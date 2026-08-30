@@ -137,8 +137,30 @@ def _clean(values: Any, limitations: bool = False) -> list[str]:
     return rows
 
 
-def _render_css(running: list[str]) -> None:
-    spin = "".join(f".st-key-select_{key} button:before{{content:'';width:9px;height:9px;border:2px solid #90b89c;border-top-color:#1f6a40;border-radius:50%;animation:spin .8s linear infinite;position:absolute;right:12px;top:15px}}" for key in running)
+def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
+    rail_rules = []
+    for key, (kind, _) in states.items():
+        selector = f".st-key-select_{key} button"
+        if kind == "running":
+            rail_rules.append(f"{selector}:before{{content:'';width:10px;height:10px;border:2px solid #b9d4c2;border-top-color:#27764a;border-radius:50%;animation:spin .8s linear infinite;position:absolute;right:12px;top:17px}}")
+        elif kind == "done":
+            rail_rules.append(f"{selector}:before{{content:'✓';display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#2f8252;color:#fff;font:600 9px 'DM Mono';position:absolute;right:9px;top:14px}}")
+        elif kind == "error":
+            rail_rules.append(f"{selector}:before{{content:'!';display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#f5d5cf;color:#9c3d31;font:600 9px 'DM Mono';position:absolute;right:9px;top:14px}}")
+        elif kind in {"locked", "idle"}:
+            rail_rules.append(f"{selector}:before{{content:'';width:8px;height:8px;border-radius:50%;background:#c7cbc8;position:absolute;right:13px;top:18px}}")
+        else:
+            rail_rules.append(f"{selector}:before{{content:'';width:8px;height:8px;border-radius:50%;background:#dfad56;box-shadow:0 0 0 4px #f8eedc;position:absolute;right:13px;top:18px}}")
+        if kind in {"locked", "idle"}:
+            rail_rules.append(f"{selector}{{background:#f0f1ef!important;color:#939994!important}}")
+        elif kind == "done":
+            rail_rules.append(f"{selector}{{color:#315a40!important}}")
+        elif kind == "running":
+            rail_rules.append(f"{selector}{{background:#f0f7f2!important;color:#244b33!important}}")
+        elif kind == "error":
+            rail_rules.append(f"{selector}{{background:#fcf1ee!important;color:#874038!important}}")
+    rail_rules.append(f".st-key-select_{selected} button{{box-shadow:inset 3px 0 0 #2f8051,0 0 0 1px #cddbd0!important;background:#e5efe7!important;color:#1c3b28!important}}")
+    state_css = "".join(rail_rules)
     st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap');
@@ -148,12 +170,12 @@ def _render_css(running: list[str]) -> None:
 .bp-project-title{{font:500 clamp(30px,3.2vw,52px)/.96 'Space Grotesk';letter-spacing:-.068em;margin:2px 0 7px;color:var(--ink)}}.bp-goal{{font:10px/1.45 'DM Mono';color:var(--muted)}}.bp-live{{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #cbd8ce;border-radius:20px;background:#f7fbf7;color:#356447;font:9px 'DM Mono'}}.bp-live:before{{content:'';width:7px;height:7px;border-radius:50%;background:#43a467;animation:pulse 1.7s infinite}}
 .kpi-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0}}.kpi{{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;min-height:74px}}.kpi:after{{content:'';position:absolute;right:-18px;bottom:-27px;width:65px;height:65px;border-radius:50%;background:var(--tint,#e6efe8)}}.kpi b{{display:block;white-space:nowrap;font:500 24px 'Space Grotesk';letter-spacing:-.055em}}.kpi span{{font:8px 'DM Mono';color:var(--muted);text-transform:uppercase}}
 .st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:calc(100vh - 32px);min-height:720px;border:1px solid var(--line);background:rgba(251,252,249,.94);overflow-y:auto}}.st-key-bp_left_rail{{border-radius:25px 12px 12px 25px;padding:17px 12px!important}}.st-key-bp_center_pane{{border-radius:12px;padding:20px 26px 105px!important}}.st-key-bp_right_rail{{border-radius:12px 25px 25px 12px;padding:16px 13px!important;background:#f7f8f4}}
-.stage-label{{margin:19px 7px 8px;font:500 8px 'DM Mono';text-transform:uppercase;color:#8a918b}}.st-key-bp_left_rail [data-testid="stButton"] button{{position:relative;min-height:47px!important;padding:8px 29px 8px 11px!important;border:0!important;border-radius:13px!important;background:transparent!important;color:#39423b!important;text-align:left!important;justify-content:flex-start!important;white-space:pre-line!important;font:500 10px/1.25 'Space Grotesk'!important;box-shadow:none!important}}.st-key-bp_left_rail [data-testid="stButton"] button:hover{{background:#edf2ec!important}}.st-key-bp_left_rail [data-testid="stButton"] button[kind="primary"]{{background:var(--deep)!important;color:#fff!important}}
+.rail-summary{{padding:12px 11px 11px;border:1px solid #e0e4e0;border-radius:15px;background:#fff}}.rail-summary-head{{display:flex;justify-content:space-between;align-items:center;font:500 9px 'DM Mono';color:#59625b}}.rail-progress{{height:5px;margin:10px 0 9px;border-radius:8px;background:#e5e8e5;overflow:hidden}}.rail-progress i{{display:block;height:100%;border-radius:8px;background:#2f8051;transition:width .35s ease}}.rail-legend{{display:flex;gap:8px;flex-wrap:wrap;font:7px 'DM Mono';color:#858c86}}.rail-legend span{{display:flex;align-items:center;gap:4px}}.rail-legend i{{width:6px;height:6px;border-radius:50%;background:#c8ccc9}}.rail-legend .live i{{background:#4a9b68;animation:pulse 1.6s infinite}}.rail-legend .done i{{background:#2f8051}}.stage-label{{margin:19px 7px 8px;font:500 8px 'DM Mono';text-transform:uppercase;color:#8a918b}}.st-key-bp_left_rail [data-testid="stButton"] button{{position:relative;min-height:48px!important;padding:8px 31px 8px 12px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#39423b!important;text-align:left!important;justify-content:flex-start!important;white-space:pre-line!important;font:500 10px/1.32 'Space Grotesk'!important;box-shadow:none!important;transition:background .18s ease,box-shadow .18s ease,transform .18s ease}}.st-key-bp_left_rail [data-testid="stButton"] button:hover{{transform:translateX(2px);background:#edf2ec!important}}
 .section-kicker{{font:8px 'DM Mono';color:#79827a;text-transform:uppercase}}.section-title{{font:500 31px 'Space Grotesk';letter-spacing:-.06em;margin:6px 0 2px}}.section-summary{{margin:13px 0 21px;padding:16px 18px;border-left:3px solid var(--green);border-radius:0 15px 15px 0;background:#f1f6f1;font:14px/1.55 'Space Grotesk'}}.state-banner{{display:flex;gap:13px;margin:22px 0;padding:18px;border:1px solid var(--line);border-radius:17px;background:#f6f8f5}}.state-spinner{{width:25px;height:25px;border:3px solid #cfdbd1;border-top-color:#267749;border-radius:50%;animation:spin .8s linear infinite}}.state-banner b{{display:block;font:500 14px 'Space Grotesk'}}.state-banner span{{font:10px/1.4 'DM Mono';color:var(--muted)}}
 .detail-heading{{margin:23px 0 9px;font:500 9px 'DM Mono';text-transform:uppercase;color:#6e776f}}.insight-list{{display:grid;gap:8px}}.insight{{padding:11px 13px;border:1px solid #e1e5e1;border-radius:12px;background:#fff;font:12px/1.48 'Space Grotesk'}}.empty-state{{display:grid;place-items:center;min-height:260px;text-align:center;color:#737d75}}.empty-state b{{display:block;font:500 22px 'Space Grotesk';color:#2a352d}}.empty-state p{{max-width:500px;font:12px/1.5 'Space Grotesk'}}
 .verdict-hero{{margin:17px 0;padding:22px;border-radius:20px;background:linear-gradient(135deg,#193f2a,#286345);color:#f2f8f3}}.verdict-hero strong{{font:500 25px 'Space Grotesk'}}.verdict-hero p{{color:#c8dbce;font:12px/1.5 'Space Grotesk'}}.score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}.score-cell{{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}}.score-cell b{{display:block;font:500 18px 'Space Grotesk'}}.score-cell span{{font:8px 'DM Mono';text-transform:uppercase;color:#7c857e}}
-.chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border-radius:15px!important}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}.notepad{{padding:15px 13px 10px;border:1px solid #ded9b9;border-radius:17px;background:repeating-linear-gradient(#fffdf2 0,#fffdf2 27px,#e8e2c8 28px)}}.notepad-title{{font:500 17px 'Space Grotesk';margin-bottom:8px}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
-{spin}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto;min-height:0;border-radius:18px}}}}
+.chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border-radius:15px!important}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 11px!important;border:1px solid #dfe4df;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(31,48,36,.06)}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:600 13px 'Space Grotesk'}}.action-head span{{font:8px 'DM Mono';color:#8b918c}}.action-progress{{height:6px;margin:12px 0 10px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#173b28,#3e9160);transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:7px 1px!important;align-items:flex-start!important;font:11px/1.4 'Space Grotesk'!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#8a908b;font:10px/1.45 'Space Grotesk'}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
+{state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto;min-height:0;border-radius:18px}}}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -240,17 +262,29 @@ def _render_chat(key: str) -> None:
 
 
 def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]) -> None:
-    st.markdown('<div class="right-title">Section companion</div><div class="notepad"><div class="notepad-title">Founder actionables</div>', unsafe_allow_html=True)
+    st.markdown('<div class="right-title">Section companion</div>', unsafe_allow_html=True)
     actions = _items(output.get("contextual_actions"))
-    if actions:
-        completed = st.session_state.setdefault("bp_completed_actionables", {}); scoped = set(_items(completed.get(key)))
-        for index, action in enumerate(actions[:7]):
-            text = _item_text(action); action_id = f"{key}:{index}:{text[:40]}"; checked = st.checkbox(text, value=action_id in scoped, key=f"action_{key}_{index}")
-            scoped.add(action_id) if checked else scoped.discard(action_id)
-        completed[key] = sorted(scoped)
-    else:
-        st.caption("Actionables appear after this section has a valid output.")
-    st.markdown('</div>', unsafe_allow_html=True)
+    completed = st.session_state.setdefault("bp_completed_actionables", {})
+    scoped = set(_items(completed.get(key)))
+    entries = []
+    for index, action in enumerate(actions[:7]):
+        text = _item_text(action)
+        action_id = f"{key}:{index}:{text[:40]}"
+        widget_key = f"action_{key}_{index}"
+        checked = bool(st.session_state.get(widget_key, action_id in scoped))
+        entries.append((checked, index, text, action_id, widget_key))
+    completed_count = sum(item[0] for item in entries)
+    total = len(entries)
+    percent = round(100 * completed_count / total) if total else 0
+    with st.container(key=f"bp_action_card_{key}"):
+        st.markdown(f'<div class="action-head"><b>Actionables</b><span>{completed_count} of {total}</span></div><div class="action-progress"><i style="width:{percent}%"></i></div>', unsafe_allow_html=True)
+        if entries:
+            for checked_before, index, text, action_id, widget_key in sorted(entries, key=lambda item: item[0]):
+                checked = st.checkbox(text, value=checked_before, key=widget_key)
+                scoped.add(action_id) if checked else scoped.discard(action_id)
+        else:
+            st.markdown('<div class="action-empty">No founder action is required until this section has a valid result.</div>', unsafe_allow_html=True)
+    completed[key] = sorted(scoped)
     with st.expander(f"Sources · {len(sources)}", expanded=False):
         if sources:
             for source in sources[:12]:
@@ -304,17 +338,20 @@ def _workspace_body() -> None:
     context = _dict(bundle.get("research_context")); dashboard = _dict(bundle.get("blueprint")); artifact = _dict(_dict(dashboard.get("current_version")).get("blueprint")); tasks = _task_map(bundle); control = _dict(bundle.get("control_panel"))
     checkpoints = [item for item in _items(control.get("panel_items")) if isinstance(item, dict) and item.get("item_type") == "HUMAN_CHECKPOINT"]; checkpoint = checkpoints[0] if checkpoints else None
     verdicts = [item for item in _items(dashboard.get("latest_verdicts")) if isinstance(item, dict)]; dashboard_verdict = next((item for item in verdicts if item.get("gate") == "RESEARCH_VERDICT"), {}); latest_verdict = _dict(context.get("latest_verdict")) or dashboard_verdict
-    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}; _render_css([key for key, state in states.items() if state[0] == "running"])
+    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}; selected = st.session_state.setdefault("bp_selected_section", "customer_demand"); _render_css(states, selected)
     idea = _dict(context.get("project")).get("idea_text") or artifact.get("idea_text") or artifact.get("product_idea") or st.session_state.get("idea", "Your Blueprint"); title = _project_title(str(idea)); outputs = [_dict(task.get("output")) for task in tasks.values() if isinstance(task.get("output"), dict)]; risks = sum(len(_clean(output.get("risks"))) for output in outputs); score = _score(dashboard_verdict or latest_verdict); progress = [item for item in _items(dashboard.get("stage_progress")) if isinstance(item, dict)]; completion = round(sum(float(item.get("completion_percent") or 0) for item in progress) / max(1, len(progress))) if progress else round(100 * sum(state[0] == "done" for state in states.values()) / len(states)); coverage_value = (dashboard_verdict or latest_verdict).get("evidence_coverage"); coverage = round((float(coverage_value) * 100 if float(coverage_value) <= 1 else float(coverage_value))) if isinstance(coverage_value, (int, float)) else 0
-    left, center, right = st.columns([1.1, 3.7, 1.35], gap="small"); selected = st.session_state.setdefault("bp_selected_section", "customer_demand")
+    left, center, right = st.columns([1.1, 3.7, 1.35], gap="small")
     with left:
         with st.container(key="bp_left_rail"):
             st.markdown('<div class="bp-wordmark">Blueprint</div>', unsafe_allow_html=True)
+            done_count = sum(state[0] == "done" for state in states.values()); running_count = sum(state[0] == "running" for state in states.values()); blocked_count = sum(state[0] in {"locked", "idle"} for state in states.values()); rail_percent = round(100 * done_count / max(1, len(states)))
+            st.markdown(f'<div class="rail-summary"><div class="rail-summary-head"><span>Blueprint progress</span><span>{done_count} of {len(states)}</span></div><div class="rail-progress"><i style="width:{rail_percent}%"></i></div><div class="rail-legend"><span class="live"><i></i>{running_count} processing</span><span class="done"><i></i>{done_count} done</span><span><i></i>{blocked_count} blocked</span></div></div>', unsafe_allow_html=True)
             for stage_name, sections in STAGES:
-                st.markdown(f'<div class="stage-label">{html.escape(stage_name)}</div>', unsafe_allow_html=True)
+                stage_done = sum(states[key][0] == "done" for key, _ in sections)
+                st.markdown(f'<div class="stage-label">{html.escape(stage_name)} · {stage_done}/{len(sections)}</div>', unsafe_allow_html=True)
                 for key, label in sections:
-                    state = states[key]; icon = {"done": "✓", "running": "◌", "ready": "·", "error": "!", "locked": "⌁", "idle": "○"}.get(state[0], "○")
-                    if st.button(f"{icon}  {label}\n{state[1]}", key=f"select_{key}", use_container_width=True, type="primary" if key == selected else "secondary"): st.session_state["bp_selected_section"] = key; st.rerun()
+                    state = states[key]
+                    if st.button(f"{label}\n{state[1]}", key=f"select_{key}", use_container_width=True): st.session_state["bp_selected_section"] = key; st.rerun()
     selected = st.session_state.get("bp_selected_section", selected); task = tasks.get(selected); state = states[selected]; output = _extract_output(task, artifact, selected)
     if selected == "research_verdict": output = {**output, **dashboard_verdict, **latest_verdict}
     sources = _flatten_sources(output, context)
