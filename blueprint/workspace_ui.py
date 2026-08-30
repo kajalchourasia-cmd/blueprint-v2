@@ -206,6 +206,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_left_rail [data-testid="stButton"] button{{padding-left:27px!important}}
 .st-key-bp_left_rail .st-key-bp_home button{{width:auto!important;min-height:26px!important;padding:0 6px 0 26px!important;background:transparent!important;color:#172019!important;font:650 18px/1 var(--ui)!important;letter-spacing:-.03em!important}}.st-key-bp_left_rail .st-key-bp_home button:before{{content:'';position:absolute;left:6px;top:50%;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(44,122,75,.09);transform:translateY(-50%)}}
 .st-key-bp_left_rail{{padding-top:12px!important}}.st-key-bp_left_rail .st-key-bp_home{{margin:0 0 36px!important}}.rail-top-progress{{margin:22px 6px 32px!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{display:flex!important;padding-left:0!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{width:100%!important;margin:0!important;text-align:left!important}}.kpi-label{{font-weight:600!important}}.st-key-bp_shortcut_blueprint,.st-key-bp_shortcut_financial{{position:relative;overflow:hidden;padding:15px!important;border-radius:20px!important;box-shadow:none!important;transform:none!important}}.st-key-bp_shortcut_blueprint{{min-height:158px;background:#132b1e!important;border-color:#244535!important}}.st-key-bp_shortcut_financial{{min-height:176px;background:radial-gradient(circle at 76% 28%,rgba(120,186,205,.52),transparent 35%),linear-gradient(145deg,#8f929a 0%,#aa8176 56%,#b8795d 100%)!important;border-color:#9b8179!important}}.st-key-bp_shortcut_blueprint:hover{{transform:translateY(-2px)!important;border-color:#537a62!important}}.st-key-bp_shortcut_financial:hover{{transform:translateY(-2px)!important;border-color:#a86f55!important}}.st-key-bp_shortcut_blueprint:after,.st-key-bp_shortcut_financial:after{{content:none!important}}.plan-native-head{{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-start;gap:9px;margin-bottom:11px}}.plan-native-head small{{color:#a8b8ad;font:650 7px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase}}.st-key-bp_shortcut_financial .plan-native-head small{{color:#fff;opacity:.82}}.plan-native-icon{{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:transparent;color:#caff36;font:700 14px var(--ui)}}.st-key-bp_shortcut_financial .plan-native-icon{{background:rgba(255,255,255,.13);color:#fff}}.plan-map-lines{{position:absolute;z-index:1;right:-12px;top:19px;width:102px;height:55px;transform:rotate(-16deg);opacity:.55}}.plan-map-lines i{{display:block;margin:9px 0;border-top:1px solid #53a671}}.st-key-bp_shortcut_blueprint button,.st-key-bp_shortcut_financial button{{position:relative;z-index:3;min-height:26px!important;padding:0!important;color:#fff!important;justify-content:flex-start!important;text-align:left!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.015em!important}}.st-key-bp_shortcut_blueprint button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_financial button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_blueprint button p,.st-key-bp_shortcut_financial button p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_shortcut_blueprint button:hover,.st-key-bp_shortcut_financial button:hover{{color:#fff!important;background:transparent!important}}.st-key-bp_shortcut_blueprint [data-testid="stCaptionContainer"],.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{position:relative;z-index:2;display:block!important;margin-top:3px!important;padding-right:4px!important;color:#a9b8ae!important;font-size:8px!important;line-height:1.45!important}}.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{color:rgba(255,255,255,.74)!important}}.plan-native-cta{{position:relative;z-index:2;display:inline-flex;margin-top:11px;padding:6px 9px;border:1px solid #bbed3f;border-radius:14px;color:#d5ff5c;font:650 7px/1 var(--ui);letter-spacing:.04em}}.plan-money{{position:relative;z-index:2;margin:14px 0 13px;color:#fff;font:500 30px/1 var(--ui);letter-spacing:-.04em}}.plan-edit-mark{{display:grid;place-items:center;width:25px;height:25px;margin-left:auto;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font:650 10px var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"] .st-key-bp_action_card_workspace{{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}}.action-count{{display:block;margin:3px 1px 0 auto;color:#858d87;font:600 9px var(--ui);text-align:right}}
+.st-key-bp_stage_scroll{{padding-bottom:12px!important}}.st-key-bp_left_shortcuts{{display:grid!important;flex:0 0 auto!important;align-self:stretch!important;width:calc(100% - 10px)!important;box-sizing:border-box!important;gap:7px!important;margin:14px 5px 13px!important;padding-top:12px!important;border-top:1px solid #daddda!important;background:#f5f6f4!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"],.st-key-bp_left_shortcuts [data-testid="stLayoutWrapper"],.st-key-bp_left_shortcuts [data-testid="stButton"]{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"]{{gap:7px!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button{{display:flex!important;width:100%!important;min-height:39px!important;padding:0 11px!important;border:1px solid #dce1dd!important;border-radius:10px!important;background:#fff!important;color:#303a33!important;justify-content:flex-start!important;text-align:left!important;font:600 10px/1.2 var(--ui)!important;box-shadow:none!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'→';margin-left:auto;color:#778079;font-size:14px;font-weight:400}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:hover{{border-color:#bfc9c1!important;background:#fafcfb!important;color:#245d3c!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"],.st-key-bp_left_rail [data-testid="stExpanderDetails"]>[data-testid="stVerticalBlock"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stLayoutWrapper"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"]{{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;align-self:stretch!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{width:100%!important;margin:0!important;padding:6px 28px 6px 32px!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button>div,.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{display:block!important;width:100%!important;margin:0!important;padding:0!important;text-align:left!important}}.st-key-bp_right_rail{{top:72px!important;margin:72px 12px 12px 10px!important}}.st-key-bp_right_rail>[data-testid="stVerticalBlock"]{{gap:0!important}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 </style>""", unsafe_allow_html=True)
 
@@ -246,8 +247,6 @@ def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, inte
         st.switch_page("app.py")
     st.markdown('<div class="rail-heading">Roadmap <span>&amp; Progress</span></div>', unsafe_allow_html=True)
     done_count = sum(state[0] == "done" for state in states.values())
-    running_count = sum(state[0] == "running" for state in states.values())
-    waiting_count = len(states) - done_count - running_count
     rail_percent = round(100 * done_count / max(1, len(states)))
     st.markdown(f'<div class="rail-top-progress"><i style="width:{rail_percent}%"></i></div>', unsafe_allow_html=True)
     with st.container(key="bp_stage_scroll"):
@@ -262,13 +261,16 @@ def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, inte
                         else:
                             st.session_state["bp_focus_idea"] = True
                         st.rerun()
-    st.markdown(
-        f'<div class="rail-summary"><div class="rail-summary-head"><span>Overall progress</span><span>{done_count} of {len(states)}</span></div>'
-        f'<div class="rail-stats"><div class="rail-stat live"><span><i></i>Processing</span><b>{running_count}</b></div>'
-        f'<div class="rail-stat done"><span><i></i>Completed</span><b>{done_count}</b></div>'
-        f'<div class="rail-stat"><span><i></i>Waiting</span><b>{waiting_count}</b></div></div></div>',
-        unsafe_allow_html=True,
-    )
+    _render_left_shortcuts()
+
+
+def _render_left_shortcuts() -> None:
+    """Keep the two durable plan views within the navigation rail."""
+    with st.container(key="bp_left_shortcuts"):
+        if st.button("Open Full Blueprint", key="bp_left_open_blueprint", use_container_width=True):
+            _open_workspace_view("blueprint")
+        if st.button("Financial Plan", key="bp_left_open_financial", use_container_width=True):
+            _open_workspace_view("financial")
 
 
 def _capture_workspace_return_state() -> None:
@@ -306,28 +308,6 @@ def _return_to_workspace() -> None:
     if run_id := st.session_state.get("backend_run_id"):
         st.query_params["run_id"] = str(run_id)
     st.rerun()
-
-
-def _render_plan_shortcuts() -> None:
-    answers = _dict(st.session_state.get("dialog_answers"))
-    capital = answers.get("budget") or answers.get("capital_available") or "$0"
-    if isinstance(capital, list):
-        capital = ", ".join(str(value) for value in capital[:2])
-    capital_text = str(capital).strip() or "$0"
-    if capital_text.replace(",", "").isdigit():
-        capital_text = f"${capital_text}"
-    with st.container(key="bp_plan_shortcuts"):
-        with st.container(key="bp_shortcut_blueprint"):
-            st.markdown('<div class="plan-native-head blueprint-card-head"><span class="plan-native-icon">⌘</span><small>Connected decision path</small></div><div class="plan-map-lines"><i></i><i></i><i></i></div>', unsafe_allow_html=True)
-            if st.button("Open full Blueprint", key="bp_open_blueprint", use_container_width=True):
-                _open_workspace_view("blueprint")
-            st.caption("Every stage, dependency, decision gate, and return path.")
-            st.markdown('<div class="plan-native-cta">VIEW SYSTEM MAP&nbsp; →</div>', unsafe_allow_html=True)
-        with st.container(key="bp_shortcut_financial"):
-            st.markdown(f'<div class="plan-native-head"><span class="plan-native-icon">$</span><small>Capital available</small><span class="plan-edit-mark">↗</span></div><div class="plan-money">{html.escape(capital_text)}</div>', unsafe_allow_html=True)
-            if st.button("Financial plan", key="bp_open_financial", use_container_width=True):
-                _open_workspace_view("financial")
-            st.caption("Capital, costs, pricing evidence, and readiness.")
 
 
 def _render_list(title: str, values: Any, limitations: bool = False) -> None:
@@ -663,8 +643,6 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
 
 
 def _render_companion(key: str, task: dict | None, output: dict, sources: list[dict], actions: list) -> None:
-    st.markdown('<div class="companion-heading">Workspace companion</div>', unsafe_allow_html=True)
-    _render_plan_shortcuts()
     _render_right(key, task, output, sources, actions)
 
 
