@@ -13,6 +13,15 @@ from blueprint.workspace_ui import LABELS, render_blueprint_workspace, render_fi
 st.set_page_config(page_title="Blueprint", page_icon="⌁", layout="wide", initial_sidebar_state="collapsed")
 require_auth()
 
+# Internal Blueprint/financial navigation carries the active run in the URL so
+# a view rerender cannot silently fall back to an empty workspace. Supabase RLS
+# still verifies that the current guest owns both identifiers.
+query_project_id = str(st.query_params.get("project_id") or "").strip()
+query_run_id = str(st.query_params.get("run_id") or "").strip()
+if query_project_id and query_run_id:
+    st.session_state["backend_project_id"] = query_project_id
+    st.session_state["backend_run_id"] = query_run_id
+
 if working_note := st.query_params.get("working_note"):
     st.session_state["working_note"] = str(working_note).strip()[:1200]
     st.query_params.clear()

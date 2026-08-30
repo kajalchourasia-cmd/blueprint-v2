@@ -1,6 +1,13 @@
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
-from blueprint.workspace_ui import _local_chat_answer, _project_title
+from blueprint.workspace_ui import (
+    _local_chat_answer,
+    _open_workspace_view,
+    _project_title,
+    _return_to_workspace,
+)
 
 
 class WorkspaceChatFallbackTests(unittest.TestCase):
@@ -54,6 +61,39 @@ class WorkspaceTitleTests(unittest.TestCase):
         )
 
         self.assertLessEqual(len(title.split()), 5)
+
+
+class WorkspaceNavigationTests(unittest.TestCase):
+    def test_blueprint_round_trip_restores_the_active_run_and_section(self):
+        session_state = {
+            "backend_project_id": "project-1",
+            "backend_run_id": "run-1",
+            "bp_selected_section": "competitor_intelligence",
+        }
+        query_params = {}
+
+        def rerun():
+            raise RuntimeError("rerun")
+
+        fake_streamlit = SimpleNamespace(
+            session_state=session_state,
+            query_params=query_params,
+            rerun=rerun,
+        )
+        with patch("blueprint.workspace_ui.st", fake_streamlit):
+            with self.assertRaisesRegex(RuntimeError, "rerun"):
+                _open_workspace_view("blueprint")
+            self.assertEqual("blueprint", query_params["view"])
+            self.assertEqual("run-1", query_params["run_id"])
+
+            session_state["backend_run_id"] = "wrong-run"
+            session_state["bp_selected_section"] = "foundation"
+            with self.assertRaisesRegex(RuntimeError, "rerun"):
+                _return_to_workspace()
+
+        self.assertNotIn("view", query_params)
+        self.assertEqual("run-1", session_state["backend_run_id"])
+        self.assertEqual("competitor_intelligence", session_state["bp_selected_section"])
 
 
 if __name__ == "__main__":
