@@ -174,6 +174,7 @@ def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
 .section-kicker{{font:8px 'DM Mono';color:#79827a;text-transform:uppercase}}.section-title{{font:500 31px 'Space Grotesk';letter-spacing:-.06em;margin:6px 0 2px}}.section-summary{{margin:13px 0 21px;padding:16px 18px;border-left:3px solid var(--green);border-radius:0 15px 15px 0;background:#f1f6f1;font:14px/1.55 'Space Grotesk'}}.state-banner{{display:flex;gap:13px;margin:22px 0;padding:18px;border:1px solid var(--line);border-radius:17px;background:#f6f8f5}}.state-spinner{{width:25px;height:25px;border:3px solid #cfdbd1;border-top-color:#267749;border-radius:50%;animation:spin .8s linear infinite}}.state-banner b{{display:block;font:500 14px 'Space Grotesk'}}.state-banner span{{font:10px/1.4 'DM Mono';color:var(--muted)}}
 .detail-heading{{margin:23px 0 9px;font:500 9px 'DM Mono';text-transform:uppercase;color:#6e776f}}.insight-list{{display:grid;gap:8px}}.insight{{padding:11px 13px;border:1px solid #e1e5e1;border-radius:12px;background:#fff;font:12px/1.48 'Space Grotesk'}}.empty-state{{display:grid;place-items:center;min-height:260px;text-align:center;color:#737d75}}.empty-state b{{display:block;font:500 22px 'Space Grotesk';color:#2a352d}}.empty-state p{{max-width:500px;font:12px/1.5 'Space Grotesk'}}
 .verdict-hero{{margin:17px 0;padding:22px;border-radius:20px;background:linear-gradient(135deg,#193f2a,#286345);color:#f2f8f3}}.verdict-hero strong{{font:500 25px 'Space Grotesk'}}.verdict-hero p{{color:#c8dbce;font:12px/1.5 'Space Grotesk'}}.score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}.score-cell{{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}}.score-cell b{{display:block;font:500 18px 'Space Grotesk'}}.score-cell span{{font:8px 'DM Mono';text-transform:uppercase;color:#7c857e}}
+.empty-start-card{{position:relative;overflow:hidden;margin-top:22px;padding:30px 30px 27px;border:1px solid #d9e1da;border-radius:24px;background:linear-gradient(140deg,#f7fbf7,#edf5ef);box-shadow:0 18px 50px rgba(35,65,45,.08)}}.empty-start-card:after{{content:'';position:absolute;right:-70px;top:-95px;width:260px;height:260px;border:1px solid rgba(48,126,78,.14);border-radius:50%;box-shadow:inset 0 0 0 40px rgba(48,126,78,.035),inset 0 0 0 80px rgba(48,126,78,.025)}}.empty-start-card>*{{position:relative;z-index:1}}.empty-eyebrow{{font:500 8px 'DM Mono';letter-spacing:.09em;text-transform:uppercase;color:#477157}}.empty-start-card h2{{max-width:620px;margin:11px 0 9px;font:500 clamp(30px,3.5vw,50px)/.98 'Space Grotesk';letter-spacing:-.065em}}.empty-start-card p{{max-width:650px;margin:0 0 22px;color:#617067;font:13px/1.55 'Space Grotesk'}}.empty-steps{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}}.empty-step{{padding:11px;border:1px solid #dae3dc;border-radius:13px;background:rgba(255,255,255,.62);font:9px/1.35 'DM Mono';color:#657069}}.empty-step b{{display:block;margin-bottom:4px;color:#2e6042;font-size:8px}}.st-key-empty_idea_entry [data-testid="stTextAreaRootElement"]{{border:1px solid #cbd8ce!important;border-radius:15px!important;background:#fff!important;box-shadow:none!important}}.st-key-empty_idea_entry textarea{{min-height:105px!important;font:13px/1.5 'Space Grotesk'!important}}.st-key-empty_idea_entry [data-testid="stFormSubmitButton"] button{{height:43px!important;border:0!important;border-radius:13px!important;background:#1d4c31!important;color:#fff!important;font:500 9px 'DM Mono'!important}}.empty-right-card{{margin-top:14px;padding:15px;border:1px solid #dde2dd;border-radius:17px;background:#fff}}.empty-right-card h4{{margin:0 0 11px;font:600 13px 'Space Grotesk'}}.empty-right-row{{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-top:1px solid #edf0ed;color:#727b74;font:10px/1.4 'Space Grotesk'}}.empty-right-row i{{flex:0 0 16px;height:16px;display:grid;place-items:center;border-radius:50%;background:#edf3ee;color:#397753;font:500 7px 'DM Mono'}}
 .chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border-radius:15px!important}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 11px!important;border:1px solid #dfe4df;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(31,48,36,.06)}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:600 13px 'Space Grotesk'}}.action-head span{{font:8px 'DM Mono';color:#8b918c}}.action-progress{{height:6px;margin:12px 0 10px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#173b28,#3e9160);transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:7px 1px!important;align-items:flex-start!important;font:11px/1.4 'Space Grotesk'!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#8a908b;font:10px/1.45 'Space Grotesk'}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto;min-height:0;border-radius:18px}}}}
 </style>""", unsafe_allow_html=True)
@@ -371,6 +372,54 @@ def _workspace_body() -> None:
             st.session_state[seen] = True; _gate_dialog(checkpoint, {**_extract_output(tasks.get("research_verdict"), artifact, "research_verdict"), **dashboard_verdict, **latest_verdict})
 
 
+def _empty_workspace() -> None:
+    states = {
+        key: (("idle", "Not started") if stage_number == 1 else ("locked", "Waiting for prior gate"))
+        for stage_number, (_, sections) in enumerate(STAGES, 1)
+        for key, _ in sections
+    }
+    _render_css(states, "no_active_section")
+    left, center, right = st.columns([1.1, 3.7, 1.35], gap="small")
+    with left:
+        with st.container(key="bp_left_rail"):
+            st.markdown('<div class="bp-wordmark">Blueprint</div>', unsafe_allow_html=True)
+            st.markdown('<div class="rail-summary"><div class="rail-summary-head"><span>Blueprint progress</span><span>0 of 15</span></div><div class="rail-progress"><i style="width:0%"></i></div><div class="rail-legend"><span class="live"><i></i>0 processing</span><span class="done"><i></i>0 done</span><span><i></i>15 not started</span></div></div>', unsafe_allow_html=True)
+            for stage_name, sections in STAGES:
+                st.markdown(f'<div class="stage-label">{html.escape(stage_name)} · 0/{len(sections)}</div>', unsafe_allow_html=True)
+                for key, label in sections:
+                    st.button(f"{label}\n{states[key][1]}", key=f"select_{key}", use_container_width=True, disabled=True)
+    with center:
+        with st.container(key="bp_center_pane"):
+            st.markdown('<div class="bp-project-title">Build your first Blueprint</div><div class="bp-goal">Start with the unfinished idea. Blueprint will ask for the context it needs.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="kpi-grid"><div class="kpi" style="--tint:#dcebdc"><b>Pending</b><span>Decision score</span></div><div class="kpi" style="--tint:#dce8ef"><b>0%</b><span>Evidence coverage</span></div><div class="kpi" style="--tint:#f2dfd2"><b>0</b><span>Open risks</span></div><div class="kpi" style="--tint:#e8ebc9"><b>0%</b><span>Blueprint progress</span></div></div>', unsafe_allow_html=True)
+            st.markdown('<div class="empty-start-card"><div class="empty-eyebrow">Start here · one rough sentence is enough</div><h2>What are you trying to make real?</h2><p>Describe the product, service, or business you are considering. After this, the short onboarding will capture your audience, goal, time, budget, and constraints before any research begins.</p>', unsafe_allow_html=True)
+            with st.container(key="empty_idea_entry"):
+                with st.form("empty_dashboard_idea", border=False):
+                    idea = st.text_area("Your idea", placeholder="For example: I want to build a fitness tracking app for busy professionals…", label_visibility="collapsed")
+                    begin = st.form_submit_button("CONTINUE TO ONBOARDING  →", type="primary", use_container_width=True)
+            st.markdown('<div class="empty-steps"><div class="empty-step"><b>01 · IDEA</b>Give Blueprint the unfinished version.</div><div class="empty-step"><b>02 · CONTEXT</b>Choose your goal, audience, and constraints.</div><div class="empty-step"><b>03 · RESEARCH</b>Customer, competitor, and market work begins.</div></div></div>', unsafe_allow_html=True)
+            if begin:
+                clean_idea = idea.strip()
+                if len(clean_idea) < 10:
+                    st.warning("Describe the idea in at least one clear sentence.")
+                else:
+                    for key in ("backend_idempotency_key", "generation_error", "backend_project_id", "backend_run_id", "backend_bundle"):
+                        st.session_state.pop(key, None)
+                    st.session_state["idea"] = clean_idea
+                    st.session_state["dialog_answers"] = {"idea": clean_idea}
+                    st.session_state["dialog_question"] = 0
+                    st.session_state["show_questions"] = True
+                    st.session_state["generating_blueprint"] = False
+                    st.switch_page("app.py", query_params={"idea": clean_idea, "start": "1"})
+    with right:
+        with st.container(key="bp_right_rail"):
+            st.markdown('<div class="bp-live">Ready when you are</div><div class="right-title">What happens next</div><div class="empty-right-card"><h4>Your workspace will fill itself</h4><div class="empty-right-row"><i>1</i><span>Selected research streams appear as processing in the left rail.</span></div><div class="empty-right-row"><i>2</i><span>Completed sections become readable while other work continues.</span></div><div class="empty-right-row"><i>3</i><span>Sources, actionables, risks, and the verdict stay attached to their section.</span></div></div>', unsafe_allow_html=True)
+            with st.expander("Sources · 0", expanded=False):
+                st.caption("Sources appear after evidence has been accepted.")
+            with st.expander("Background process", expanded=False):
+                st.caption("No research run has started yet.")
+
+
 @st.fragment(run_every=4)
 def _live_workspace() -> None:
     _workspace_body()
@@ -378,5 +427,5 @@ def _live_workspace() -> None:
 
 def render_blueprint_workspace() -> None:
     if not st.session_state.get("backend_run_id"):
-        st.info("Complete onboarding to create the first Blueprint run."); return
+        _empty_workspace(); return
     _live_workspace()
