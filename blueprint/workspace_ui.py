@@ -12,6 +12,7 @@ from blueprint.backend import (
     BackendError, ask_research, hydrate_current_run, make_idempotency_key,
     preview_research_rerun, resolve_founder_checkpoint, resolve_research_rerun,
 )
+from blueprint.onboarding_dialog import questions_dialog
 
 STAGES = [
     ("Stage 1 · Discover", [("foundation", "Foundation"), ("customer_demand", "Customer Research"), ("competitor_intelligence", "Competitor Research"), ("market_economics", "Market Research"), ("evidence_audit", "Evidence Audit"), ("research_verdict", "Research Verdict")]),
@@ -63,12 +64,25 @@ def _project_title(idea: str) -> str:
 def _goal_line(context: dict) -> str:
     stored = _dict(_dict(context.get("project")).get("constraints"))
     answers = _dict(stored.get("onboarding_answers")) or _dict(st.session_state.get("dialog_answers"))
-    success, kind, goal = (str(answers.get(key) or "").strip() for key in ("success_definition", "success_type", "goal"))
-    if success and kind:
-        return f"Goal: {kind} — {success}"
-    if success or (kind and kind.lower() != "not sure"):
-        return f"Goal: {success or kind}"
-    return f"Goal: {goal}" if goal else "Goal not specified — optimizing for evidence before commitment."
+    segments: list[str] = []
+    customer = answers.get("target_customer")
+    if isinstance(customer, list) and customer:
+        segments.append("For " + ", ".join(str(value) for value in customer[:2]))
+    elif isinstance(customer, str) and customer.strip():
+        segments.append("For " + customer.strip())
+    location = str(answers.get("location_detail") or answers.get("location") or "").strip()
+    if location and location.lower() != "not sure":
+        segments.append(location)
+    goal = str(answers.get("goal") or "").strip()
+    if goal and goal.lower() != "not sure":
+        segments.append(goal)
+    success = str(answers.get("success_definition") or answers.get("success_type") or "").strip()
+    if success and success.lower() != "not sure":
+        segments.append("Success: " + success)
+    timeline = str(answers.get("launch_timeline") or "").strip()
+    if timeline and timeline.lower() != "not sure":
+        segments.append(timeline)
+    return " · ".join(segments[:4]) or "Evidence-first validation · Assumptions stay visible · Every next move must earn the one after it"
 
 
 def _section_state(task: dict | None, stage: int, gate_1: bool, gate_2: bool) -> tuple[str, str]:
@@ -165,69 +179,70 @@ def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap');
 :root{{--ink:#172019;--muted:#727a74;--line:#e2e5e2;--panel:#fff;--deep:#193f2a;--green:#2c7a4b;--ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}}
-[data-testid="stAppViewContainer"],[data-testid="stHeader"]{{background:#fff}}[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stSidebar"],[data-testid="stSidebarNav"],#MainMenu,footer{{display:none!important}}html,body,[data-testid="stAppViewContainer"],[data-testid="stAppViewContainer"]>.main,[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{height:100vh!important;margin:0!important;padding:0!important;overflow:hidden!important}}main .block-container,[data-testid="stMainBlockContainer"]{{width:100%!important;max-width:none!important;padding:0!important}}[data-testid="stMainBlockContainer"]>[data-testid="stVerticalBlock"]{{gap:0!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:100vh!important;gap:0!important}}.st-key-bp_left_rail *,.st-key-bp_center_pane *,.st-key-bp_right_rail *{{font-family:var(--ui)!important}}[data-testid="stIconMaterial"],.material-symbols-rounded{{font-family:'Material Symbols Rounded'!important}}
-.bp-wordmark{{display:flex;align-items:center;gap:9px;font:650 18px/1 var(--ui);letter-spacing:-.03em;margin:0 4px 26px}}.bp-wordmark:before{{content:'';width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(44,122,75,.09)}}
-.bp-project-title{{font:650 clamp(32px,3.1vw,48px)/1.02 var(--ui);letter-spacing:-.045em;margin:15px 0 7px;color:var(--ink)}}.bp-goal{{font:12px/1.45 var(--ui);color:var(--muted)}}.bp-live{{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:18px;background:#eef6f0;color:#356447;font:600 10px/1 var(--ui)}}.bp-live:before{{content:'';width:7px;height:7px;border-radius:50%;background:#43a467;animation:pulse 1.7s infinite}}.bp-live-spacer{{height:24px}}
-.kpi-grid{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 27px;background:transparent}}.kpi{{position:relative;min-width:0;min-height:108px;padding:15px;border:1px solid #dfe3df;border-radius:13px;background:#fff;box-shadow:none}}.kpi-label{{display:block;padding-right:67px;color:#626a64;font:600 12px/1.2 var(--ui)}}.kpi-badge{{position:absolute;right:11px;top:11px;display:inline-flex;align-items:center;padding:5px 7px;border-radius:9px;background:#e7f4ea;color:#287546;font:650 8px/1 var(--ui);text-transform:uppercase}}.kpi-badge.watch{{background:#fff0e5;color:#a55228}}.kpi-badge.neutral{{background:#eff1ef;color:#707671}}.kpi-value-row{{display:flex;align-items:center;gap:9px;min-height:34px;margin-top:19px}}.kpi-icon{{display:grid;place-items:center;flex:0 0 25px;width:25px;height:25px;border-radius:8px;background:#ede8fb;color:#655399;font:700 12px/1 var(--ui)}}.kpi.evidence .kpi-icon{{background:#e4f1f8;color:#3d7190}}.kpi.risk .kpi-icon{{background:#fff0e6;color:#a45c32}}.kpi.progress .kpi-icon{{background:#e5f3e9;color:#30754b}}.kpi-value-row b{{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#172019;font:650 28px/1 var(--ui);letter-spacing:-.035em}}.kpi-meta{{display:block;margin-top:8px;color:#8b928c;font:10px/1.3 var(--ui)}}
-.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:100vh;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}}.st-key-bp_left_rail{{position:sticky;top:0;max-height:100vh;border:0;border-right:1px solid #e2e4e2;border-radius:0;padding:6px 8px 30px!important;background:#f7f7f6;overflow-y:scroll!important;scrollbar-width:thin;scrollbar-color:#c8ceca transparent}}.st-key-bp_left_rail::-webkit-scrollbar{{width:6px}}.st-key-bp_left_rail::-webkit-scrollbar-thumb{{border-radius:8px;background:#c8ceca}}.st-key-bp_center_pane{{border:0;border-radius:0;padding:20px 34px 120px!important;background:#fff}}.st-key-bp_right_rail{{height:calc(100vh - 16px);min-height:0;margin:8px 12px 8px 10px;padding:16px 14px!important;border:1px solid #e2e5e2;border-radius:16px;background:#fbfbfa;box-shadow:0 8px 24px rgba(25,36,28,.055)}}
-.rail-heading{{margin:0 6px 7px;font:650 22px/1.02 var(--ui);letter-spacing:-.04em;color:#202722}}.rail-heading span{{color:#9aa09b}}.rail-heading small{{display:block;margin-bottom:8px;color:#7b837d;font:600 9px/1 var(--ui);letter-spacing:.02em;text-transform:uppercase}}.rail-top-progress{{height:4px;margin:12px 6px 23px;border-radius:5px;background:#dde1de;overflow:hidden}}.rail-top-progress i{{display:block;height:100%;border-radius:5px;background:#252b27;transition:width .35s ease}}
-.rail-summary{{margin:22px 6px 0;padding:15px 0 0;border:0;border-top:1px solid #d8ddda;border-radius:0;background:transparent}}.rail-summary-head{{display:flex;justify-content:space-between;align-items:center;font:650 12px/1.2 var(--ui);color:#303833}}.rail-summary-head span:last-child{{font-size:10px;color:#7d847f}}.rail-stats{{display:grid;gap:8px;margin-top:12px}}.rail-stat{{display:flex;align-items:center;justify-content:space-between;color:#666e68;font:500 10px/1.2 var(--ui)}}.rail-stat span{{display:flex;align-items:center;gap:7px}}.rail-stat i{{width:12px;height:12px;border:1px solid #bfc5c0;border-radius:50%;background:transparent}}.rail-stat.live i{{border:3px solid #d8e9dc;border-top-color:#318052;animation:spin 1s linear infinite}}.rail-stat.done i{{border-color:#2f8051;background:#2f8051;box-shadow:inset 0 0 0 3px #f7f7f6}}.rail-stat b{{font-size:10px;color:#89908a}}.st-key-bp_left_rail [data-testid="stExpander"]{{margin-top:8px;border:0!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_rail [data-testid="stExpander"] details{{border:0!important;background:transparent!important}}.st-key-bp_left_rail [data-testid="stExpander"] summary{{min-height:38px!important;padding:0 9px!important;border-radius:9px!important;background:transparent!important;color:#687069!important;font:650 10px/1 var(--ui)!important;text-transform:uppercase}}.st-key-bp_left_rail [data-testid="stExpander"] details[open] summary{{border:0!important;border-radius:9px!important;background:#e7eee8!important;color:#33463a!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"]{{padding:5px 0 3px!important}}.st-key-bp_left_rail [data-testid="stButton"]{{width:100%!important;margin:2px 0!important;padding:0 5px!important}}.st-key-bp_left_rail [data-testid="stButton"] button{{position:relative;width:100%!important;min-width:0!important;min-height:38px!important;padding:8px 32px 8px 34px!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#39423b!important;text-align:left!important;justify-content:flex-start!important;white-space:normal!important;font:500 12px/1.25 var(--ui)!important;box-shadow:none!important;transition:background .18s ease,transform .18s ease}}.st-key-bp_left_rail [data-testid="stButton"] button:hover{{transform:none;background:#e9ece9!important}}
+[data-testid="stAppViewContainer"],[data-testid="stHeader"]{{background:#fff}}[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stSidebar"],[data-testid="stSidebarNav"],#MainMenu,footer{{display:none!important}}html,body{{height:100%!important;margin:0!important;overflow:hidden!important}}[data-testid="stAppViewContainer"]{{height:100vh!important;overflow-y:auto!important;overflow-x:hidden!important}}[data-testid="stAppViewContainer"]>.main,[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{min-height:100vh!important;height:auto!important;margin:0!important;padding:0!important;overflow:visible!important}}main .block-container,[data-testid="stMainBlockContainer"]{{width:100%!important;max-width:none!important;padding:0!important}}[data-testid="stMainBlockContainer"]>[data-testid="stVerticalBlock"]{{gap:0!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{min-height:100vh!important;height:auto!important;align-items:flex-start!important;gap:0!important}}[data-stale="true"]{{opacity:1!important}}.st-key-bp_left_rail *,.st-key-bp_center_pane *,.st-key-bp_right_rail *{{font-family:var(--ui)!important}}[data-testid="stIconMaterial"],.material-symbols-rounded{{font-family:'Material Symbols Rounded'!important}}
+.bp-wordmark{{display:flex;align-items:center;gap:9px;font:650 18px/1 var(--ui);letter-spacing:-.03em;margin:0 6px 36px}}.bp-wordmark:before{{content:'';width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(44,122,75,.09)}}
+.bp-project-title{{font:650 clamp(32px,3.1vw,48px)/1.02 var(--ui);letter-spacing:-.045em;margin:15px 0 7px;color:var(--ink)}}.empty-project-title{{color:#8d938f}}.bp-goal{{max-width:900px;font:12px/1.45 var(--ui);color:var(--muted)}}.bp-live-spacer{{height:38px}}
+.kpi-grid{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0 27px;background:transparent}}.kpi{{position:relative;min-width:0;min-height:112px;padding:16px;border:1px solid #dfe3df;border-radius:13px;background:#fff;box-shadow:none}}.kpi-label{{display:block;padding-right:76px;color:#4e5751;font:650 13px/1.25 var(--ui)}}.kpi-badge{{position:absolute;right:11px;top:11px;display:inline-flex;align-items:center;padding:5px 8px;border-radius:9px;font:700 8px/1 var(--ui);text-transform:uppercase}}.kpi-badge.awaiting{{background:#eee8f8;color:#68538f}}.kpi-badge.sparse{{background:#fff0df;color:#9a5c27}}.kpi-badge.clear{{background:#e3f2e7;color:#267044}}.kpi-badge.starting{{background:#e5eef8;color:#3a6889}}.kpi-badge.active{{background:#e7f0fb;color:#315f88}}.kpi-badge.watch{{background:#fff0df;color:#9a5c27}}.kpi-badge.danger{{background:#f9e5e2;color:#963f36}}.kpi-value-row{{display:flex;align-items:center;min-height:34px;margin-top:20px}}.kpi-value-row b{{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#172019;font:650 29px/1 var(--ui);letter-spacing:-.035em}}.kpi-meta{{display:block;margin-top:9px;color:#7b837d;font:11px/1.35 var(--ui)}}
+.st-key-bp_left_rail{{position:sticky;top:0;display:flex!important;flex-direction:column!important;gap:0!important;align-self:flex-start;box-sizing:border-box!important;height:100vh;min-height:0;max-height:100vh;border:0;border-right:1px solid #e2e4e2;border-radius:0;padding:22px 8px 0!important;background:#f5f6f4;overflow:hidden!important}}.st-key-bp_left_rail>[data-testid="stLayoutWrapper"]:has(.st-key-bp_stage_scroll){{flex:1 1 auto!important;min-height:0!important;overflow:hidden!important}}.st-key-bp_stage_scroll{{height:100%!important;min-height:0!important;padding:0 2px 120px 0!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c8ceca transparent}}.st-key-bp_stage_scroll::-webkit-scrollbar{{width:5px}}.st-key-bp_stage_scroll::-webkit-scrollbar-thumb{{border-radius:8px;background:#c8ceca}}.st-key-bp_center_pane{{display:flex!important;flex-direction:column!important;min-height:100vh;border:0;border-radius:0;padding:20px 34px 120px!important;background:#fff;overflow:visible!important}}.st-key-bp_right_rail{{position:sticky;top:12px;align-self:flex-start;height:auto;min-height:0;margin:12px 12px 12px 10px;padding:16px 14px!important;border:1px solid #e2e5e2;border-radius:16px;background:#fbfbfa;box-shadow:0 8px 24px rgba(25,36,28,.055)}}
+.rail-heading{{margin:0 6px 7px;font:650 22px/1.02 var(--ui);letter-spacing:-.04em;color:#202722}}.rail-heading span{{color:#9aa09b}}.rail-top-progress{{height:4px;margin:12px 6px 19px;border-radius:5px;background:#dde1de;overflow:hidden}}.rail-top-progress i{{display:block;height:100%;border-radius:5px;background:#252b27;transition:width .35s ease}}
+.rail-summary{{position:absolute;z-index:8;left:14px;right:14px;bottom:0;margin:0;padding:14px 0 15px;border:0;border-top:1px solid #d8ddda;border-radius:0;background:#f5f6f4}}.rail-summary-head{{display:flex;justify-content:space-between;align-items:center;font:650 12px/1.2 var(--ui);color:#303833}}.rail-summary-head span:last-child{{font-size:10px;color:#7d847f}}.rail-stats{{display:grid;gap:8px;margin-top:12px}}.rail-stat{{display:flex;align-items:center;justify-content:space-between;color:#666e68;font:500 10px/1.2 var(--ui)}}.rail-stat span{{display:flex;align-items:center;gap:7px}}.rail-stat i{{width:12px;height:12px;border:1px solid #bfc5c0;border-radius:50%;background:transparent}}.rail-stat.live i{{border:3px solid #d8e9dc;border-top-color:#318052;animation:spin 1s linear infinite}}.rail-stat.done i{{border-color:#2f8051;background:#2f8051;box-shadow:inset 0 0 0 3px #f5f6f4}}.rail-stat b{{font-size:10px;color:#89908a}}.st-key-bp_left_rail [data-testid="stExpander"]{{margin-top:7px;border:0!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_rail [data-testid="stExpander"] details{{border:0!important;background:transparent!important;box-shadow:none!important}}.st-key-bp_left_rail [data-testid="stExpander"] summary{{min-height:38px!important;padding:0 9px!important;border:0!important;border-radius:9px!important;background:transparent!important;color:#687069!important;box-shadow:none!important;font:650 10px/1 var(--ui)!important;text-transform:uppercase}}.st-key-bp_left_rail [data-testid="stExpander"] details[open] summary{{border:0!important;border-radius:9px!important;background:#e5ece6!important;color:#33463a!important;box-shadow:none!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"]{{padding:5px 0 3px!important;border:0!important}}.st-key-bp_left_rail [data-testid="stButton"]{{width:100%!important;margin:2px 0!important;padding:0 5px!important}}.st-key-bp_left_rail [data-testid="stButton"] button{{position:relative;width:100%!important;min-width:0!important;min-height:38px!important;padding:8px 32px 8px 34px!important;border:0!important;border-radius:9px!important;background:#eceeec!important;color:#4f5751!important;text-align:left!important;justify-content:flex-start!important;white-space:normal!important;font:500 12px/1.25 var(--ui)!important;box-shadow:none!important;transition:background .18s ease}}.st-key-bp_left_rail [data-testid="stButton"] button:hover{{background:#e2e6e3!important}}
 .plan-shortcuts{{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0 17px}}.plan-shortcut{{display:block;padding:13px;border:1px solid #d6e2d8;border-radius:13px;background:#eaf3ec;color:#253029;text-decoration:none!important;transition:transform .2s,border-color .2s}}.plan-shortcut:last-child{{border-color:#ead9ce;background:#f7eee8}}.plan-shortcut:hover{{transform:translateY(-2px);border-color:#abc4b1}}.plan-shortcut i{{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:#dbeadf;color:#2f754b;font:normal 12px var(--ui)}}.plan-shortcut:last-child i{{background:#f0ddd2;color:#8a553a}}.plan-shortcut b{{display:block;margin-top:10px;font:650 12px/1.2 var(--ui)}}.plan-shortcut small{{display:block;margin-top:3px;color:#68736b;font:9px/1.35 var(--ui)}}
 .section-kicker{{font:600 10px/1.2 var(--ui);color:#79827a;text-transform:uppercase}}.section-title{{font:650 31px/1.08 var(--ui);letter-spacing:-.035em;margin:7px 0 2px}}.section-summary{{margin:13px 0 21px;padding:16px 18px;border-left:3px solid var(--green);border-radius:0 12px 12px 0;background:#f1f6f1;font:14px/1.55 var(--ui)}}.state-banner{{display:flex;gap:13px;margin:22px 0;padding:18px;border:1px solid var(--line);border-radius:14px;background:#f6f8f5}}.state-spinner{{width:25px;height:25px;border:3px solid #cfdbd1;border-top-color:#267749;border-radius:50%;animation:spin .8s linear infinite}}.state-banner b{{display:block;font:600 14px var(--ui)}}.state-banner span{{font:11px/1.4 var(--ui);color:var(--muted)}}
 .detail-heading{{margin:23px 0 9px;font:500 9px 'DM Mono';text-transform:uppercase;color:#6e776f}}.insight-list{{display:grid;gap:8px}}.insight{{padding:11px 13px;border:1px solid #e1e5e1;border-radius:12px;background:#fff;font:12px/1.48 'Space Grotesk'}}.empty-state{{display:grid;place-items:center;min-height:260px;text-align:center;color:#737d75}}.empty-state b{{display:block;font:500 22px 'Space Grotesk';color:#2a352d}}.empty-state p{{max-width:500px;font:12px/1.5 'Space Grotesk'}}
 .verdict-hero{{margin:17px 0;padding:22px;border-radius:20px;background:linear-gradient(135deg,#193f2a,#286345);color:#f2f8f3}}.verdict-hero strong{{font:500 25px 'Space Grotesk'}}.verdict-hero p{{color:#c8dbce;font:12px/1.5 'Space Grotesk'}}.score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}.score-cell{{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}}.score-cell b{{display:block;font:500 18px 'Space Grotesk'}}.score-cell span{{font:8px 'DM Mono';text-transform:uppercase;color:#7c857e}}
-.st-key-empty_idea_composer{{position:relative;overflow:hidden;margin-top:22px;padding:27px 28px 22px!important;border:1px solid #dce3dd;border-radius:18px;background:#f7faf7;box-shadow:0 10px 30px rgba(35,65,45,.055)}}.st-key-empty_idea_composer:after{{content:'';position:absolute;z-index:0;right:-92px;top:-108px;width:260px;height:260px;border-radius:50%;border:1px solid rgba(48,126,78,.1);box-shadow:inset 0 0 0 42px rgba(48,126,78,.025),inset 0 0 0 84px rgba(48,126,78,.02);pointer-events:none}}.st-key-empty_idea_composer>*{{position:relative;z-index:1}}.st-key-empty_idea_composer.idea-attention{{animation:ideaFocus 1.05s ease}}.empty-eyebrow{{font:650 10px/1.2 var(--ui);text-transform:uppercase;color:#477157}}.empty-composer-title{{max-width:650px;margin:10px 0 8px;font:650 clamp(31px,3.5vw,48px)/1.02 var(--ui);letter-spacing:-.045em}}.empty-composer-copy{{max-width:690px;margin:0 0 17px;color:#617067;font:13px/1.55 var(--ui)}}.empty-steps{{display:flex;align-items:center;width:100%;margin-top:20px}}.empty-step{{display:flex;align-items:center;gap:8px;color:#48534b;font:650 11px/1 var(--ui);white-space:nowrap}}.empty-step:not(:last-child){{flex:1}}.empty-step:not(:last-child):after{{content:'';flex:1;height:1px;margin:0 14px;background:#cbd3cd}}.empty-step i{{display:grid;place-items:center;width:27px;height:27px;border:1px solid #aebdb2;border-radius:50%;background:#fff;color:#2f6946;font:650 10px/1 var(--ui);font-style:normal}}.st-key-empty_idea_composer [data-testid="stForm"]{{border:0!important;padding:0!important}}.st-key-empty_idea_composer [data-testid="stTextAreaRootElement"]{{border:1px solid #cbd8ce!important;border-radius:12px!important;background:#fff!important;box-shadow:none!important}}.st-key-empty_idea_composer textarea{{min-height:112px!important;font:14px/1.5 var(--ui)!important}}.st-key-empty_idea_composer [data-testid="stFormSubmitButton"]{{display:flex!important;justify-content:flex-start!important}}.st-key-empty_idea_composer [data-testid="stFormSubmitButton"] button{{width:auto!important;min-width:205px!important;height:42px!important;padding:0 18px!important;border:0!important;border-radius:11px!important;background:#1d4c31!important;color:#fff!important;font:650 10px var(--ui)!important}}.empty-right-card{{margin-top:10px;padding:14px;border:1px solid #e3e6e3;border-radius:13px;background:#fff}}.empty-right-row{{display:flex;gap:9px;align-items:flex-start;padding:10px 0;border-top:1px solid #edf0ed;color:#626a64;font:11px/1.4 var(--ui)}}.empty-right-row i{{flex:0 0 12px;height:12px;margin-top:1px;border:1px solid #afb6b0;border-radius:50%;background:#fff}}
-.chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.chat-guide{{margin:6px 0 10px;padding:14px 15px;border:1px solid #dbe2dc;border-radius:14px;background:#f7faf7}}.chat-guide b{{display:block;font:600 14px/1.3 var(--ui)}}.chat-guide span{{display:block;margin-top:4px;color:#707a72;font:10px/1.45 var(--ui)}}[class*="st-key-chat_starter_"] button{{min-height:36px!important;border:1px solid #d7dfd8!important;border-radius:11px!important;background:#fff!important;color:#405047!important;font:600 10px var(--ui)!important;box-shadow:none!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#6b9276!important;background:#edf5ef!important}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fff;padding-top:12px}}.stChatMessage{{background:#f6f7f5!important;border:1px solid #e1e6e1!important;border-radius:13px!important}}.chat-grounding{{margin-top:7px;color:#7b847d;font:600 9px var(--ui);text-transform:uppercase}}.right-title{{font:650 10px/1.2 var(--ui);text-transform:uppercase;margin:11px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 12px!important;border:1px solid #dfe4df;border-radius:14px;background:#fff;box-shadow:none}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:650 14px var(--ui)}}.action-head span{{font:600 10px var(--ui);color:#8b918c}}.action-progress{{height:5px;margin:12px 0 9px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:#202522;transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important;border-top:1px solid #eef0ee}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:9px 1px!important;align-items:flex-start!important;font:11px/1.4 var(--ui)!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#757d77;font:10px/1.45 var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:0!important;border-top:1px solid #e0e4e0!important;border-radius:0!important;background:transparent!important;margin-top:4px}}.st-key-bp_right_rail [data-testid="stExpander"] details{{border:0!important;border-radius:0!important;background:transparent!important}}.st-key-bp_right_rail [data-testid="stExpander"] summary{{min-height:40px!important;padding:8px 3px!important;flex-direction:row-reverse!important;justify-content:space-between!important;color:#4c554e!important;font:600 11px/1.2 var(--ui)!important}}.st-key-bp_right_rail [data-testid="stExpanderDetails"]{{padding:0 3px 10px!important}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#252b27!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:22px!important;background:#f8faf7!important}}
-{state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"],[data-testid="stAppViewContainer"]>.main,[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.empty-steps{{align-items:flex-start;flex-direction:column;gap:10px}}.empty-step:not(:last-child):after{{display:none}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
+.st-key-empty_idea_composer{{position:relative;overflow:hidden;margin-top:22px;padding:27px 28px 22px!important;border:1px solid #dce3dd;border-radius:18px;background:#f7faf7;box-shadow:0 10px 30px rgba(35,65,45,.055)}}.st-key-empty_idea_composer:after{{content:'';position:absolute;z-index:0;right:-92px;top:-108px;width:260px;height:260px;border-radius:50%;border:1px solid rgba(48,126,78,.1);box-shadow:inset 0 0 0 42px rgba(48,126,78,.025),inset 0 0 0 84px rgba(48,126,78,.02);pointer-events:none}}.st-key-empty_idea_composer>*{{position:relative;z-index:1}}.st-key-empty_idea_composer.idea-attention{{animation:ideaFocus 1.05s ease}}.empty-eyebrow{{font:650 10px/1.2 var(--ui);text-transform:uppercase;color:#477157}}.empty-composer-title{{max-width:650px;margin:10px 0 8px;font:650 clamp(31px,3.5vw,48px)/1.02 var(--ui);letter-spacing:-.045em}}.empty-composer-copy{{max-width:690px;margin:0 0 17px;color:#617067;font:13px/1.55 var(--ui)}}.st-key-empty_idea_composer [data-testid="stForm"]{{border:0!important;padding:0!important}}.st-key-empty_idea_composer [data-testid="stTextAreaRootElement"]{{border:1px solid #cbd8ce!important;border-radius:12px!important;background:#fff!important;box-shadow:none!important}}.st-key-empty_idea_composer textarea{{min-height:112px!important;font:14px/1.5 var(--ui)!important}}.st-key-empty_idea_composer [data-testid="stFormSubmitButton"]{{display:flex!important;justify-content:flex-start!important}}.st-key-empty_idea_composer [data-testid="stFormSubmitButton"] button{{width:auto!important;min-width:205px!important;height:42px!important;padding:0 18px!important;border:0!important;border-radius:11px!important;background:#1d4c31!important;color:#fff!important;font:650 10px var(--ui)!important}}.empty-right-card{{margin-top:10px;padding:14px;border:1px solid #e3e6e3;border-radius:13px;background:#fff}}.empty-right-row{{display:flex;gap:9px;align-items:flex-start;padding:10px 0;border-top:1px solid #edf0ed;color:#626a64;font:11px/1.4 var(--ui)}}.empty-right-row i{{flex:0 0 12px;height:12px;margin-top:1px;border:1px solid #afb6b0;border-radius:50%;background:#fff}}
+.st-key-bp_center_pane>[data-testid="stLayoutWrapper"]:has([class*="st-key-bp_chat_shell_"]){{margin-top:auto!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:30px!important}}.chat-divider{{margin:0 0 14px;border-top:1px solid var(--line)}}.chat-guide{{margin:6px 0 10px;padding:13px 15px;border:0;border-radius:12px;background:#f3f6f3}}.chat-guide b{{display:block;font:650 14px/1.3 var(--ui)}}.chat-guide span{{display:block;margin-top:4px;color:#707a72;font:11px/1.45 var(--ui)}}[class*="st-key-chat_starter_"] button{{min-height:35px!important;padding:7px 10px!important;border:0!important;border-radius:10px!important;background:#f2f4f2!important;color:#405047!important;justify-content:flex-start!important;text-align:left!important;font:600 10px var(--ui)!important;box-shadow:none!important}}[class*="st-key-chat_starter_"] button:hover{{background:#e7efe9!important;color:#285c3c!important}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:10px;z-index:20;padding-top:12px;background:linear-gradient(transparent,#fff 28%)}}.stChatMessage{{background:#f6f7f5!important;border:1px solid #e1e6e1!important;border-radius:13px!important}}.chat-grounding{{margin-top:7px;color:#7b847d;font:600 9px var(--ui);text-transform:uppercase}}.companion-heading{{padding:8px 0 4px;color:#4b534d;font:650 10px/1.2 var(--ui);text-transform:uppercase}}.st-key-bp_toggle_companion button{{width:30px!important;min-width:30px!important;height:30px!important;padding:0!important;border:1px solid #d9ddda!important;border-radius:50%!important;background:#fff!important;color:#4d574f!important;box-shadow:none!important}}.right-title{{font:650 10px/1.2 var(--ui);text-transform:uppercase;margin:11px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 12px!important;border:1px solid #dfe4df;border-radius:14px;background:#fff;box-shadow:none}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:650 14px var(--ui)}}.action-head span{{font:600 10px var(--ui);color:#8b918c}}.action-progress{{height:5px;margin:12px 0 11px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:#202522;transition:width .35s ease}}.action-divider{{height:1px;margin:0;background:#eef0ee}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important;border:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:9px 1px!important;align-items:flex-start!important;font:11px/1.4 var(--ui)!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#757d77;font:10px/1.45 var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:0!important;border-top:1px solid #e0e4e0!important;border-radius:0!important;background:transparent!important;margin-top:4px}}.st-key-bp_right_rail [data-testid="stExpander"] details{{border:0!important;border-radius:0!important;background:transparent!important}}.st-key-bp_right_rail [data-testid="stExpander"] summary{{min-height:40px!important;padding:8px 3px!important;flex-direction:row-reverse!important;justify-content:space-between!important;color:#4c554e!important;font:600 11px/1.2 var(--ui)!important}}.st-key-bp_right_rail [data-testid="stExpanderDetails"]{{padding:0 3px 10px!important}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#252b27!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:22px!important;background:#f8faf7!important}}
+{state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 </style>""", unsafe_allow_html=True)
 
 
 def _render_kpi_strip(score: float | None, coverage: int, risks: int, completion: int) -> None:
     if score is None:
-        score_value, score_status, score_tone = "—", "Awaiting", "neutral"
+        score_value, score_status, score_tone = "—", "Awaiting", "awaiting"
     elif score >= 60:
-        score_value, score_status, score_tone = f"{score:.0f}/100", "Proceed", ""
+        score_value, score_status, score_tone = f"{score:.0f}/100", "Proceed", "clear"
     elif score >= 40:
         score_value, score_status, score_tone = f"{score:.0f}/100", "Review", "watch"
     else:
-        score_value, score_status, score_tone = f"{score:.0f}/100", "Rethink", "watch"
+        score_value, score_status, score_tone = f"{score:.0f}/100", "Rethink", "danger"
     coverage_status = "Strong" if coverage >= 70 else "Growing" if coverage >= 35 else "Sparse"
-    coverage_tone = "" if coverage >= 70 else "watch" if coverage else "neutral"
-    risk_status, risk_tone = ("Clear", "") if risks == 0 else ("Review", "watch")
+    coverage_tone = "clear" if coverage >= 70 else "watch" if coverage >= 35 else "sparse"
+    risk_status, risk_tone = ("Clear", "clear") if risks == 0 else ("Review", "danger")
     progress_status = "Complete" if completion >= 100 else "Active" if completion else "Starting"
-    progress_tone = "" if completion else "neutral"
+    progress_tone = "clear" if completion >= 100 else "active" if completion else "starting"
     metrics = (
-        ("score", "◆", "Decision score", score_value, score_status, score_tone, "Evidence-weighted verdict"),
-        ("evidence", "▦", "Evidence coverage", f"{coverage}%", coverage_status, coverage_tone, "Accepted research coverage"),
-        ("risk", "!", "Open risks", str(risks), risk_status, risk_tone, "Items needing resolution"),
-        ("progress", "↗", "Blueprint progress", f"{completion}%", progress_status, progress_tone, "Current roadmap completion"),
+        ("Decision score", score_value, score_status, score_tone, "Evidence-weighted verdict"),
+        ("Evidence coverage", f"{coverage}%", coverage_status, coverage_tone, "Accepted research coverage"),
+        ("Open risks", str(risks), risk_status, risk_tone, "Items needing resolution"),
+        ("Blueprint progress", f"{completion}%", progress_status, progress_tone, "Current roadmap completion"),
     )
     cards = "".join(
-        f'<div class="kpi {kind}"><span class="kpi-label">{html.escape(label)}</span><span class="kpi-badge {tone}">{html.escape(status)}</span>'
-        f'<div class="kpi-value-row"><i class="kpi-icon">{html.escape(icon)}</i><b>{html.escape(value)}</b></div><span class="kpi-meta">{html.escape(meta)}</span></div>'
-        for kind, icon, label, value, status, tone, meta in metrics
+        f'<div class="kpi"><span class="kpi-label">{html.escape(label)}</span><span class="kpi-badge {tone}">{html.escape(status)}</span>'
+        f'<div class="kpi-value-row"><b>{html.escape(value)}</b></div><span class="kpi-meta">{html.escape(meta)}</span></div>'
+        for label, value, status, tone, meta in metrics
     )
     st.markdown(f'<div class="kpi-grid">{cards}</div>', unsafe_allow_html=True)
 
 
 def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, interactive: bool) -> None:
-    st.markdown('<div class="bp-wordmark">Blueprint</div><div class="rail-heading"><small>Your decision path</small>Roadmap <span>&amp; Progress</span></div>', unsafe_allow_html=True)
+    st.markdown('<div class="bp-wordmark">Blueprint</div><div class="rail-heading">Roadmap <span>&amp; Progress</span></div>', unsafe_allow_html=True)
     done_count = sum(state[0] == "done" for state in states.values())
     running_count = sum(state[0] == "running" for state in states.values())
     waiting_count = len(states) - done_count - running_count
     rail_percent = round(100 * done_count / max(1, len(states)))
     st.markdown(f'<div class="rail-top-progress"><i style="width:{rail_percent}%"></i></div>', unsafe_allow_html=True)
-    for stage_number, (stage_name, sections) in enumerate(STAGES, 1):
-        selected_in_stage = any(key == selected for key, _ in sections)
-        with st.expander(stage_name, expanded=stage_number == 1 or selected_in_stage):
-            for key, label in sections:
-                state = states[key]
-                if st.button(label, key=f"select_{key}", help=f"Status: {state[1]}"):
-                    if interactive:
-                        st.session_state["bp_selected_section"] = key
-                    else:
-                        st.session_state["bp_focus_idea"] = True
-                    st.rerun()
+    with st.container(key="bp_stage_scroll"):
+        for stage_number, (stage_name, sections) in enumerate(STAGES, 1):
+            selected_in_stage = any(key == selected for key, _ in sections)
+            with st.expander(stage_name, expanded=stage_number == 1 or selected_in_stage):
+                for key, label in sections:
+                    state = states[key]
+                    if st.button(label, key=f"select_{key}", help=f"Status: {state[1]}", use_container_width=True):
+                        if interactive:
+                            st.session_state["bp_selected_section"] = key
+                        else:
+                            st.session_state["bp_focus_idea"] = True
+                        st.rerun()
     st.markdown(
         f'<div class="rail-summary"><div class="rail-summary-head"><span>Overall progress</span><span>{done_count} of {len(states)}</span></div>'
         f'<div class="rail-stats"><div class="rail-stat live"><span><i></i>Processing</span><b>{running_count}</b></div>'
@@ -237,9 +252,9 @@ def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, inte
     )
 
 
-def _render_plan_shortcuts() -> None:
+def _render_plan_shortcuts(*, show_title: bool = True) -> None:
     st.markdown(
-        '<div class="right-title">Complete plan</div><div class="plan-shortcuts">'
+        ('<div class="right-title">Complete plan</div>' if show_title else '') + '<div class="plan-shortcuts">'
         '<a class="plan-shortcut" href="/Your_Plan?view=blueprint" target="_blank" rel="noopener"><i>⌘</i><b>Open full Blueprint</b><small>Every stage, dependency, and unresolved decision.</small></a>'
         '<a class="plan-shortcut" href="/Your_Plan?view=financial" target="_blank" rel="noopener"><i>$</i><b>Financial plan</b><small>Capital, costs, pricing evidence, and readiness.</small></a></div>',
         unsafe_allow_html=True,
@@ -309,7 +324,40 @@ def _render_empty(key: str, state: tuple[str, str]) -> None:
     st.markdown(f'<div class="empty-state"><div><b>{html.escape(state[1])}</b><p>{html.escape(message)}</p></div></div>', unsafe_allow_html=True)
 
 
-def _render_chat(key: str) -> None:
+def _render_chat(key: str, output: dict, state: tuple[str, str]) -> None:
+    with st.container(key=f"bp_chat_shell_{key}"):
+        _render_chat_content(key, output, state)
+
+
+def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, str]) -> str:
+    """Return a useful, explicitly bounded answer when the research copilot has no safe result."""
+    label = LABELS[key]
+    normalized = re.sub(r"[^a-z0-9]+", " ", question.lower()).strip()
+    definitions = {
+        "foundation": "Foundation defines the problem hypothesis, target-user boundary, founder constraints, riskiest assumptions, and the unknowns that must be resolved before deeper research can support a decision.",
+        "customer_demand": "Customer Research looks for observable jobs, pains, current workarounds, buying triggers, and commitment signals. It separates reported interest from evidence of real behaviour.",
+        "competitor_intelligence": "Competitor Research compares direct and indirect alternatives, customer praise and complaints, positioning, differentiators, and evidence-backed gaps this idea could test.",
+        "market_economics": "Market Research examines demand signals, reachable segments, channel access, market constraints, and the assumptions behind market size or willingness to pay.",
+        "evidence_audit": "Evidence Audit checks whether important claims are supported, current, relevant, and non-contradictory before they influence the verdict.",
+        "research_verdict": "Research Verdict explains whether the idea should proceed, be narrowed, be tested again, or be reconsidered—and shows which evidence and uncertainty caused that recommendation.",
+    }
+    finding = str(output.get("executive_finding") or output.get("summary") or output.get("explanation") or "").strip()
+    if any(term in normalized for term in ("next step", "next move", "what should i do", "actionable", "recommend")):
+        actions = _section_actions(key, None, output)
+        return "The safest next moves are: " + " ".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
+    if any(term in normalized for term in ("what is", "explain", "mean", "purpose", "why")) and key in definitions:
+        suffix = f" Current finding: {finding}" if finding else ""
+        return definitions[key] + suffix
+    if finding:
+        return f"Here is the clearest evidence-bounded answer available from {label}: {finding}"
+    if state[0] == "running":
+        return f"{label} is still running, so Blueprint cannot safely answer that from completed evidence yet. You can ask what this section is meant to establish, or wait for the accepted findings and sources to appear."
+    if state[0] in {"locked", "idle", "ready"}:
+        return f"{label} has not produced an accepted result yet. Blueprint will not invent an answer; start or unlock this section first, then ask again against its findings and sources."
+    return f"Blueprint could not ground that answer in the current {label} result. Ask which evidence is missing or rerun this section after adding the needed context."
+
+
+def _render_chat_content(key: str, output: dict, state: tuple[str, str]) -> None:
     label = LABELS[key]
     st.markdown('<div class="chat-divider"></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="chat-guide"><b>Ask Blueprint about {html.escape(label)}</b><span>Get a plain-language explanation, trace the supporting evidence, or turn an existing actionable into practical steps.</span></div>', unsafe_allow_html=True)
@@ -327,7 +375,7 @@ def _render_chat(key: str) -> None:
                 st.markdown(f'<div class="chat-grounding">{html.escape(str(message["grounding_status"]).replace("_", " "))}</div>', unsafe_allow_html=True)
     starter_question = None
     if not history:
-        starters = ("Explain this simply", "What evidence supports this?", "What should I do next?")
+        starters = ("◎  Explain simply", "▦  Show supporting evidence", "↗  Recommend the next move")
         starter_cols = st.columns(3)
         for index, (column, starter) in enumerate(zip(starter_cols, starters)):
             if column.button(starter, key=f"chat_starter_{key}_{index}", use_container_width=True):
@@ -349,15 +397,24 @@ def _render_chat(key: str) -> None:
                 )
             if result.get("thread_id"):
                 threads[key] = result["thread_id"]
+            answer = str(result.get("answer") or "").strip()
+            weak_answer = not answer or answer.upper() in {"UNKNOWN", "NOT ENOUGH INFORMATION", "INSUFFICIENT INFORMATION"} or len(answer) < 18
             history.append({
                 "role": "assistant",
-                "content": result.get("answer") or "I could not produce a safe answer from the available section context. Try asking what is missing or which evidence would resolve it.",
+                "content": _local_chat_answer(question, key, output, state) if weak_answer else answer,
                 "citations": _items(result.get("citations")),
                 "suggested_actions": _items(result.get("suggested_actions")),
                 "grounding_status": result.get("grounding_status"),
             })
         except BackendError as exc:
-            history.append({"role": "assistant", "content": str(exc), "citations": []})
+            history.append({
+                "role": "assistant",
+                "content": _local_chat_answer(question, key, output, state),
+                "citations": [],
+                "grounding_status": "LOCAL_SAFE_FALLBACK",
+                "suggested_actions": [],
+                "technical_note": str(exc),
+            })
         st.rerun()
 
 
@@ -388,30 +445,66 @@ def _section_actions(key: str, task: dict | None, output: dict) -> list:
     return defaults.get(key, ["Review this section's current state.", "Resolve its next missing input before continuing."])
 
 
-def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]) -> None:
-    st.markdown('<div class="right-title">Section companion</div>', unsafe_allow_html=True)
-    actions = _section_actions(key, task, output)
+def _workspace_actions(tasks: dict[str, dict], artifact: dict, dashboard: dict) -> list:
+    candidates: list = []
+    for source in (dashboard, artifact):
+        for field in ("next_actions", "contextual_actions", "recommendations", "milestones"):
+            candidates.extend(_items(source.get(field)))
+    for section_key in LABELS:
+        task = tasks.get(section_key)
+        if not task:
+            continue
+        output = _dict(task.get("output"))
+        if str(task.get("status") or "").upper() in DONE:
+            candidates.extend(_section_actions(section_key, task, output)[:2])
+    if not candidates:
+        foundation_task = tasks.get("foundation")
+        candidates = _section_actions("foundation", foundation_task, _dict(_dict(foundation_task).get("output")))
+    actions, seen = [], set()
+    for candidate in candidates:
+        text = _item_text(candidate)
+        canonical = re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+        if text and canonical not in seen:
+            seen.add(canonical)
+            actions.append(text)
+        if len(actions) == 7:
+            break
+    return actions
+
+
+def _render_actionables(actions: list) -> None:
     completed = st.session_state.setdefault("bp_completed_actionables", {})
-    scoped = set(_items(completed.get(key)))
+    scoped = set(_items(completed.get("workspace")))
     entries = []
     for index, action in enumerate(actions[:7]):
         text = _item_text(action)
-        action_id = f"{key}:{index}:{text[:40]}"
-        widget_key = f"action_{key}_{index}"
+        action_id = f"workspace:{text[:80]}"
+        widget_key = f"action_workspace_{index}_{sum(ord(char) for char in text) % 100000}"
         checked = bool(st.session_state.get(widget_key, action_id in scoped))
         entries.append((checked, index, text, action_id, widget_key))
     completed_count = sum(item[0] for item in entries)
     total = len(entries)
     percent = round(100 * completed_count / total) if total else 0
-    with st.container(key=f"bp_action_card_{key}"):
+    with st.container(key="bp_action_card_workspace"):
         st.markdown(f'<div class="action-head"><b>Actionables</b><span>{completed_count} of {total}</span></div><div class="action-progress"><i style="width:{percent}%"></i></div>', unsafe_allow_html=True)
         if entries:
-            for checked_before, index, text, action_id, widget_key in sorted(entries, key=lambda item: item[0]):
+            for position, (checked_before, index, text, action_id, widget_key) in enumerate(sorted(entries, key=lambda item: item[0])):
+                if position:
+                    st.markdown('<div class="action-divider"></div>', unsafe_allow_html=True)
                 checked = st.checkbox(text, value=checked_before, key=widget_key)
                 scoped.add(action_id) if checked else scoped.discard(action_id)
         else:
             st.markdown('<div class="action-empty">No founder action is required until this section has a valid result.</div>', unsafe_allow_html=True)
-    completed[key] = sorted(scoped)
+    completed["workspace"] = sorted(scoped)
+
+
+def _render_right(key: str, task: dict | None, output: dict, sources: list[dict], actions: list, *, compact: bool = False) -> None:
+    if compact:
+        with st.expander("Section companion", expanded=False):
+            _render_actionables(actions)
+    else:
+        st.markdown('<div class="right-title">Section companion</div>', unsafe_allow_html=True)
+        _render_actionables(actions)
     with st.expander(f"Sources · {len(sources)}", expanded=False):
         if sources:
             for source in sources[:12]:
@@ -442,6 +535,22 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
                 st.session_state.pop("bp_rerun_preview", None); st.session_state.pop("bp_rerun_proposal", None); st.rerun()
 
 
+def _render_companion(key: str, task: dict | None, output: dict, sources: list[dict], actions: list) -> None:
+    collapsed = bool(st.session_state.get("bp_companion_collapsed", False))
+    label_col, control_col = st.columns([5, 1])
+    label_col.markdown('<div class="companion-heading">Workspace companion</div>', unsafe_allow_html=True)
+    if control_col.button("＋" if collapsed else "−", key="bp_toggle_companion", help="Expand companion" if collapsed else "Collapse companion"):
+        st.session_state["bp_companion_collapsed"] = not collapsed
+        st.rerun()
+    if collapsed:
+        with st.expander("Complete plan", expanded=False):
+            _render_plan_shortcuts(show_title=False)
+        _render_right(key, task, output, sources, actions, compact=True)
+    else:
+        _render_plan_shortcuts()
+        _render_right(key, task, output, sources, actions)
+
+
 def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
     @st.dialog("Decide what Blueprint should do next", width="large")
     def gate() -> None:
@@ -465,8 +574,14 @@ def _workspace_body() -> None:
     context = _dict(bundle.get("research_context")); dashboard = _dict(bundle.get("blueprint")); artifact = _dict(_dict(dashboard.get("current_version")).get("blueprint")); tasks = _task_map(bundle); control = _dict(bundle.get("control_panel"))
     checkpoints = [item for item in _items(control.get("panel_items")) if isinstance(item, dict) and item.get("item_type") == "HUMAN_CHECKPOINT"]; checkpoint = checkpoints[0] if checkpoints else None
     verdicts = [item for item in _items(dashboard.get("latest_verdicts")) if isinstance(item, dict)]; dashboard_verdict = next((item for item in verdicts if item.get("gate") == "RESEARCH_VERDICT"), {}); latest_verdict = _dict(context.get("latest_verdict")) or dashboard_verdict
-    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}; selected = st.session_state.setdefault("bp_selected_section", "customer_demand"); _render_css(states, selected)
-    idea = _dict(context.get("project")).get("idea_text") or artifact.get("idea_text") or artifact.get("product_idea") or st.session_state.get("idea", "Your Blueprint"); title = _project_title(str(idea)); outputs = [_dict(task.get("output")) for task in tasks.values() if isinstance(task.get("output"), dict)]; risks = sum(len(_clean(output.get("risks"))) for output in outputs); score = _score(dashboard_verdict or latest_verdict); progress = [item for item in _items(dashboard.get("stage_progress")) if isinstance(item, dict)]; completion = round(sum(float(item.get("completion_percent") or 0) for item in progress) / max(1, len(progress))) if progress else round(100 * sum(state[0] == "done" for state in states.values()) / len(states)); coverage_value = (dashboard_verdict or latest_verdict).get("evidence_coverage"); coverage = round((float(coverage_value) * 100 if float(coverage_value) <= 1 else float(coverage_value))) if isinstance(coverage_value, (int, float)) else 0
+    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
+    current_run_id = str(st.session_state.get("backend_run_id") or "")
+    if st.session_state.get("bp_auto_selected_run_id") != current_run_id:
+        first_running = next((key for key, state in states.items() if state[0] == "running"), None)
+        st.session_state["bp_selected_section"] = first_running or "foundation"
+        st.session_state["bp_auto_selected_run_id"] = current_run_id
+    selected = st.session_state.setdefault("bp_selected_section", "foundation"); _render_css(states, selected)
+    idea = _dict(context.get("project")).get("idea_text") or artifact.get("idea_text") or artifact.get("product_idea") or st.session_state.get("idea", "Your Blueprint"); title = _project_title(str(idea)); outputs = [_dict(task.get("output")) for task in tasks.values() if isinstance(task.get("output"), dict)]; risks = sum(len(_clean(output.get("risks"))) for output in outputs); score = _score(dashboard_verdict or latest_verdict); progress = [item for item in _items(dashboard.get("stage_progress")) if isinstance(item, dict)]; completion = round(sum(float(item.get("completion_percent") or 0) for item in progress) / max(1, len(progress))) if progress else round(100 * sum(state[0] == "done" for state in states.values()) / len(states)); coverage_value = (dashboard_verdict or latest_verdict).get("evidence_coverage"); coverage = round((float(coverage_value) * 100 if float(coverage_value) <= 1 else float(coverage_value))) if isinstance(coverage_value, (int, float)) else 0; workspace_actions = _workspace_actions(tasks, artifact, dashboard)
     left, center, right = st.columns([1.08, 4.25, 1.12], gap=None)
     with left:
         with st.container(key="bp_left_rail"):
@@ -476,16 +591,15 @@ def _workspace_body() -> None:
     sources = _flatten_sources(output, context)
     with center:
         with st.container(key="bp_center_pane"):
-            st.markdown('<div class="bp-live">Live evidence workspace</div>', unsafe_allow_html=True)
+            st.markdown('<div class="bp-live-spacer"></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="bp-project-title">{html.escape(title)}</div><div class="bp-goal">{html.escape(_goal_line(context))}</div>', unsafe_allow_html=True)
             _render_kpi_strip(score, coverage, risks, completion)
             if notice := st.session_state.pop("bp_transition_notice", None): st.success(str(notice))
             st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)} · {html.escape(state[1])}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
-            _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state); _render_chat(selected)
+            _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state); _render_chat(selected, output, state)
     with right:
         with st.container(key="bp_right_rail"):
-            _render_plan_shortcuts()
-            _render_right(selected, task, output, sources)
+            _render_companion(selected, task, output, sources, workspace_actions)
     if checkpoint:
         seen = f"bp_gate_seen_{checkpoint.get('checkpoint_id')}"
         if not st.session_state.get(seen):
@@ -507,7 +621,7 @@ def _empty_workspace() -> None:
     with center:
         with st.container(key="bp_center_pane"):
             st.markdown('<div class="bp-live-spacer"></div>', unsafe_allow_html=True)
-            st.markdown('<div class="bp-project-title">Build your first Blueprint</div><div class="bp-goal">Start with the unfinished idea. Blueprint will ask for the context it needs.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="bp-project-title empty-project-title">Build your first Blueprint</div><div class="bp-goal">Start with the unfinished idea. Blueprint will ask for the context it needs.</div>', unsafe_allow_html=True)
             _render_kpi_strip(None, 0, 0, 0)
             if highlight_idea:
                 st.markdown('<style>.st-key-empty_idea_composer{animation:ideaFocus 1.05s ease}</style>', unsafe_allow_html=True)
@@ -516,7 +630,6 @@ def _empty_workspace() -> None:
                 with st.form("empty_dashboard_idea", border=False):
                     idea = st.text_area("Your idea", placeholder="For example: I want to build a fitness tracking app for busy professionals…", label_visibility="collapsed")
                     begin = st.form_submit_button("CONTINUE TO ONBOARDING  →", type="primary", use_container_width=False)
-                st.markdown('<div class="empty-steps"><div class="empty-step"><i>1</i><span>Idea</span></div><div class="empty-step"><i>2</i><span>Context</span></div><div class="empty-step"><i>3</i><span>Research</span></div></div>', unsafe_allow_html=True)
             if begin:
                 clean_idea = idea.strip()
                 if len(clean_idea) < 10:
@@ -529,15 +642,22 @@ def _empty_workspace() -> None:
                     st.session_state["dialog_question"] = 0
                     st.session_state["show_questions"] = True
                     st.session_state["generating_blueprint"] = False
-                    st.switch_page("app.py", query_params={"idea": clean_idea, "start": "1"})
+                    st.rerun()
     with right:
         with st.container(key="bp_right_rail"):
-            _render_plan_shortcuts()
-            st.markdown('<div class="right-title">What happens next</div><div class="empty-right-card"><div class="action-head"><b>Getting started</b><span>0 of 3</span></div><div class="action-progress"><i style="width:0%"></i></div><div class="empty-right-row"><i></i><span>Enter the unfinished idea and continue to onboarding.</span></div><div class="empty-right-row"><i></i><span>Confirm the goal, audience, budget, time, and research streams.</span></div><div class="empty-right-row"><i></i><span>Start Stage 1 and review its evidence-backed verdict.</span></div></div>', unsafe_allow_html=True)
-            with st.expander("Sources · 0", expanded=False):
-                st.caption("Sources appear after evidence has been accepted.")
-            with st.expander("Background process", expanded=False):
-                st.caption("No research run has started yet.")
+            _render_companion(
+                "foundation",
+                None,
+                {},
+                [],
+                [
+                    "Enter the unfinished idea and continue to onboarding.",
+                    "Confirm the goal, audience, budget, time, and research streams.",
+                    "Start Stage 1 and review its evidence-backed verdict.",
+                ],
+            )
+    if st.session_state.get("show_questions"):
+        questions_dialog()
 
 
 def _map_node_content(output: dict, state: tuple[str, str], label: str) -> tuple[str, list[str]]:
