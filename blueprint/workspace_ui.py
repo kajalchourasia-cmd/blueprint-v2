@@ -6,6 +6,7 @@ import html
 import re
 from datetime import datetime, timezone
 from typing import Any
+from urllib.parse import urlencode
 
 import streamlit as st
 
@@ -239,6 +240,14 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 [class*="st-key-bp_chat_composer_"]{{position:fixed!important;left:calc(14.3vw + 36px)!important;right:34px!important;bottom:10px!important;width:auto!important;z-index:120!important}}.st-key-bp_center_pane{{padding-bottom:235px!important}}.st-key-bp_center_pane:after{{content:'';position:fixed;z-index:115;left:14.3vw;right:0;bottom:0;height:178px;background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 33%,#fff);pointer-events:none}}.kpi-label{{color:#767d78!important;font-size:11px!important;font-weight:500!important;letter-spacing:.065em!important;text-transform:uppercase!important}}.section-title{{margin:9px 0 0!important}}.research-lead{{margin:22px 0 34px!important;color:#344039!important;font:14px/1.62 var(--ui)!important}}.decision-frame dd,.narrative-block li,.foundation-assumptions b,.report-pairs p,.report-pairs li,.report-callout p,.competitor-profile dd{{font-family:var(--ui)!important;font-size:14px!important;line-height:1.62!important}}.report-signal-strip{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:900px;margin:4px 0 38px;border:1px solid #dce3dd;border-radius:14px;background:#f8faf8;overflow:hidden}}.report-signal-strip>div{{min-width:0;padding:17px 16px}}.report-signal-strip>div+div{{border-left:1px solid #e1e6e2}}.report-signal-strip small{{display:block;color:#748078;font:500 9px/1.25 var(--ui);letter-spacing:.055em;text-transform:uppercase}}.report-signal-strip b{{display:block;margin-top:8px;color:#233029;font:600 17px/1.28 var(--ui);overflow-wrap:anywhere}}.report-signal-strip span{{display:block;margin-top:7px;color:#778079;font:10px/1.45 var(--ui)}}.report-signal-strip.customer{{border-top:3px solid #4d8060}}.report-signal-strip.market{{border-top:3px solid #547a8e}}.report-signal-strip.foundation{{border-top:3px solid #9a735d}}.research-table-scroll{{max-width:100%;overflow:auto!important}}.competitor-profile dd ul{{margin:0;padding-left:18px}}.competitor-profile dd li{{margin:0 0 6px}}.verdict-hero{{display:grid;grid-template-columns:1fr auto;gap:6px 24px;margin-bottom:31px!important}}.verdict-hero small{{grid-column:1/-1;color:#9fc0aa;font:500 9px/1.2 var(--ui);letter-spacing:.06em;text-transform:uppercase}}.verdict-hero strong{{align-self:center}}.verdict-hero>b{{align-self:center;color:#d8f4df;font:600 24px/1 var(--ui)}}.verdict-hero p{{grid-column:1/-1;margin:9px 0 0!important;font-size:14px!important;line-height:1.6!important}}.score-row{{margin:0 0 34px}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] p,.st-key-bp_left_companion [data-testid="stExpanderDetails"] a{{font-size:9px!important;line-height:1.35!important}}@media(max-width:1100px){{.report-signal-strip{{grid-template-columns:repeat(2,1fr)}}.report-signal-strip>div:nth-child(3){{border-left:0;border-top:1px solid #e1e6e2}}.report-signal-strip>div:nth-child(4){{border-top:1px solid #e1e6e2}}}}@media(max-width:760px){{.st-key-bp_center_pane:after{{display:none}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;left:auto!important;right:auto!important;bottom:8px!important}}}}
 </style>""", unsafe_allow_html=True)
+    st.markdown("""
+<style>
+.foundation-intro{max-width:900px;margin:4px 0 28px;padding:0 0 0 18px;border-left:3px solid #7d9f87}.foundation-intro small,.hmw-block>small,.persona-heading small{display:block;color:#52705c;font:650 9px/1.2 var(--ui);letter-spacing:.07em}.foundation-intro h3,.problem-stack h3,.persona-heading h3{margin:8px 0;color:#1e2921;font:650 20px/1.25 var(--ui)}.foundation-intro p{max-width:820px;margin:8px 0 0;color:#3f4a43;font:14px/1.65 var(--ui)}
+.hmw-block{max-width:900px;margin:29px 0 35px}.hmw-block blockquote{position:relative;margin:12px 0 0;padding:28px 34px 28px 80px;border-radius:18px;background:#0d3d31;color:#f6faf7;font:500 clamp(21px,2.2vw,32px)/1.42 var(--ui);letter-spacing:-.025em}.hmw-block blockquote>span{position:absolute;left:30px;top:17px;color:#287a62;font:700 54px/1 var(--ui)}.hmw-block blockquote em,.hmw-block blockquote b{color:#d7ee58}.hmw-block>p{margin:10px 0 0;color:#7b847d;font:11px/1.5 var(--ui)}
+.problem-stack{max-width:900px;margin:33px 0}.problem-stack ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none;counter-reset:problem}.problem-stack li{min-width:0;padding:18px;border:1px solid #dde4de;border-top:3px solid #6f927b;border-radius:13px;background:#f8faf8;counter-increment:problem}.problem-stack li:before{content:counter(problem,decimal-leading-zero);display:block;margin-bottom:17px;color:#5d806a;font:650 10px var(--ui)}.problem-stack b{display:block;color:#28342c;font:600 13px/1.5 var(--ui)}.problem-stack span{display:block;margin-top:8px;color:#727d75;font:11px/1.5 var(--ui)}
+.persona-section{max-width:900px;margin:34px 0}.persona-heading{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:14px}.persona-heading p{max-width:430px;margin:0;color:#727c75;font:11px/1.5 var(--ui)}.persona-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.persona-card{padding:19px;border:1px solid #dfe5e0;border-radius:14px;background:#fbfcfb}.persona-card header{display:flex;align-items:center;gap:10px}.persona-card header>span{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:#e2eee5;color:#38694a;font:650 9px var(--ui)}.persona-card h4{margin:0;color:#202a23;font:650 16px/1.25 var(--ui)}.persona-card>p{margin:10px 0 15px;color:#657168;font:12px/1.5 var(--ui)}.persona-card dl{margin:0}.persona-card dl>div{display:grid;grid-template-columns:112px 1fr;gap:12px;padding:9px 0;border-top:1px solid #e8ece9}.persona-card dt{color:#77817a;font:650 9px/1.35 var(--ui);text-transform:uppercase}.persona-card dd{margin:0;color:#3d4941;font:12px/1.5 var(--ui)}
+@media(max-width:900px){.problem-stack ol{grid-template-columns:1fr}.persona-grid{grid-template-columns:1fr}.persona-heading{display:block}.persona-heading p{margin-top:8px}.hmw-block blockquote{padding-left:58px}.hmw-block blockquote>span{left:20px}}
+</style>""", unsafe_allow_html=True)
 
 
 def _render_kpi_strip(score: float | None, coverage: int, risks: int, completion: int, risk_items: list[str] | None = None) -> None:
@@ -444,6 +453,90 @@ def _render_report_pairs(pairs: list[tuple[str, Any]]) -> None:
         st.markdown(f'<section class="report-pairs">{"".join(entries)}</section>', unsafe_allow_html=True)
 
 
+def _render_personas(output: dict) -> None:
+    """Present evidence-bounded user archetypes without inventing biographies."""
+    raw_personas = _items(output.get("user_personas")) or _items(output.get("customer_segments"))
+    goals = _clean(output.get("jobs_to_be_done") or output.get("customer_jobs"))
+    behaviours = _clean(output.get("current_alternatives"))
+    pains = _clean(output.get("pain_signals") or output.get("pains") or output.get("switching_barriers"))
+    cards = []
+    for index, value in enumerate(raw_personas[:5], 1):
+        item = _dict(value)
+        segment = _item_text(value) if not item else _field_text(item, "segment", "who_they_are", "description", fallback=f"Priority user {index}")
+        lower_segment = segment.lower()
+        inferred_name = (
+            "Solo practitioner" if "solo" in lower_segment else
+            "High-volume practice manager" if "high" in lower_segment and ("volume" in lower_segment or "staff" in lower_segment) else
+            "Multilingual clinic team" if "hindi" in lower_segment or "multilingual" in lower_segment else
+            "Independent clinic owner" if "clinic" in lower_segment else
+            f"Priority user {index}"
+        )
+        name = _field_text(item, "name", "persona", "title", fallback=inferred_name) if item else inferred_name
+        goal = _field_text(item, "primary_goal", "goal", "jobs_to_be_done", "job", fallback=(goals[(index - 1) % len(goals)] if goals else "Clarify the outcome this user is trying to achieve."))
+        behaviour = _field_text(item, "current_behaviour", "current_workaround", "current_alternative", "behaviour", fallback=(behaviours[(index - 1) % len(behaviours)] if behaviours else "Current behaviour is not yet established by accepted evidence."))
+        pain = _field_text(item, "pain", "problem", "friction", "barrier", fallback=(pains[(index - 1) % len(pains)] if pains else "Pain intensity and frequency still need direct validation."))
+        evidence = _field_text(item, "evidence_status", "evidence", "confidence", fallback="Desk-research hypothesis — validate in a real conversation.")
+        cards.append(
+            f'<article class="persona-card"><header><span>{index:02d}</span><h4>{html.escape(name)}</h4></header>'
+            f'<p>{html.escape(segment)}</p><dl><div><dt>Goal</dt><dd>{html.escape(goal)}</dd></div>'
+            f'<div><dt>Current behaviour</dt><dd>{html.escape(behaviour)}</dd></div>'
+            f'<div><dt>Problem to test</dt><dd>{html.escape(pain)}</dd></div>'
+            f'<div><dt>Evidence status</dt><dd>{html.escape(evidence)}</dd></div></dl></article>'
+        )
+    if cards:
+        st.markdown(
+            '<section class="persona-section"><div class="persona-heading"><div><small>WHO TO LEARN FROM</small>'
+            '<h3>Priority user personas</h3></div><p>These are research archetypes, not invented biographies. '
+            'Demographics appear only when the evidence or founder inputs support them.</p></div>'
+            f'<div class="persona-grid">{"".join(cards)}</div></section>',
+            unsafe_allow_html=True,
+        )
+
+
+def _workspace_url(**params: Any) -> str:
+    """Build internal links that retain the active owned project and run."""
+    query = {key: str(value) for key, value in params.items() if value not in (None, "")}
+    project_id = st.session_state.get("backend_project_id")
+    run_id = st.session_state.get("backend_run_id")
+    if project_id:
+        query.setdefault("project_id", str(project_id))
+    if run_id:
+        query.setdefault("run_id", str(run_id))
+    return "/Your_Plan" + ("?" + urlencode(query) if query else "")
+
+
+def _safe_customer_finding(output: dict) -> str:
+    """Prevent listed prices or stated interest from being presented as payment proof."""
+    finding = str(output.get("executive_finding") or output.get("summary") or output.get("explanation") or "").strip()
+    willingness = _item_text(output.get("willingness_to_pay_status") or "UNKNOWN")
+    if not finding or "unknown" not in willingness.lower():
+        return finding
+    sentences = re.split(r"(?<=[.!?])\s+", finding)
+    safe = [sentence for sentence in sentences if "willingness to pay" not in sentence.lower()]
+    boundary = "Listed prices are competitor observations, not proof of demand; payment and willingness-to-pay evidence remain unknown."
+    return " ".join(safe + [boundary]).strip()
+
+
+def _safe_discovery_questions(output: dict) -> list[str]:
+    """Keep the displayed primary-research guide anchored in past behaviour."""
+    generated = _clean(output.get("discovery_questions"))
+    leading = re.compile(r"\b(would you|do you prefer|how important|if we built|would this|would your)\b", re.I)
+    safe = [question for question in generated if not leading.search(question)]
+    defaults = [
+        "Tell me about the last time this problem happened. What triggered it?",
+        "What did you do next, and who else became involved?",
+        "What tools, people, or workarounds did you use?",
+        "How often has this happened in the last month?",
+        "What did the current workaround cost in time, money, or lost opportunity?",
+        "What have you already tried to change, and why did it succeed or fail?",
+        "Who decides whether to buy a solution, and what evidence do they require?",
+    ]
+    for question in defaults:
+        if question not in safe:
+            safe.append(question)
+    return safe[:9]
+
+
 def _render_evidence_boundary(text: str, *, tone: str = "evidence", title: str = "Evidence boundary") -> None:
     if not text:
         return
@@ -499,7 +592,34 @@ def _render_foundation(output: dict) -> None:
 
     problem = _item_text(output.get("problem_hypothesis") or output.get("starting_position") or "Not identified yet.")
     audience = _dedupe_boundary(output.get("target_user_boundary") or "Not identified yet.")
+    audience_sentence = re.sub(r"\s+[—-]\s+inferred\b.*$", "", audience, flags=re.I).rstrip(" .") or audience
     success = _item_text(output.get("success_definition") or "Not identified yet.")
+    introduction = _item_text(output.get("introduction") or f"This Foundation turns the founder’s unfinished idea into a bounded decision problem for {audience_sentence}. It records what is known, what is only believed, and what the three research streams must establish before more investment is justified.")
+    st.markdown(
+        '<section class="foundation-intro"><small>FOUNDATION / DECISION BRIEF</small><h3>What this idea is trying to make true</h3>'
+        f'<p>{html.escape(introduction)}</p></section>',
+        unsafe_allow_html=True,
+    )
+
+    how_might_we = _item_text(output.get("how_might_we") or f"How might we help {audience_sentence} solve the stated problem in a way that is meaningfully better than their current behaviour?")
+    st.markdown(
+        '<section class="hmw-block"><small>DEFINING THE PROBLEM</small><blockquote><span>“</span>'
+        f'{html.escape(how_might_we)}</blockquote><p>This is the working design question. Customer evidence may narrow or rewrite it; Blueprint preserves the original idea separately.</p></section>',
+        unsafe_allow_html=True,
+    )
+
+    top_problems = _items(output.get("top_problems")) or _items(output.get("riskiest_assumptions")) or _items(output.get("assumptions"))
+    if top_problems:
+        problem_rows = []
+        for value in top_problems[:4]:
+            item = _dict(value)
+            statement = _item_text(value)
+            why = _field_text(item, "why_it_matters", "impact", "why", fallback="If this is false, the recommended customer, offer, or validation path must change.")
+            problem_rows.append(f'<li><b>{html.escape(statement)}</b><span>{html.escape(why)}</span></li>')
+        st.markdown(
+            f'<section class="problem-stack"><h3>The problems this research must resolve first</h3><ol>{"".join(problem_rows)}</ol></section>',
+            unsafe_allow_html=True,
+        )
     st.markdown(
         '<section class="decision-frame"><h3>Your starting position</h3>'
         f'<dl><div><dt>Problem hypothesis</dt><dd>{html.escape(problem)}</dd></div>'
@@ -555,7 +675,7 @@ def _render_foundation(output: dict) -> None:
 
 
 def _render_customer_research(output: dict) -> None:
-    finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
+    finding = _safe_customer_finding(output)
     if finding:
         st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
 
@@ -571,9 +691,16 @@ def _render_customer_research(output: dict) -> None:
     ], tone="customer")
 
     _render_evidence_boundary(
-        "This report distinguishes observed desk-research signals from founder assumptions. Interest, complaints, or stated intent are not treated as willingness to pay unless the evidence includes a payment, deposit, preorder, or explicit price commitment.",
-        title="How to read this research",
+        "This is User Research. The agent can synthesize public behaviour, complaints, reviews, communities, and founder inputs, but it cannot claim it conducted interviews. The interview plan below is primary research for the founder to run; visible findings remain desk-research evidence or explicit hypotheses.",
+        title="Primary research boundary",
     )
+    _render_list("The problem this user research must define", output.get("problem_definition") or output.get("research_problem") or output.get("customer_problem"))
+    _render_list("Research objectives", output.get("research_objectives") or [
+        "Identify which reachable user experiences the problem most frequently and urgently.",
+        "Understand the job, current workaround, trigger, switching barrier, and decision role around the problem.",
+        "Find behavioural or commitment evidence that can challenge the founder’s assumptions.",
+    ])
+    _render_personas(output)
     _render_list("Who appears to feel the problem most", output.get("customer_segments"))
     _render_report_pairs([
         ("Jobs they are trying to complete", output.get("jobs_to_be_done") or output.get("customer_jobs")),
@@ -594,8 +721,16 @@ def _render_customer_research(output: dict) -> None:
         ("Behaviour that indicates urgency", output.get("commitment_signals") or output.get("behaviour_signals")),
         ("What is still only an inference", output.get("inferences")),
     ])
-    _render_list("Questions for real customer conversations", output.get("discovery_questions"))
+    _render_list("Questions for real customer conversations", _safe_discovery_questions(output))
     _render_list("Where the first users may be reachable", output.get("first_user_channels"))
+    _render_report_pairs([
+        ("Primary research method", output.get("primary_research_method") or output.get("primary_research_plan") or ["Run problem interviews with the priority personas before showing a solution.", "Capture exact past behaviour, frequency, current spend, workarounds, and the cost of doing nothing.", "Treat compliments and hypothetical intent as weak evidence; record commitments separately."]),
+        ("How to interpret the interviews", output.get("primary_research_inference_rules") or ["Repeated behaviour across contrasting personas indicates a stronger problem pattern.", "A deposit, paid pilot, preorder, or explicit price commitment is stronger than stated willingness to pay.", "Contradictions should narrow the segment or change the problem statement rather than be averaged away."]),
+    ])
+    _render_evidence_boundary(
+        "Persona-specific pricing is deliberately deferred to Stage 2 · Offer & Pricing. Stage 1 establishes who values what and what they do today; Stage 2 converts that evidence into testable price and packaging hypotheses.",
+        title="Where pricing belongs",
+    )
     _render_list("What this changes in your idea", output.get("contextual_actions") or output.get("recommendations"))
     _render_report_pairs([
         ("Inferences—not yet facts", output.get("inferences")),
@@ -611,6 +746,11 @@ def _render_market_research(output: dict) -> None:
     finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
     if finding:
         st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
+
+    _render_evidence_boundary(
+        "This section is secondary research: public reports, statistics, regulations, category pages, and other attributable sources. Interview findings belong in Customer Research. Blueprint never labels desk research as primary research and never invents a TAM when the source boundary cannot support one.",
+        title="Research method / secondary evidence",
+    )
 
     _render_signal_strip([
         ("Market today", _first_text(output, "market_structure", "category_maturity"), "Current category structure supported by the research."),
@@ -664,6 +804,7 @@ def _render_market_research(output: dict) -> None:
             title="False precision withheld",
         )
     _render_list("What this changes in the founder plan", output.get("contextual_actions") or output.get("recommendations"))
+    _render_list("Explicit market inference", output.get("market_inferences") or output.get("inferences"))
     _render_report_pairs([
         ("Assumptions to validate", output.get("assumptions")),
         ("Open market risks", output.get("risks")),
@@ -958,7 +1099,14 @@ def _instant_foundation(context: dict, idea: str) -> dict:
         "schema_version": "bp-foundation-preview-v1",
         "module_key": "foundation",
         "executive_finding": finding,
+        "introduction": f"This Foundation converts the unfinished idea into a bounded founder decision for {audience or 'a first user who is not yet specific enough'}. It uses only onboarding inputs and makes every unverified belief visible before research begins.",
         "problem_hypothesis": f"{idea} The decision question is whether the stated audience experiences this problem strongly and frequently enough to change current behaviour.",
+        "how_might_we": f"How might we help {audience or 'a clearly defined first user'} solve this problem in a way that is meaningfully better than the current alternative?",
+        "top_problems": [
+            {"title": assumptions[0], "why_it_matters": "This determines who Customer Research should recruit and which alternatives are genuinely relevant."},
+            {"title": assumptions[1], "why_it_matters": "Without frequent or costly pain, interest is unlikely to become changed behaviour or payment."},
+            {"title": assumptions[2], "why_it_matters": "The next proof must fit the founder's actual time, money, and life constraints."},
+        ],
         "target_user_boundary": audience or "Not identified — founder input required.",
         "founder_constraints": {"hours_per_week": hours or "Not provided", "available_budget": budget if budget not in (None, "") else "Not provided", "launch_timeline": timeline or "Not provided"},
         "success_definition": success or "Not identified — define a measurable outcome.",
@@ -1055,8 +1203,43 @@ def _render_chat(key: str, output: dict, state: tuple[str, str]) -> None:
         _render_chat_content(key, output, state)
 
 
+def _chat_safety_boundary(question: str) -> str | None:
+    """Fail closed for secret, hidden-instruction, prompt-override, and cross-owner requests."""
+    disclosure = re.search(
+        r"\b(?:show|reveal|print|dump|give|share|expose|display|return|tell\s+me|what\s+is|list)\b"
+        r"[\s\S]{0,80}\b(?:system\s+prompt|developer\s+prompt|hidden\s+instructions?|chain\s+of\s+thought|"
+        r"reasoning\s+trace|api\s*keys?|secrets?|tokens?|passwords?|credentials?|environment\s+variables?|"
+        r"env\s+vars?|connection\s+strings?|service\s+role|database\s+url|private\s+webhooks?|internal\s+logs?|"
+        r"raw\s+traces?)\b",
+        question,
+        re.I,
+    )
+    prompt_override = re.search(
+        r"\b(?:ignore|disregard|override|bypass)\b[\s\S]{0,80}"
+        r"\b(?:previous|prior|system|developer|guardrails?|polic(?:y|ies)|instructions?)\b",
+        question,
+        re.I,
+    )
+    cross_owner = re.search(
+        r"\b(?:another|other|different)\s+(?:user|founder|customer|tenant)(?:'s)?\b[\s\S]{0,80}"
+        r"\b(?:project|research|data|chat|blueprint|record|history)\b",
+        question,
+        re.I,
+    )
+    if disclosure or prompt_override or cross_owner:
+        return (
+            "I can explain Blueprint’s public architecture and trust boundaries, but I cannot reveal hidden "
+            "prompts, credentials, tokens, private configuration, raw internal traces, or another founder’s data. "
+            "I can instead describe the relevant component at a safe architectural level."
+        )
+    return None
+
+
 def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, str]) -> str:
     """Return a useful, explicitly bounded answer when the research copilot has no safe result."""
+    safety_response = _chat_safety_boundary(question)
+    if safety_response:
+        return safety_response
     label = LABELS[key]
     normalized = re.sub(r"[^a-z0-9]+", " ", question.lower()).strip()
     definitions = {
@@ -1067,6 +1250,15 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
         "evidence_audit": "Evidence Audit checks whether important claims are supported, current, relevant, and non-contradictory before they influence the verdict.",
         "research_verdict": "Research Verdict explains whether the idea should proceed, be narrowed, be tested again, or be reconsidered—and shows which evidence and uncertainty caused that recommendation.",
     }
+    if any(term in normalized for term in ("architecture", "system design", "trust boundary")):
+        return (
+            "Blueprint’s public architecture is a guarded decision loop: Streamlit captures founder context; the "
+            "n8n Supervisor plans and routes work to bounded research specialists; Evidence Audit and Verdict Critic "
+            "check support and contradictions; and human gates decide whether a rerun or the next stage is allowed. "
+            "Supabase is the durable system of record, Pinecone supports evidence retrieval, Mem0 stores approved "
+            "preferences and episode summaries, and Nebius performs constrained synthesis. Private prompts, secrets, "
+            "and raw internal traces remain outside the answer boundary."
+        )
     finding = str(output.get("executive_finding") or output.get("summary") or output.get("explanation") or "").strip()
     if not output and state[0] in {"locked", "idle", "ready"} and any(term in normalized for term in ("what did", "research prove", "findings", "result")):
         return f"{label} has not produced an accepted result yet. Blueprint will not invent an answer; start or unlock this section first, then ask again against its findings and sources."
@@ -1125,6 +1317,8 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
 
 def _can_answer_from_section(question: str, key: str, output: dict) -> bool:
     """Keep common retrieval questions instant; reserve the agent loop for new synthesis."""
+    if _chat_safety_boundary(question):
+        return True
     if not output:
         return True
     normalized = re.sub(r"[^a-z0-9]+", " ", question.lower()).strip()
@@ -1637,7 +1831,7 @@ def render_full_blueprint() -> None:
             if not detail_html:
                 detail_html = '<div class="node-awaiting">Awaiting accepted evidence and the required prior decision.</div>'
             cards.append(
-                f'<a class="map-node {kind}" style="animation-delay:{sequence * 0.035:.3f}s" href="/Your_Plan?section={html.escape(key)}" target="_self">'
+                f'<a class="map-node {kind}" style="animation-delay:{sequence * 0.035:.3f}s" href="{html.escape(_workspace_url(section=key))}" target="_self">'
                 f'<div class="node-top"><span class="node-number">{sequence:02d}</span><span class="node-status">{status_label}</span></div>'
                 f'<h3>{html.escape(label)}</h3><p>{html.escape(summary)}</p><div class="node-points">{detail_html}</div></a>'
             )
@@ -1651,7 +1845,7 @@ def render_full_blueprint() -> None:
         f'''<main class="map-shell"><header class="map-top"><div class="map-brand"><b>⌘</b> BLUEPRINT / CONNECTED DECISION PATH</div><div></div></header>
         <section class="map-hero"><div><div class="map-eyebrow">IDEA → EVIDENCE → DECISION → ADVISORY PLAN</div><h1>{html.escape(title)} <span>Blueprint</span></h1></div><p class="map-intro"><b>Follow the connected path.</b> Identified cards contain accepted work from this run. Gray cards are deliberately marked as not identified until their evidence or decision gate exists.</p></section>
         <div class="map-metrics"><div class="map-metric"><b>{discovered}/{len(states)}</b><span>Parts identified</span></div><div class="map-metric"><b>{processing}</b><span>Processing now</span></div><div class="map-metric"><b>{unresolved}</b><span>Still unidentified</span></div><div class="map-metric goal"><b>{html.escape(_goal_line(context).replace("Goal: ", ""))}</b><span>Founder goal</span></div></div>{load_notice}{"".join(lanes)}
-        <section class="finance-strip"><div class="finance-lead"><small>Financial plan / evidence boundary</small><h2>Know the cost of the next commitment.</h2><p>Blueprint separates founder inputs from researched evidence and never invents revenue, pricing, conversion, or willingness to pay.</p><a class="finance-link" href="/Your_Plan?view=financial" target="_self">OPEN FINANCIAL PLAN →</a></div><div class="finance-cell"><small>Capital available</small><b>{html.escape(str(capital))}</b><span>Founder-provided constraint</span></div><div class="finance-cell"><small>Revenue model</small><b>{html.escape(str(revenue))}</b><span>Unidentified until provided or supported</span></div><div class="finance-cell"><small>Pricing direction</small><b>{html.escape(_item_text(pricing)[:80])}</b><span>Requires customer or market evidence</span></div></section>
+        <section class="finance-strip"><div class="finance-lead"><small>Financial plan / evidence boundary</small><h2>Know the cost of the next commitment.</h2><p>Blueprint separates founder inputs from researched evidence and never invents revenue, pricing, conversion, or willingness to pay.</p><a class="finance-link" href="{html.escape(_workspace_url(view='financial'))}" target="_self">OPEN FINANCIAL PLAN →</a></div><div class="finance-cell"><small>Capital available</small><b>{html.escape(str(capital))}</b><span>Founder-provided constraint</span></div><div class="finance-cell"><small>Revenue model</small><b>{html.escape(str(revenue))}</b><span>Unidentified until provided or supported</span></div><div class="finance-cell"><small>Pricing direction</small><b>{html.escape(_item_text(pricing)[:80])}</b><span>Requires customer or market evidence</span></div></section>
         <div class="map-legend"><span class="l1"><i></i>Identified from the current Blueprint</span><span class="l2"><i></i>Processing now</span><span class="l3"><i></i>Needs input or review</span><span><i></i>Not identified yet</span></div></main>''',
         unsafe_allow_html=True,
     )
@@ -1697,7 +1891,7 @@ def render_financial_plan() -> None:
         if st.button("BACK TO DASHBOARD", key="bp_financial_dashboard"):
             _return_to_workspace()
     st.markdown(
-        f'''<main class="fp-shell"><header class="fp-top"><div class="fp-brand">BLUEPRINT / FINANCIAL PLAN</div><div></div></header><section class="fp-hero"><div><small>Founder constraints → evidence → financial decision</small><h1>Financial <span>Plan</span></h1></div><p>Financial readiness for <b>{html.escape(_project_title(str(idea)))}</b>. Blank evidence stays visibly unidentified; Blueprint does not turn estimates into facts.</p></section><div class="fp-grid">{cards}</div><div class="fp-sections">{"".join(sections)}</div><div class="fp-rule"><b>Evidence boundary:</b> projected revenue, conversion, willingness to pay, and runway are withheld until the required founder inputs or accepted research exist.</div><div class="fp-actions"><a href="/Your_Plan?section=financial_readiness" target="_self">OPEN FINANCIAL READINESS →</a><a class="secondary" href="/Your_Plan?view=blueprint" target="_self">VIEW FULL BLUEPRINT</a></div></main>''',
+        f'''<main class="fp-shell"><header class="fp-top"><div class="fp-brand">BLUEPRINT / FINANCIAL PLAN</div><div></div></header><section class="fp-hero"><div><small>Founder constraints → evidence → financial decision</small><h1>Financial <span>Plan</span></h1></div><p>Financial readiness for <b>{html.escape(_project_title(str(idea)))}</b>. Blank evidence stays visibly unidentified; Blueprint does not turn estimates into facts.</p></section><div class="fp-grid">{cards}</div><div class="fp-sections">{"".join(sections)}</div><div class="fp-rule"><b>Evidence boundary:</b> projected revenue, conversion, willingness to pay, and runway are withheld until the required founder inputs or accepted research exist.</div><div class="fp-actions"><a href="{html.escape(_workspace_url(section='financial_readiness'))}" target="_self">OPEN FINANCIAL READINESS →</a><a class="secondary" href="{html.escape(_workspace_url(view='blueprint'))}" target="_self">VIEW FULL BLUEPRINT</a></div></main>''',
         unsafe_allow_html=True,
     )
 

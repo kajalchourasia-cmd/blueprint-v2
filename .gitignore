@@ -7,5 +7,6 @@ venv/
 .venv/
 *.egg-info/
 .pytest_cache/
-.streamlit-ui.*.log
+.doc-qa/
+.streamlit-*.log
 

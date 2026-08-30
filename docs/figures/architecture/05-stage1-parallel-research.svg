@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Stage 1 Parallel Research and Evidence Convergence</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Independent specialists can finish, fail or request input without erasing sibling work</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="70" y="235" width="300" height="175" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="98" y="287" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Foundation</text>
+<text x="98" y="328" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Deterministic</text>
+<text x="98" y="354" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">founder-input framing; no</text>
+<text x="98" y="380" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">web or model latency.</text>
+<line x1="370" y1="323" x2="455" y2="323" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="455" y="220" width="340" height="205" rx="22" fill="#FFFFFF" stroke="#2D5F8B" stroke-width="2"/>
+<text x="483" y="270" text-anchor="start" font-family="Segoe UI, Arial" font-size="27" font-weight="600" fill="#17201C">Customer / User Agent</text>
+<text x="483" y="315" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Personas, jobs, public</text>
+<text x="483" y="344" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">signals, research objectives</text>
+<text x="483" y="373" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">and primary-research plan.</text>
+<rect x="455" y="455" width="340" height="205" rx="22" fill="#FFFFFF" stroke="#6D5AA6" stroke-width="2"/>
+<text x="483" y="507" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Competitor Agent</text>
+<text x="483" y="550" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Direct and indirect</text>
+<text x="483" y="579" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">alternatives, offers,</text>
+<text x="483" y="608" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">strengths, complaints, gaps</text>
+<text x="483" y="637" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">and geography.</text>
+<rect x="455" y="690" width="340" height="205" rx="22" fill="#FFFFFF" stroke="#7C563C" stroke-width="2"/>
+<text x="483" y="742" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Market Agent</text>
+<text x="483" y="785" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Secondary evidence,</text>
+<text x="483" y="814" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">category direction,</text>
+<text x="483" y="843" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">beachhead, forces,</text>
+<text x="483" y="872" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">constraints and fit.</text>
+<line x1="370" y1="323" x2="430" y2="322" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="370" y1="323" x2="430" y2="557" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="370" y1="323" x2="430" y2="792" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="935" y="330" width="350" height="210" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="963" y="382" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Evidence Auditor</text>
+<text x="963" y="425" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Checks citation allowlists,</text>
+<text x="963" y="454" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">relevance, freshness,</text>
+<text x="963" y="483" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">conflicts, coverage and</text>
+<text x="963" y="512" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">missing streams.</text>
+<rect x="935" y="635" width="350" height="190" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="963" y="687" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Viability Engine</text>
+<text x="963" y="729" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Deterministic 40/30/30 score:</text>
+<text x="963" y="756" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">demand, differentiation and</text>
+<text x="963" y="783" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">market access.</text>
+<line x1="795" y1="322" x2="915" y2="435" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="795" y1="557" x2="915" y2="435" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="795" y1="792" x2="915" y2="435" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1110" y1="540" x2="1110" y2="635" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1435" y="410" width="390" height="235" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="1463" y="460" text-anchor="start" font-family="Segoe UI, Arial" font-size="27" font-weight="600" fill="#17201C">Research Blueprint + Gate 1</text>
+<text x="1463" y="507" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Sourced findings, limitations,</text>
+<text x="1463" y="540" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">next actions and founder</text>
+<text x="1463" y="573" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">decision: proceed, revise,</text>
+<text x="1463" y="606" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">rerun, override or pause.</text>
+<line x1="1285" y1="730" x2="1435" y2="528" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">A directory or search engine is never treated as a competitor; a claim without accepted evidence cannot increase the score.</text>
+</svg>

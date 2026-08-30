@@ -75,7 +75,7 @@ st.markdown(
 
 motion = r"""
 <!doctype html><html><head><style>
-*{box-sizing:border-box}html,body{margin:0;background:transparent;color:#256d45;overflow:hidden}.shell{height:300px;position:relative;border:1px solid rgba(27,90,54,.28);border-radius:30px;background:linear-gradient(145deg,#e8f0e9,#d8e8dc);font-family:'Courier New',monospace;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}.labels{position:absolute;top:23px;left:7%;right:7%;height:23px;border-top:1px solid rgba(38,109,69,.6);display:flex;justify-content:space-between;align-items:flex-start;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.labels span{margin-top:-7px;padding:0 9px;background:#e4eee6}.labels span:last-child{background:#dce9df}canvas{position:absolute;top:48px;left:0;width:100%;height:206px}.bottom{position:absolute;left:7%;right:7%;bottom:16px;border-top:1px solid rgba(38,109,69,.45);padding-top:8px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:.08em}.bottom .pulse{font-size:13px;line-height:0;animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.25}}
+*{box-sizing:border-box}html,body{margin:0;background:transparent;color:#256d45;overflow:hidden}.shell{height:328px;position:relative;border:1px solid rgba(27,90,54,.28);border-radius:30px;background:linear-gradient(145deg,#e8f0e9,#d8e8dc);font-family:'Courier New',monospace;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}.labels{position:absolute;top:23px;left:7%;right:7%;height:23px;border-top:1px solid rgba(38,109,69,.6);display:flex;justify-content:space-between;align-items:flex-start;font-size:10px;text-transform:uppercase;letter-spacing:.08em}.labels span{margin-top:-7px;padding:0 9px;background:#e4eee6}.labels span:last-child{background:#dce9df}canvas{position:absolute;top:48px;left:0;width:100%;height:234px}.bottom{position:absolute;left:7%;right:7%;bottom:16px;border-top:1px solid rgba(38,109,69,.45);padding-top:8px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:.08em}.bottom .pulse{font-size:13px;line-height:0;animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.25}}
 </style></head><body><div class="shell"><div class="labels"><span>uncertainty</span><span>evidence</span></div><canvas id="field"></canvas><div class="bottom"><span>UNFINISHED</span><span class="pulse">◉</span><span>NEXT PROOF</span></div></div><script>
 const c=document.getElementById('field'),ctx=c.getContext('2d'),DPR=Math.min(devicePixelRatio||1,2);let W,H,t=0;
 function size(){W=c.clientWidth;H=c.clientHeight;c.width=W*DPR;c.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}function rand(a,b){return a+Math.random()*(b-a)}
@@ -206,50 +206,53 @@ def _create_profile(answers: dict) -> UserProfile:
     )
 
 
-@st.dialog("Help us understand you better", width="small")
-def questions_dialog():
+@st.dialog("Creating your Blueprint", width="small")
+def generation_dialog():
     if generation_error := st.session_state.get("generation_error"):
         st.error(generation_error)
+        st.caption("Your onboarding answers are preserved. A retry uses the same idempotency key and cannot create a duplicate run.")
         if st.button("Retry safely", key="retry_blueprint_start", use_container_width=True):
             st.session_state["generation_error"] = None
             st.session_state["generating_blueprint"] = True
             st.rerun()
-    if st.session_state.get("generating_blueprint"):
-        answers = st.session_state["dialog_answers"]
-        st.markdown('<div class="generation"><div class="generation-orbit"></div><h3>Starting your evidence Blueprint</h3><p>Saving your founder context, creating the owned research run, and handing it to the Supervisor.</p><div class="generation-lines"><i></i><i></i><i></i></div></div>', unsafe_allow_html=True)
-        profile = _create_profile(answers)
-        idempotency_key = st.session_state.setdefault("backend_idempotency_key", make_idempotency_key())
-        try:
-            start_result = start_blueprint(profile, answers, idempotency_key=idempotency_key)
-        except BackendError as exc:
-            st.session_state["generating_blueprint"] = False
-            st.session_state["generation_error"] = str(exc)
-            st.error(str(exc))
-            st.caption("Your onboarding answers are preserved. Retry uses the same idempotency key and cannot create a duplicate run.")
-            return
-        st.session_state.update(
-            {
-                "profile": profile,
-                "backend_project_id": start_result["project_id"],
-                "backend_run_id": start_result["run_id"],
-                "backend_start_result": start_result,
-                "backend_bundle": None,
-                "backend_last_refresh_at": 0,
-                "show_questions": False,
-                "generating_blueprint": False,
-                "generation_error": None,
-                "bp_selected_section": "foundation",
-                "bp_auto_selected_run_id": start_result["run_id"],
-                "bp_workspace_polling": True,
-            }
-        )
-        st.session_state.setdefault("projects", {})[profile.idea or "Untitled project"] = {
-            "profile": profile,
-            "project_id": start_result["project_id"],
-            "run_id": start_result["run_id"],
-        }
-        st.switch_page("pages/2_🗺️_Your_Plan.py")
         return
+    answers = st.session_state["dialog_answers"]
+    st.markdown('<div class="generation"><div class="generation-orbit"></div><h3>Starting your evidence Blueprint</h3><p>Saving your founder context, creating the owned research run, and handing it to the Supervisor.</p><div class="generation-lines"><i></i><i></i><i></i></div></div>', unsafe_allow_html=True)
+    profile = _create_profile(answers)
+    idempotency_key = st.session_state.setdefault("backend_idempotency_key", make_idempotency_key())
+    try:
+        start_result = start_blueprint(profile, answers, idempotency_key=idempotency_key)
+    except BackendError as exc:
+        st.session_state["generating_blueprint"] = False
+        st.session_state["generation_error"] = str(exc)
+        st.rerun()
+        return
+    st.session_state.update(
+        {
+            "profile": profile,
+            "backend_project_id": start_result["project_id"],
+            "backend_run_id": start_result["run_id"],
+            "backend_start_result": start_result,
+            "backend_bundle": None,
+            "backend_last_refresh_at": 0,
+            "show_questions": False,
+            "generating_blueprint": False,
+            "generation_error": None,
+            "bp_selected_section": "foundation",
+            "bp_auto_selected_run_id": start_result["run_id"],
+            "bp_workspace_polling": True,
+        }
+    )
+    st.session_state.setdefault("projects", {})[profile.idea or "Untitled project"] = {
+        "profile": profile,
+        "project_id": start_result["project_id"],
+        "run_id": start_result["run_id"],
+    }
+    st.switch_page("pages/2_🗺️_Your_Plan.py")
+
+
+@st.dialog("Help us understand you better", width="small")
+def questions_dialog():
 
     options = ["Business", "Product", "App / Software", "Service", "Physical store", "Online business", "Community", "Not sure"]
     goals = ["Build a profitable business", "Replace my current income", "Create a side income", "Turn an idea into a real product", "Build a large company", "Build a brand / community", "Test whether an idea can work", "Create something I eventually want to sell", "Solve a problem I care about", "Build it for the experience / vibes", "Other"]
@@ -337,4 +340,7 @@ def questions_dialog():
 
 
 if st.session_state.get("show_questions"):
-    questions_dialog()
+    if st.session_state.get("generating_blueprint") or st.session_state.get("generation_error"):
+        generation_dialog()
+    else:
+        questions_dialog()

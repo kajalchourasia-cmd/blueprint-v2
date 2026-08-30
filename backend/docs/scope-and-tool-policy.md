@@ -22,16 +22,19 @@ Safe denial response:
 
 > Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything. I can instead turn that action into a founder-approved validation experiment or draft.
 
+Ask Blueprint also rejects requests to reveal system or developer prompts, hidden instructions, chain of thought, credentials, tokens, private configuration, database connection details, private webhooks, raw internal traces, or another founder's project data. This denial happens in a deterministic request boundary before authentication-dependent retrieval or model generation. A request to explain Blueprint's public architecture or trust boundaries remains allowed.
+
 Ask Blueprint additionally refuses to present unsupported project questions as facts. It returns `INSUFFICIENT_EVIDENCE`, states the missing evidence and proposes a bounded research or founder-input step. A module rerun is a write to project state and therefore requires an impact preview and explicit confirmation.
 
 ## Defense in depth
 
 1. The Start API accepts only `idea_text`, `idempotency_key`, optional industry/geography, and bounded constraints; unexpected/action payload fields are rejected.
 2. Explicit operational requests are denied before authentication-dependent research or model calls.
-3. The future Scope Classifier returns only `IN_SCOPE`, `NEEDS_CLARIFICATION`, or `OUT_OF_SCOPE` using strict JSON.
-4. The deterministic Route Guard permits only Blueprint research routes.
-5. No email, messaging, social-posting, payment, booking, CRM-write, or arbitrary HTTP action tool is provisioned to any agent.
-6. Retrieved-page instructions are treated as untrusted evidence, never executable instructions.
-7. Out-of-scope denials are logged by error code and correlation ID without storing sensitive message content.
+3. Sensitive/internal disclosure, prompt-override, and cross-owner data requests return `SENSITIVE_INTERNAL` before model execution.
+4. The Scope Classifier returns only `IN_SCOPE`, `NEEDS_CLARIFICATION`, or `OUT_OF_SCOPE` using strict JSON.
+5. The deterministic Route Guard permits only Blueprint research routes.
+6. No email, messaging, social-posting, payment, booking, CRM-write, or arbitrary HTTP action tool is provisioned to any agent.
+7. Retrieved-page instructions are treated as untrusted evidence, never executable instructions.
+8. Out-of-scope denials are logged by error code and correlation ID without storing secrets or sensitive message content.
 
 An idea *about* messaging, payments, booking, or publishing is still valid when framed as a product to evaluate. A direct instruction asking Blueprint to perform one of those actions is denied. Ambiguous input triggers one clarification rather than execution.

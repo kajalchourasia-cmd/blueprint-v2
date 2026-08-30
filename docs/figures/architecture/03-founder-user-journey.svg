@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Founder User Flow</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">The dashboard remains useful while research continues and gates prevent accidental progression</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="65" y="245" width="270" height="240" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<circle cx="103" cy="283" r="22" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="103" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#176447">1</text>
+<text x="141" y="290" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#17201C">Describe the idea</text>
+<text x="93" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Choose customer,</text>
+<text x="93" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">competitor and</text>
+<text x="93" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">market research.</text>
+<line x1="335" y1="365" x2="359" y2="365" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="373" y="245" width="270" height="240" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="411" cy="283" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="411" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">2</text>
+<text x="449" y="291" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="600" fill="#17201C">Confirm context</text>
+<text x="401" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Goal, audience,</text>
+<text x="401" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">geography,</text>
+<text x="401" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">budget, time and</text>
+<text x="401" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">prior work.</text>
+<line x1="643" y1="365" x2="667" y2="365" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="681" y="245" width="270" height="240" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="719" cy="283" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="719" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">3</text>
+<text x="757" y="292" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#17201C">See Foundation</text>
+<text x="709" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Immediate</text>
+<text x="709" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">founder-input</text>
+<text x="709" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">summary; research</text>
+<text x="709" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">starts in parallel.</text>
+<line x1="951" y1="365" x2="975" y2="365" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="989" y="245" width="270" height="240" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="1027" cy="283" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1027" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">4</text>
+<text x="1065" y="293" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Inspect Stage 1</text>
+<text x="1017" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Read completed</text>
+<text x="1017" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">sections while</text>
+<text x="1017" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">siblings are still</text>
+<text x="1017" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">running.</text>
+<line x1="1259" y1="365" x2="1283" y2="365" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1297" y="245" width="270" height="240" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="1335" cy="283" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1335" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">5</text>
+<text x="1373" y="293" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Review verdict</text>
+<text x="1325" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">See score,</text>
+<text x="1325" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">evidence strength,</text>
+<text x="1325" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">risks and what</text>
+<text x="1325" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">would change it.</text>
+<line x1="1567" y1="365" x2="1591" y2="365" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1605" y="245" width="270" height="240" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<circle cx="1643" cy="283" r="22" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="1643" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#176447">6</text>
+<text x="1681" y="290" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#17201C">Choose the route</text>
+<text x="1633" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Proceed, revise,</text>
+<text x="1633" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">override with</text>
+<text x="1633" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">reason, rerun or</text>
+<text x="1633" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">pause.</text>
+<rect x="170" y="640" width="465" height="175" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="198" y="692" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">If evidence is strong enough</text>
+<text x="198" y="735" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Gate 1 unlocks Prove &amp; Design:</text>
+<text x="198" y="764" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">assumptions, operating model,</text>
+<text x="198" y="793" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">validation and financial readiness.</text>
+<rect x="725" y="640" width="465" height="175" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="753" y="688" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">If evidence is weak or contradictory</text>
+<text x="753" y="735" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Blueprint recommends a narrower test,</text>
+<text x="753" y="764" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">asks for input, preserves partial results,</text>
+<text x="753" y="793" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">or pauses safely.</text>
+<rect x="1280" y="640" width="465" height="175" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1308" y="692" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">At every point</text>
+<text x="1308" y="734" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Full Blueprint, financial boundary, sources,</text>
+<text x="1308" y="761" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">background status and section-scoped</text>
+<text x="1308" y="788" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Ask Blueprint remain available.</text>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">The founder—not the model—owns the consequential decision at each stage gate.</text>
+</svg>

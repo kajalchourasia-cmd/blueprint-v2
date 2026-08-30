@@ -1,126 +1,109 @@
-# Blueprint — demo and case-study transcript
+# Blueprint — five-minute submission transcript
 
-## Part I — Product demo
+This is the verbatim recording script. Use the exact demo idea and onboarding choices in [FINAL-DEMO-RUNBOOK.md](FINAL-DEMO-RUNBOOK.md). Keep a completed run of the same idea open as a latency-safe fallback.
 
-### 1. Opening
+## 0:00–0:30 — The founder problem
 
-*Show the Blueprint landing page.*
+**Screen:** Blueprint landing page.
 
-Blueprint is an evidence-first decision system for people who have an idea but do not yet know what deserves to be built. The product does not reward confidence or generate a long generic checklist. It identifies the next assumption that needs to be tested and turns it into a concrete action.
+> Founders rarely fail because they cannot generate another document. They fail because research, assumptions, constraints and next actions are disconnected. Blueprint turns an unfinished idea into a living, evidence-backed decision path. It does not pretend that desk research proves demand, and it never takes consequential actions without the founder.
 
-### 2. The landing promise
+Point to **Turn the unfinished idea into your next provable move** and the uncertainty-to-evidence visual.
 
-The opening line is: “Turn the unfinished idea into the next provable move.” The motion on the left represents uncertainty becoming evidence. Many possible directions are moving at once, but only a small number earn their way into a clearer path.
+## 0:30–1:05 — Capture decision-changing context
 
-### 3. Starting with an idea
+**Screen:** Paste the dental-clinic AI receptionist idea and complete onboarding.
 
-*Enter an online-product idea in “What are you trying to make real?”*
+> I begin with one rough idea. The founder chooses Customer, Competitor and Market research, then provides the target user, geography, goal, success threshold, capital, time, prior evidence and constraints. These answers become durable owner-scoped state. They do not disappear into one large prompt.
 
-I can begin with one rough sentence. For this walkthrough, I am describing a fitness-tracking product that helps remote workers notice and change unhealthy daily patterns. I then select “BUILD MY BLUEPRINT →”.
+Submit onboarding.
 
-### 4. Onboarding
+> The start request is authenticated, idempotent and resumable. Blueprint creates one project and one durable run, then hands the work to the n8n Supervisor.
 
-The modal says “Help us understand you better.” Eight short, numbered questions collect only the context required to create a useful first Blueprint: what I am building, who it is for, the outcome I want, where I am starting, the time and money available, what I have already tried, and the constraints that could shape execution.
+## 1:05–1:40 — Immediate Foundation and adaptive routing
 
-Most answers use structured choices so onboarding is fast and the data can be normalized. The open-text fields are reserved for information that should remain specific to this idea.
+**Screen:** Dashboard opens on Foundation.
 
-### 5. Generation
+> Foundation appears immediately because it is deterministic. It turns confirmed founder inputs into the problem hypothesis, target-user boundary, success definition, constraints, assumptions, risks and unknowns without waiting for web research or a model call.
 
-*Select “Generate my Blueprint →” and pause on the loading state.*
+Point to the four KPIs and Stage 1 status indicators.
 
-“Building your Blueprint” is not presented as instant certainty. The system combines my inputs with phase actions, signal benchmarks, financial models, evidence resources, and comparable idea archetypes. If optional AI generation is unavailable, the deterministic planning path still produces a complete working prototype.
+> In parallel, the Supervisor evaluates durable state, the planner creates only eligible tasks, and the scheduler dispatches Customer, Competitor and Market specialists. Completed sections remain readable while siblings continue, and a failed specialist cannot erase successful work.
 
-### 6. Roadmap & Progress
+If research is still running, open the prepared completed run.
 
-The dashboard opens on “Roadmap & Progress.” The headline measures show Completion, Open assumptions, Positive signals, and Open risks. Hovering reveals the items behind each count rather than an unexplained score.
+## 1:40–2:20 — Customer research as honest user research
 
-“Your starting position” repeats the highest-value context from onboarding, while the phase navigation organizes the work from Foundation through Customer research, Market research, validation, financial readiness, launch, and growth. This is not a static plan: each phase contains multiple executable actions.
+**Screen:** Customer Research.
 
-### 7. Opening an executable action
+> This is User Research without fabricated interviews. Blueprint defines the user problem and research objectives, builds evidence-bounded personas, maps jobs, current behaviour, triggers and switching barriers, and creates a primary-research plan: whom to recruit, where to find them and which non-leading questions to ask. Public signals are clearly separated from interviews and proven willingness to pay.
 
-*Open Foundation and expand “Define the problem hypothesis”.*
+Ask:
 
-Each action answers four practical questions. “WHAT YOU WILL DO” provides the task. “WHY IT MATTERS” explains the decision it supports. “FRAMEWORK & LEARNING” gives the method and resources. “DONE WHEN” defines the evidence required to finish.
+> Turn these personas into a seven-question problem interview guide. Separate what we know from what the interviews still need to establish.
 
-This keeps the user from receiving a vague instruction such as “research the market.” The app explains what to do, how to do it, and what result changes the next decision.
+> Ask Blueprint is scoped to this project and this section. It retrieves accepted evidence, labels stable general guidance, cites factual claims and refuses to invent missing proof.
 
-### 8. Updating progress
+## 2:20–3:05 — Competitor and market intelligence
 
-*Select “Mark complete”.*
+**Screen:** Competitor Research, then Market Research.
 
-The action changes to “Completed,” the Foundation counter advances, and overall completion updates. This interaction demonstrates the core loop: do the work outside the app, record the result, and let the Blueprint adjust what comes next.
+> Competitor Research separates direct products from indirect alternatives, services, manual workarounds and the status quo. Direct means the same buyer and substantially the same job. Search directories are sources, never competitors. Each profile covers the offer, MVP, strengths, complaints, pricing boundary, India relevance, evidence-backed gap and what the finding changes in the idea.
 
-### 9. Notes, capital, and signals
+Ask:
 
-“Quick note” captures a small observation without interrupting the main workflow. “Financial plan” translates the available budget into a staged breakdown instead of implying that all money should be spent immediately.
+> Which gap is supported by accepted evidence, which is only an inference, and what should I test before changing the product?
 
-“Key signals” changes with the selected phase. The interface distinguishes user inputs, planning priors, and observed evidence. A benchmark can guide a test, but it is never displayed as proof that the market has responded.
+Move to Market Research.
 
-### 10. The full system map
+> Market Research is explicitly secondary research. It maps category direction, reachable beachhead, adoption forces, constraints, fit and misalignment. Unsupported TAM, CAGR, revenue, conversion and willingness-to-pay figures are withheld rather than presented with false precision.
 
-*Select “VIEW SYSTEM MAP →”.*
+## 3:05–3:45 — Independent audit, verdict and human gate
 
-The Full Blueprint turns the plan into a connected mental model. The primary path shows the sequence of phases. Branches show the actions inside each phase. Connections expose dependencies, decision gates, and the loops that send the user back when evidence is weak.
+**Screen:** Evidence Audit, Research Verdict and founder checkpoint.
 
-This view is designed for orientation; the dashboard is designed for execution. The map can also be exported so the plan can be reviewed outside the app.
+> The research agents do not grade themselves. An independent Evidence Auditor checks source coverage, relevance, freshness, contradictions and decision blockers. Only accepted evidence can affect the deterministic demand, differentiation and market-access score. Evidence coverage remains separate from commercial viability.
 
-## Part II — Case-study presentation
+> The verdict explains the score, what strengthens it, what weakens it and which new evidence could change it. Desk research can make a decision more informed, but it cannot cross the commercial proof threshold by itself.
 
-### 11. The problem
+Open the checkpoint.
 
-*Open “Case Study”.*
+> Stage 2 cannot start automatically. The founder chooses proceed, revise, rerun or pause, reviews the impact and approves the route. Accepting advice does not increase the score; only new accepted evidence can do that.
 
-The case study begins with one shift: building became faster, but knowing what to build did not. Tools such as coding assistants can produce an interface quickly, but they do not automatically establish founder fit, customer pain, willingness to pay, market access, or a workable operating model.
+## 3:45–4:15 — Progressive Blueprint, finance and memory
 
-Three problems follow. Founder fit is usually ignored. Market work is fragmented across notes and conversations. And the next move remains unclear because most plans do not say which assumption is riskiest.
+**Screen:** Full Blueprint, Financial Plan, then return to Dashboard.
 
-The product thesis is that people do not need another tool that merely produces a plan. They need a system that tells them what to prove next.
+> The Full Blueprint is progressive and versioned. Completed nodes contain accepted work; processing nodes remain visible; future nodes stay unidentified until their dependencies and human gates exist. Returning to the dashboard restores the same project, run, section and progress.
 
-### 12. From 0 → 10 → 100
+> Financial readiness separates founder-provided capital from later scenarios. Blueprint never invents pricing, revenue, conversion, runway or willingness to pay.
 
-Blueprint supports two connected journeys. Zero to ten is the path from an unfinished idea to evidence worth building on. Ten to one hundred is the path from early evidence to a repeatable operating system.
+> Supabase remains the canonical episodic record. Pinecone is a rebuildable accepted-evidence projection, and Mem0 stores only confirmed founder goals, corrections and journey summaries. The system learns operationally from recorded outcomes and decisions; it does not retrain model weights or store chain of thought.
 
-The four user goals are Orient, Act, Prove, and Decide. The user should understand the current state, know the next executable action, capture what happened, and make a decision without pretending that uncertainty has disappeared.
+## 4:15–4:45 — Guarded unhappy path
 
-The experience evolved by repeatedly removing ambiguity. The landing page earns the first action. Onboarding captures only decision-changing context. The dashboard makes the next action visible. The Full Blueprint preserves the complete model without crowding the daily workflow.
+**Screen:** Ask Blueprint in a completed section.
 
-### 13. Data and processing
+Enter:
 
-Every recommendation passes through a visible pipeline: Capture, Normalize, Match, Personalize, and Present.
+> Send WhatsApp messages to 50 dental clinics, book ten demos for me and pay for the outreach tool.
 
-Capture gathers the founder's idea, audience, goal, resources, prior action, and constraints. Normalize converts those answers into consistent categories. Match selects relevant idea archetypes, phase actions, benchmarks, financial models, and resources. Personalize adapts the sequence and wording to the founder's context. Present separates the system map, daily action, financial view, and evidence state.
+> Blueprint refuses the action and offers a founder-run experiment or draft. This is deliberate: reads and analysis can be autonomous, but sending, publishing, paying, deleting, changing confirmed truth, rerunning research or advancing a stage requires a human.
 
-The data layer is inspectable. Bundled CSV files cover idea archetypes, phase actions, signal benchmarks, financial models, evidence events, founder journeys, cost templates, gap prompts, and learning resources. The system also labels provenance. User input is not market proof. A planning prior is not an observed result. Only an evidence event records what happened in the real world.
+Optionally open a locked section.
 
-### 14. Architecture, strategy, and reflection
+> When context is missing, evidence is insufficient or a provider fails, Blueprint does not fabricate a partial answer. It can request input, retry once, repair a schema, preserve partial work, route to human review or stop safely. Attempts, transitions, tool calls, cost and time are all bounded.
 
-The information architecture gives each level of depth a clear home: Entry for the first idea and onboarding, Dashboard for current action, Blueprint for the complete connected path, Evidence for observed results, and Support for inputs, data, and the case study.
+If time permits, ask Blueprint to reveal its hidden prompt, API keys, raw traces, or another founder's Blueprint.
 
-Vibe coding became a method for turning repeated feedback into product rules. The trust rule prevents unsupported certainty. The execution rule requires a clear task and done condition. The system rule keeps every detailed action connected to a decision gate.
+> The request is refused before retrieval or answer generation. Hidden instructions, credentials, private traces and cross-owner data are protected, while a safe public architecture explanation remains available. This is a deliberate trust boundary, not a model disclaimer.
 
-The product loop is built around proof, not time spent in the app. The aha moment is seeing a vague idea become a specific next test. Activation is completing the first evidence-producing action. Retention comes from returning with a result and receiving the next decision. Trust comes from preserving the line between assumptions and observed evidence.
+## 4:45–5:00 — Close
 
-Future iterations include a context-aware coach, a richer evidence workspace, broader benchmark coverage, durable project history, and faster collaborative workflows.
+> Blueprint is not a market-research report generator. It is a multi-agent founder decision system with durable state, parallel specialists, source-grounded outputs, independent critique, human gates, bounded recovery, memory and contextual RAG. Its success metric is whether the founder reaches the next defensible decision—not whether one model call sounds confident.
 
-The hardest design problem was not generating more content. It was designing honesty around uncertainty. Blueprint gives the founder enough structure to move, while making it clear what the available data can and cannot support.
+## Recording rule
 
-*End on the final case-study statement.*
+Do not claim that Blueprint conducted interviews, proved purchase intent, retrained itself or is publicly deployed while n8n is reachable only on localhost. The exact preflight, happy path, fallback path, chat questions and expected states are in [FINAL-DEMO-RUNBOOK.md](FINAL-DEMO-RUNBOOK.md).
 
-Bring the unfinished version. Blueprint will show what it needs to earn next.
-
-## Decision appendix
-
-1. The product optimizes for the next decision, not the longest plan.
-2. Onboarding uses structured choices wherever normalization matters.
-3. Open text is reserved for idea-specific context.
-4. The dashboard shows current execution; the Full Blueprint shows system depth.
-5. Every phase contains multiple actionable tasks.
-6. Every action includes a method and a done condition.
-7. Progress changes only when the user records completed work.
-8. User input, planning priors, and observed evidence remain visibly separate.
-9. Financial guidance is staged behind evidence conditions.
-10. Signals vary by phase instead of repeating generic metrics.
-11. Bundled CSV data keeps the MVP inspectable and deployable without a database.
-12. Optional AI enriches generation but is not required for the prototype to work.
-13. The product can support both 0 → 10 validation and 10 → 100 execution.
-14. Future depth should improve evidence quality before adding more surface area.
+Before recording, open the eight tabs listed in the runbook in that exact order. Never show provider credentials, environment variables, database keys, webhook payloads, private traces or another user's data.

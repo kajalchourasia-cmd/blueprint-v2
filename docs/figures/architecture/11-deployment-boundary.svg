@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Deployment Boundary and Reproducibility</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Local demo is complete; public hosting needs one stable HTTPS n8n endpoint</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="90" y="230" width="760" height="245" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="118" y="282" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Current local demonstration</text>
+<text x="118" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Streamlit at localhost:8501 → self-hosted n8n Docker at</text>
+<text x="118" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">localhost:5679 → Supabase, You.com, Nebius, Pinecone and</text>
+<text x="118" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Mem0 over HTTPS.</text>
+<rect x="1070" y="230" width="760" height="245" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1098" y="282" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Public deployment path</text>
+<text x="1098" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Streamlit Community Cloud → stable public HTTPS n8n</text>
+<text x="1098" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">endpoint with persistent storage → the same external services</text>
+<text x="1098" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">and Supabase owner boundary.</text>
+<line x1="850" y1="352" x2="1050" y2="352" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="90" y="588" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="600" fill="#5F6B65">PUBLIC RELEASE CHECKLIST</text>
+<rect x="90" y="610" width="405" height="210" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="128" cy="648" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="128" y="656" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">1</text>
+<text x="166" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Host n8n</text>
+<text x="118" y="707" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Persistent volume, TLS,</text>
+<text x="118" y="740" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">credentials and webhook URL.</text>
+<rect x="540" y="610" width="405" height="210" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="578" cy="648" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="578" y="656" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">2</text>
+<text x="616" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Configure Streamlit</text>
+<text x="568" y="707" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Only public Supabase and</text>
+<text x="568" y="740" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">webhook values in secrets.</text>
+<rect x="990" y="610" width="405" height="210" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="1028" cy="648" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1028" y="656" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">3</text>
+<text x="1066" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Re-run acceptance</text>
+<text x="1018" y="707" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Happy path, denial, retry,</text>
+<text x="1018" y="740" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">resume and state restoration.</text>
+<rect x="1440" y="610" width="405" height="210" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="1478" cy="648" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1478" y="656" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">4</text>
+<text x="1516" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Verify isolation</text>
+<text x="1468" y="707" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">A second anonymous user</text>
+<text x="1468" y="740" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">cannot read the first user&#x27;s</text>
+<text x="1468" y="773" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">project.</text>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Until n8n is public, the reliable submission demo is the local Streamlit application with a pre-completed fallback run.</text>
+</svg>

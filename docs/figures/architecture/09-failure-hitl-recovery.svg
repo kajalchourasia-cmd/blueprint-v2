@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Failure Handling and Human-in-the-Loop</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Expected tool observations are routed deliberately; uncaught crashes converge on the global audit boundary</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="705" y="205" width="510" height="145" rx="22" fill="#FBECEB" stroke="#A94840" stroke-width="2"/>
+<text x="733" y="257" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Tool or model observation</text>
+<text x="733" y="299" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Timeout • rate limit • empty result • schema •</text>
+<text x="733" y="326" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">grounding • conflict • policy • budget</text>
+<line x1="960" y1="350" x2="960" y2="420" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="705" y="420" width="510" height="145" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="733" y="472" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Shared resilience controller</text>
+<text x="733" y="514" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Classify → check attempts/budget → preserve</text>
+<text x="733" y="541" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">siblings → choose one terminal-safe route</text>
+<rect x="60" y="700" width="320" height="180" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="88" y="752" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Retry / repair</text>
+<text x="88" y="795" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Bounded backoff or one</text>
+<text x="88" y="824" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">schema/grounding</text>
+<text x="88" y="853" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">repair.</text>
+<line x1="960" y1="565" x2="220" y2="700" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="430" y="700" width="320" height="180" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="458" y="752" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Reload / replan</text>
+<text x="458" y="796" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Resolve stale state and</text>
+<text x="458" y="827" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">recalculate eligible tasks.</text>
+<line x1="960" y1="565" x2="590" y2="700" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="800" y="700" width="320" height="180" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="828" y="752" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Partial complete</text>
+<text x="828" y="795" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Keep useful siblings</text>
+<text x="828" y="824" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">visible; label missing</text>
+<text x="828" y="853" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">evidence.</text>
+<line x1="960" y1="565" x2="960" y2="700" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1170" y="700" width="320" height="180" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="1198" y="752" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Human review</text>
+<text x="1198" y="795" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Ask for input, resolve</text>
+<text x="1198" y="824" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">contradiction or approve</text>
+<text x="1198" y="853" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">override.</text>
+<line x1="960" y1="565" x2="1330" y2="700" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1540" y="700" width="320" height="180" rx="22" fill="#FBECEB" stroke="#A94840" stroke-width="2"/>
+<text x="1568" y="752" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Safe fail / deny</text>
+<text x="1568" y="795" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Stop on auth, policy,</text>
+<text x="1568" y="824" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">exhausted budget or</text>
+<text x="1568" y="853" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">unsafe scope.</text>
+<line x1="960" y1="565" x2="1700" y2="700" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">No partial verdict is exposed as success. Every route records the reason, attempt, latency and terminal status.</text>
+</svg>

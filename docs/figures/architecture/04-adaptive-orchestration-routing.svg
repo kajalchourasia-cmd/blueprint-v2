@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Adaptive Orchestration and Closed-Loop Routing</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">The next step is selected from durable state after every observation</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="720" y="205" width="480" height="140" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="748" y="257" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Adaptive Supervisor</text>
+<text x="748" y="298" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Reload snapshot → validate budgets →</text>
+<text x="748" y="324" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">choose one allowed route</text>
+<line x1="960" y1="345" x2="960" y2="405" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="720" y="405" width="480" height="140" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="748" y="457" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Dynamic Planner + Scheduler</text>
+<text x="748" y="498" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Build dependencies and atomically claim only</text>
+<text x="748" y="524" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">eligible tasks</text>
+<rect x="95" y="690" width="350" height="185" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="123" y="742" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Ready work</text>
+<text x="123" y="786" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Dispatch the allowlisted</text>
+<text x="123" y="817" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">specialist or deterministic</text>
+<text x="123" y="848" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">step.</text>
+<line x1="960" y1="545" x2="270" y2="690" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="525" y="690" width="350" height="185" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="553" y="742" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Missing input</text>
+<text x="553" y="786" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Create a checkpoint and</text>
+<text x="553" y="817" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">ask one precise founder</text>
+<text x="553" y="848" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">question.</text>
+<line x1="960" y1="545" x2="700" y2="690" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="955" y="690" width="350" height="185" rx="22" fill="#FBECEB" stroke="#A94840" stroke-width="2"/>
+<text x="983" y="742" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Tool observation</text>
+<text x="983" y="786" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Retry, repair, reload/replan,</text>
+<text x="983" y="817" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">partial, review or safe fail.</text>
+<line x1="960" y1="545" x2="1130" y2="690" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1385" y="690" width="350" height="185" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1413" y="742" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Stage complete</text>
+<text x="1413" y="786" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Audit, score, synthesize</text>
+<text x="1413" y="817" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">and wait at the founder</text>
+<text x="1413" y="848" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">gate.</text>
+<line x1="960" y1="545" x2="1560" y2="690" stroke="#78817C" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="270" y1="690" x2="270" y2="610" stroke="#176447" stroke-width="3"/>
+<line x1="270" y1="610" x2="690" y2="610" stroke="#176447" stroke-width="3"/>
+<line x1="690" y1="610" x2="690" y2="275" stroke="#176447" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="345" y="592" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#176447">observation returns to supervisor</text>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">No unlimited loops: task attempts, transitions, tool calls and cost/time budgets are bounded.</text>
+</svg>

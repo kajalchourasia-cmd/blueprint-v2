@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Ask Blueprint — Grounded RAG and Action Coaching</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">The assistant explains the selected section; it cannot silently change or execute the plan</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="55" y="245" width="335" height="245" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<circle cx="93" cy="283" r="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="93" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#C9D0CC">1</text>
+<text x="131" y="297" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Question router</text>
+<text x="83" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Classify project question,</text>
+<text x="83" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">general explanation,</text>
+<text x="83" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">actionable coaching,</text>
+<text x="83" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">rerun intent or refusal.</text>
+<line x1="390" y1="368" x2="415" y2="368" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="430" y="245" width="335" height="245" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<circle cx="468" cy="283" r="22" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="468" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#176447">2</text>
+<text x="506" y="290" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#17201C">Owner-scoped retrieval</text>
+<text x="458" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Load selected section,</text>
+<text x="458" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">verdict, actions and</text>
+<text x="458" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">accepted evidence from</text>
+<text x="458" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Supabase.</text>
+<line x1="765" y1="368" x2="790" y2="368" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="805" y="245" width="335" height="245" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<circle cx="843" cy="283" r="22" fill="#FFFFFF" stroke="#6D5AA6" stroke-width="2"/>
+<text x="843" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#6D5AA6">3</text>
+<text x="881" y="297" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Semantic assist</text>
+<text x="833" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Optionally retrieve</text>
+<text x="833" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">related</text>
+<text x="833" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">accepted-evidence</text>
+<text x="833" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">vectors from Pinecone.</text>
+<line x1="1140" y1="368" x2="1165" y2="368" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1180" y="245" width="335" height="245" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<circle cx="1218" cy="283" r="22" fill="#FFFFFF" stroke="#9A6A14" stroke-width="2"/>
+<text x="1218" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#9A6A14">4</text>
+<text x="1256" y="291" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="600" fill="#17201C">Canonical revalidation</text>
+<text x="1208" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Discard any vector hit</text>
+<text x="1208" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">that no longer maps to</text>
+<text x="1208" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">accepted Supabase</text>
+<text x="1208" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">evidence.</text>
+<line x1="1515" y1="368" x2="1540" y2="368" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1555" y="245" width="335" height="245" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<circle cx="1593" cy="283" r="22" fill="#FFFFFF" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1593" y="291" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#2D5F8B">5</text>
+<text x="1631" y="297" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Bounded answer</text>
+<text x="1583" y="342" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Answer first, show</text>
+<text x="1583" y="375" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">citations and limitations,</text>
+<text x="1583" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">then recommend the</text>
+<text x="1583" y="441" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">smallest next move.</text>
+<rect x="180" y="650" width="470" height="180" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="208" y="702" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Allowed</text>
+<text x="208" y="745" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Explain, compare, trace sources, convert</text>
+<text x="208" y="774" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">an existing actionable into founder-run</text>
+<text x="208" y="803" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">steps, or propose a rerun.</text>
+<rect x="725" y="650" width="470" height="180" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="753" y="702" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Needs approval</text>
+<text x="753" y="745" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">A proposed research rerun shows</text>
+<text x="753" y="774" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">dependency impact before the founder</text>
+<text x="753" y="803" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">confirms it.</text>
+<rect x="1270" y="650" width="470" height="180" rx="22" fill="#FBECEB" stroke="#A94840" stroke-width="2"/>
+<text x="1298" y="702" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Denied</text>
+<text x="1298" y="745" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Contact, send, publish, buy, book, pay,</text>
+<text x="1298" y="774" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">delete, expose secrets or invent</text>
+<text x="1298" y="803" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">unsupported facts.</text>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Conversation context is section-scoped; long chats are summarized without replacing accepted project evidence.</text>
+</svg>

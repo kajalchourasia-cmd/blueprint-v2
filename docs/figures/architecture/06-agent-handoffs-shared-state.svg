@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Agent Roles, Typed Handoffs and Shared State</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Agents exchange validated artifacts and observations—not hidden reasoning</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="70" y="235" width="360" height="190" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="98" y="287" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Supervisor</text>
+<text x="98" y="332" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Reads the durable</text>
+<text x="98" y="365" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">snapshot; emits one typed</text>
+<text x="98" y="398" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">route and route reason.</text>
+<rect x="520" y="235" width="360" height="190" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="548" y="287" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Research specialist</text>
+<text x="548" y="331" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">Returns structured findings,</text>
+<text x="548" y="362" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">evidence IDs, assumptions,</text>
+<text x="548" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5F6B65">conflicts and next actions.</text>
+<rect x="970" y="235" width="360" height="190" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="998" y="287" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Evidence auditor</text>
+<text x="998" y="332" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Returns accepted, limited</text>
+<text x="998" y="365" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">or rejected claims plus</text>
+<text x="998" y="398" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">coverage and blockers.</text>
+<rect x="1420" y="235" width="360" height="190" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="1448" y="287" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Verdict / critic</text>
+<text x="1448" y="332" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Returns score components,</text>
+<text x="1448" y="365" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">decision, revision needs</text>
+<text x="1448" y="398" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">and checkpoint payload.</text>
+<line x1="430" y1="330" x2="500" y2="330" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="880" y1="330" x2="950" y2="330" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1330" y1="330" x2="1400" y2="330" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="245" y="610" width="1430" height="210" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="273" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Supabase shared-state contract</text>
+<text x="273" y="707" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">project_id • run_id • owner_id • state_version • module_key • dependencies • status • attempt • evidence IDs • observation</text>
+<text x="273" y="740" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">verdict • route reason • checkpoint • immutable output version</text>
+<line x1="250" y1="425" x2="250" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="700" y1="425" x2="700" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1150" y1="425" x2="1150" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1600" y1="425" x2="1600" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="330" y="870" width="270" height="42" rx="21" fill="#FBECEB" stroke="#FBECEB" stroke-width="1"/>
+<text x="347" y="898" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#A94840">No raw chain of thought</text>
+<rect x="760" y="870" width="294" height="42" rx="21" fill="#EAF1F8" stroke="#EAF1F8" stroke-width="1"/>
+<text x="777" y="898" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#2D5F8B">Schema-validated handoffs</text>
+<rect x="1210" y="870" width="290" height="42" rx="21" fill="#E8F2ED" stroke="#E8F2ED" stroke-width="1"/>
+<text x="1227" y="898" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#176447">Optimistic state versioning</text>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Every handoff can be reproduced from durable inputs, selected tools, accepted evidence and recorded decisions.</text>
+</svg>

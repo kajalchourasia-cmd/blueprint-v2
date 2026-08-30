@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">State and Memory Model</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Different stores serve different lifetimes and authority levels</text>
+<line x1="70" y1="165" x2="1850" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="80" y="230" width="400" height="255" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="108" y="282" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Session memory</text>
+<text x="108" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Streamlit navigation, active</text>
+<text x="108" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">section and temporary chat</text>
+<text x="108" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">state. Lifetime: browser</text>
+<text x="108" y="426" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">session. Authority: cache only.</text>
+<rect x="510" y="230" width="400" height="255" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="538" y="281" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="600" fill="#17201C">Episodic workflow memory</text>
+<text x="538" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Supabase stores exact</text>
+<text x="538" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">projects, runs, tasks, decisions,</text>
+<text x="538" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">failures and Blueprint versions.</text>
+<text x="538" y="426" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Authority: canonical.</text>
+<rect x="940" y="230" width="400" height="255" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="968" y="280" text-anchor="start" font-family="Segoe UI, Arial" font-size="27" font-weight="600" fill="#17201C">Semantic evidence memory</text>
+<text x="968" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Pinecone stores vectors for</text>
+<text x="968" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">accepted evidence only.</text>
+<text x="968" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Lifetime: rebuildable. Authority:</text>
+<text x="968" y="426" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">projection.</text>
+<rect x="1370" y="230" width="470" height="255" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1398" y="282" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Founder journey memory</text>
+<text x="1398" y="327" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Mem0 stores confirmed goals,</text>
+<text x="1398" y="360" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">preferences, corrections and</text>
+<text x="1398" y="393" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">decisions. Authority: personalization</text>
+<text x="1398" y="426" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">only.</text>
+<text x="80" y="603" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="600" fill="#5F6B65">WHAT BLUEPRINT REMEMBERS</text>
+<rect x="80" y="625" width="820" height="205" rx="22" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="108" y="677" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Persisted</text>
+<text x="108" y="722" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Founder-confirmed context • accepted sources • route reasons •</text>
+<text x="108" y="755" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">tool/model selection • errors • checkpoints • approvals • outcomes •</text>
+<text x="108" y="788" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">immutable versions</text>
+<rect x="1020" y="625" width="820" height="205" rx="22" fill="#FFFFFF" stroke="#A94840" stroke-width="2"/>
+<text x="1048" y="677" text-anchor="start" font-family="Segoe UI, Arial" font-size="29" font-weight="600" fill="#17201C">Never persisted</text>
+<text x="1048" y="722" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Raw chain of thought • provider secrets • unconfirmed</text>
+<text x="1048" y="755" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">personalization • rejected evidence as truth • cross-owner project</text>
+<text x="1048" y="788" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">context</text>
+<line x1="710" y1="485" x2="710" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1140" y1="485" x2="1140" y2="610" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="70" y1="1002" x2="1850" y2="1002" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="1046" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">If Pinecone or Mem0 fails, Blueprint degrades retrieval or personalization but does not lose project truth.</text>
+</svg>
