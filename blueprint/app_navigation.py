@@ -11,8 +11,6 @@ def render_app_navigation(active: str = "") -> None:
         ("dashboard", "/Your_Plan", "▦", "Dashboard"),
         ("blueprint", "/Your_Plan?view=blueprint", "⌘", "Full Blueprint"),
         ("inputs", "/Inputs", "≋", "User inputs"),
-        ("data", "/Data_Library", "◫", "Data library"),
-        ("case", "/Case_Study", "¶", "Case study"),
     ]
     links = "".join(
         f'<a class="{"active" if key == active else ""}" href="{href}" aria-label="{label}"><span class="nav-glyph">{icon}</span><small>{label}</small></a>'

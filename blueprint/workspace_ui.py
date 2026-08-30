@@ -207,6 +207,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_left_rail .st-key-bp_home button{{width:auto!important;min-height:26px!important;padding:0 6px 0 26px!important;background:transparent!important;color:#172019!important;font:650 18px/1 var(--ui)!important;letter-spacing:-.03em!important}}.st-key-bp_left_rail .st-key-bp_home button:before{{content:'';position:absolute;left:6px;top:50%;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(44,122,75,.09);transform:translateY(-50%)}}
 .st-key-bp_left_rail{{padding-top:12px!important}}.st-key-bp_left_rail .st-key-bp_home{{margin:0 0 36px!important}}.rail-top-progress{{margin:22px 6px 32px!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{display:flex!important;padding-left:0!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{width:100%!important;margin:0!important;text-align:left!important}}.kpi-label{{font-weight:600!important}}.st-key-bp_shortcut_blueprint,.st-key-bp_shortcut_financial{{position:relative;overflow:hidden;padding:15px!important;border-radius:20px!important;box-shadow:none!important;transform:none!important}}.st-key-bp_shortcut_blueprint{{min-height:158px;background:#132b1e!important;border-color:#244535!important}}.st-key-bp_shortcut_financial{{min-height:176px;background:radial-gradient(circle at 76% 28%,rgba(120,186,205,.52),transparent 35%),linear-gradient(145deg,#8f929a 0%,#aa8176 56%,#b8795d 100%)!important;border-color:#9b8179!important}}.st-key-bp_shortcut_blueprint:hover{{transform:translateY(-2px)!important;border-color:#537a62!important}}.st-key-bp_shortcut_financial:hover{{transform:translateY(-2px)!important;border-color:#a86f55!important}}.st-key-bp_shortcut_blueprint:after,.st-key-bp_shortcut_financial:after{{content:none!important}}.plan-native-head{{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-start;gap:9px;margin-bottom:11px}}.plan-native-head small{{color:#a8b8ad;font:650 7px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase}}.st-key-bp_shortcut_financial .plan-native-head small{{color:#fff;opacity:.82}}.plan-native-icon{{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:transparent;color:#caff36;font:700 14px var(--ui)}}.st-key-bp_shortcut_financial .plan-native-icon{{background:rgba(255,255,255,.13);color:#fff}}.plan-map-lines{{position:absolute;z-index:1;right:-12px;top:19px;width:102px;height:55px;transform:rotate(-16deg);opacity:.55}}.plan-map-lines i{{display:block;margin:9px 0;border-top:1px solid #53a671}}.st-key-bp_shortcut_blueprint button,.st-key-bp_shortcut_financial button{{position:relative;z-index:3;min-height:26px!important;padding:0!important;color:#fff!important;justify-content:flex-start!important;text-align:left!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.015em!important}}.st-key-bp_shortcut_blueprint button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_financial button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_blueprint button p,.st-key-bp_shortcut_financial button p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_shortcut_blueprint button:hover,.st-key-bp_shortcut_financial button:hover{{color:#fff!important;background:transparent!important}}.st-key-bp_shortcut_blueprint [data-testid="stCaptionContainer"],.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{position:relative;z-index:2;display:block!important;margin-top:3px!important;padding-right:4px!important;color:#a9b8ae!important;font-size:8px!important;line-height:1.45!important}}.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{color:rgba(255,255,255,.74)!important}}.plan-native-cta{{position:relative;z-index:2;display:inline-flex;margin-top:11px;padding:6px 9px;border:1px solid #bbed3f;border-radius:14px;color:#d5ff5c;font:650 7px/1 var(--ui);letter-spacing:.04em}}.plan-money{{position:relative;z-index:2;margin:14px 0 13px;color:#fff;font:500 30px/1 var(--ui);letter-spacing:-.04em}}.plan-edit-mark{{display:grid;place-items:center;width:25px;height:25px;margin-left:auto;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font:650 10px var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"] .st-key-bp_action_card_workspace{{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}}.action-count{{display:block;margin:3px 1px 0 auto;color:#858d87;font:600 9px var(--ui);text-align:right}}
 .st-key-bp_stage_scroll{{padding-bottom:12px!important}}.st-key-bp_left_shortcuts{{display:grid!important;flex:0 0 auto!important;align-self:stretch!important;width:calc(100% - 10px)!important;box-sizing:border-box!important;gap:7px!important;margin:14px 5px 13px!important;padding-top:12px!important;border-top:1px solid #daddda!important;background:#f5f6f4!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"],.st-key-bp_left_shortcuts [data-testid="stLayoutWrapper"],.st-key-bp_left_shortcuts [data-testid="stButton"]{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"]{{gap:7px!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button{{display:flex!important;width:100%!important;min-height:39px!important;padding:0 11px!important;border:1px solid #dce1dd!important;border-radius:10px!important;background:#fff!important;color:#303a33!important;justify-content:flex-start!important;text-align:left!important;font:600 10px/1.2 var(--ui)!important;box-shadow:none!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'→';margin-left:auto;color:#778079;font-size:14px;font-weight:400}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:hover{{border-color:#bfc9c1!important;background:#fafcfb!important;color:#245d3c!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"],.st-key-bp_left_rail [data-testid="stExpanderDetails"]>[data-testid="stVerticalBlock"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stLayoutWrapper"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"]{{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;align-self:stretch!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{width:100%!important;margin:0!important;padding:6px 28px 6px 32px!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button>div,.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{display:block!important;width:100%!important;margin:0!important;padding:0!important;text-align:left!important}}.st-key-bp_right_rail{{top:72px!important;margin:72px 12px 12px 10px!important}}.st-key-bp_right_rail>[data-testid="stVerticalBlock"]{{gap:0!important}}
+.st-key-bp_center_pane{{padding-bottom:34px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:clamp(92px,15vh,180px)!important}}[class*="st-key-bp_chat_composer_"]{{bottom:8px!important;border-color:#e2d7d0!important;box-shadow:0 12px 32px rgba(82,52,38,.08)!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#dac8bc!important;background:#f7f0eb!important;color:#704832!important}}.st-key-bp_center_pane [data-testid="stChatInput"] button,.st-key-bp_center_pane [data-testid="stChatInputSubmitButton"]{{background:#87583f!important;color:#fff!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{width:100%!important;max-width:none!important;padding:0 12px!important;text-align:left!important;justify-content:flex-start!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button{{border-color:#d5dfd6!important;background:#edf4ee!important;color:#315440!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{border-color:#e5d8cf!important;background:#f7efea!important;color:#704b38!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'↗'!important;margin-left:auto;color:currentColor;font-size:13px;font-weight:500}}.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"],.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"] p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_left_companion{{flex:0 0 auto!important;align-self:stretch!important;max-height:255px;margin:0 5px 10px!important;padding:0 2px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin;scrollbar-color:transparent transparent}}.st-key-bp_left_companion:hover{{scrollbar-color:#c8ceca transparent}}.st-key-bp_left_companion>[data-testid="stVerticalBlock"]{{gap:0!important}}.st-key-bp_left_companion [data-testid="stExpander"]{{margin:0!important;border:0!important;border-top:1px solid #dfe3df!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_companion [data-testid="stExpander"] details{{border:0!important;background:transparent!important;box-shadow:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] summary{{min-height:38px!important;padding:7px 4px!important;flex-direction:row-reverse!important;justify-content:space-between!important;border:0!important;border-radius:0!important;background:transparent!important;color:#515a53!important;font:600 10px/1.2 var(--ui)!important;text-transform:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] details[open] summary{{background:transparent!important;color:#333d35!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"]{{padding:0 4px 9px!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{padding-left:8px!important}}.st-key-bp_left_companion [data-testid="stCheckbox"] label{{font-size:10px!important}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 </style>""", unsafe_allow_html=True)
 
@@ -242,7 +243,13 @@ def _render_kpi_strip(score: float | None, coverage: int, risks: int, completion
     st.markdown(f'<div class="kpi-grid">{cards}</div>', unsafe_allow_html=True)
 
 
-def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, interactive: bool) -> None:
+def _render_left_rail(
+    states: dict[str, tuple[str, str]],
+    selected: str,
+    *,
+    interactive: bool,
+    companion: tuple[str, dict | None, dict, list[dict], list] | None = None,
+) -> None:
     if st.button("Blueprint", key="bp_home", help="Return to the Blueprint landing page"):
         st.switch_page("app.py")
     st.markdown('<div class="rail-heading">Roadmap <span>&amp; Progress</span></div>', unsafe_allow_html=True)
@@ -262,6 +269,9 @@ def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, inte
                             st.session_state["bp_focus_idea"] = True
                         st.rerun()
     _render_left_shortcuts()
+    if companion is not None:
+        with st.container(key="bp_left_companion"):
+            _render_right(*companion)
 
 
 def _render_left_shortcuts() -> None:
@@ -642,10 +652,6 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
                 st.session_state.pop("bp_rerun_preview", None); st.session_state.pop("bp_rerun_proposal", None); st.rerun()
 
 
-def _render_companion(key: str, task: dict | None, output: dict, sources: list[dict], actions: list) -> None:
-    _render_right(key, task, output, sources, actions)
-
-
 def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
     @st.dialog("Decide what Blueprint should do next", width="large")
     def gate() -> None:
@@ -683,13 +689,18 @@ def _workspace_body() -> None:
             if risk not in risk_items:
                 risk_items.append(risk)
     risks = len(risk_items); score = _score(dashboard_verdict or latest_verdict); progress = [item for item in _items(dashboard.get("stage_progress")) if isinstance(item, dict)]; completion = round(sum(float(item.get("completion_percent") or 0) for item in progress) / max(1, len(progress))) if progress else round(100 * sum(state[0] == "done" for state in states.values()) / len(states)); coverage_value = (dashboard_verdict or latest_verdict).get("evidence_coverage"); coverage = round((float(coverage_value) * 100 if float(coverage_value) <= 1 else float(coverage_value))) if isinstance(coverage_value, (int, float)) else 0; workspace_actions = _workspace_actions(tasks, artifact, dashboard)
-    left, center, right = st.columns([0.92, 4.41, 1.12], gap=None)
-    with left:
-        with st.container(key="bp_left_rail"):
-            _render_left_rail(states, selected, interactive=True)
     selected = st.session_state.get("bp_selected_section", selected); task = tasks.get(selected); state = states[selected]; output = _extract_output(task, artifact, selected)
     if selected == "research_verdict": output = {**output, **dashboard_verdict, **latest_verdict}
     sources = _flatten_sources(output, context)
+    left, center = st.columns([0.92, 5.53], gap=None)
+    with left:
+        with st.container(key="bp_left_rail"):
+            _render_left_rail(
+                states,
+                selected,
+                interactive=True,
+                companion=(selected, task, output, sources, workspace_actions),
+            )
     with center:
         with st.container(key="bp_center_pane"):
             st.markdown('<div class="bp-live-spacer"></div>', unsafe_allow_html=True)
@@ -700,9 +711,6 @@ def _workspace_body() -> None:
             if notice := st.session_state.pop("bp_transition_notice", None): st.success(str(notice))
             st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)} · {html.escape(state[1])}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
             _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state, task); _render_chat(selected, output, state)
-    with right:
-        with st.container(key="bp_right_rail"):
-            _render_companion(selected, task, output, sources, workspace_actions)
     if checkpoint:
         seen = f"bp_gate_seen_{checkpoint.get('checkpoint_id')}"
         if not st.session_state.get(seen):
@@ -719,10 +727,25 @@ def _empty_workspace() -> None:
     }
     _render_css(states, "no_active_section")
     highlight_idea = bool(st.session_state.pop("bp_focus_idea", False))
-    left, center, right = st.columns([0.92, 4.41, 1.12], gap=None)
+    left, center = st.columns([0.92, 5.53], gap=None)
     with left:
         with st.container(key="bp_left_rail"):
-            _render_left_rail(states, "no_active_section", interactive=False)
+            _render_left_rail(
+                states,
+                "no_active_section",
+                interactive=False,
+                companion=(
+                    "foundation",
+                    None,
+                    {},
+                    [],
+                    [
+                        "Enter the unfinished idea and continue to onboarding.",
+                        "Confirm the goal, audience, budget, time, and research streams.",
+                        "Start Stage 1 and review its evidence-backed verdict.",
+                    ],
+                ),
+            )
     with center:
         with st.container(key="bp_center_pane"):
             st.markdown('<div class="bp-live-spacer"></div>', unsafe_allow_html=True)
@@ -734,7 +757,7 @@ def _empty_workspace() -> None:
                 st.markdown('<div class="empty-eyebrow">Start here · one rough sentence is enough</div><div class="empty-composer-title">What are you trying to make real?</div><div class="empty-composer-copy">Describe the product, service, or business you are considering. After this, the short onboarding will capture your audience, goal, time, budget, and constraints before any research begins.</div>', unsafe_allow_html=True)
                 with st.form("empty_dashboard_idea", border=False):
                     idea = st.text_area("Your idea", placeholder="For example: I want to build a fitness tracking app for busy professionals…", label_visibility="collapsed")
-                    begin = st.form_submit_button("CONTINUE TO ONBOARDING  →", type="primary", use_container_width=False)
+                    begin = st.form_submit_button("CONTINUE TO ONBOARDING  ↗", type="primary", use_container_width=False)
             if begin:
                 clean_idea = idea.strip()
                 if len(clean_idea) < 10:
@@ -748,19 +771,6 @@ def _empty_workspace() -> None:
                     st.session_state["show_questions"] = True
                     st.session_state["generating_blueprint"] = False
                     st.switch_page("app.py")
-    with right:
-        with st.container(key="bp_right_rail"):
-            _render_companion(
-                "foundation",
-                None,
-                {},
-                [],
-                [
-                    "Enter the unfinished idea and continue to onboarding.",
-                    "Confirm the goal, audience, budget, time, and research streams.",
-                    "Start Stage 1 and review its evidence-backed verdict.",
-                ],
-            )
 
 
 def _map_node_content(output: dict, state: tuple[str, str], label: str) -> tuple[str, list[str]]:
