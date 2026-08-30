@@ -85,6 +85,14 @@ assert(invalid.valid === false && invalid.status_code === 401, 'Checkpoint API d
 
 const supervisor = load('BP-00-adaptive-supervisor.json');
 assert(code(supervisor, 'Normalize Canonical Supervisor Command').includes("['START','RESUME']"), 'Supervisor cannot resume after a gate.');
+const discoverSupervisor = runCode(code(supervisor, 'Normalize Canonical Supervisor Command'), {
+  command: 'START', authorization: 'Bearer safe-test',
+  project_id: '00000000-0000-4000-8000-000000000001',
+  run_id: '00000000-0000-4000-8000-000000000002', profile_version: 2,
+  requested_research: ['customer_demand', 'competitor_intelligence', 'market_economics'],
+  planning_mode: 'DISCOVER',
+});
+assert(discoverSupervisor.claim_limit === 3, 'Independent Stage 1 research is not configured for bounded three-way fan-out.');
 
 const auditor = load('BP-AUDIT-01-independent-evidence-auditor.json');
 assert(code(auditor, 'Audit Evidence Independently').includes('directDemandGap'), 'Auditor does not distinguish desk research from direct demand evidence.');
@@ -110,13 +118,13 @@ assert(deskVerdictInput.critical_blockers.some((x) => /no direct interview/i.tes
 assert(deskWeighted < 60, 'Desk-only research can still cross the commercial viability threshold.');
 
 console.log(JSON.stringify({
-  passed: 20,
+  passed: 21,
   checks: [
     'safe_advisory_fixture', 'synthetic_fixture_label', 'founder_input_finance',
     'finance_no_forecast_boundary', 'goal_specific_stage2', 'no_stage3_leak',
     'scheduler_allowlist_limit', 'gate2_scheduled', 'discover_allowlist_exact', 'section_scoped_chat',
     'section_scoped_prompt', 'idempotent_chat_scope', 'research_explanation_not_rerun',
-    'explicit_rerun_confirmation', 'checkpoint_auth_rejection', 'supervisor_resume_command',
+    'explicit_rerun_confirmation', 'checkpoint_auth_rejection', 'supervisor_resume_command', 'bounded_stage1_fanout',
     'direct_demand_gate', 'desk_research_label', 'desk_only_blocker', 'desk_only_score_ceiling',
   ],
 }, null, 2));
