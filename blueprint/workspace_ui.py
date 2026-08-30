@@ -52,10 +52,11 @@ def _project_title(idea: str) -> str:
     clean = re.sub(r"^(?:my|our)\s+idea\s+is\s+(?:to\s+)?", "", clean, flags=re.I)
     clean = re.sub(r"^(?:build|create|launch|start|make)\s+(?:an?\s+)?", "", clean, flags=re.I)
     clean = re.split(r"\s+(?:that|which|so that)\s+", clean, maxsplit=1, flags=re.I)[0]
-    product_phrase = re.match(r"^(.+?\b(?:app|platform|service|tool|marketplace|store|business|product))\s+for\b", clean, flags=re.I)
+    clean = re.split(r"[,:;]|\s+(?:because|where|while|with the goal of|in order to|to help)\s+", clean, maxsplit=1, flags=re.I)[0]
+    product_phrase = re.match(r"^(.+?\b(?:app|platform|service|tool|marketplace|store|business|product|tracker|assistant|dashboard|system|solution|studio))\s+for\b", clean, flags=re.I)
     if product_phrase:
         clean = product_phrase.group(1)
-    words = clean.split()[:7]
+    words = clean.split()[:5]
     small = {"a", "an", "and", "for", "in", "of", "the", "to", "with"}
     return " ".join(word if word.isupper() else (word.lower() if i and word.lower() in small else word.capitalize()) for i, word in enumerate(words)) or "Untitled Blueprint"
 
@@ -193,6 +194,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_center_pane>[data-testid="stLayoutWrapper"]:has([class*="st-key-bp_chat_shell_"]){{margin-top:auto!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:clamp(56px,9vh,112px)!important}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;bottom:12px!important;z-index:24;margin-top:14px!important;padding:8px 10px 10px!important;border:1px solid #dce2dd!important;border-radius:18px!important;background:#fff!important;box-shadow:0 12px 32px rgba(25,45,32,.08)!important}}[class*="st-key-bp_chat_composer_"]>[data-testid="stVerticalBlock"]{{gap:6px!important}}[class*="st-key-chat_starter_"] button{{min-height:27px!important;padding:4px 8px!important;border:1px solid #e5e9e6!important;border-radius:9px!important;background:#f7f8f7!important;color:#556159!important;justify-content:center!important;text-align:center!important;font:500 9px/1.1 var(--ui)!important;box-shadow:none!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#cdd9d0!important;background:#edf4ef!important;color:#24583a!important}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:relative!important;bottom:auto!important;z-index:1!important;padding-top:0!important;background:transparent!important}}.st-key-bp_center_pane [data-testid="stChatInput"]>div{{border-color:#d8dfd9!important;border-radius:13px!important;background:#fff!important;box-shadow:none!important}}.st-key-bp_center_pane [data-testid="stChatInput"] textarea{{font:12px/1.45 var(--ui)!important}}.st-key-bp_center_pane [data-testid="stChatInput"] button,.st-key-bp_center_pane [data-testid="stChatInputSubmitButton"]{{background:#1d4c31!important;color:#fff!important;border-radius:10px!important}}.stChatMessage{{background:#f6f7f5!important;border:1px solid #e1e6e1!important;border-radius:13px!important}}.chat-grounding{{margin-top:7px;color:#7b847d;font:600 9px var(--ui);text-transform:uppercase}}.companion-heading{{padding:8px 0 4px;color:#4b534d;font:650 10px/1.2 var(--ui);text-transform:uppercase}}.st-key-bp_toggle_companion button{{width:28px!important;min-width:28px!important;height:28px!important;padding:0!important;border:0!important;border-radius:8px!important;background:transparent!important;color:#3f4a42!important;font-size:14px!important;box-shadow:none!important}}.st-key-bp_toggle_companion button:hover{{background:#edf1ee!important}}.right-title{{font:650 10px/1.2 var(--ui);text-transform:uppercase;margin:11px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 12px!important;border:1px solid #dfe4df;border-radius:14px;background:#fff;box-shadow:none}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:650 14px var(--ui)}}.action-head span{{font:600 10px var(--ui);color:#8b918c}}.action-progress{{height:5px;margin:12px 0 11px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:#202522;transition:width .35s ease}}.action-divider{{height:1px;margin:0;background:#eef0ee}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 12px!important;border:1px solid #dfe4df;border-radius:14px;background:#fff;box-shadow:none}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important;border:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:9px 1px!important;align-items:flex-start!important;font:11px/1.4 var(--ui)!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#757d77;font:10px/1.45 var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:0!important;border-top:1px solid #e0e4e0!important;border-radius:0!important;background:transparent!important;margin-top:4px}}.st-key-bp_right_rail [data-testid="stExpander"] details{{border:0!important;border-radius:0!important;background:transparent!important}}.st-key-bp_right_rail [data-testid="stExpander"] summary{{min-height:40px!important;padding:8px 3px!important;flex-direction:row-reverse!important;justify-content:space-between!important;color:#4c554e!important;font:600 11px/1.2 var(--ui)!important}}.st-key-bp_right_rail [data-testid="stExpanderDetails"]{{padding:0 3px 10px!important}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#252b27!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:22px!important;background:#f8faf7!important}}
 .st-key-bp_left_rail [data-testid="stButton"] button{{padding-left:27px!important}}
 .st-key-bp_left_rail .st-key-bp_home button{{width:auto!important;min-height:26px!important;padding:0 6px 0 26px!important;background:transparent!important;color:#172019!important;font:650 18px/1 var(--ui)!important;letter-spacing:-.03em!important}}.st-key-bp_left_rail .st-key-bp_home button:before{{content:'';position:absolute;left:6px;top:50%;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(44,122,75,.09);transform:translateY(-50%)}}
+.st-key-bp_left_rail{{padding-top:0!important}}.st-key-bp_left_rail .st-key-bp_home{{margin:-8px 0 56px!important}}.rail-top-progress{{margin:22px 6px 32px!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{padding-left:0!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{width:100%!important;margin:0!important;text-align:left!important}}.kpi-label{{font-weight:600!important}}.st-key-bp_shortcut_blueprint,.st-key-bp_shortcut_financial{{padding:13px!important}}.plan-native-icon{{display:grid;place-items:center;width:24px;height:24px;margin-bottom:7px;border-radius:8px;background:#dbeadf;color:#2f754b;font:600 12px var(--ui)}}.st-key-bp_shortcut_financial .plan-native-icon{{background:#f0ddd2;color:#8a553a}}.st-key-bp_shortcut_blueprint button,.st-key-bp_shortcut_financial button{{min-height:22px!important;font-size:12px!important}}.st-key-bp_shortcut_blueprint [data-testid="stCaptionContainer"],.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{display:block!important;margin-top:4px!important}}.st-key-bp_right_rail [data-testid="stExpander"] .st-key-bp_action_card_workspace{{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}}.action-count{{margin:3px 0 0;color:#858d87;font:600 9px var(--ui)}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 </style>""", unsafe_allow_html=True)
 
@@ -214,25 +216,16 @@ def _render_kpi_strip(score: float | None, coverage: int, risks: int, completion
     risk_items = risk_items or []
     risk_detail = "<b>Open items</b><ul>" + "".join(f"<li>{html.escape(item)}</li>" for item in risk_items[:5]) + "</ul>" if risk_items else "<b>Open items</b>No unresolved risk has been promoted into the current Blueprint yet."
     metrics = (
-        ("Decision score", score_value, score_status, score_tone, "Evidence-weighted verdict", "flat" if score is None else "up" if score >= 60 else "down", "<b>How this is calculated</b>The score appears after Stage 1 reconciles customer, competitor, and market evidence. It is not a probability of success."),
-        ("Evidence coverage", f"{coverage}%", coverage_status, coverage_tone, "Accepted research coverage", "up" if coverage else "flat", f"<b>What is covered</b>{coverage}% of the decision-critical research boundary currently has accepted evidence. Rejected or unaudited claims do not increase this value."),
-        ("Open risks", str(risks), risk_status, risk_tone, "Items needing resolution", "down" if risks == 0 else "up", risk_detail),
-        ("Blueprint progress", f"{completion}%", progress_status, progress_tone, "Current roadmap completion", "up" if completion else "flat", f"<b>Roadmap status</b>{completion}% of the currently planned Blueprint modules are complete. Locked future stages do not count as completed work."),
+        ("Decision score", score_value, score_status, score_tone, "Evidence-weighted verdict", "<b>How this is calculated</b>The score appears after Stage 1 reconciles customer, competitor, and market evidence. It is not a probability of success."),
+        ("Evidence coverage", f"{coverage}%", coverage_status, coverage_tone, "Accepted research coverage", f"<b>What is covered</b>{coverage}% of the decision-critical research boundary currently has accepted evidence. Rejected or unaudited claims do not increase this value."),
+        ("Open risks", str(risks), risk_status, risk_tone, "Items needing resolution", risk_detail),
+        ("Blueprint progress", f"{completion}%", progress_status, progress_tone, "Current roadmap completion", f"<b>Roadmap status</b>{completion}% of the currently planned Blueprint modules are complete. Locked future stages do not count as completed work."),
     )
-
-    def trend_svg(direction: str) -> str:
-        if direction == "up":
-            path = '<path d="M2.5 13.5 7 9l3 3 6-7"/><path d="M11.5 5H16v4.5"/>'
-        elif direction == "down":
-            path = '<path d="M2.5 4.5 7 9l3-3 6 7"/><path d="M11.5 13H16V8.5"/>'
-        else:
-            path = '<path d="M2.5 9H15.5"/><path d="m12 5.5 3.5 3.5-3.5 3.5"/>'
-        return f'<svg viewBox="0 0 18 18" aria-hidden="true" focusable="false">{path}</svg>'
 
     cards = "".join(
         f'<div class="kpi"><span class="kpi-label">{html.escape(label)}</span><span class="kpi-badge {tone}">{html.escape(status)}</span>'
-        f'<div class="kpi-value-row"><b>{html.escape(value)}</b><span class="kpi-trend {tone} {direction}" aria-label="{html.escape(direction)} trend">{trend_svg(direction)}</span></div><span class="kpi-meta">{html.escape(meta)}</span><div class="kpi-tooltip">{detail}</div></div>'
-        for label, value, status, tone, meta, direction, detail in metrics
+        f'<div class="kpi-value-row"><b>{html.escape(value)}</b></div><span class="kpi-meta">{html.escape(meta)}</span><div class="kpi-tooltip">{detail}</div></div>'
+        for label, value, status, tone, meta, detail in metrics
     )
     st.markdown(f'<div class="kpi-grid">{cards}</div>', unsafe_allow_html=True)
 
@@ -270,12 +263,14 @@ def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, inte
 def _render_plan_shortcuts() -> None:
     with st.container(key="bp_plan_shortcuts"):
         with st.container(key="bp_shortcut_blueprint"):
-            if st.button("⌘  Open Blueprint", key="bp_open_blueprint", use_container_width=True):
+            st.markdown('<div class="plan-native-icon">⌘</div>', unsafe_allow_html=True)
+            if st.button("Open Blueprint", key="bp_open_blueprint", use_container_width=True):
                 st.query_params["view"] = "blueprint"
                 st.rerun()
             st.caption("Every stage, dependency, and unresolved decision.")
         with st.container(key="bp_shortcut_financial"):
-            if st.button("$  Financial plan", key="bp_open_financial", use_container_width=True):
+            st.markdown('<div class="plan-native-icon">$</div>', unsafe_allow_html=True)
+            if st.button("Financial plan", key="bp_open_financial", use_container_width=True):
                 st.query_params["view"] = "financial"
                 st.rerun()
             st.caption("Capital, costs, pricing evidence, and readiness.")
@@ -495,7 +490,7 @@ def _workspace_actions(tasks: dict[str, dict], artifact: dict, dashboard: dict) 
     return actions
 
 
-def _render_actionables(actions: list) -> None:
+def _render_actionables(actions: list, *, show_heading: bool = True) -> None:
     completed = st.session_state.setdefault("bp_completed_actionables", {})
     scoped = set(_items(completed.get("workspace")))
     entries = []
@@ -509,7 +504,8 @@ def _render_actionables(actions: list) -> None:
     total = len(entries)
     percent = round(100 * completed_count / total) if total else 0
     with st.container(key="bp_action_card_workspace"):
-        st.markdown(f'<div class="action-head"><b>Actionables</b><span>{completed_count} of {total}</span></div><div class="action-progress"><i style="width:{percent}%"></i></div>', unsafe_allow_html=True)
+        heading = f'<div class="action-head"><b>Actionables</b><span>{completed_count} of {total}</span></div>' if show_heading else f'<div class="action-count">{completed_count} of {total} complete</div>'
+        st.markdown(f'{heading}<div class="action-progress"><i style="width:{percent}%"></i></div>', unsafe_allow_html=True)
         if entries:
             for position, (checked_before, index, text, action_id, widget_key) in enumerate(sorted(entries, key=lambda item: item[0])):
                 if position:
@@ -521,13 +517,9 @@ def _render_actionables(actions: list) -> None:
     completed["workspace"] = sorted(scoped)
 
 
-def _render_right(key: str, task: dict | None, output: dict, sources: list[dict], actions: list, *, compact: bool = False) -> None:
-    if compact:
-        with st.expander("Section companion", expanded=False):
-            _render_actionables(actions)
-    else:
-        st.markdown('<div class="right-title">Section companion</div>', unsafe_allow_html=True)
-        _render_actionables(actions)
+def _render_right(key: str, task: dict | None, output: dict, sources: list[dict], actions: list) -> None:
+    with st.expander("Actionables", expanded=False):
+        _render_actionables(actions, show_heading=False)
     with st.expander(f"Sources · {len(sources)}", expanded=False):
         if sources:
             for source in sources[:12]:
@@ -559,15 +551,9 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
 
 
 def _render_companion(key: str, task: dict | None, output: dict, sources: list[dict], actions: list) -> None:
-    collapsed = bool(st.session_state.get("bp_companion_collapsed", False))
-    label_col, control_col = st.columns([5, 1])
-    label_col.markdown('<div class="companion-heading">Workspace companion</div>', unsafe_allow_html=True)
-    if control_col.button("▾" if collapsed else "▴", key="bp_toggle_companion", help="Expand companion" if collapsed else "Collapse companion"):
-        st.session_state["bp_companion_collapsed"] = not collapsed
-        st.rerun()
+    st.markdown('<div class="companion-heading">Workspace companion</div>', unsafe_allow_html=True)
     _render_plan_shortcuts()
-    if not collapsed:
-        _render_right(key, task, output, sources, actions)
+    _render_right(key, task, output, sources, actions)
 
 
 def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
@@ -846,7 +832,7 @@ def render_financial_plan() -> None:
     )
 
 
-@st.fragment(run_every=4)
+@st.fragment(run_every=2)
 def _live_workspace() -> None:
     _workspace_body()
 

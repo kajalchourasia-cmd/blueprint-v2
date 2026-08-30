@@ -1,6 +1,6 @@
 import unittest
 
-from blueprint.workspace_ui import _local_chat_answer
+from blueprint.workspace_ui import _local_chat_answer, _project_title
 
 
 class WorkspaceChatFallbackTests(unittest.TestCase):
@@ -36,6 +36,24 @@ class WorkspaceChatFallbackTests(unittest.TestCase):
 
         self.assertIn("has not produced an accepted result", answer)
         self.assertIn("will not invent", answer)
+
+
+class WorkspaceTitleTests(unittest.TestCase):
+    def test_long_founder_idea_becomes_a_short_product_title(self):
+        title = _project_title(
+            "I want to build a fitness tracking app for busy professionals "
+            "because they struggle to maintain consistent habits."
+        )
+
+        self.assertEqual("Fitness Tracking App", title)
+
+    def test_unstructured_idea_title_is_bounded(self):
+        title = _project_title(
+            "A community-led solution that connects independent founders "
+            "to trustworthy customer discovery opportunities"
+        )
+
+        self.assertLessEqual(len(title.split()), 5)
 
 
 if __name__ == "__main__":
