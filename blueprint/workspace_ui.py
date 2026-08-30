@@ -90,6 +90,11 @@ def _project_title(idea: str) -> str:
     return " ".join(word if word.isupper() else (word.lower() if i and word.lower() in small else word.capitalize()) for i, word in enumerate(words)) or "Untitled Blueprint"
 
 
+def _audience_from_idea(idea: str) -> str:
+    match = re.search(r"\bfor\s+(.+?)(?=\s+(?:that|who|which|with)\b|[,.;]|$)", str(idea), flags=re.I)
+    return match.group(1).strip() if match else ""
+
+
 def _goal_line(context: dict) -> str:
     stored = _dict(_dict(context.get("project")).get("constraints"))
     answers = _dict(stored.get("onboarding_answers")) or _dict(st.session_state.get("dialog_answers"))
@@ -227,7 +232,9 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_stage_scroll{{padding-bottom:12px!important}}.st-key-bp_left_shortcuts{{display:grid!important;flex:0 0 auto!important;align-self:stretch!important;width:calc(100% - 10px)!important;box-sizing:border-box!important;gap:7px!important;margin:14px 5px 13px!important;padding-top:12px!important;border-top:1px solid #daddda!important;background:#f5f6f4!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"],.st-key-bp_left_shortcuts [data-testid="stLayoutWrapper"],.st-key-bp_left_shortcuts [data-testid="stButton"]{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"]{{gap:7px!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button{{display:flex!important;width:100%!important;min-height:39px!important;padding:0 11px!important;border:1px solid #dce1dd!important;border-radius:10px!important;background:#fff!important;color:#303a33!important;justify-content:flex-start!important;text-align:left!important;font:600 10px/1.2 var(--ui)!important;box-shadow:none!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'→';margin-left:auto;color:#778079;font-size:14px;font-weight:400}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:hover{{border-color:#bfc9c1!important;background:#fafcfb!important;color:#245d3c!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"],.st-key-bp_left_rail [data-testid="stExpanderDetails"]>[data-testid="stVerticalBlock"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stLayoutWrapper"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"]{{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;align-self:stretch!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{width:100%!important;margin:0!important;padding:6px 28px 6px 32px!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button>div,.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{display:block!important;width:100%!important;margin:0!important;padding:0!important;text-align:left!important}}.st-key-bp_right_rail{{top:72px!important;margin:72px 12px 12px 10px!important}}.st-key-bp_right_rail>[data-testid="stVerticalBlock"]{{gap:0!important}}
 .st-key-bp_center_pane{{padding-bottom:34px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:clamp(92px,15vh,180px)!important}}[class*="st-key-bp_chat_composer_"]{{bottom:8px!important;border-color:#e2d7d0!important;box-shadow:0 12px 32px rgba(82,52,38,.08)!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#dac8bc!important;background:#f7f0eb!important;color:#704832!important}}.st-key-bp_center_pane [data-testid="stChatInput"] button,.st-key-bp_center_pane [data-testid="stChatInputSubmitButton"]{{background:#87583f!important;color:#fff!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{width:100%!important;max-width:none!important;padding:0 12px!important;text-align:left!important;justify-content:flex-start!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button{{border-color:#d5dfd6!important;background:#edf4ee!important;color:#315440!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{border-color:#e5d8cf!important;background:#f7efea!important;color:#704b38!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'↗'!important;margin-left:auto;color:currentColor;font-size:13px;font-weight:500}}.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"],.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"] p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_left_companion{{flex:0 0 auto!important;align-self:stretch!important;max-height:255px;margin:0 5px 10px!important;padding:0 2px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin;scrollbar-color:transparent transparent}}.st-key-bp_left_companion:hover{{scrollbar-color:#c8ceca transparent}}.st-key-bp_left_companion>[data-testid="stVerticalBlock"]{{gap:0!important}}.st-key-bp_left_companion [data-testid="stExpander"]{{margin:0!important;border:0!important;border-top:1px solid #dfe3df!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_companion [data-testid="stExpander"] details{{border:0!important;background:transparent!important;box-shadow:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] summary{{min-height:38px!important;padding:7px 4px!important;flex-direction:row-reverse!important;justify-content:space-between!important;border:0!important;border-radius:0!important;background:transparent!important;color:#515a53!important;font:600 10px/1.2 var(--ui)!important;text-transform:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] details[open] summary{{background:transparent!important;color:#333d35!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"]{{padding:0 4px 9px!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{padding-left:8px!important}}.st-key-bp_left_companion [data-testid="stCheckbox"] label{{font-size:10px!important}}
 .state-banner span{{display:block;margin-top:4px}}.state-banner small{{display:block;margin-top:5px;color:#8a928c;font:9px var(--ui)}}.section-preview{{margin:12px 0 22px;padding:17px 18px;border:1px solid #e0e5e1;border-radius:14px;background:#fff}}.section-preview b{{font:600 13px/1.25 var(--ui);color:#28332b}}.section-preview p{{max-width:720px;margin:7px 0 0;color:#657068;font:12px/1.55 var(--ui)}}.empty-state{{display:grid!important;align-items:start!important;place-items:initial!important;min-height:245px!important;padding-top:24px!important;text-align:left!important}}.empty-state>div{{max-width:720px;padding:20px;border:1px solid #e1e6e2;border-radius:15px;background:#fafbfa}}.empty-state small{{display:block;margin-bottom:8px;color:#7a837c;font:650 9px/1.2 var(--ui);letter-spacing:.05em;text-transform:uppercase}}.empty-state b{{font:600 19px/1.25 var(--ui)!important}}.empty-state p{{max-width:660px!important;margin:8px 0 14px!important}}.empty-state em{{display:block;padding-top:12px;border-top:1px solid #e5e8e5;color:#8a918c;font:normal 10px/1.45 var(--ui)}}.chat-disabled{{padding:14px 15px;border:1px solid #e2d7d0;border-radius:17px;background:#fbf9f7;color:#77706b}}.chat-disabled b{{display:block;color:#4a413b;font:600 12px/1.3 var(--ui)}}.chat-disabled span{{display:block;margin:4px 0 11px;font:10px/1.45 var(--ui)}}.chat-disabled div{{padding:12px 13px;border:1px solid #e5dfda;border-radius:12px;background:#f3f1ef;color:#aaa39e;font:11px/1.2 var(--ui)}}
+.research-lead{{max-width:850px;margin:18px 0 27px;color:#344039;font:17px/1.68 var(--ui)}}.research-subtitle{{margin:31px 0 12px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.competitor-depth-title{{margin-top:38px}}.narrative-block{{max-width:870px;margin:31px 0 0;padding:0;border:0;background:transparent}}.narrative-block h3,.decision-frame h3,.constraint-strip h3,.foundation-assumptions h3{{margin:0 0 13px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.narrative-block ul{{margin:0;padding:0 0 0 21px}}.narrative-block li{{margin:0 0 10px;padding-left:3px;color:#3f4a43;font:14px/1.62 var(--ui)}}.narrative-block li::marker{{color:#4b805e}}.narrative-limitations{{margin-top:30px;padding:15px 17px;border-left:3px solid #b6937e;background:#faf7f4}}.narrative-limitations h3{{font-size:13px;color:#5f4b40}}.narrative-limitations li{{font-size:12px;color:#6e625b}}.decision-frame{{max-width:900px;margin:0 0 31px;padding:0}}.decision-frame dl{{margin:0;border-top:1px solid #dfe4e0}}.decision-frame dl>div{{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:15px 0;border-bottom:1px solid #e4e8e5}}.decision-frame dt{{color:#6b756e;font:600 11px/1.45 var(--ui);text-transform:uppercase;letter-spacing:.035em}}.decision-frame dd{{margin:0;color:#2e3931;font:14px/1.58 var(--ui)}}.constraint-strip{{max-width:900px;margin:31px 0}}.constraint-strip>div{{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid #dfe4e0;border-bottom:1px solid #dfe4e0}}.constraint-strip>div>div{{min-width:180px;flex:1;padding:14px 17px 14px 0}}.constraint-strip span{{display:block;color:#7a837c;font:600 9px/1.2 var(--ui);text-transform:uppercase}}.constraint-strip b{{display:block;margin-top:7px;color:#263129;font:600 13px/1.35 var(--ui)}}.foundation-assumptions{{max-width:900px;margin:31px 0}}.foundation-assumptions ol{{margin:0;padding:0;list-style:none;counter-reset:foundation}}.foundation-assumptions li{{position:relative;padding:15px 0 15px 45px;border-top:1px solid #e0e4e1;counter-increment:foundation}}.foundation-assumptions li:last-child{{border-bottom:1px solid #e0e4e1}}.foundation-assumptions li:before{{content:counter(foundation,decimal-leading-zero);position:absolute;left:0;top:16px;color:#528065;font:650 10px var(--ui)}}.foundation-assumptions b{{display:block;color:#273229;font:600 14px/1.5 var(--ui)}}.foundation-assumptions span{{display:block;margin-top:5px;color:#727a74;font:12px/1.55 var(--ui)}}.competitor-profile{{max-width:900px;margin:0;padding:24px 0;border-top:1px solid #dfe4e0}}.competitor-profile:last-of-type{{border-bottom:1px solid #dfe4e0}}.competitor-profile header{{display:flex;align-items:center;gap:10px;margin-bottom:18px}}.competitor-profile h4{{margin:0;color:#1e2821;font:650 22px/1.2 var(--ui)}}.competitor-profile header span{{padding:5px 8px;border-radius:99px;background:#e9f1eb;color:#3f684d;font:600 9px/1 var(--ui)}}.competitor-profile dl{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0}}.competitor-profile dl>div{{padding:12px 0;border-top:1px solid #edf0ed}}.competitor-profile dt{{color:#69736c;font:600 10px/1.3 var(--ui);text-transform:uppercase;letter-spacing:.025em}}.competitor-profile dd{{margin:5px 0 0;color:#38433b;font:13px/1.55 var(--ui)}}[data-testid="stChatMessage"]{{padding:8px 0!important;border:0!important;border-radius:0!important;background:transparent!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]){{width:fit-content!important;max-width:76%!important;margin-left:auto!important;padding:10px 14px!important;border:1px solid #eadfd7!important;border-radius:15px!important;background:#f7f0eb!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]){{max-width:880px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] p{{font:14px/1.62 var(--ui)!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:48px!important}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;bottom:8px!important}}.gate-score{{padding-bottom:15px;border-bottom:1px solid #e1e5e1}}.gate-score small{{display:block;color:#79827b;font:600 9px var(--ui);text-transform:uppercase}}.gate-score b{{display:block;margin:7px 0 3px;color:#233027;font:650 20px/1.25 var(--ui)}}.gate-score strong{{color:#3c744e;font:650 15px var(--ui)}}.conditional-score{{display:flex;align-items:center;gap:15px;margin:15px 0;padding:13px 14px;border-left:3px solid #4f825f;background:#f0f5f1}}.conditional-score b{{white-space:nowrap;color:#2e6540;font:650 19px var(--ui)}}.conditional-score span{{color:#68726b;font:11px/1.45 var(--ui)}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
+[class*="st-key-bp_chat_composer_"]{{position:fixed!important;left:calc(14.3vw + 36px)!important;right:34px!important;bottom:10px!important;width:auto!important;z-index:120!important}}.st-key-bp_center_pane{{padding-bottom:185px!important}}@media(max-width:760px){{[class*="st-key-bp_chat_composer_"]{{position:sticky!important;left:auto!important;right:auto!important;bottom:8px!important}}}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -262,6 +269,19 @@ def _render_kpi_strip(score: float | None, coverage: int, risks: int, completion
     st.markdown(f'<div class="kpi-grid">{cards}</div>', unsafe_allow_html=True)
 
 
+def _select_workspace_section(section_key: str) -> None:
+    st.session_state["bp_selected_section"] = section_key
+    st.session_state["bp_navigation_only"] = True
+
+
+def _focus_empty_idea() -> None:
+    st.session_state["bp_focus_idea"] = True
+
+
+def _mark_fast_interaction() -> None:
+    st.session_state["bp_interaction_fast"] = True
+
+
 def _render_left_rail(
     states: dict[str, tuple[str, str]],
     selected: str,
@@ -281,12 +301,14 @@ def _render_left_rail(
             with st.expander(stage_name, expanded=stage_number == 1 or selected_in_stage):
                 for key, label in sections:
                     state = states[key]
-                    if st.button(label, key=f"select_{key}", help=f"Status: {state[1]}", use_container_width=True):
-                        if interactive:
-                            st.session_state["bp_selected_section"] = key
-                        else:
-                            st.session_state["bp_focus_idea"] = True
-                        st.rerun()
+                    st.button(
+                        label,
+                        key=f"select_{key}",
+                        help=f"Status: {state[1]}",
+                        use_container_width=True,
+                        on_click=_select_workspace_section if interactive else _focus_empty_idea,
+                        args=(key,) if interactive else (),
+                    )
     _render_left_shortcuts()
     if companion is not None:
         with st.container(key="bp_left_companion"):
@@ -343,10 +365,78 @@ def _render_list(title: str, values: Any, limitations: bool = False) -> None:
     rows = _clean(values, limitations)[:12]
     if not rows:
         return
-    st.markdown(f'<div class="detail-heading">{html.escape(title)}</div><div class="insight-list">', unsafe_allow_html=True)
-    for row in rows:
-        st.markdown(f'<div class="insight">{html.escape(row)}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    items = "".join(f"<li>{html.escape(row)}</li>" for row in rows)
+    tone = " narrative-limitations" if limitations else ""
+    st.markdown(
+        f'<section class="narrative-block{tone}"><h3>{html.escape(title)}</h3><ul>{items}</ul></section>',
+        unsafe_allow_html=True,
+    )
+
+
+def _field_text(item: dict, *keys: str, fallback: str = "Not established by the current evidence.") -> str:
+    for key in keys:
+        value = item.get(key)
+        if value not in (None, "", []):
+            return _item_text(value) if not isinstance(value, list) else "; ".join(_clean(value))
+    return fallback
+
+
+def _render_foundation(output: dict) -> None:
+    finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
+    if finding:
+        st.markdown(
+            f'<p class="research-lead">{html.escape(str(finding))}</p>',
+            unsafe_allow_html=True,
+        )
+
+    problem = _item_text(output.get("problem_hypothesis") or output.get("starting_position") or "Not identified yet.")
+    audience = _item_text(output.get("target_user_boundary") or "Not identified yet.")
+    success = _item_text(output.get("success_definition") or "Not identified yet.")
+    st.markdown(
+        '<section class="decision-frame"><h3>Your starting position</h3>'
+        f'<dl><div><dt>Problem hypothesis</dt><dd>{html.escape(problem)}</dd></div>'
+        f'<div><dt>First-user boundary</dt><dd>{html.escape(audience)}</dd></div>'
+        f'<div><dt>Success means</dt><dd>{html.escape(success)}</dd></div></dl></section>',
+        unsafe_allow_html=True,
+    )
+
+    constraints = _dict(output.get("founder_constraints"))
+    if constraints:
+        entries = "".join(
+            f'<div><span>{html.escape(str(key).replace("_", " ").title())}</span><b>{html.escape(_item_text(value))}</b></div>'
+            for key, value in constraints.items()
+            if value not in (None, "", [])
+        )
+        if entries:
+            st.markdown(
+                f'<section class="constraint-strip"><h3>Constraints this Blueprint must respect</h3><div>{entries}</div></section>',
+                unsafe_allow_html=True,
+            )
+
+    assumptions = _items(output.get("assumptions"))
+    if assumptions:
+        impact_fallbacks = (
+            "This determines who Customer Research should recruit and which competitors are actually relevant.",
+            "If the problem is not frequent or painful enough, interest will not turn into changed behaviour or payment.",
+            "This sets the boundary for the smallest credible validation plan and prevents an unrealistic MVP.",
+        )
+        rows = []
+        for index, assumption in enumerate(assumptions[:6]):
+            item = _dict(assumption)
+            statement = _item_text(assumption)
+            impact = _field_text(item, "impact", "why_it_matters", "why", fallback=impact_fallbacks[min(index, len(impact_fallbacks) - 1)])
+            rows.append(
+                f'<li><b>{html.escape(statement)}</b><span>Why it matters: {html.escape(impact)}</span></li>'
+            )
+        st.markdown(
+            f'<section class="foundation-assumptions"><h3>Assumptions the research must challenge</h3><ol>{"".join(rows)}</ol></section>',
+            unsafe_allow_html=True,
+        )
+
+    _render_list("Risks to control now", output.get("risks"))
+    _render_list("Questions still unanswered", output.get("unknowns"))
+    _render_list("What to do before spending more", output.get("contextual_actions") or output.get("recommendations") or _section_actions("foundation", None, output))
+    _render_list("Evidence boundary", output.get("limitations"), limitations=True)
 
 
 def _render_competitors(output: dict) -> None:
@@ -354,9 +444,62 @@ def _render_competitors(output: dict) -> None:
     rows = []
     for item in competitors:
         if isinstance(item, dict):
-            rows.append({"Competitor": item.get("name") or item.get("competitor") or "Unknown", "Type": item.get("type") or item.get("category") or "Unclassified", "What they do well": item.get("strengths") or item.get("customer_praise") or "Not evidenced", "Weakness / complaint": item.get("weaknesses") or item.get("customer_complaints") or "Not evidenced", "MVP / differentiator": item.get("mvp") or item.get("differentiator") or item.get("core_offer") or "Not evidenced", "Gap for this idea": item.get("gap") or item.get("opportunity") or "Not established"})
+            rows.append({
+                "Competitor": item.get("name") or item.get("competitor") or "Unknown",
+                "Type": item.get("type") or item.get("category") or "Unclassified",
+                "Core offer": _field_text(item, "core_offer", "mvp", "description"),
+                "What customers value": _field_text(item, "customer_praise", "strengths"),
+                "Gap worth testing": _field_text(item, "gap", "opportunity"),
+            })
     if rows:
+        st.markdown(
+            '<p class="research-lead">This view separates direct products, indirect alternatives, and the status quo. '
+            'The table is the comparison layer; the profiles below explain what each alternative means for your idea.</p>',
+            unsafe_allow_html=True,
+        )
+        st.markdown('<h3 class="research-subtitle">Competitor landscape at a glance</h3>', unsafe_allow_html=True)
         st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.markdown('<h3 class="research-subtitle competitor-depth-title">What each competitor means for your idea</h3>', unsafe_allow_html=True)
+        for item in competitors[:8]:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("name") or item.get("competitor") or "Unnamed alternative"
+            category = item.get("type") or item.get("category") or "Alternative"
+            region = _field_text(
+                item,
+                "india_relevance",
+                "geography",
+                "regions",
+                "market_presence",
+                fallback="India relevance is not established by the current sources. Verify availability, INR pricing, privacy or data-residency terms, and local integrations before treating it as a direct Indian competitor.",
+            )
+            attributes = (
+                ("What it is", _field_text(item, "core_offer", "description", "mvp")),
+                ("What it does well", _field_text(item, "strengths", "customer_praise", "differentiator")),
+                ("Where customers struggle", _field_text(item, "weaknesses", "customer_complaints", "limitations")),
+                ("Pricing and commercial model", _field_text(item, "pricing", "pricing_model", "business_model")),
+                ("India and geographic relevance", region),
+                ("Opportunity for this idea", _field_text(item, "gap", "opportunity")),
+            )
+            body = "".join(
+                f'<div><dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd></div>'
+                for label, value in attributes
+            )
+            st.markdown(
+                f'<section class="competitor-profile"><header><h4>{html.escape(str(name))}</h4><span>{html.escape(str(category))}</span></header><dl>{body}</dl></section>',
+                unsafe_allow_html=True,
+            )
+
+        opportunities = []
+        for item in competitors:
+            if not isinstance(item, dict):
+                continue
+            text = _field_text(item, "gap", "opportunity", fallback="")
+            if text and text not in opportunities:
+                opportunities.append(text)
+        opportunities.extend(_clean(output.get("contextual_actions") or output.get("recommendations")))
+        _render_list("How to sharpen your idea from this research", opportunities[:7])
+        st.caption("Treat these as positioning hypotheses to validate with customers—not as proof of demand.")
     else:
         st.warning("A decision-grade competitor matrix has not been produced yet. Blueprint will not present directories, review sites, or research tools as competitors.")
 
@@ -383,9 +526,11 @@ def _render_verdict(output: dict, checkpoint: dict | None) -> None:
 def _render_output(key: str, output: dict, checkpoint: dict | None) -> None:
     if key == "research_verdict":
         _render_verdict(output, checkpoint); return
+    if key == "foundation":
+        _render_foundation(output); return
     finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
     if finding:
-        st.markdown(f'<div class="section-summary">{html.escape(str(finding))}</div>', unsafe_allow_html=True)
+        st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
     if key == "competitor_intelligence":
         _render_competitors(output)
     for title, values in [("Problem and founder context", output.get("problem_hypothesis") or output.get("starting_position")), ("Evidence-supported signals", output.get("observed_signals")), ("Customer jobs and pains", output.get("customer_jobs") or output.get("pains")), ("Recommendations", output.get("recommendations")), ("Scenarios", output.get("scenarios")), ("Milestones", output.get("milestones")), ("Assumptions to test", output.get("assumptions")), ("Risks", output.get("risks")), ("Contradictions", output.get("contradictions")), ("Unknowns", output.get("unknowns")), ("Limitations", output.get("limitations"))]:
@@ -418,9 +563,12 @@ def _instant_foundation(context: dict, idea: str) -> dict:
     def clean(value: Any) -> str:
         if isinstance(value, list):
             return ", ".join(str(item).strip() for item in value if str(item).strip())
-        return str(value or "").strip()
+        text = str(value or "").strip()
+        return "" if text.lower().strip(" :.-") in {"not sure", "unknown", "skip", "skipped"} else text
 
     audience = clean(constraints.get("target_customer") or answers.get("target_customer"))
+    if not audience:
+        audience = _audience_from_idea(idea)
     audience_detail = clean(answers.get("customer_detail"))
     if audience_detail and audience_detail.lower() not in audience.lower():
         audience = " — ".join(item for item in (audience, audience_detail) if item)
@@ -477,6 +625,27 @@ def _instant_foundation(context: dict, idea: str) -> dict:
         "unknowns": unknowns,
         "limitations": ["This immediate Foundation is structured only from founder-provided inputs. External customer and market claims require accepted research evidence."],
     }
+
+
+def _enrich_foundation_from_idea(output: dict, idea: str) -> dict:
+    """Recover an explicit audience from the founder's own sentence without inventing research."""
+    enriched = dict(output)
+    current = str(enriched.get("target_user_boundary") or "").strip()
+    audience = _audience_from_idea(idea)
+    if audience and (not current or current.lower().startswith("not identified")):
+        enriched["target_user_boundary"] = f"{audience} — inferred from the founder's idea; confirm before recruitment."
+        assumptions = list(_items(enriched.get("assumptions")))
+        if assumptions:
+            assumptions[0] = f"The stated first user is {audience}; this remains a founder hypothesis until customer evidence is collected."
+            enriched["assumptions"] = assumptions
+        enriched["unknowns"] = [
+            item for item in _items(enriched.get("unknowns"))
+            if "first target customer segment" not in _item_text(item).lower()
+        ]
+    success = str(enriched.get("success_definition") or "").strip()
+    if success.lower().strip(" :.-") in {"not sure", "unknown"}:
+        enriched["success_definition"] = "Not identified — define a measurable founder outcome before Gate 1."
+    return enriched
 
 
 def _recover_expired_task(tasks: dict[str, dict], bundle: dict) -> None:
@@ -557,10 +726,49 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
         "research_verdict": "Research Verdict explains whether the idea should proceed, be narrowed, be tested again, or be reconsidered—and shows which evidence and uncertainty caused that recommendation.",
     }
     finding = str(output.get("executive_finding") or output.get("summary") or output.get("explanation") or "").strip()
-    if any(term in normalized for term in ("next step", "next move", "what should i do", "actionable", "recommend")):
+    if not output and state[0] in {"locked", "idle", "ready"} and any(term in normalized for term in ("what did", "research prove", "findings", "result")):
+        return f"{label} has not produced an accepted result yet. Blueprint will not invent an answer; start or unlock this section first, then ask again against its findings and sources."
+    if any(term in normalized for term in ("source", "evidence", "prove", "supporting")):
+        signals = _clean(output.get("supporting_signals") or output.get("observed_signals"))
+        evidence = _items(output.get("evidence_cards"))
+        parts = []
+        if signals:
+            parts.append("The strongest accepted signals are: " + " ".join(f"{index}. {signal}" for index, signal in enumerate(signals[:4], 1)))
+        if evidence:
+            names = [
+                _field_text(_dict(item), "source_title", "title", "source_domain", fallback="Accepted evidence source")
+                for item in evidence[:5]
+            ]
+            parts.append("The attached evidence references are: " + "; ".join(names) + ".")
+        if parts:
+            return " ".join(parts) + " Open Sources to inspect the underlying links and evidence boundary."
+        return f"The current {label} result does not contain an accepted supporting source for that claim. Blueprint will not manufacture one; inspect Sources or rerun this section with a narrower question."
+    if key == "competitor_intelligence" and any(term in normalized for term in ("competitor", "alternative", "different", "india", "pricing", "gap", "weakness", "strength")):
+        competitors = _items(output.get("competitors")) or _items(output.get("competitor_matrix"))
+        if competitors:
+            summaries = []
+            for item in competitors[:5]:
+                item = _dict(item)
+                name = item.get("name") or item.get("competitor") or "Unnamed alternative"
+                strength = _field_text(item, "strengths", "customer_praise", "differentiator")
+                gap = _field_text(item, "gap", "opportunity", "weaknesses")
+                summaries.append(f"{name}: strongest on {strength}; the testable opening is {gap}.")
+            return "Here is the evidence-bounded comparison: " + " ".join(summaries)
+    if any(term in normalized for term in ("risk", "limitation", "unknown", "uncertain", "missing")):
+        field = "limitations" if "limitation" in normalized else "unknowns" if any(term in normalized for term in ("unknown", "uncertain", "missing")) else "risks"
+        items = _clean(output.get(field))
+        if items:
+            return f"The current {field.replace('_', ' ')} are: " + " ".join(f"{index}. {item}" for index, item in enumerate(items[:5], 1))
+        return f"No accepted {field.replace('_', ' ')} are recorded in this section yet. Blueprint will not infer one as fact."
+    asks_for_explanation = any(term in normalized for term in ("what is", "explain", "mean", "purpose", "why"))
+    asks_for_action = any(term in normalized for term in ("next step", "next move", "what should i do", "actionable", "recommend"))
+    if asks_for_explanation and asks_for_action and key in definitions:
+        actions = _section_actions(key, None, output)
+        return definitions[key] + " Your safest next moves are: " + " ".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
+    if asks_for_action:
         actions = _section_actions(key, None, output)
         return "The safest next moves are: " + " ".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
-    if any(term in normalized for term in ("what is", "explain", "mean", "purpose", "why")) and key in definitions:
+    if asks_for_explanation and key in definitions:
         suffix = f" Current finding: {finding}" if finding else ""
         return definitions[key] + suffix
     if finding:
@@ -570,6 +778,22 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
     if state[0] in {"locked", "idle", "ready"}:
         return f"{label} has not produced an accepted result yet. Blueprint will not invent an answer; start or unlock this section first, then ask again against its findings and sources."
     return f"Blueprint could not ground that answer in the current {label} result. Ask which evidence is missing or rerun this section after adding the needed context."
+
+
+def _can_answer_from_section(question: str, key: str, output: dict) -> bool:
+    """Keep common retrieval questions instant; reserve the agent loop for new synthesis."""
+    if not output:
+        return True
+    normalized = re.sub(r"[^a-z0-9]+", " ", question.lower()).strip()
+    if any(term in normalized for term in ("combine", "across sections", "new strategy", "trade off", "tradeoff")):
+        return False
+    common_intents = (
+        "what is", "explain", "summarize", "summary", "mean", "purpose", "why",
+        "next step", "next move", "what should i do", "actionable", "recommend",
+        "source", "evidence", "prove", "supporting", "competitor", "alternative",
+        "india", "pricing", "gap", "weakness", "strength", "risk", "limitation",
+    )
+    return len(normalized.split()) <= 28 and any(term in normalized for term in common_intents)
 
 
 def _render_chat_content(key: str, output: dict, state: tuple[str, str]) -> None:
@@ -596,13 +820,23 @@ def _render_chat_content(key: str, output: dict, state: tuple[str, str]) -> None
         starter_cols = st.columns(3)
         for index, (column, starter) in enumerate(zip(starter_cols, starters)):
             starter_label, starter_prompt = starter
-            if column.button(starter_label, key=f"chat_starter_{key}_{index}", use_container_width=True):
+            if column.button(starter_label, key=f"chat_starter_{key}_{index}", use_container_width=True, on_click=_mark_fast_interaction):
                 starter_question = starter_prompt
-        typed_question = st.chat_input(f"Ask Blueprint about {label.lower()}…", key=f"chat_{key}")
+        typed_question = st.chat_input(f"Ask Blueprint about {label.lower()}…", key=f"chat_{key}", on_submit=_mark_fast_interaction)
     question = typed_question or starter_question
     if question:
         conversation = [{"role": item["role"], "content": str(item["content"])} for item in history[-8:]]
         history.append({"role": "user", "content": question})
+        if _can_answer_from_section(question, key, output):
+            history.append({
+                "role": "assistant",
+                "content": _local_chat_answer(question, key, output, state),
+                "citations": [],
+                "suggested_actions": [],
+                "grounding_status": "SECTION_GROUNDED",
+            })
+            st.session_state["bp_interaction_fast"] = True
+            st.rerun()
         try:
             with st.spinner("Blueprint is reading this section and its evidence…"):
                 result = ask_research(
@@ -633,6 +867,7 @@ def _render_chat_content(key: str, output: dict, state: tuple[str, str]) -> None
                 "suggested_actions": [],
                 "technical_note": str(exc),
             })
+        st.session_state["bp_interaction_fast"] = True
         st.rerun()
 
 
@@ -750,31 +985,87 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
                 st.session_state.pop("bp_rerun_preview", None); st.session_state.pop("bp_rerun_proposal", None); st.rerun()
 
 
+def _verdict_actions(verdict_data: dict) -> list[str]:
+    candidates = []
+    for field in ("next_evidence_needed", "contextual_actions", "recommendations", "critical_blockers", "risks"):
+        candidates.extend(_clean(verdict_data.get(field)))
+    unique = []
+    for item in candidates:
+        if item not in unique:
+            unique.append(item)
+        if len(unique) == 5:
+            break
+    defaults = [
+        "Narrow the first-customer segment before designing the offer.",
+        "Validate the highest-risk problem assumption with observable customer behaviour.",
+        "Test one evidence-backed differentiation against the strongest current alternative.",
+    ]
+    for item in defaults:
+        if len(unique) >= 3:
+            break
+        if item not in unique:
+            unique.append(item)
+    return unique
+
+
+def _projected_score(current_score: float | None, accepted_actions: int) -> float | None:
+    if current_score is None:
+        return None
+    return min(100.0, current_score + min(20, max(0, accepted_actions) * 4))
+
+
 def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
-    @st.dialog("Decide what Blueprint should do next", width="large")
+    @st.dialog("Your Stage 1 decision", width="small")
     def gate() -> None:
         raw = str(verdict_data.get("verdict") or checkpoint.get("title") or "WITHHELD").upper(); score = _score(verdict_data)
-        st.markdown(f"### {VERDICT_LABELS.get(raw, raw.replace('_', ' ').title())}" + (f" · {score:.0f}/100" if score is not None else ""))
+        label = VERDICT_LABELS.get(raw, raw.replace('_', ' ').title())
+        st.markdown(f'<div class="gate-score"><small>Current verdict</small><b>{html.escape(label)}</b><strong>{f"{score:.0f}/100" if score is not None else "Score withheld"}</strong></div>', unsafe_allow_html=True)
         st.write(verdict_data.get("explanation") or checkpoint.get("message") or "Review the completed research before continuing.")
+        st.caption("60+ is the commercial-readiness threshold for proceeding. Below 60, Blueprint recommends narrowing or targeted validation before further commitment.")
+        st.markdown("#### Which improvements will you carry forward?")
+        accepted_actions = []
+        for index, action in enumerate(_verdict_actions(verdict_data)):
+            if st.checkbox(action, key=f"gate_action_{checkpoint.get('checkpoint_id')}_{index}"):
+                accepted_actions.append(action)
+        projected = _projected_score(score, len(accepted_actions))
+        if projected is not None:
+            st.markdown(
+                f'<div class="conditional-score"><b>{score:.0f} → {projected:.0f}/100</b><span>Conditional planning estimate if the selected improvements produce new accepted evidence. This is not a guaranteed score.</span></div>',
+                unsafe_allow_html=True,
+            )
         allowed = _items(checkpoint.get("allowed_decisions"))
         if not allowed: st.error("No safe decision is currently available. Refresh the run state."); return
         decision = st.radio("Choose the next route", allowed, format_func=lambda value: DECISION_LABELS.get(value, str(value).replace("_", " ").title())); note = st.text_area("Optional founder note", placeholder="Add context that Stage 2 should respect.")
         if st.button("Apply decision and start the next route", type="primary", use_container_width=True):
+            if str(decision) in {"PROCEED", "CONTINUE_ANYWAY", "TARGETED_VALIDATION"} and not accepted_actions:
+                st.error("Select at least one improvement for Stage 2 to respect before continuing.")
+                return
+            decision_payload = {
+                "founder_note": note,
+                "accepted_actions": accepted_actions,
+                "current_score": score,
+                "conditional_score": projected,
+            }
             with st.spinner("Applying your decision and returning control to the Supervisor…"):
-                try: result = resolve_founder_checkpoint(str(checkpoint["checkpoint_id"]), int(checkpoint["state_version"]), str(decision), {"founder_note": note} if note else {})
+                try: result = resolve_founder_checkpoint(str(checkpoint["checkpoint_id"]), int(checkpoint["state_version"]), str(decision), decision_payload)
                 except BackendError as exc: st.error(str(exc)); return
             st.session_state.pop("backend_bundle", None); st.session_state["backend_last_refresh_at"] = 0; st.session_state["bp_gate1_approved"] = str(decision) in {"PROCEED", "CONTINUE_ANYWAY", "TARGETED_VALIDATION"}; st.session_state["bp_selected_section"] = "assumptions_risks" if st.session_state["bp_gate1_approved"] else "research_verdict"; st.session_state["bp_transition_notice"] = result.get("message") or DECISION_LABELS.get(str(decision), "Decision applied"); st.rerun()
     gate()
 
 
 def _workspace_body() -> None:
-    try: bundle = hydrate_current_run(force=True) or {}
+    navigation_only = bool(st.session_state.pop("bp_navigation_only", False))
+    fast_interaction = navigation_only or bool(st.session_state.pop("bp_interaction_fast", False))
+    cache_window = 86400 if fast_interaction else 8
+    try: bundle = hydrate_current_run(force=not fast_interaction, max_age_seconds=cache_window) or {}
     except BackendError as exc: st.error(str(exc)); st.caption("Completed data remains in Supabase. Blueprint will retry automatically."); return
     context = _dict(bundle.get("research_context")); dashboard = _dict(bundle.get("blueprint")); artifact = _dict(_dict(dashboard.get("current_version")).get("blueprint")); tasks = _task_map(bundle); control = _dict(bundle.get("control_panel"))
     _recover_expired_task(tasks, bundle)
     checkpoints = [item for item in _items(control.get("panel_items")) if isinstance(item, dict) and item.get("item_type") == "HUMAN_CHECKPOINT"]; checkpoint = checkpoints[0] if checkpoints else None
     verdicts = [item for item in _items(dashboard.get("latest_verdicts")) if isinstance(item, dict)]; dashboard_verdict = next((item for item in verdicts if item.get("gate") == "RESEARCH_VERDICT"), {}); latest_verdict = _dict(context.get("latest_verdict")) or dashboard_verdict
     gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
+    if checkpoint and not gate_1:
+        states["research_verdict"] = ("ready", "Awaiting your decision")
     current_run_id = str(st.session_state.get("backend_run_id") or "")
     if st.session_state.get("bp_auto_selected_run_id") != current_run_id:
         first_running = next((key for key, state in states.items() if state[0] == "running"), None)
@@ -792,7 +1083,11 @@ def _workspace_body() -> None:
     if selected == "foundation" and not output and state[0] in {"idle", "running", "ready"}:
         output = _instant_foundation(context, str(idea))
         foundation_preview = True
+        state = ("done", "Ready")
+        states["foundation"] = state
     if selected == "research_verdict": output = {**output, **dashboard_verdict, **latest_verdict}
+    if selected == "foundation" and output:
+        output = _enrich_foundation_from_idea(output, str(idea))
     sources = _flatten_sources(output, context)
     left, center = st.columns([0.92, 5.53], gap=None)
     with left:
@@ -1037,7 +1332,7 @@ def render_financial_plan() -> None:
     )
 
 
-@st.fragment(run_every=2)
+@st.fragment(run_every=8)
 def _live_workspace() -> None:
     _workspace_body()
 

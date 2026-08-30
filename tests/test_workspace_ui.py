@@ -7,9 +7,12 @@ from unittest.mock import patch
 
 from blueprint.workspace_ui import (
     SECTION_PREVIEWS,
+    _can_answer_from_section,
+    _enrich_foundation_from_idea,
     _instant_foundation,
     _local_chat_answer,
     _open_workspace_view,
+    _projected_score,
     _project_title,
     _running_age_seconds,
     _return_to_workspace,
@@ -49,6 +52,27 @@ class WorkspaceChatFallbackTests(unittest.TestCase):
 
         self.assertIn("has not produced an accepted result", answer)
         self.assertIn("will not invent", answer)
+
+    def test_common_section_questions_take_the_instant_grounded_path(self):
+        self.assertTrue(
+            _can_answer_from_section(
+                "What are the strongest competitor gaps?",
+                "competitor_intelligence",
+                {"competitors": [{"name": "Example"}]},
+            )
+        )
+        self.assertFalse(
+            _can_answer_from_section(
+                "Combine the competitor, customer, and market findings into a new positioning strategy with trade-offs",
+                "competitor_intelligence",
+                {"competitors": [{"name": "Example"}]},
+            )
+        )
+
+    def test_verdict_projection_is_bounded_and_conditional(self):
+        self.assertEqual(60, _projected_score(48, 3))
+        self.assertEqual(100, _projected_score(96, 5))
+        self.assertIsNone(_projected_score(None, 3))
 
 
 class WorkspaceTitleTests(unittest.TestCase):
@@ -109,6 +133,21 @@ class WorkspaceRunningStateTests(unittest.TestCase):
         self.assertIn("Busy professionals", result["target_user_boundary"])
         self.assertTrue(result["assumptions"])
         self.assertTrue(result["risks"])
+
+    def test_foundation_recovers_explicit_audience_from_the_idea(self):
+        result = _enrich_foundation_from_idea(
+            {
+                "target_user_boundary": "Not identified — founder input required.",
+                "assumptions": ["A user must be chosen."],
+                "unknowns": ["The first target customer segment is not yet specific enough to test."],
+                "success_definition": "Not sure:",
+            },
+            "A privacy-first fitness tracker for busy professionals that supports realistic habits",
+        )
+
+        self.assertIn("busy professionals", result["target_user_boundary"])
+        self.assertFalse(result["unknowns"])
+        self.assertIn("measurable", result["success_definition"])
 
 
 class WorkspaceNavigationTests(unittest.TestCase):
