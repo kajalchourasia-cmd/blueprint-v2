@@ -2,6 +2,8 @@
 
 Last updated: 30 August 2026
 
+> **Current acceptance truth:** the no-login landing/onboarding path is connected to the dynamic n8n Supervisor. A fresh anonymous browser run completed Stage 1 through the live founder verdict popup. The stage-scoped scheduler bug found by the first smoke test is fixed and published. The auditor now prevents desk-research completeness from being shown as proven demand. Stage 2/3 are built and published; the remaining live-path dependency is the founder's real Gate 1 click, followed by Gate 2 acceptance. See [Phase 7 closed-loop evidence](phase-7-closed-loop-evidence.md).
+
 ## Latest architecture-contract update
 
 The approved dynamic design is recorded in `docs/dynamic-blueprint-orchestration-spec.md`. Its Phase 6A–6G backend contracts are now bound to Supabase migrations, n8n workflows, a shared resilience controller, and a repeatable evaluation gate. Authenticated Streamlit binding remains.
@@ -42,13 +44,13 @@ Approximate readiness:
 14. Supabase migrations 007–008 are applied: owner-isolated run context/chat/commands plus atomic Supervisor/chat persistence; all access verification checks passed.
 15. `BP-API-01` is wired to dispatch the Supervisor after a successful authenticated start.
 
-## What is not built yet
+## What remains
 
-1. Streamlit sign-in/backend integration, module selection, progress, chat, and one authenticated start/persistence acceptance run.
-2. Streamlit controls for approval/correction/resume, profile edit, impact preview, rerun confirmation, version comparison and memory inspection.
-3. Remaining direct-source verification hardening; search excerpts remain explicitly limited even though accepted-evidence Pinecone projection is complete.
-4. Founder-facing observability/debug view using the completed Phase 6F RPC; the Phase 6G evaluator itself is complete at 66/66.
-5. Demo recording, consolidated Google Doc, sanitized GitHub push, and final submission checks.
+1. The founder must choose the live Gate 1 decision; then Stage 2, Gate 2, and Stage 3 need one production acceptance observation.
+2. One second-anonymous-user isolation denial test.
+3. Public HTTPS hosting for n8n before Streamlit Community Cloud deployment.
+4. Optional UI refinement, profile/version comparison and memory-inspection controls.
+5. Demo recording, consolidated submission document, final credential scan and submission checks.
 
 ## The founder input
 

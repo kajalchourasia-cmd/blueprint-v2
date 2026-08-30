@@ -13,7 +13,6 @@ def render_app_navigation(active: str = "") -> None:
         ("inputs", "/Inputs", "≋", "User inputs"),
         ("data", "/Data_Library", "◫", "Data library"),
         ("case", "/Case_Study", "¶", "Case study"),
-        ("logout", "/?logout=1", "↪", "Sign out"),
     ]
     links = "".join(
         f'<a class="{"active" if key == active else ""}" href="{href}" aria-label="{label}"><span class="nav-glyph">{icon}</span><small>{label}</small></a>'

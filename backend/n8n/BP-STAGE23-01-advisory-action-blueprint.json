@@ -1,0 +1,701 @@
+{
+  "id": "bpStage23Advisory01",
+  "name": "BP-STAGE23-01 Advisory and Action Blueprint",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1b51dfd3-ce4f-579c-9c4b-6cea21c26838",
+      "name": "Run Advisory Worker Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{task:{id:'00000000-0000-4000-8000-000000000701',task_key:'s2_offer_pricing',module_key:'offer_pricing',goal:'Create evidence-labelled offer and pricing hypotheses.'},idea_text:'A grounded research workspace for founders.',profile_version:1,profile:{goal:{type:'PAID_CUSTOMERS'},constraints:{available_budget:2000,hours_per_week:10}},dependency_outputs:[],correlation_id:'bp-advisory-safe-test',test_mode:true}}];"
+      },
+      "id": "b9f7dddf-4171-5fa8-8fbc-2046dbcf8f00",
+      "name": "Create Safe Advisory Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1060,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "556b0b5a-a4d1-5d84-98de-503a448f7016",
+      "name": "When Called by Typed Router",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1280,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first()?.json??{};const t=x.task??x;const supported=[\"assumptions_risks\", \"offer_pricing\", \"validation_proof\", \"operating_model\", \"financial_readiness\", \"execution_readiness\", \"launch_distribution\", \"growth_optimization\", \"action_blueprint\"];const module=String(t.module_key??'').toLowerCase();const idea=String(x.idea_text??x.profile?.idea_text??'').trim();return [{json:{...x,task:t,module_key:module,idea_text:idea,supported:supported.includes(module)&&idea.length>=10,profile_version:Number(x.profile_version??t.profile_version??0),dependency_outputs:Array.isArray(x.dependency_outputs)?x.dependency_outputs:[],test_mode:x.test_mode===true,correlation_id:String(x.correlation_id??`bp-advisory-${Date.now()}`).slice(0,200)}}];"
+      },
+      "id": "0bd32e1d-af91-586d-9d43-56470d3044b4",
+      "name": "Normalize Advisory Task",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1020,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "280058fe-0099-5aa4-a8d7-829c87916c41",
+              "leftValue": "={{ $json.supported }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ad14c17b-8388-5246-826c-7df6e7f9ed86",
+      "name": "Advisory Route Supported?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6bb07643-fba1-5a3d-9df4-7422bbe3bac2",
+              "leftValue": "={{ $json.test_mode }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4ac93c9d-971b-5cb4-9720-c410921a03d8",
+      "name": "Use Safe Advisory Fixture?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -580,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:'COMPLETED',observation:{verdict:'VALID',summary:`Safe fixture completed ${x.module_key}.`,output:{schema_version:'bp-advisory-section-v1',module_key:x.module_key,executive_finding:'Safe structural fixture only.',recommendations:[],contextual_actions:[],risks:[],unknowns:['Production evidence intentionally omitted.'],assumptions:['Synthetic test output.'],limitations:['TEST_MODE'],coverage:0},evidence_ids:[],limitations:['TEST_MODE'],retryable:false,proposed_route:'OBSERVE_AND_UNLOCK'},correlation_id:x.correlation_id,test_mode:true}}];"
+      },
+      "id": "77610fc6-c044-56f2-aa33-009678017d27",
+      "name": "Return Safe Advisory Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "579b6b70-0d9c-5b52-a1df-c92f31621a3d",
+              "leftValue": "={{ $json.module_key === 'financial_readiness' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "29847926-9138-5b8c-a7c9-1f3755e53292",
+      "name": "Deterministic Finance?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -340,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;const p=x.profile??{};const c=p.constraints??p.founder_inputs??{};const n=v=>Number.isFinite(Number(v))&&Number(v)>=0?Number(v):null;const budget=n(c.available_budget??c.money_available);const monthly=n(c.monthly_build_budget);const price=n(c.target_monthly_price??c.price);const fixed=n(c.estimated_monthly_fixed_cost);const hours=n(c.hours_per_week);const scenarios=[];if(price&&fixed!=null)scenarios.push({name:'Founder-input break-even',formula:'estimated_monthly_fixed_cost / target_monthly_price',result_customers:Math.ceil(fixed/price),inputs:{estimated_monthly_fixed_cost:fixed,target_monthly_price:price}});if(budget!=null&&monthly)scenarios.push({name:'Cash runway',formula:'available_budget / monthly_build_budget',result_months:Number((budget/monthly).toFixed(1)),inputs:{available_budget:budget,monthly_build_budget:monthly}});if(budget!=null)scenarios.push({name:'Maximum committed budget',formula:'founder-entered available_budget',result_budget:budget,inputs:{available_budget:budget}});const missing=[];if(budget==null)missing.push('available_budget');if(!monthly)missing.push('monthly_build_budget');if(!price)missing.push('target_monthly_price');if(fixed==null)missing.push('estimated_monthly_fixed_cost');const needsInput=budget==null;const output={schema_version:'bp-financial-readiness-v1',module_key:x.module_key,executive_finding:scenarios.length?'Founder-input scenarios are available; they are not forecasts.':'No financial result is calculated until the founder supplies an available budget.',scenarios,founder_capacity:{hours_per_week:hours},missing_inputs:missing,contextual_actions:missing.length?[{title:'Add the missing financial inputs',why:`Required for more complete transparent scenarios: ${missing.join(', ')}`}]:[{title:'Validate price before treating break-even as useful',why:'The price is a founder hypothesis until real payment evidence exists.'}],risks:['Scenario outputs change directly with founder-entered assumptions.'],unknowns:missing,assumptions:[],limitations:['Scenario, not forecast. No revenue, conversion, or willingness-to-pay value was invented.'],coverage:missing.length?Math.max(0.25,1-missing.length/4):1};return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:needsInput?'PARTIAL':'COMPLETED',observation:{verdict:needsInput?'NEEDS_INPUT':'VALID',summary:output.executive_finding,output,evidence_ids:[],limitations:output.limitations,retryable:false,proposed_route:needsInput?'FOUNDER_INPUT':'OBSERVE_AND_UNLOCK'},correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "2b6ccd7a-9be9-5c78-ac1a-7f2b8d3862cd",
+      "name": "Build Deterministic Finance Scenarios",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7029bade-9160-5422-af65-3bd6a99de9bc",
+              "leftValue": "={{ $json.module_key === 'execution_readiness' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bc80a4fe-f067-5492-bd7e-ce443086dcf8",
+      "name": "Execution Readiness Gate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -100,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;const deps=x.dependency_outputs??[];const required=deps.map(d=>String(d.module_key)).filter(Boolean);const completed=deps.filter(d=>['COMPLETED','REUSED','NOT_APPLICABLE'].includes(String(d.status))||d.observation_verdict==='VALID').map(d=>String(d.module_key));const coverages=deps.map(d=>Number(d.output?.coverage)).filter(Number.isFinite);const coverage=coverages.length?coverages.reduce((a,b)=>a+b,0)/coverages.length:(completed.length/Math.max(1,required.length));const risks=deps.flatMap(d=>Array.isArray(d.output?.risks)?d.output.risks:[]).filter(r=>/critical|blocking|fatal/i.test(typeof r==='string'?r:JSON.stringify(r))).slice(0,10);const explanation=`${completed.length} of ${required.length} required advisory modules completed; evidence coverage ${Math.round(coverage*100)}%; ${risks.length} critical risks remain.`;return [{json:{...x,readiness:{required,completed,coverage,risks,explanation},rpc_body:{p_run_id:x.run_id,p_profile_version:x.profile_version,p_completed_modules:completed,p_required_modules:required,p_evidence_coverage:Math.max(0,Math.min(1,coverage)),p_open_critical_risks:risks,p_explanation:explanation}}}];"
+      },
+      "id": "02321ccc-1899-5bd0-a086-7227c954f3f8",
+      "name": "Prepare Execution Readiness",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_execution_readiness",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "1dda40a2-8fd4-530d-9f35-ed8c7403e4de",
+      "name": "Persist Execution Readiness and Gate 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        380,
+        -20
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Prepare Execution Readiness').first().json;const p=$json??{};const ok=p.persisted===true&&p.checkpoint_id;const output={schema_version:'bp-execution-readiness-v1',module_key:'execution_readiness',executive_finding:ok?`${p.verdict} (${p.score}/100).`:'Gate 2 could not be persisted safely.',...x.readiness,verdict:p.verdict??'UNKNOWN',score:p.score??null,checkpoint_id:p.checkpoint_id??null,available_decisions:p.available_decisions??[],contextual_actions:[{title:'Review Gate 2',why:'A founder decision is required before the Action Blueprint can be created.'}],limitations:['Readiness is a deterministic decision aid, not proof of business success.']};return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:ok?'COMPLETED':'PARTIAL',observation:{verdict:ok?'VALID':'TOOL_FAILED',summary:output.executive_finding,output,evidence_ids:[],limitations:output.limitations,retryable:!ok,proposed_route:ok?'HUMAN_CHECKPOINT':'BOUNDED_RETRY_OR_FALLBACK'},correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "79542403-e8e5-5f40-8915-951f0b3cb500",
+      "name": "Wrap Execution Readiness Observation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;const roles={assumptions_risks:'Re-rank assumptions, contradictions, and critical risks.',offer_pricing:'Create offer, packaging, and pricing hypotheses. Pricing is a testable hypothesis, never willingness-to-pay fact.',validation_proof:'Design the smallest founder-run validation experiments with explicit pass, fail, and inconclusive thresholds.',operating_model:'Advise on feasible delivery and operating choices inside the supplied time, budget, and team constraints.',launch_distribution:'Advise on MVP boundary, first-customer routes, distribution options, and milestone sequence. Do not execute a launch or create weekly schedules.',growth_optimization:'Provide growth prerequisites based only on measured traction. If traction is absent, state prerequisites and unknowns only.',action_blueprint:'Synthesize an advisory Action Blueprint with MVP boundary, first-customer route, distribution, financial scenarios, milestones, risks, and explicit unknowns.'};const deps=(x.dependency_outputs??[]).map(d=>({task_key:d.task_key,module_key:d.module_key,status:d.status,output:d.output,route_reason:d.route_reason}));return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.05,max_tokens:x.module_key==='action_blueprint'?2600:1500,response_format:{type:'json_object'},messages:[{role:'system',content:`You are Blueprint's bounded ${x.module_key} advisory agent. ${roles[x.module_key]} Use only founder profile and supplied dependency outputs. Separate evidence, inferences, assumptions, risks, and unknowns. Never invent customers, quotes, market sizes, conversion, retention, revenue, willingness to pay, or completed actions. Never contact, send, publish, buy, book, pay, or delete. Return JSON with executive_finding, recommendations, contextual_actions [{title,why}], risks, unknowns, assumptions, limitations. For action_blueprint also return stages and milestones; milestones are outcome-level, not weekly tasks.`},{role:'user',content:JSON.stringify({idea:x.idea_text,goal:x.profile?.goal??null,founder_profile:x.profile??{},dependencies:deps})}]}}}];"
+      },
+      "id": "e8a2f4ea-7506-532e-a28f-e9813b11d75b",
+      "name": "Prepare Grounded Advisory Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 45000
+        }
+      },
+      "id": "ec5e8ae4-6132-531b-9757-69c44ad7c5bb",
+      "name": "Nebius \u2014 Bounded Advisory Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        380,
+        140
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Prepare Grounded Advisory Analysis').first().json;const r=$json??{};const c=r.choices?.[0]?.message?.content;let a=null;try{a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c}catch{}if(!a)return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:'PARTIAL',observation:{verdict:'TOOL_FAILED',summary:'The advisory model failed safely; no unsupported output was accepted.',output:{},evidence_ids:[],limitations:['Existing completed work remains preserved.'],retryable:true,proposed_route:'BOUNDED_RETRY_OR_FALLBACK'},correlation_id:x.correlation_id,test_mode:false}}];const output={schema_version:x.module_key==='action_blueprint'?'bp-action-blueprint-v1':'bp-advisory-section-v1',module_key:x.module_key,executive_finding:String(a.executive_finding??''),recommendations:Array.isArray(a.recommendations)?a.recommendations:[],contextual_actions:Array.isArray(a.contextual_actions)?a.contextual_actions.slice(0,5):[],risks:Array.isArray(a.risks)?a.risks:[],unknowns:Array.isArray(a.unknowns)?a.unknowns:[],assumptions:Array.isArray(a.assumptions)?a.assumptions:[],limitations:Array.isArray(a.limitations)?a.limitations:[],stages:Array.isArray(a.stages)?a.stages:[],milestones:Array.isArray(a.milestones)?a.milestones:[],dependency_snapshot:(x.dependency_outputs??[]).map(d=>({task_key:d.task_key,module_key:d.module_key,status:d.status})),coverage:1};return [{json:{...x,advisory_output:output,model:r.model??null,is_action_blueprint:x.module_key==='action_blueprint'}}];"
+      },
+      "id": "de7c7a04-f551-5b54-af7c-2752e3b28c1e",
+      "name": "Enforce Advisory Contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "92755a48-be95-56b5-9bd3-41322198c581",
+              "leftValue": "={{ $json.is_action_blueprint }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f5504112-0ad2-5f34-871f-364d50900522",
+      "name": "Persist Action Blueprint?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        860,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;const bp={...x.advisory_output,product_idea:x.idea_text,starting_position:x.profile??{},generated_from_run:x.run_id,advisory_only:true};return [{json:{...x,action_blueprint:bp,rpc_body:{p_run_id:x.run_id,p_profile_version:x.profile_version,p_version_kind:'ACTION',p_artifact_stage:'ACTION_BLUEPRINT',p_status:'COMPLETED',p_blueprint:bp,p_change_summary:'Stage 2 evidence and Gate 2 decision produced the advisory Action Blueprint.',p_source_verdict_ids:[]}}}];"
+      },
+      "id": "17b4fc4a-4040-5800-922e-ca796e8696fd",
+      "name": "Prepare Immutable Action Blueprint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/create_progressive_blueprint_version",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "9ca2b819-8363-5364-9871-c04ea7eaa84f",
+      "name": "Persist Immutable Action Blueprint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1340,
+        40
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Prepare Immutable Action Blueprint').first().json;const p=$json??{};const ok=p.id&&p.version_kind==='ACTION';return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:ok?'COMPLETED':'PARTIAL',observation:{verdict:ok?'VALID':'TOOL_FAILED',summary:ok?`Action Blueprint v${p.version} created.`:'The Action Blueprint was generated but immutable persistence failed.',output:{...x.action_blueprint,blueprint_version:p.version??null,blueprint_version_id:p.id??null},evidence_ids:[],limitations:x.action_blueprint.limitations??[],retryable:!ok,proposed_route:ok?'OBSERVE_AND_UNLOCK':'BOUNDED_RETRY_OR_FALLBACK'},correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "14803fb1-9c58-5c75-9217-3ebd47dbc049",
+      "name": "Wrap Persisted Action Blueprint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.module_key,status:'COMPLETED',observation:{verdict:'VALID',summary:x.advisory_output.executive_finding||`${x.module_key} completed.`,output:x.advisory_output,evidence_ids:[],limitations:x.advisory_output.limitations,retryable:false,proposed_route:'OBSERVE_AND_UNLOCK'},provider_trace:[{provider:'NEBIUS',status:'SUCCEEDED',model:x.model}],correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "a97106dc-5af3-562c-b9f6-ddfd719562e9",
+      "name": "Wrap Advisory Observation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task?.id??null,task_key:x.task?.task_key??'',module_key:x.module_key,status:'SAFE_FAILED',observation:{verdict:'POLICY_DENIED',summary:'No allowlisted advisory worker exists for this route.',output:{supported_modules:[\"assumptions_risks\", \"offer_pricing\", \"validation_proof\", \"operating_model\", \"financial_readiness\", \"execution_readiness\", \"launch_distribution\", \"growth_optimization\", \"action_blueprint\"]},evidence_ids:[],limitations:['Nothing was executed outside the worker boundary.'],retryable:false,proposed_route:'SUPERVISOR_REPLAN'},correlation_id:x.correlation_id,test_mode:x.test_mode}}];"
+      },
+      "id": "02ca6f7c-6af6-5091-be81-0e2631a2eae7",
+      "name": "Refuse Unsupported Advisory Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        180
+      ]
+    }
+  ],
+  "connections": {
+    "Run Advisory Worker Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Advisory Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Advisory Fixture": {
+      "main": [
+        [
+          {
+            "node": "Normalize Advisory Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Typed Router": {
+      "main": [
+        [
+          {
+            "node": "Normalize Advisory Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Advisory Task": {
+      "main": [
+        [
+          {
+            "node": "Advisory Route Supported?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advisory Route Supported?": {
+      "main": [
+        [
+          {
+            "node": "Use Safe Advisory Fixture?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Refuse Unsupported Advisory Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Safe Advisory Fixture?": {
+      "main": [
+        [
+          {
+            "node": "Return Safe Advisory Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Deterministic Finance?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deterministic Finance?": {
+      "main": [
+        [
+          {
+            "node": "Build Deterministic Finance Scenarios",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execution Readiness Gate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Readiness Gate?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Execution Readiness",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Grounded Advisory Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Execution Readiness": {
+      "main": [
+        [
+          {
+            "node": "Persist Execution Readiness and Gate 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Execution Readiness and Gate 2": {
+      "main": [
+        [
+          {
+            "node": "Wrap Execution Readiness Observation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Grounded Advisory Analysis": {
+      "main": [
+        [
+          {
+            "node": "Nebius \u2014 Bounded Advisory Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius \u2014 Bounded Advisory Agent": {
+      "main": [
+        [
+          {
+            "node": "Enforce Advisory Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enforce Advisory Contract": {
+      "main": [
+        [
+          {
+            "node": "Persist Action Blueprint?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Action Blueprint?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Immutable Action Blueprint",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrap Advisory Observation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Immutable Action Blueprint": {
+      "main": [
+        [
+          {
+            "node": "Persist Immutable Action Blueprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Immutable Action Blueprint": {
+      "main": [
+        [
+          {
+            "node": "Wrap Persisted Action Blueprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 180
+  },
+  "versionId": "716d2361-c2fb-5681-a810-ceb29616cc85",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

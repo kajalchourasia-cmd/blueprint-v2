@@ -1,0 +1,513 @@
+{
+  "id": "bpApi03Checkpoint",
+  "name": "BP-API-03 Founder Checkpoint and Resume",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "blueprint/checkpoint",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "6d21c08f-a78a-523d-820f-db0d3328e054",
+      "name": "POST Blueprint Checkpoint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1180,
+        0
+      ],
+      "webhookId": "ef16191a-dda4-54e7-b24d-beddadc2dae1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw=$input.first()?.json??{};let b=raw.body??raw;if(typeof b==='string'){try{b=JSON.parse(b)}catch{b={}}}const h=Object.fromEntries(Object.entries(raw.headers??{}).map(([k,v])=>[String(k).toLowerCase(),v]));const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(h.authorization??'');const decision=String(b.decision??'').toUpperCase();const allowed=['PROCEED','TARGETED_VALIDATION','RUN_MISSING_RESEARCH','CONTINUE_ANYWAY','PAUSE_OR_REVISE','CANCEL'];const valid=/^Bearer\\s+\\S+$/i.test(authorization)&&uuid.test(String(b.checkpoint_id??''))&&Number(b.expected_state_version)>0&&allowed.includes(decision);return [{json:{valid,status_code:/^Bearer\\s+\\S+$/i.test(authorization)?400:401,authorization,checkpoint_id:b.checkpoint_id??null,expected_state_version:Number(b.expected_state_version??0),decision,decision_payload:b.decision_payload&&typeof b.decision_payload==='object'?b.decision_payload:{},run_id:b.run_id??null,project_id:b.project_id??null,profile_version:Number(b.profile_version??0),idea_text:String(b.idea_text??''),profile:b.profile??{},requested_research:Array.isArray(b.requested_research)?b.requested_research:[],correlation_id:String(b.correlation_id??`bp-checkpoint-${Date.now()}`).slice(0,200)}}];"
+      },
+      "id": "df2b48ea-293b-56c9-8433-c7bf9b36d517",
+      "name": "Validate Checkpoint API Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0d73b0ed-9cd5-5274-89bb-2edd62d5ee1c",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e50fbe02-39e7-5d2c-9144-1c0120f47d2d",
+      "name": "Checkpoint API Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -740,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "005d9743-5eb4-5b82-9f8a-f73cc4507df5",
+      "name": "Verify Checkpoint Supabase User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -520,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc3b95d7-ce7c-519f-bf2d-13cda417c743",
+              "leftValue": "={{ Boolean($json.id) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "85c54d22-3182-56bb-84fd-b5ae656a3840",
+      "name": "Checkpoint User Authenticated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -300,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Validate Checkpoint API Request').first().json;return [{json:{...x,test_mode:false}}];"
+      },
+      "id": "231471d8-9bbe-52da-b991-875bbdd50fc7",
+      "name": "Prepare Durable Checkpoint Resolution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpHitl01CheckpointResume",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "c6bdfe74-f1a3-5531-8d44-82b3c2526963",
+      "name": "Resolve Through BP-HITL-01",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        -160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "389ab16f-deff-5c34-b584-95d4088d37bc",
+              "leftValue": "={{ Boolean($json.planner_input) && $json.status === 'RESOLVED' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f52ec2f0-2a80-5b5f-b5a0-6c5cd584cfb3",
+      "name": "Checkpoint Requires Replan?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        420,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json;const x=$('Validate Checkpoint API Request').first().json;return [{json:{command:'RESUME',authorization:x.authorization,project_id:x.project_id,run_id:r.planner_input?.run_id??x.run_id,profile_version:x.profile_version,idea_text:x.idea_text,profile:x.profile,founder_inputs:x.profile?.constraints??{},requested_research:x.requested_research,planning_mode:r.planner_input.planning_mode,gate_context:r.planner_input.gate_context,controller_cycle:0,correlation_id:x.correlation_id,test_mode:false,resolution:r}}];"
+      },
+      "id": "d5a5e2cf-978b-522a-932e-11f4d7e1a49e",
+      "name": "Prepare Resume Supervisor Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bp00Supervisor",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "23b722e8-8400-5744-bb5d-3fc16937bb90",
+      "name": "Resume Dynamic Supervisor",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        900,
+        -240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s=$json;const x=$('Prepare Resume Supervisor Dispatch').first().json;return [{json:{status_code:202,response:{ok:true,status:s.status??'PLANNING',route:s.route??'TASK_PLANNER',decision:x.resolution.decision,planning_mode:x.planning_mode,run_id:x.run_id,state_version:x.resolution.state_version,message:s.message??'The next Blueprint stage was dispatched.',poll_after_ms:2000,correlation_id:x.correlation_id}}}];"
+      },
+      "id": "8b0d2224-8c33-5105-a0b3-2c186ca576ea",
+      "name": "Build Resumed Checkpoint Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json;return [{json:{status_code:r.status==='RESOLVED'?200:409,response:{ok:r.status==='RESOLVED',status:r.status,route:r.route,decision:r.decision,state_version:r.state_version,message:r.status==='RESOLVED'?'The founder decision was recorded; no autonomous stage was started.':'The checkpoint could not be resolved safely.',correlation_id:r.correlation_id}}}];"
+      },
+      "id": "7a674c10-fe1c-5feb-960c-81141e6ebc9a",
+      "name": "Build Paused Checkpoint Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "19ae6279-5766-579b-a52c-735113047671",
+      "name": "Respond Checkpoint",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1380,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ok:false,error_code:$json.status_code===401?'UNAUTHENTICATED':'INVALID_CHECKPOINT_REQUEST',message:$json.status_code===401?'The private demo session is missing or expired.':'Refresh the gate and choose an allowed decision.'}) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "286e952e-3584-5505-b371-96303314dd32",
+      "name": "Respond Invalid Checkpoint Request",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -520,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ok:false,error_code:'UNAUTHENTICATED',message:'The private demo session is invalid or expired.'}) }}",
+        "options": {
+          "responseCode": "={{ 401 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b15b6efb-140f-56b8-81c6-aca017dc3d0f",
+      "name": "Respond Invalid Checkpoint Session",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -60,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "POST Blueprint Checkpoint": {
+      "main": [
+        [
+          {
+            "node": "Validate Checkpoint API Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Checkpoint API Request": {
+      "main": [
+        [
+          {
+            "node": "Checkpoint API Request Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checkpoint API Request Valid?": {
+      "main": [
+        [
+          {
+            "node": "Verify Checkpoint Supabase User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Checkpoint Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Checkpoint Supabase User": {
+      "main": [
+        [
+          {
+            "node": "Checkpoint User Authenticated?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checkpoint User Authenticated?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Durable Checkpoint Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Checkpoint Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Durable Checkpoint Resolution": {
+      "main": [
+        [
+          {
+            "node": "Resolve Through BP-HITL-01",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Through BP-HITL-01": {
+      "main": [
+        [
+          {
+            "node": "Checkpoint Requires Replan?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checkpoint Requires Replan?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Resume Supervisor Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Paused Checkpoint Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Resume Supervisor Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Resume Dynamic Supervisor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume Dynamic Supervisor": {
+      "main": [
+        [
+          {
+            "node": "Build Resumed Checkpoint Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Resumed Checkpoint Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Checkpoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Paused Checkpoint Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Checkpoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 900
+  },
+  "versionId": "3fe04049-5c92-5626-be97-5d55608e6a70",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

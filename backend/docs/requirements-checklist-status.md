@@ -4,7 +4,7 @@ Audited against the complete pasted checklist and all 122 ordered textual paragr
 
 Legend: **DONE** = implemented and evidenced; **PARTIAL** = designed or implemented but an acceptance test/UI binding remains; **PENDING** = not built yet; **N/A BY SCOPE** = deliberately prohibited rather than omitted.
 
-> Phase 7 delta (30 August 2026): migrations 019–020 are installed; the authenticated Streamlit start now reaches the dynamic Supervisor main path; detailed research sections, sources, verdict/actionables, Ask this Research, and approval-gated targeted reruns are functionally bound. Automated workflow/component evaluation is now 77/77 and Python auth/backend tests are 9/9. Items below that still describe these bindings as “held” or “pending” are historical audit wording; the remaining acceptance gap is one real signed-in golden journey, a second-user isolation journey, and public deployment.
+> Phase 7 closed-path delta (30 August 2026): the evaluator sees no login/logout form. Streamlit silently creates an owner-isolated Supabase anonymous JWT, and a fresh browser run completed landing → onboarding → dynamic Supervisor → all Stage 1 specialists → independent audit → deterministic verdict → immutable Research Blueprint → founder checkpoint. The workspace exposes four KPIs, stage/section states, details, sources, actionables, section-scoped chat and approval-gated reruns. Stage 2/3 and the gate-aware resume API are built and published; their real acceptance awaits the founder's Gate 1 click. Automated evidence now includes 11/11 Python contracts, 7/7 staged-planner branches and 17/17 Phase 7 closed-loop checks. See `phase-7-closed-loop-evidence.md`.
 
 ## 1. Define the project — DONE
 

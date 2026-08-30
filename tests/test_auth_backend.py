@@ -5,13 +5,14 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from blueprint.auth import AUTH_STATE_KEY, clear_local_session, get_auth_session, sign_in
+from blueprint.auth import AUTH_STATE_KEY, clear_local_session, get_auth_session, sign_in, sign_in_anonymously
 from blueprint.backend import (
     ask_research,
     load_recent_blueprints,
     normalize_research_selection,
     preview_research_rerun,
     resolve_research_rerun,
+    resolve_founder_checkpoint,
     start_blueprint,
 )
 from blueprint.config import AppConfig
@@ -35,6 +36,20 @@ class FakeResponse:
 
 
 class AuthenticationTests(unittest.TestCase):
+    def test_anonymous_sign_in_creates_owner_isolated_session_without_identity_fields(self):
+        state = {}
+        response = FakeResponse(200, {
+            "access_token": "guest-access", "refresh_token": "guest-refresh", "expires_in": 3600,
+            "user": {"id": "guest-owner-1", "is_anonymous": True},
+        })
+        with patch("blueprint.auth.st.session_state", state), patch(
+            "blueprint.auth.requests.post", return_value=response
+        ) as request:
+            session = sign_in_anonymously(CONFIG)
+
+        self.assertEqual(session["user"]["id"], "guest-owner-1")
+        self.assertEqual(request.call_args.kwargs["json"], {})
+        self.assertNotIn("email", request.call_args.kwargs["json"])
     def test_sign_in_stores_real_supabase_session(self):
         state = {}
         response = FakeResponse(
@@ -144,6 +159,26 @@ class BackendContractTests(unittest.TestCase):
         self.assertEqual(result["status"], "ANSWERED")
         self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/chat")
         self.assertFalse(request.call_args.kwargs["json"]["confirmed_command"])
+
+    def test_checkpoint_resolution_uses_resume_webhook_with_current_run_context(self):
+        response = FakeResponse(202, {"ok": True, "status": "PLANNING", "planning_mode": "PROVE_AND_DESIGN"})
+        state = {
+            "backend_project_id": "project-1", "backend_run_id": "run-1",
+            "backend_bundle": {
+                "snapshot": {"run": {"profile_version": 2}},
+                "research_context": {"project": {"idea_text": "A founder evidence workspace"}},
+                "blueprint": {"current_version": {"blueprint": {"starting_position": {"goal": {"type": "PAID_CUSTOMERS"}}}}},
+            },
+            "dialog_answers": {"research_selection": ["Customer research", "Competitor research", "Market research"]},
+        }
+        with patch("blueprint.backend.st.session_state", state), patch(
+            "blueprint.backend.load_config", return_value=CONFIG
+        ), patch("blueprint.backend._authenticated_request", return_value=response) as request:
+            result = resolve_founder_checkpoint("checkpoint-1", 4, "PROCEED")
+
+        self.assertEqual(result["status"], "PLANNING")
+        self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/checkpoint")
+        self.assertEqual(request.call_args.kwargs["json"]["requested_research"], ["customer_demand", "competitor_intelligence", "market_economics"])
 
     def test_rerun_is_preview_then_explicit_resolution(self):
         preview_response = FakeResponse(200, {"ok": True, "status": "NEEDS_CONFIRMATION", "rerun_request_id": "rr-1"})

@@ -47,7 +47,7 @@ def _safe_error(response: requests.Response, default: str) -> BackendError:
     code = str(payload.get("error_code") or payload.get("code") or "BACKEND_ERROR")
     message = str(payload.get("message") or payload.get("hint") or default)
     if response.status_code == 401:
-        message, code = "Your session has expired. Sign in again.", "UNAUTHENTICATED"
+        message, code = "Your private demo session expired. Refresh once to continue.", "UNAUTHENTICATED"
     elif response.status_code == 403:
         message, code = "You do not have access to this Blueprint.", "FORBIDDEN"
     elif response.status_code == 429:
@@ -76,7 +76,7 @@ def _authenticated_request(
 ) -> requests.Response:
     session = get_auth_session()
     if session is None:
-        raise BackendError("Sign in before continuing.", code="UNAUTHENTICATED", status_code=401)
+        raise BackendError("The private demo session is unavailable. Refresh once to continue.", code="UNAUTHENTICATED", status_code=401)
     try:
         response = requests.request(
             method,
@@ -121,9 +121,29 @@ def start_blueprint(
 ) -> dict[str, Any]:
     config = config or load_config()
     modules = normalize_research_selection(answers.get("research_selection"))
+    success_goal_types = {
+        "First paying customers": "PAID_CUSTOMERS",
+        "Replace my current income": "REDUCE_FINANCIAL_BURDEN",
+        "Reliable side income": "SIDE_INCOME",
+        "Launch a working product": "LAUNCH_READINESS",
+        "Reach a revenue target": "PAID_CUSTOMERS",
+        "Create measurable impact": "CUSTOM",
+        "Build an audience or community": "CUSTOM",
+    }
+    profile_goal_types = {
+        "side_income": "SIDE_INCOME", "small_business": "PAID_CUSTOMERS",
+        "raise_money": "FUNDRAISING_READINESS", "startup": "VALIDATE_DEMAND",
+        "just_explore": "VALIDATE_DEMAND", "get_job": "CUSTOM",
+    }
+    goal_type = success_goal_types.get(str(answers.get("success_type") or "")) or profile_goal_types.get(str(getattr(profile, "goal", "")), "VALIDATE_DEMAND")
+    structured_goal = {
+        "type": goal_type,
+        "label": str(answers.get("success_type") or answers.get("goal") or getattr(profile, "goal", "Validate demand")),
+        "success_definition": getattr(profile, "success_definition", ""),
+    }
     constraints = {
         "requested_research": modules,
-        "goal": getattr(profile, "goal", None),
+        "goal": structured_goal,
         "success_definition": getattr(profile, "success_definition", ""),
         "target_customer": getattr(profile, "target_customer", ""),
         "hours_per_week": getattr(profile, "hours_per_week", 0),
@@ -256,17 +276,36 @@ def resolve_founder_checkpoint(
     decision: str,
     decision_payload: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    result = supabase_rpc(
-        "resolve_founder_checkpoint",
-        {
-            "p_checkpoint_id": checkpoint_id,
-            "p_expected_state_version": int(expected_state_version),
-            "p_decision": decision,
-            "p_decision_payload": decision_payload or {},
-        },
+    """Resolve a gate and, when permitted, dispatch the next stage through BP-00."""
+    config = load_config()
+    bundle = st.session_state.get("backend_bundle") or {}
+    snapshot = bundle.get("snapshot") or {}
+    run = snapshot.get("run") or {}
+    context = bundle.get("research_context") or {}
+    project = context.get("project") or {}
+    dashboard = bundle.get("blueprint") or {}
+    current = (dashboard.get("current_version") or {}).get("blueprint") or {}
+    profile = current.get("starting_position") or {}
+    answers = st.session_state.get("dialog_answers") or {}
+    payload = {
+        "checkpoint_id": checkpoint_id,
+        "expected_state_version": int(expected_state_version),
+        "decision": decision,
+        "decision_payload": decision_payload or {},
+        "project_id": st.session_state.get("backend_project_id"),
+        "run_id": st.session_state.get("backend_run_id"),
+        "profile_version": int(run.get("profile_version") or current.get("profile_version") or 1),
+        "idea_text": project.get("idea_text") or current.get("product_idea") or st.session_state.get("idea", ""),
+        "profile": profile,
+        "requested_research": normalize_research_selection(answers.get("research_selection")),
+        "correlation_id": f"streamlit-checkpoint-{uuid.uuid4()}",
+    }
+    response = _authenticated_request(
+        "POST", _n8n_webhook(config, "checkpoint"), config=config, json=payload
     )
-    if not isinstance(result, dict):
-        raise BackendError("The checkpoint response was not valid.", code="SCHEMA")
+    result = _json_or_empty(response)
+    if response.status_code not in {200, 202} or not isinstance(result, dict) or not result.get("ok"):
+        raise _safe_error(response, "Blueprint could not apply the gate decision safely.")
     return result
 
 
@@ -276,6 +315,7 @@ def ask_research(
     project_id: str,
     run_id: str,
     thread_id: str | None = None,
+    section_key: str | None = None,
     config: AppConfig | None = None,
 ) -> dict[str, Any]:
     """Ask only against the current owner's retrieved research context."""
@@ -286,6 +326,7 @@ def ask_research(
         "run_id": run_id,
         "correlation_id": f"streamlit-chat-{uuid.uuid4()}",
         "confirmed_command": False,
+        "section_key": section_key,
     }
     if thread_id:
         payload["thread_id"] = thread_id

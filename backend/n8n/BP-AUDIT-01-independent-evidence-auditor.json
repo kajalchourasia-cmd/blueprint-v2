@@ -7,7 +7,10 @@
       "name": "Run Auditor Test",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
-      "position": [-640, -140]
+      "position": [
+        -640,
+        -140
+      ]
     },
     {
       "parameters": {
@@ -17,92 +20,276 @@
       "name": "Create Safe Audit Fixture",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-400, -140]
+      "position": [
+        -400,
+        -140
+      ]
     },
     {
-      "parameters": {"inputSource": "passthrough"},
+      "parameters": {
+        "inputSource": "passthrough"
+      },
       "id": "d6a70101-0140-4040-8040-0de014000103",
       "name": "When Called by Stage 1 Router",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.2,
-      "position": [-640, 80]
+      "position": [
+        -640,
+        80
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const src=$input.first()?.json??{};const task=src.task??{};const deps=Array.isArray(src.dependency_outputs)?src.dependency_outputs:[];const streamMap={customer_demand:['user_research','user_demand'],competitor_intelligence:['competitor_research','competitive_opportunity'],market_economics:['market_research','market_accessibility']};const relevant=deps.filter(d=>streamMap[d.module_key]);const requested=relevant.map(d=>streamMap[d.module_key][0]);const completed=relevant.filter(d=>d.status==='COMPLETED'&&d.observation_verdict==='VALID'&&d.output).map(d=>streamMap[d.module_key][0]);const dimensions={};const blockers=[];const findings=[];let totalCoverage=0;let citationErrors=0;for(const d of relevant){const o=d.output??{};const cards=Array.isArray(o.evidence_cards)?o.evidence_cards:[];const ids=new Set(cards.map(x=>String(x.evidence_id)));const signals=Array.isArray(o.observed_signals)?o.observed_signals:[];const contradictions=Array.isArray(o.contradictions)?o.contradictions:[];const unknowns=Array.isArray(o.unknowns)?o.unknowns:[];const bad=signals.filter(s=>!Array.isArray(s.evidence_ids)||!s.evidence_ids.length||s.evidence_ids.some(id=>!ids.has(String(id))));citationErrors+=bad.length;const coverage=Math.max(0,Math.min(1,Number(o.coverage)||0));totalCoverage+=coverage;let score=Math.round(Math.max(0,Math.min(100,50+(signals.length*7)+(coverage*20)-(unknowns.length*3)-(contradictions.length*8)-(bad.length*15))));const dim=streamMap[d.module_key][1];dimensions[dim]={score,coverage,evidence_ids:cards.map(x=>String(x.evidence_id)),unknowns:unknowns.map(String).slice(0,20)};findings.push({module_key:d.module_key,coverage,signal_count:signals.length,contradiction_count:contradictions.length,citation_error_count:bad.length});if(contradictions.length>2&&signals.length<2)blockers.push(`${d.module_key}: unresolved contradictions outweigh supported signals.`);}const evidenceCoverage=relevant.length?Math.round(totalCoverage/relevant.length*100)/100:0;const missing=requested.filter(x=>!completed.includes(x));if(!relevant.length)blockers.push('No completed research streams reached the independent auditor.');if(citationErrors)blockers.push(`${citationErrors} material claim(s) failed citation allowlist checks.`);const auditStatus=!blockers.length&&!missing.length&&evidenceCoverage>=0.60?'PASS':'NOT_PASSED';const verdict=blockers.some(x=>x.includes('contradictions'))?'CONTRADICTORY':auditStatus==='PASS'?'VALID':'NEEDS_REPAIR';const evidenceIds=relevant.flatMap(d=>(d.output?.evidence_cards??[]).map(x=>String(x.evidence_id))).filter(x=>/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(x));const verdictInput={authorization:String(src.authorization??''),owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,profile_version:Number(src.profile_version??0),requested_streams:requested,completed_streams:completed,dimension_scores:dimensions,evidence_coverage:evidenceCoverage,evidence_ids:evidenceIds,critical_blockers:blockers,evidence_audit_status:auditStatus,explanation:auditStatus==='PASS'?'Independent checks passed for stream completion, evidence coverage and citation integrity.':`The research cannot support an unrestricted verdict yet: ${blockers.concat(missing.map(x=>`missing ${x}`)).join(' ')}`,correlation_id:String(src.correlation_id??`bp-audit-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true};const report={schema_version:'bp-evidence-audit-v1',audit_status:auditStatus,independent:true,stream_findings:findings,missing_streams:missing,citation_error_count:citationErrors,evidence_coverage:evidenceCoverage,critical_blockers:blockers,verdict_input:verdictInput};return [{json:{schema_version:'bp-task-worker-result-v1',task_id:task.id??null,task_key:task.task_key??'s1_evidence_audit',module_key:'evidence_audit',status:verdict==='VALID'?'COMPLETED':verdict==='CONTRADICTORY'?'HUMAN_REVIEW':'PARTIAL',observation:{verdict,summary:verdictInput.explanation,output:report,evidence_ids:evidenceIds,limitations:['Search excerpts are not equivalent to completed customer interviews or verified purchases.','Scores are deterministic evidence-quality signals, not guarantees of business success.'],retryable:verdict==='NEEDS_REPAIR',proposed_route:verdict==='VALID'?'OBSERVE_AND_UNLOCK':verdict==='CONTRADICTORY'?'HUMAN_REVIEW':'TARGETED_RESEARCH_REPAIR'},provider_trace:[{provider:'RULE_BASED_INDEPENDENT_AUDITOR',status:auditStatus}],correlation_id:verdictInput.correlation_id,test_mode:src.test_mode===true}}];"
+        "jsCode": "const src=$input.first()?.json??{};const task=src.task??{};const deps=Array.isArray(src.dependency_outputs)?src.dependency_outputs:[];const streamMap={customer_demand:['user_research','user_demand'],competitor_intelligence:['competitor_research','competitive_opportunity'],market_economics:['market_research','market_accessibility']};const relevant=deps.filter(d=>streamMap[d.module_key]);const requested=relevant.map(d=>streamMap[d.module_key][0]);const completed=relevant.filter(d=>d.status==='COMPLETED'&&d.observation_verdict==='VALID'&&d.output).map(d=>streamMap[d.module_key][0]);const dimensions={};const blockers=[];const findings=[];let totalCoverage=0;let citationErrors=0;for(const d of relevant){const o=d.output??{};const cards=Array.isArray(o.evidence_cards)?o.evidence_cards:[];const ids=new Set(cards.map(x=>String(x.evidence_id)));const signals=Array.isArray(o.observed_signals)?o.observed_signals:[];const contradictions=Array.isArray(o.contradictions)?o.contradictions:[];const unknowns=Array.isArray(o.unknowns)?o.unknowns:[];const bad=signals.filter(s=>!Array.isArray(s.evidence_ids)||!s.evidence_ids.length||s.evidence_ids.some(id=>!ids.has(String(id))));citationErrors+=bad.length;const coverage=Math.max(0,Math.min(1,Number(o.coverage)||0));totalCoverage+=coverage;let score=Math.round(Math.max(0,Math.min(100,50+(signals.length*7)+(coverage*20)-(unknowns.length*3)-(contradictions.length*8)-(bad.length*15))));const dim=streamMap[d.module_key][1];const directEvidenceTypes=new Set(['FOUNDER','INTERVIEW','PAYMENT','PURCHASE','PREORDER','DEPOSIT','SIGNUP','COMMITMENT','BEHAVIOR']);const directEvidenceCount=cards.filter(c=>{const provider=String(c.provider??c.source_provider??'').toUpperCase();const type=String(c.evidence_type??c.source_type??c.signal_type??'').toUpperCase();return provider==='FOUNDER'||directEvidenceTypes.has(type)}).length;dimensions[dim]={score,coverage,evidence_ids:cards.map(x=>String(x.evidence_id)),unknowns:unknowns.map(String).slice(0,20),direct_evidence_count:directEvidenceCount,evidence_basis:directEvidenceCount?'PRIMARY_OR_BEHAVIORAL':'DESK_RESEARCH_ONLY'};findings.push({module_key:d.module_key,coverage,signal_count:signals.length,contradiction_count:contradictions.length,citation_error_count:bad.length});if(contradictions.length>2&&signals.length<2)blockers.push(`${d.module_key}: unresolved contradictions outweigh supported signals.`);}const demandDirect=Number(dimensions.user_demand?.direct_evidence_count??0);const directDemandGap=!src.test_mode&&Boolean(dimensions.user_demand)&&demandDirect===0;if(directDemandGap){dimensions.user_demand.score=Math.min(Number(dimensions.user_demand.score)||0,20);if(dimensions.competitive_opportunity)dimensions.competitive_opportunity.score=Math.min(Number(dimensions.competitive_opportunity.score)||0,65);if(dimensions.market_accessibility)dimensions.market_accessibility.score=Math.min(Number(dimensions.market_accessibility.score)||0,65);}const evidenceCoverage=relevant.length?Math.round(totalCoverage/relevant.length*100)/100:0;const missing=requested.filter(x=>!completed.includes(x));if(!relevant.length)blockers.push('No completed research streams reached the independent auditor.');if(citationErrors)blockers.push(`${citationErrors} material claim(s) failed citation allowlist checks.`);const auditStatus=!blockers.length&&!missing.length&&evidenceCoverage>=0.60?'PASS':'NOT_PASSED';if(directDemandGap)blockers.push('customer_demand: desk research found directional signals, but no direct interview, commitment, signup, deposit, purchase, payment, or behavioral evidence validates demand for this specific idea.');const verdict=blockers.some(x=>x.includes('contradictions'))?'CONTRADICTORY':auditStatus==='PASS'?'VALID':'NEEDS_REPAIR';const evidenceIds=relevant.flatMap(d=>(d.output?.evidence_cards??[]).map(x=>String(x.evidence_id))).filter(x=>/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(x));const verdictInput={authorization:String(src.authorization??''),owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,profile_version:Number(src.profile_version??0),requested_streams:requested,completed_streams:completed,dimension_scores:dimensions,evidence_coverage:evidenceCoverage,evidence_ids:evidenceIds,critical_blockers:blockers,evidence_audit_status:auditStatus,explanation:auditStatus==='PASS'?'Independent checks passed for stream completion, evidence coverage and citation integrity.':`The research cannot support an unrestricted verdict yet: ${blockers.concat(missing.map(x=>`missing ${x}`)).join(' ')}`,correlation_id:String(src.correlation_id??`bp-audit-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true};const report={schema_version:'bp-evidence-audit-v1',audit_status:auditStatus,independent:true,stream_findings:findings,missing_streams:missing,citation_error_count:citationErrors,evidence_coverage:evidenceCoverage,critical_blockers:blockers,verdict_input:verdictInput};return [{json:{schema_version:'bp-task-worker-result-v1',task_id:task.id??null,task_key:task.task_key??'s1_evidence_audit',module_key:'evidence_audit',status:verdict==='VALID'?'COMPLETED':verdict==='CONTRADICTORY'?'HUMAN_REVIEW':'PARTIAL',observation:{verdict,summary:verdictInput.explanation,output:report,evidence_ids:evidenceIds,limitations:['Search excerpts are not equivalent to completed customer interviews or verified purchases.','Scores are deterministic evidence-quality signals, not guarantees of business success.'],retryable:verdict==='NEEDS_REPAIR',proposed_route:verdict==='VALID'?'OBSERVE_AND_UNLOCK':verdict==='CONTRADICTORY'?'HUMAN_REVIEW':'TARGETED_RESEARCH_REPAIR'},provider_trace:[{provider:'RULE_BASED_INDEPENDENT_AUDITOR',status:auditStatus}],correlation_id:verdictInput.correlation_id,test_mode:src.test_mode===true}}];"
       },
       "id": "d6a70101-0140-4040-8040-0de014000104",
       "name": "Audit Evidence Independently",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-120, -20]
+      "position": [
+        -120,
+        -20
+      ]
     },
     {
-      "parameters": {"jsCode": "const src=$input.first()?.json??{};const deps=Array.isArray(src.dependency_outputs)?src.dependency_outputs:[];const accepted=deps.filter(d=>['customer_demand','competitor_intelligence','market_economics'].includes(d.module_key)).flatMap(d=>(d.output?.evidence_cards??[]).map(c=>({...c,module_key:d.module_key,provider:c.provider??'YOU',limitations:[...(Array.isArray(c.limitations)?c.limitations:[]),'Accepted with limitation only after the independent batch audit passes.']}))).slice(0,50);return [{json:{...src,accepted_evidence_cards:accepted}}];"},
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const deps=Array.isArray(src.dependency_outputs)?src.dependency_outputs:[];const accepted=deps.filter(d=>['customer_demand','competitor_intelligence','market_economics'].includes(d.module_key)).flatMap(d=>(d.output?.evidence_cards??[]).map(c=>({...c,module_key:d.module_key,provider:c.provider??'YOU',limitations:[...(Array.isArray(c.limitations)?c.limitations:[]),'Accepted with limitation only after the independent batch audit passes.']}))).slice(0,50);return [{json:{...src,accepted_evidence_cards:accepted}}];"
+      },
       "id": "d6a70101-0140-4040-8040-0de014000105",
       "name": "Collect Candidate Evidence Cards",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-260, -20]
+      "position": [
+        -260,
+        -20
+      ]
     },
     {
-      "parameters": {"jsCode": "const worker=$input.first().json;const ctx=$('Collect Candidate Evidence Cards').first().json;const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(ctx.authorization??'');const passed=worker.observation?.output?.audit_status==='PASS';const persist_required=passed&&!ctx.test_mode&&uuid.test(String(ctx.run_id??''))&&Number(ctx.profile_version)>0&&/^Bearer\\s+\\S+$/i.test(authorization);return [{json:{worker,authorization,persist_required,rpc_body:{p_run_id:ctx.run_id,p_profile_version:Number(ctx.profile_version),p_audit_status:worker.observation?.output?.audit_status,p_items:ctx.accepted_evidence_cards??[]}}}];"},
+      "parameters": {
+        "jsCode": "const worker=$input.first().json;const ctx=$('Collect Candidate Evidence Cards').first().json;const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(ctx.authorization??'');const passed=worker.observation?.output?.audit_status==='PASS';const persist_required=passed&&!ctx.test_mode&&uuid.test(String(ctx.run_id??''))&&Number(ctx.profile_version)>0&&/^Bearer\\s+\\S+$/i.test(authorization);return [{json:{worker,authorization,persist_required,rpc_body:{p_run_id:ctx.run_id,p_profile_version:Number(ctx.profile_version),p_audit_status:worker.observation?.output?.audit_status,p_items:ctx.accepted_evidence_cards??[]}}}];"
+      },
       "id": "d6a70101-0140-4040-8040-0de014000106",
       "name": "Prepare Accepted Evidence Persistence",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [120, -20]
+      "position": [
+        120,
+        -20
+      ]
     },
     {
-      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"d6a70101-0140-4040-8040-0de014000151","leftValue":"={{ $json.persist_required }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d6a70101-0140-4040-8040-0de014000151",
+              "leftValue": "={{ $json.persist_required }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "d6a70101-0140-4040-8040-0de014000107",
       "name": "Persist Accepted Evidence?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [360, -20]
+      "position": [
+        360,
+        -20
+      ]
     },
     {
-      "parameters": {"method":"POST","url":"https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_audited_stage1_evidence","authentication":"genericCredentialType","genericAuthType":"httpHeaderAuth","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ $json.authorization }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"contentType":"raw","rawContentType":"application/json","body":"={{ JSON.stringify($json.rpc_body) }}","options":{"timeout":20000}},
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_audited_stage1_evidence",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
       "id": "d6a70101-0140-4040-8040-0de014000108",
       "name": "Persist Auditor-Accepted Evidence",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
-      "position": [600, -120],
-      "credentials": {"httpHeaderAuth":{"id":"fguxqwSfKfj2xfo9","name":"BP Supabase Public"}},
+      "position": [
+        600,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {"jsCode": "const prep=$('Prepare Accepted Evidence Persistence').first().json;const p=$input.first()?.json??{};const worker=prep.worker;const ok=p.persisted===true;const rows=Array.isArray(p.accepted_evidence)?p.accepted_evidence:[];if(ok){const ids=rows.map(x=>x.id).filter(Boolean);worker.observation.output.accepted_evidence=rows;worker.observation.output.verdict_input.evidence_ids=ids;worker.observation.evidence_ids=ids;worker.provider_trace.push({provider:'SUPABASE_CANONICAL_EVIDENCE',status:'SUCCEEDED',count:ids.length});return [{json:worker}];}worker.status='PARTIAL';worker.observation={...worker.observation,verdict:'TOOL_FAILED',summary:'The audit passed, but accepted evidence could not be written to the canonical store. The verdict is paused.',evidence_ids:[],retryable:true,proposed_route:'BOUNDED_RETRY_OR_HUMAN_REVIEW'};worker.observation.output.audit_status='NOT_PASSED';worker.observation.output.verdict_input.evidence_audit_status='NOT_PASSED';worker.provider_trace.push({provider:'SUPABASE_CANONICAL_EVIDENCE',status:'FAILED'});return [{json:worker}];"},
+      "parameters": {
+        "jsCode": "const prep=$('Prepare Accepted Evidence Persistence').first().json;const p=$input.first()?.json??{};const worker=prep.worker;const ok=p.persisted===true;const rows=Array.isArray(p.accepted_evidence)?p.accepted_evidence:[];if(ok){const ids=rows.map(x=>x.id).filter(Boolean);worker.observation.output.accepted_evidence=rows;worker.observation.output.verdict_input.evidence_ids=ids;worker.observation.evidence_ids=ids;worker.provider_trace.push({provider:'SUPABASE_CANONICAL_EVIDENCE',status:'SUCCEEDED',count:ids.length});return [{json:worker}];}worker.status='PARTIAL';worker.observation={...worker.observation,verdict:'TOOL_FAILED',summary:'The audit passed, but accepted evidence could not be written to the canonical store. The verdict is paused.',evidence_ids:[],retryable:true,proposed_route:'BOUNDED_RETRY_OR_HUMAN_REVIEW'};worker.observation.output.audit_status='NOT_PASSED';worker.observation.output.verdict_input.evidence_audit_status='NOT_PASSED';worker.provider_trace.push({provider:'SUPABASE_CANONICAL_EVIDENCE',status:'FAILED'});return [{json:worker}];"
+      },
       "id": "d6a70101-0140-4040-8040-0de014000109",
       "name": "Attach Canonical Evidence IDs",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [840, -120]
+      "position": [
+        840,
+        -120
+      ]
     },
     {
-      "parameters": {"jsCode": "return [{json:$input.first().json.worker}];"},
+      "parameters": {
+        "jsCode": "return [{json:$input.first().json.worker}];"
+      },
       "id": "d6a70101-0140-4040-8040-0de014000110",
       "name": "Return Nonproduction Audit",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [600, 100]
+      "position": [
+        600,
+        100
+      ]
     }
   ],
   "connections": {
-    "Run Auditor Test": {"main": [[{"node": "Create Safe Audit Fixture", "type": "main", "index": 0}]]},
-    "Create Safe Audit Fixture": {"main": [[{"node": "Collect Candidate Evidence Cards", "type": "main", "index": 0}]]},
-    "When Called by Stage 1 Router": {"main": [[{"node": "Collect Candidate Evidence Cards", "type": "main", "index": 0}]]},
-    "Collect Candidate Evidence Cards": {"main": [[{"node": "Audit Evidence Independently", "type": "main", "index": 0}]]},
-    "Audit Evidence Independently": {"main": [[{"node": "Prepare Accepted Evidence Persistence", "type": "main", "index": 0}]]},
-    "Prepare Accepted Evidence Persistence": {"main": [[{"node": "Persist Accepted Evidence?", "type": "main", "index": 0}]]},
-    "Persist Accepted Evidence?": {"main": [[{"node": "Persist Auditor-Accepted Evidence", "type": "main", "index": 0}], [{"node": "Return Nonproduction Audit", "type": "main", "index": 0}]]},
-    "Persist Auditor-Accepted Evidence": {"main": [[{"node": "Attach Canonical Evidence IDs", "type": "main", "index": 0}]]}
+    "Run Auditor Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Audit Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Audit Fixture": {
+      "main": [
+        [
+          {
+            "node": "Collect Candidate Evidence Cards",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Stage 1 Router": {
+      "main": [
+        [
+          {
+            "node": "Collect Candidate Evidence Cards",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Candidate Evidence Cards": {
+      "main": [
+        [
+          {
+            "node": "Audit Evidence Independently",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Evidence Independently": {
+      "main": [
+        [
+          {
+            "node": "Prepare Accepted Evidence Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Accepted Evidence Persistence": {
+      "main": [
+        [
+          {
+            "node": "Persist Accepted Evidence?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Accepted Evidence?": {
+      "main": [
+        [
+          {
+            "node": "Persist Auditor-Accepted Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Nonproduction Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Auditor-Accepted Evidence": {
+      "main": [
+        [
+          {
+            "node": "Attach Canonical Evidence IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
   "pinData": {},
   "active": false,
-  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 60},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 60
+  },
   "versionId": "d6a70101-0140-4040-8040-0de014000199",
-  "meta": {"templateCredsSetupCompleted": true},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "id": "bpAudit01IndependentEvidenceAuditor",
   "tags": []
 }

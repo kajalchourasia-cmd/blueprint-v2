@@ -1,11 +1,13 @@
 # Blueprint Evidence Dev — Authoritative Build Plan
 
-> Version: 1.1 — Phase 7 canonical-path revision
+> Version: 1.2 — Phase 7 closed-path and guest-demo revision
 > Updated: 30 August 2026  
 > Authority: this document supersedes older phase/status statements in `README.md`, `blueprint.md`, and `implementation-plan.md`. Those files remain useful design history.  
 > Product: a dynamic, evidence-first founder validation system—not a generic market-research report generator.
 
 ## 1. The product we are building
+
+> **Latest implementation evidence:** [Phase 7 closed Streamlit-to-n8n path](phase-7-closed-loop-evidence.md). The visible login/logout requirement was removed after the original plan: Blueprint now uses an invisible, owner-isolated Supabase guest session. Stage 1 is live-verified through its founder checkpoint; Stage 2/3 are built and published but require the founder's real Gate 1 decision before production acceptance.
 
 A founder enters an idea, goal, constraints, available budget, progress already made, and the research modules they want. Blueprint creates a project-specific validation roadmap, researches the selected questions, preserves source-level evidence, challenges weak conclusions, and returns a versioned Blueprint with detailed sections, risks, assumptions, financial scenarios, founder actions, and the next best step.
 
@@ -162,12 +164,12 @@ The dashboard shows only project-relevant signals, selected by deterministic rul
 - Streamlit renders the live Research Blueprint sections, sources, risks, unknowns, contextual actions, grounded research chat, and rerun approval controls ahead of the existing dashboard redesign layer.
 - Repeatable workflow/component evaluation now passes **77/77**; Python auth/backend contracts pass **9/9**; all three production webhooks reject missing authentication with `401`.
 
-### Designed but not yet complete
+### Built, with final acceptance still pending
 
-- One real signed-in golden run and a second-user isolation run through the Streamlit browser.
-- Financial scenario engine and remaining dynamic modules.
-- Evaluation runner and hardening evidence.
-- Streamlit authentication/integration and final submission assets.
+- One founder-approved continuation from the live Gate 1 popup through Stage 2, Gate 2, and the Action Blueprint.
+- A real second anonymous-user isolation denial test.
+- Public HTTPS hosting for n8n, followed by Streamlit Community Cloud deployment.
+- Final submission assets and demo recording.
 
 ## 9. Revised build phases
 
@@ -187,11 +189,11 @@ The dashboard shows only project-relevant signals, selected by deterministic rul
 | 6E2 | Profile edit, impact preview, targeted/full rerun | **Backend complete and safe-plan live-tested; authenticated UI acceptance remains** | Core complete |
 | 6F | Failure handling, observability, budgets, safe/partial completion | **Complete and live-safe verified: migration 018 installed; shared resilience controller published; 15/15 injected failures passed** | Complete |
 | 6G | Evals: routing, grounding, isolation, failures, workflow completion | **Complete for backend/component scope: actual exported Code nodes plus structural/security contracts pass 68/68** | Complete |
-| 7A | Authenticated start/JWT, immutable initial state, canonical n8n entry | **Implemented and locally/live-contract verified; real founder sign-in acceptance remains** | Complete except golden run |
+| 7A | Invisible anonymous JWT, immutable initial state, canonical n8n entry | **Complete and live-verified from a fresh browser session; no login UI** | Complete |
 | 7B | Dynamic main-path convergence and bounded re-evaluation | **Implemented and published in place under `bp00Supervisor`** | Complete |
-| 7C | Streamlit live progress, Blueprint sections, sources, verdict, actionables, checkpoints | **Implemented; visual redesign remains deliberately separable** | Complete for functional binding |
+| 7C | Codex-style Streamlit progress, sections, sources, actionables, section chat, rerun and checkpoints | **Implemented and live-verified through Gate 1** | Complete for Stage 1; Stage 2/3 acceptance pending click |
 | 7D | Routing/grounding/failure/HITL/isolation/completion/rerun evals | **77/77 workflow/component + 9/9 Python PASS; real two-user journey remains** | Component complete |
-| 7E | Ask this Research RAG plus approval-gated reruns | **Implemented and webhooks published; authenticated answer/rerun golden run remains** | Component complete |
+| 7E | Section-scoped Ask this Research plus approval-gated reruns | **Implemented and webhooks published; real chat/rerun write acceptance remains founder-controlled** | Component complete |
 | 8 | Requirement audit, demo fixtures, case study, README, submission | Pending | 2–3 h |
 | Product V2 | File upload, LlamaIndex document RAG, optional voice | Deferred | Post-hackathon |
 

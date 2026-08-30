@@ -3,18 +3,16 @@ import html
 import streamlit as st
 import streamlit.components.v1 as components
 
-from blueprint.auth import current_user_email, handle_logout_query, render_auth_gate
+from blueprint.auth import render_auth_gate
 from blueprint.backend import BackendError, load_recent_blueprints, make_idempotency_key, start_blueprint
 from blueprint.schemas import UserProfile
 from blueprint.state import reset
 
 
 st.set_page_config(page_title="Blueprint", page_icon="⌖", layout="wide", initial_sidebar_state="collapsed")
-handle_logout_query()
 if not render_auth_gate():
     st.stop()
 reset()
-auth_email = current_user_email()
 
 query_idea = st.query_params.get("idea", "").strip()
 if query_idea and st.query_params.get("start") == "1":
@@ -70,7 +68,7 @@ div[data-baseweb="modal"],[data-testid="stDialog"]{background:rgba(235,237,234,.
 )
 
 st.markdown(
-    f'''<details class="landing-menu"><summary aria-label="Open Blueprint navigation"><span style="font-family:Arial,sans-serif">⌘</span></summary><nav><a href="/"><span style="font-family:Arial,sans-serif">⌂</span>Home</a><a href="/Your_Plan"><span style="font-family:Arial,sans-serif">▦</span>Dashboard</a><a href="/Your_Plan?view=blueprint"><span style="font-family:Arial,sans-serif">⌘</span>Full Blueprint</a><a href="/Inputs"><span style="font-family:Arial,sans-serif">≋</span>User inputs</a><a href="/Data_Library"><span style="font-family:Arial,sans-serif">◫</span>Data library</a><a href="/Case_Study"><span style="font-family:Arial,sans-serif">¶</span>Case study</a><a href="/?logout=1"><span style="font-family:Arial,sans-serif">↪</span>Sign out · {html.escape(auth_email)}</a></nav></details><section class="landing-intro"><div class="landing-brand">Blueprint</div><h1>Turn the unfinished idea into <em>the next provable move.</em></h1><p>Blueprint turns your context, constraints, and real-world evidence into a roadmap you can execute—without pretending uncertainty is validation.</p></section><div class="hero-grid-label">01 / Start here</div>''',
+    '''<details class="landing-menu"><summary aria-label="Open Blueprint navigation"><span style="font-family:Arial,sans-serif">⌘</span></summary><nav><a href="/"><span style="font-family:Arial,sans-serif">⌂</span>Home</a><a href="/Your_Plan"><span style="font-family:Arial,sans-serif">▦</span>Dashboard</a><a href="/Your_Plan?view=blueprint"><span style="font-family:Arial,sans-serif">⌘</span>Full Blueprint</a><a href="/Inputs"><span style="font-family:Arial,sans-serif">≋</span>User inputs</a><a href="/Data_Library"><span style="font-family:Arial,sans-serif">◫</span>Data library</a><a href="/Case_Study"><span style="font-family:Arial,sans-serif">¶</span>Case study</a></nav></details><section class="landing-intro"><div class="landing-brand">Blueprint</div><h1>Turn the unfinished idea into <em>the next provable move.</em></h1><p>Blueprint turns your context, constraints, and real-world evidence into a roadmap you can execute—without pretending uncertainty is validation.</p></section><div class="hero-grid-label">01 / Start here</div>''',
     unsafe_allow_html=True,
 )
 

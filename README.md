@@ -29,17 +29,17 @@ Instead of producing a generic plan, Blueprint combines founder context, executa
 - **Data library** — inspectable CSV-backed planning sources and provenance.
 - **Case study** — problem, product thesis, user goals, iterations, processing pipeline, information architecture, strategy, and reflection.
 
-## Authenticated V2 data flow
+## Owner-isolated demo data flow
 
-Blueprint V2 now uses real Supabase email/password authentication. The browser receives only the Supabase publishable key; provider keys and Supabase secret/service-role credentials stay in n8n. Every n8n and Supabase request carries the signed-in founder's JWT, and Supabase RLS keeps projects and runs owner-scoped.
+Blueprint creates a unique Supabase anonymous user invisibly, so an evaluator lands directly on the existing page and never sees an email/password or login/logout task. The browser receives only the Supabase publishable key; provider keys and Supabase secret/service-role credentials stay in n8n. Every n8n and Supabase request still carries an authenticated owner JWT, and Supabase RLS keeps projects and runs isolated.
 
-1. Sign in or create a Supabase account.
+1. Open the landing page; Blueprint creates the private guest workspace silently.
 2. Submit the idea and choose Customer, Competitor, and/or Market Research (all three are selected by default).
 3. Streamlit sends the authenticated, idempotent start request to `BP-API-01` in n8n.
 4. n8n atomically creates the immutable founder profile and Original Blueprint, then dispatches the dynamic Planner, bounded Scheduler, selected specialists, independent auditor, deterministic verdict, and Research Blueprint synthesizer.
 5. The dashboard reads owner-scoped progress, detailed research sections, sources, actionables, Blueprint versions, observability, and pending founder checkpoints from Supabase.
 6. Ask this Research answers only from retrieved project evidence and dynamic outputs. A research rerun requires an impact preview and explicit approve/cancel before a new run is dispatched.
-7. Founder decisions are state-version checked; signing out revokes the Supabase session and clears local project state. Signing back in reloads durable projects and latest runs.
+7. Founder decisions are state-version checked. Stage 2 and Stage 3 cannot start before their corresponding founder gate decision.
 
 The existing dashboard design is intentionally preserved for the later UI refinement pass. A compact live-research panel currently exposes real status, partial-projection failures, refresh, and HITL decisions.
 
@@ -158,4 +158,4 @@ The production entrypoint is `app.py` on the `main` branch. Streamlit Community 
 
 ## Current scope
 
-Implemented in this slice: real sign-up/sign-in/token refresh/logout, owner-scoped recovery, authenticated idempotent start, immutable initial state, canonical dynamic orchestration, detailed research-section/source rendering, live verdict/checkpoints, project-grounded Ask this Research, and approval-gated targeted reruns. The repeatable backend evaluation passes 77/77 and Python auth/backend contracts pass 9/9. A real signed-in golden run, second-user isolation run, public n8n deployment, and final submission package remain. See [Phase 7 authentication integration](docs/PHASE-7-AUTH-INTEGRATION.md).
+Implemented in this slice: invisible owner-isolated guest JWT, authenticated idempotent start, immutable initial state, canonical staged orchestration, detailed section/source/actionable rendering, live verdict/checkpoints, section-scoped Ask this Research, approval-gated targeted reruns, deterministic finance, and advisory Action Blueprint workers. A fresh browser run completed the full Stage 1 path to its human gate. The remaining acceptance work is the founder-approved Stage 2/3 continuation, a second-user isolation test, public HTTPS n8n deployment, and final submission assets. See [Phase 7 closed-loop evidence](backend/docs/phase-7-closed-loop-evidence.md).

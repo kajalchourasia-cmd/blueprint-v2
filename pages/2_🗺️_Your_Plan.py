@@ -7,19 +7,10 @@ import xml.etree.ElementTree as ET
 import plotly.graph_objects as go
 import streamlit as st
 
-from blueprint.auth import handle_logout_query, require_auth
-from blueprint.backend_ui import render_backend_status_panel, render_research_workspace
-from blueprint.product_dashboard_v2 import render_product_dashboard_v2
-from blueprint.blueprint_map import render_blueprint_map
-from blueprint.coach import chat
-from blueprint.cost_calculator import add_delta, compute_initial, mark_done
-from blueprint.gap_generator import generate as generate_gap
-from blueprint.plan_generator import generate as generate_plan
-from blueprint.reality_check import generate as generate_reality
-from blueprint.state import reset
+from blueprint.auth import require_auth
+from blueprint.workspace_ui import render_blueprint_workspace
 
 st.set_page_config(page_title="Blueprint", page_icon="⌁", layout="wide", initial_sidebar_state="collapsed")
-handle_logout_query()
 require_auth()
 
 if working_note := st.query_params.get("working_note"):
@@ -39,12 +30,11 @@ if action_key := st.query_params.get("complete_action"):
     st.rerun()
 
 if st.query_params.get("view") == "blueprint":
-    render_blueprint_map()
+    st.session_state["bp_selected_section"] = "action_blueprint"
+    render_blueprint_workspace()
     st.stop()
 else:
-    render_backend_status_panel()
-    render_research_workspace()
-    render_product_dashboard_v2()
+    render_blueprint_workspace()
     st.stop()
 
 

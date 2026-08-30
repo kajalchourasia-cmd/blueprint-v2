@@ -1,4 +1,9 @@
-"""Supabase email/password authentication for the Streamlit client."""
+"""Invisible Supabase guest authentication for the Streamlit client.
+
+Blueprint deliberately has no evaluator-facing sign-in screen.  A visitor is
+still represented by a real, isolated Supabase ``authenticated`` user so the
+existing row-level-security policies remain the ownership boundary.
+"""
 
 from __future__ import annotations
 
@@ -38,6 +43,9 @@ SENSITIVE_SESSION_KEYS = {
     "bp_rerun_proposal",
     "bp_rerun_preview",
     "bp_rerun_idempotency_key",
+    "bp_section_chats",
+    "bp_section_threads",
+    "bp_selected_section",
 }
 
 
@@ -127,6 +135,43 @@ def sign_up(email: str, password: str, config: AppConfig | None = None) -> dict[
     }
 
 
+def sign_in_anonymously(config: AppConfig | None = None) -> dict[str, Any]:
+    """Create a unique guest user without collecting identity information.
+
+    Supabase anonymous users receive ordinary access/refresh tokens and use the
+    ``authenticated`` Postgres role.  This is intentionally different from
+    exposing database access with the public ``anon`` role.
+    """
+    config = config or load_config()
+    try:
+        response = requests.post(
+            f"{config.supabase_url}/auth/v1/signup",
+            headers=_auth_headers(config),
+            json={},
+            timeout=(5, config.request_timeout_seconds),
+        )
+    except requests.RequestException as exc:
+        raise AuthenticationError("Blueprint could not create a private guest workspace.") from exc
+    if response.status_code not in {200, 201}:
+        message = _safe_auth_message(response)
+        if "anonymous" in message.lower() and ("disabled" in message.lower() or "not enabled" in message.lower()):
+            message = "Anonymous demo access is not enabled in Supabase yet."
+        raise AuthenticationError(message, status_code=response.status_code)
+    session = _normalize_session(response.json())
+    if not session["access_token"] or not session["refresh_token"] or not (session.get("user") or {}).get("id"):
+        raise AuthenticationError("Supabase returned an incomplete guest session.")
+    st.session_state[AUTH_STATE_KEY] = session
+    return session
+
+
+def ensure_guest_session(config: AppConfig | None = None) -> dict[str, Any]:
+    """Return the current owner session or create one invisibly."""
+    session = get_auth_session()
+    if session is not None:
+        return session
+    return sign_in_anonymously(config)
+
+
 def refresh_auth_session(config: AppConfig | None = None) -> dict[str, Any] | None:
     config = config or load_config()
     existing = st.session_state.get(AUTH_STATE_KEY) or {}
@@ -191,70 +236,31 @@ def handle_logout_query() -> None:
 
 def current_user_email() -> str:
     session = get_auth_session(refresh_if_needed=False) or {}
-    return str((session.get("user") or {}).get("email") or "Founder")
+    return str((session.get("user") or {}).get("email") or "Guest founder")
 
 
 def render_auth_gate() -> bool:
-    if get_auth_session() is not None:
-        return True
-    st.markdown(
-        """
-        <style>
-        [data-testid="stAppViewContainer"]{background:radial-gradient(circle at 80% 10%,#fff,transparent 31%),linear-gradient(145deg,#f7f7f4,#e4e6e2)}
-        main .block-container{max-width:560px;padding-top:9vh}.auth-brand{font:500 11px 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase}.auth-title{margin:35px 0 12px;font:500 55px/.92 'Space Grotesk',sans-serif;letter-spacing:-.075em}.auth-copy{margin-bottom:28px;color:#68706b;font:14px/1.5 'Space Grotesk',sans-serif}
-        </style><div class="auth-brand">Blueprint Evidence Dev</div><h1 class="auth-title">Your research needs an owner.</h1><p class="auth-copy">Sign in so every idea, source, checkpoint, Blueprint version, and rerun stays isolated to your account.</p>
-        """,
-        unsafe_allow_html=True,
-    )
     try:
-        config = load_config()
+        ensure_guest_session(load_config())
+        return True
     except ConfigurationError as exc:
         st.error(str(exc))
         st.caption("Use `.streamlit/secrets.toml` locally or Advanced settings → Secrets in Streamlit Community Cloud.")
         return False
-
-    sign_in_tab, create_tab = st.tabs(["Sign in", "Create account"])
-    with sign_in_tab:
-        with st.form("bp_sign_in", clear_on_submit=False):
-            email = st.text_input("Email address", key="bp_login_email")
-            password = st.text_input("Password", type="password", key="bp_login_password")
-            submitted = st.form_submit_button("Sign in →", type="primary", use_container_width=True)
-        if submitted:
-            if not email.strip() or not password:
-                st.error("Enter both the email address and password.")
-            else:
-                try:
-                    sign_in(email, password, config)
-                    st.rerun()
-                except AuthenticationError as exc:
-                    st.error(str(exc))
-    with create_tab:
-        with st.form("bp_sign_up", clear_on_submit=False):
-            new_email = st.text_input("Email address", key="bp_signup_email")
-            new_password = st.text_input("Password", type="password", key="bp_signup_password")
-            confirm_password = st.text_input("Confirm password", type="password", key="bp_signup_confirm")
-            created = st.form_submit_button("Create account →", use_container_width=True)
-        if created:
-            if not new_email.strip() or "@" not in new_email:
-                st.error("Enter a valid email address.")
-            elif len(new_password) < 8:
-                st.error("Use a password with at least eight characters.")
-            elif new_password != confirm_password:
-                st.error("The passwords do not match.")
-            else:
-                try:
-                    result = sign_up(new_email, new_password, config)
-                    if result.get("signed_in"):
-                        st.rerun()
-                    st.success(result.get("message", "Account created."))
-                except AuthenticationError as exc:
-                    st.error(str(exc))
-    return False
+    except AuthenticationError as exc:
+        st.error("Blueprint could not open a private demo workspace.")
+        st.caption(str(exc))
+        if st.button("Retry demo workspace", type="primary"):
+            st.rerun()
+        return False
 
 
 def require_auth() -> dict[str, Any]:
     session = get_auth_session()
     if session is None:
-        st.switch_page("app.py")
-        st.stop()
+        try:
+            session = ensure_guest_session()
+        except (AuthenticationError, ConfigurationError):
+            st.switch_page("app.py")
+            st.stop()
     return session

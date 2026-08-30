@@ -7,142 +7,545 @@
       "name": "Run Router Test",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
-      "position": [-980, -220]
+      "position": [
+        -980,
+        -220
+      ]
     },
     {
-      "parameters": {"jsCode": "return [{json:{task:{id:'00000000-0000-4000-8000-000000000501',task_key:'s1_foundation',module_key:'foundation',goal:'Frame the founder idea.'},idea_text:'An evidence workspace that helps a founder validate a product idea.',profile_version:1,dependency_outputs:[],correlation_id:'bp-router-safe-test',test_mode:true}}];"},
+      "parameters": {
+        "jsCode": "return [{json:{task:{id:'00000000-0000-4000-8000-000000000501',task_key:'s1_foundation',module_key:'foundation',goal:'Frame the founder idea.'},idea_text:'An evidence workspace that helps a founder validate a product idea.',profile_version:1,dependency_outputs:[],correlation_id:'bp-router-safe-test',test_mode:true}}];"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000102",
       "name": "Create Safe Router Fixture",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-740, -220]
+      "position": [
+        -740,
+        -220
+      ]
     },
     {
-      "parameters": {"inputSource": "passthrough"},
+      "parameters": {
+        "inputSource": "passthrough"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000103",
       "name": "When Called by Scheduler",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.2,
-      "position": [-980, 40]
+      "position": [
+        -980,
+        40
+      ]
     },
     {
-      "parameters": {"jsCode": "const x=$input.first()?.json??{};const module=String(x.task?.module_key??x.module_key??'').toLowerCase();const supported=['foundation','customer_demand','competitor_intelligence','market_economics','evidence_audit','research_verdict','final_blueprint'];return [{json:{...x,module_key:module,router_supported:supported.includes(module)}}];"},
+      "parameters": {
+        "jsCode": "const x=$input.first()?.json??{};const module=String(x.task?.module_key??x.module_key??'').toLowerCase();const supported=['foundation','customer_demand','competitor_intelligence','market_economics','evidence_audit','research_verdict','final_blueprint','assumptions_risks','offer_pricing','validation_proof','operating_model','financial_readiness','execution_readiness','launch_distribution','growth_optimization','action_blueprint'];return [{json:{...x,module_key:module,router_supported:supported.includes(module)}}];"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000104",
       "name": "Normalize Typed Route",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-500, -80]
+      "position": [
+        -500,
+        -80
+      ]
     },
     {
-      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"f8c90101-0160-4060-8060-0de016000151","leftValue":"={{ ['foundation','customer_demand','competitor_intelligence','market_economics'].includes($json.module_key) }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f8c90101-0160-4060-8060-0de016000151",
+              "leftValue": "={{ ['foundation','customer_demand','competitor_intelligence','market_economics'].includes($json.module_key) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "f8c90101-0160-4060-8060-0de016000105",
       "name": "Research Specialist Route?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [-260, -80]
+      "position": [
+        -260,
+        -80
+      ]
     },
     {
-      "parameters": {"source":"database","workflowId":{"__rl":true,"value":"bpStage101ResearchSpecialist","mode":"id"},"mode":"each","options":{"waitForSubWorkflow":true}},
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpStage101ResearchSpecialist",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
       "id": "f8c90101-0160-4060-8060-0de016000106",
       "name": "Run Bounded Research Specialist",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
-      "position": [0, -260],
+      "position": [
+        0,
+        -260
+      ],
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"f8c90101-0160-4060-8060-0de016000152","leftValue":"={{ $json.module_key === 'evidence_audit' }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f8c90101-0160-4060-8060-0de016000152",
+              "leftValue": "={{ $json.module_key === 'evidence_audit' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "f8c90101-0160-4060-8060-0de016000107",
       "name": "Evidence Auditor Route?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [0, -20]
+      "position": [
+        0,
+        -20
+      ]
     },
     {
-      "parameters": {"source":"database","workflowId":{"__rl":true,"value":"bpAudit01IndependentEvidenceAuditor","mode":"id"},"mode":"each","options":{"waitForSubWorkflow":true}},
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpAudit01IndependentEvidenceAuditor",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
       "id": "f8c90101-0160-4060-8060-0de016000108",
       "name": "Run Independent Evidence Auditor",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
-      "position": [260, -160],
+      "position": [
+        260,
+        -160
+      ],
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"f8c90101-0160-4060-8060-0de016000153","leftValue":"={{ $json.module_key === 'research_verdict' }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f8c90101-0160-4060-8060-0de016000153",
+              "leftValue": "={{ $json.module_key === 'research_verdict' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "f8c90101-0160-4060-8060-0de016000109",
       "name": "Research Verdict Route?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [260, 80]
+      "position": [
+        260,
+        80
+      ]
     },
     {
-      "parameters": {"jsCode": "const x=$input.first().json;const audit=(x.dependency_outputs??[]).find(d=>d.module_key==='evidence_audit')?.output??{};const v=audit.verdict_input??{};return [{json:{...v,authorization:x.authorization,owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id,profile_version:x.profile_version,correlation_id:x.correlation_id,test_mode:x.test_mode===true,_router_task:x.task}}];"},
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const audit=(x.dependency_outputs??[]).find(d=>d.module_key==='evidence_audit')?.output??{};const v=audit.verdict_input??{};return [{json:{...v,authorization:x.authorization,owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id,profile_version:x.profile_version,correlation_id:x.correlation_id,test_mode:x.test_mode===true,_router_task:x.task}}];"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000110",
       "name": "Bind Audited Verdict Input",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [520, 0]
+      "position": [
+        520,
+        0
+      ]
     },
     {
-      "parameters": {"source":"database","workflowId":{"__rl":true,"value":"bpVerdict01ResearchViability","mode":"id"},"mode":"each","options":{"waitForSubWorkflow":true}},
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpVerdict01ResearchViability",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
       "id": "f8c90101-0160-4060-8060-0de016000111",
       "name": "Run Deterministic Verdict Gate",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
-      "position": [760, 0],
+      "position": [
+        760,
+        0
+      ],
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {"jsCode": "const v=$input.first()?.json??{};const ctx=$('Normalize Typed Route').first().json;const failed=Boolean(v.error)||!v.verdict;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:ctx.task?.id??null,task_key:ctx.task?.task_key??'s1_research_verdict',module_key:'research_verdict',status:failed?'PARTIAL':'COMPLETED',observation:{verdict:failed?'TOOL_FAILED':'VALID',summary:failed?'The verdict worker failed safely.':`Research verdict: ${v.verdict}${v.research_viability_score==null?'':` (${v.research_viability_score}/100)`}.`,output:v,evidence_ids:Array.isArray(v.evidence_ids)?v.evidence_ids:[],limitations:['The verdict is evidence-bounded and requires the founder checkpoint decision.'],retryable:failed,proposed_route:failed?'HUMAN_REVIEW':'OBSERVE_AND_UNLOCK'},correlation_id:ctx.correlation_id,test_mode:ctx.test_mode===true}}];"},
+      "parameters": {
+        "jsCode": "const v=$input.first()?.json??{};const ctx=$('Normalize Typed Route').first().json;const failed=Boolean(v.error)||!v.verdict;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:ctx.task?.id??null,task_key:ctx.task?.task_key??'s1_research_verdict',module_key:'research_verdict',status:failed?'PARTIAL':'COMPLETED',observation:{verdict:failed?'TOOL_FAILED':'VALID',summary:failed?'The verdict worker failed safely.':`Research verdict: ${v.verdict}${v.research_viability_score==null?'':` (${v.research_viability_score}/100)`}.`,output:v,evidence_ids:Array.isArray(v.evidence_ids)?v.evidence_ids:[],limitations:['The verdict is evidence-bounded and requires the founder checkpoint decision.'],retryable:failed,proposed_route:failed?'HUMAN_REVIEW':'OBSERVE_AND_UNLOCK'},correlation_id:ctx.correlation_id,test_mode:ctx.test_mode===true}}];"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000112",
       "name": "Wrap Verdict as Typed Observation",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1000, 0]
+      "position": [
+        1000,
+        0
+      ]
     },
     {
-      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"f8c90101-0160-4060-8060-0de016000154","leftValue":"={{ $json.module_key === 'final_blueprint' }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f8c90101-0160-4060-8060-0de016000154",
+              "leftValue": "={{ $json.module_key === 'final_blueprint' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "f8c90101-0160-4060-8060-0de016000113",
       "name": "Research Blueprint Route?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [520, 220]
+      "position": [
+        520,
+        220
+      ]
     },
     {
-      "parameters": {"source":"database","workflowId":{"__rl":true,"value":"bpSynth01ResearchBlueprint","mode":"id"},"mode":"each","options":{"waitForSubWorkflow":true}},
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpSynth01ResearchBlueprint",
+          "mode": "id"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
       "id": "f8c90101-0160-4060-8060-0de016000114",
       "name": "Run Research Blueprint Synthesis",
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
-      "position": [780, 180],
+      "position": [
+        780,
+        180
+      ],
       "onError": "continueRegularOutput"
     },
     {
-      "parameters": {"jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task?.id??null,task_key:x.task?.task_key??'',module_key:x.module_key,status:'SAFE_FAILED',observation:{verdict:'POLICY_DENIED',summary:'No allowlisted Stage 1 worker adapter exists for this module.',output:{supported_modules:['foundation','customer_demand','competitor_intelligence','market_economics','evidence_audit','research_verdict','final_blueprint']},evidence_ids:[],limitations:['Nothing was executed outside the router boundary.'],retryable:false,proposed_route:'SUPERVISOR_REPLAN'},correlation_id:x.correlation_id,test_mode:x.test_mode===true}}];"},
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task?.id??null,task_key:x.task?.task_key??'',module_key:x.module_key,status:'SAFE_FAILED',observation:{verdict:'POLICY_DENIED',summary:'No allowlisted Stage 1 worker adapter exists for this module.',output:{supported_modules:['foundation','customer_demand','competitor_intelligence','market_economics','evidence_audit','research_verdict','final_blueprint']},evidence_ids:[],limitations:['Nothing was executed outside the router boundary.'],retryable:false,proposed_route:'SUPERVISOR_REPLAN'},correlation_id:x.correlation_id,test_mode:x.test_mode===true}}];"
+      },
       "id": "f8c90101-0160-4060-8060-0de016000115",
       "name": "Refuse Unknown Worker Route",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [780, 340]
+      "position": [
+        780,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f9a6023b-6b35-5bee-8557-8b978665062f",
+              "leftValue": "={{ ['assumptions_risks','offer_pricing','validation_proof','operating_model','financial_readiness','execution_readiness','launch_distribution','growth_optimization','action_blueprint'].includes($json.module_key) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "47c984e1-bd70-5189-afdf-ce7ff2eb87b7",
+      "name": "Stage 2 or 3 Advisory Route?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        540,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpStage23Advisory01",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "5080ad42-3fab-57d3-8243-46c68201f0a7",
+      "name": "Run Stage 2 or 3 Advisory Worker",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        780,
+        220
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
-    "Run Router Test": {"main": [[{"node":"Create Safe Router Fixture","type":"main","index":0}]]},
-    "Create Safe Router Fixture": {"main": [[{"node":"Normalize Typed Route","type":"main","index":0}]]},
-    "When Called by Scheduler": {"main": [[{"node":"Normalize Typed Route","type":"main","index":0}]]},
-    "Normalize Typed Route": {"main": [[{"node":"Research Specialist Route?","type":"main","index":0}]]},
-    "Research Specialist Route?": {"main": [[{"node":"Run Bounded Research Specialist","type":"main","index":0}], [{"node":"Evidence Auditor Route?","type":"main","index":0}]]},
-    "Evidence Auditor Route?": {"main": [[{"node":"Run Independent Evidence Auditor","type":"main","index":0}], [{"node":"Research Verdict Route?","type":"main","index":0}]]},
-    "Research Verdict Route?": {"main": [[{"node":"Bind Audited Verdict Input","type":"main","index":0}], [{"node":"Research Blueprint Route?","type":"main","index":0}]]},
-    "Bind Audited Verdict Input": {"main": [[{"node":"Run Deterministic Verdict Gate","type":"main","index":0}]]},
-    "Run Deterministic Verdict Gate": {"main": [[{"node":"Wrap Verdict as Typed Observation","type":"main","index":0}]]},
-    "Research Blueprint Route?": {"main": [[{"node":"Run Research Blueprint Synthesis","type":"main","index":0}], [{"node":"Refuse Unknown Worker Route","type":"main","index":0}]]}
+    "Run Router Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Router Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Router Fixture": {
+      "main": [
+        [
+          {
+            "node": "Normalize Typed Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Scheduler": {
+      "main": [
+        [
+          {
+            "node": "Normalize Typed Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Typed Route": {
+      "main": [
+        [
+          {
+            "node": "Research Specialist Route?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Specialist Route?": {
+      "main": [
+        [
+          {
+            "node": "Run Bounded Research Specialist",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Evidence Auditor Route?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evidence Auditor Route?": {
+      "main": [
+        [
+          {
+            "node": "Run Independent Evidence Auditor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Research Verdict Route?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Verdict Route?": {
+      "main": [
+        [
+          {
+            "node": "Bind Audited Verdict Input",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Research Blueprint Route?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bind Audited Verdict Input": {
+      "main": [
+        [
+          {
+            "node": "Run Deterministic Verdict Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Deterministic Verdict Gate": {
+      "main": [
+        [
+          {
+            "node": "Wrap Verdict as Typed Observation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Blueprint Route?": {
+      "main": [
+        [
+          {
+            "node": "Run Research Blueprint Synthesis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stage 2 or 3 Advisory Route?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage 2 or 3 Advisory Route?": {
+      "main": [
+        [
+          {
+            "node": "Run Stage 2 or 3 Advisory Worker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Refuse Unknown Worker Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
   "pinData": {},
   "active": false,
-  "settings": {"executionOrder":"v1","timezone":"Asia/Calcutta","errorWorkflow":"bp90ErrorAudit01","executionTimeout":120},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 120
+  },
   "versionId": "f8c90101-0160-4060-8060-0de016000199",
-  "meta": {"templateCredsSetupCompleted": true},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "id": "bpStage1Router01",
   "tags": []
 }
