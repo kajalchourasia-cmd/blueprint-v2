@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import re
+from datetime import datetime, timezone
 from typing import Any
 
 import streamlit as st
@@ -11,6 +12,7 @@ import streamlit as st
 from blueprint.backend import (
     BackendError, ask_research, hydrate_current_run, make_idempotency_key,
     preview_research_rerun, resolve_founder_checkpoint, resolve_research_rerun,
+    resume_stalled_run,
 )
 
 STAGES = [
@@ -383,9 +385,67 @@ def _render_output(key: str, output: dict, checkpoint: dict | None) -> None:
         st.info("This older run has only a thin foundation. The research-quality pass will add the problem hypothesis, target-user boundary, founder constraints, riskiest assumptions, and unresolved unknowns.")
 
 
-def _render_empty(key: str, state: tuple[str, str]) -> None:
+def _running_age_seconds(task: dict | None) -> int | None:
+    if not task:
+        return None
+    raw = task.get("updated_at") or task.get("started_at")
+    if not raw:
+        return None
+    try:
+        stamp = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=timezone.utc)
+        return max(0, round((datetime.now(timezone.utc) - stamp).total_seconds()))
+    except (TypeError, ValueError):
+        return None
+
+
+def _recover_expired_task(tasks: dict[str, dict], bundle: dict) -> None:
+    now = datetime.now(timezone.utc).timestamp()
+    attempts = st.session_state.setdefault("bp_stale_recovery_attempts", {})
+    for task in tasks.values():
+        if str(task.get("status") or "").upper() != "RUNNING":
+            continue
+        age = _running_age_seconds(task)
+        if age is None or age < 180:
+            continue
+        recovery_key = f"{task.get('id')}:{task.get('attempt_count', 0)}"
+        if now - float(attempts.get(recovery_key) or 0) < 60:
+            return
+        attempts[recovery_key] = now
+        try:
+            result = resume_stalled_run(bundle)
+        except BackendError as exc:
+            st.session_state["bp_recovery_notice"] = str(exc)
+            return
+        st.session_state["bp_recovery_notice"] = str(result.get("message") or "Blueprint restarted the expired task safely.")
+        st.session_state.pop("backend_bundle", None)
+        st.session_state["backend_last_refresh_at"] = 0
+        st.rerun()
+        return
+
+
+def _render_empty(key: str, state: tuple[str, str], task: dict | None = None) -> None:
     if state[0] == "running":
-        st.markdown('<div class="state-banner"><div class="state-spinner"></div><div><b>Research is running</b><span>Blueprint is gathering, auditing, and reconciling evidence. Accepted results will appear here automatically.</span></div></div>', unsafe_allow_html=True); return
+        age = _running_age_seconds(task)
+        if key == "foundation":
+            title = "Structuring your Foundation"
+            detail = "Blueprint is converting your onboarding answers into the problem, audience, constraints, assumptions, risks, and unknowns. No web search is required."
+        elif key in {"customer_demand", "competitor_intelligence", "market_economics"}:
+            title = f"{LABELS[key]} is running"
+            detail = "The specialist is collecting bounded web evidence, producing structured findings, and returning them for evidence audit."
+        elif key == "evidence_audit":
+            title = "Evidence Audit is running"
+            detail = "The auditor is checking source coverage, citations, contradictions, and unsupported claims before they can influence the verdict."
+        else:
+            title = f"{LABELS[key]} is running"
+            detail = "Blueprint is completing this bounded step and persisting the result."
+        if age is not None and age >= 180:
+            title = "This task stopped reporting progress"
+            detail = "The task lease has expired. Blueprint will recover it for a bounded retry instead of leaving this screen running forever."
+        elapsed = f'<small>Last task update: {age // 60}m {age % 60:02d}s ago</small>' if age is not None else ""
+        st.markdown(f'<div class="state-banner"><div class="state-spinner"></div><div><b>{html.escape(title)}</b><span>{html.escape(detail)}</span>{elapsed}</div></div>', unsafe_allow_html=True)
+        return
     stage = _stage_number(key)
     message = "The Supervisor has queued this specialist and will start it when its dependencies are ready." if state[0] == "ready" else "The failed output was not promoted. Open Background process for the safe next route." if state[0] == "error" else "Stage 1 must finish first. Open Research Verdict, review why it was reached, then choose a founder decision to unlock Stage 2." if stage == 2 else "Stage 2 evidence and Gate 2 approval are required before this advisory action blueprint can be created." if stage == 3 else "This stream has not started. If selected during onboarding, the Supervisor will schedule it automatically."
     st.markdown(f'<div class="empty-state"><div><b>{html.escape(state[1])}</b><p>{html.escape(message)}</p></div></div>', unsafe_allow_html=True)
@@ -629,6 +689,7 @@ def _workspace_body() -> None:
     try: bundle = hydrate_current_run(force=True) or {}
     except BackendError as exc: st.error(str(exc)); st.caption("Completed data remains in Supabase. Blueprint will retry automatically."); return
     context = _dict(bundle.get("research_context")); dashboard = _dict(bundle.get("blueprint")); artifact = _dict(_dict(dashboard.get("current_version")).get("blueprint")); tasks = _task_map(bundle); control = _dict(bundle.get("control_panel"))
+    _recover_expired_task(tasks, bundle)
     checkpoints = [item for item in _items(control.get("panel_items")) if isinstance(item, dict) and item.get("item_type") == "HUMAN_CHECKPOINT"]; checkpoint = checkpoints[0] if checkpoints else None
     verdicts = [item for item in _items(dashboard.get("latest_verdicts")) if isinstance(item, dict)]; dashboard_verdict = next((item for item in verdicts if item.get("gate") == "RESEARCH_VERDICT"), {}); latest_verdict = _dict(context.get("latest_verdict")) or dashboard_verdict
     gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
@@ -656,9 +717,11 @@ def _workspace_body() -> None:
             st.markdown('<div class="bp-live-spacer"></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="bp-project-title">{html.escape(title)}</div><div class="bp-goal">{html.escape(_goal_line(context))}</div>', unsafe_allow_html=True)
             _render_kpi_strip(score, coverage, risks, completion, risk_items)
+            if recovery_notice := st.session_state.pop("bp_recovery_notice", None):
+                st.info(str(recovery_notice))
             if notice := st.session_state.pop("bp_transition_notice", None): st.success(str(notice))
             st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)} · {html.escape(state[1])}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
-            _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state); _render_chat(selected, output, state)
+            _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state, task); _render_chat(selected, output, state)
     with right:
         with st.container(key="bp_right_rail"):
             _render_companion(selected, task, output, sources, workspace_actions)

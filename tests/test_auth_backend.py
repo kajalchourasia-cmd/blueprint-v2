@@ -13,6 +13,7 @@ from blueprint.backend import (
     preview_research_rerun,
     resolve_research_rerun,
     resolve_founder_checkpoint,
+    resume_stalled_run,
     start_blueprint,
 )
 from blueprint.config import AppConfig
@@ -188,6 +189,32 @@ class BackendContractTests(unittest.TestCase):
         self.assertEqual(result["status"], "PLANNING")
         self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/checkpoint")
         self.assertEqual(request.call_args.kwargs["json"]["requested_research"], ["customer_demand", "competitor_intelligence", "market_economics"])
+
+    def test_stalled_run_recovery_resumes_the_same_durable_run(self):
+        response = FakeResponse(202, {"ok": True, "status": "RECOVERY_DISPATCHED", "run_id": "run-1"})
+        state = {"backend_project_id": "project-1", "backend_run_id": "run-1", "idea": "A founder evidence workspace"}
+        bundle = {
+            "research_context": {
+                "project": {"idea_text": "A founder evidence workspace"},
+                "orchestration_tasks": [
+                    {"module_key": "foundation", "profile_version": 3},
+                    {"module_key": "customer_demand", "profile_version": 3},
+                    {"module_key": "competitor_intelligence", "profile_version": 3},
+                    {"module_key": "market_economics", "profile_version": 3},
+                ],
+            }
+        }
+        with patch("blueprint.backend.st.session_state", state), patch(
+            "blueprint.backend._authenticated_request", return_value=response
+        ) as request:
+            result = resume_stalled_run(bundle, CONFIG)
+
+        self.assertEqual(result["status"], "RECOVERY_DISPATCHED")
+        self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/resume")
+        payload = request.call_args.kwargs["json"]
+        self.assertEqual(payload["run_id"], "run-1")
+        self.assertEqual(payload["profile_version"], 3)
+        self.assertEqual(set(payload["requested_research"]), {"customer_demand", "competitor_intelligence", "market_economics"})
 
     def test_rerun_is_preview_then_explicit_resolution(self):
         preview_response = FakeResponse(200, {"ok": True, "status": "NEEDS_CONFIRMATION", "rerun_request_id": "rr-1"})

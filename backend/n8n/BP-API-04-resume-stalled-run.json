@@ -1,0 +1,105 @@
+{
+  "name": "BP-API-04 Resume Stalled Run",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "blueprint/resume", "responseMode": "responseNode", "options": {}},
+      "id": "b1a60401-0140-4010-8010-0de012000101",
+      "name": "POST Blueprint Resume",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-880, 0],
+      "webhookId": "bp-api-04-resume-stalled-run"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw=$input.first()?.json??{};let b=raw.body??raw;if(typeof b==='string'){try{b=JSON.parse(b)}catch{b={}}}const h=Object.fromEntries(Object.entries(raw.headers??{}).map(([k,v])=>[String(k).toLowerCase(),v]));const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(h.authorization??'').trim();const aliases={user_research:'customer_demand',customer_research:'customer_demand',customer_demand:'customer_demand',competitor_research:'competitor_intelligence',competitor_intelligence:'competitor_intelligence',market_research:'market_economics',market_economics:'market_economics'};const requested=[...new Set((Array.isArray(b.requested_research)?b.requested_research:['customer_demand','competitor_intelligence','market_economics']).map(v=>aliases[String(v).toLowerCase()]).filter(Boolean))];const valid=/^Bearer\\s+\\S+$/i.test(authorization)&&uuid.test(String(b.project_id??''))&&uuid.test(String(b.run_id??''))&&Number(b.profile_version)>0&&requested.length>0;return [{json:{valid,status_code:/^Bearer\\s+\\S+$/i.test(authorization)?400:401,authorization,project_id:b.project_id??null,run_id:b.run_id??null,profile_version:Number(b.profile_version??0),requested_research:requested,idea_text:String(b.idea_text??''),correlation_id:String(h['x-correlation-id']??b.correlation_id??`bp-resume-${Date.now()}`).slice(0,200)}}];"
+      },
+      "id": "b1a60401-0140-4010-8010-0de012000102",
+      "name": "Validate Resume Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-660, 0]
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60401-0140-4010-8010-0de012000201", "leftValue": "={{ $json.valid }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"}, "options": {}},
+      "id": "b1a60401-0140-4010-8010-0de012000103",
+      "name": "Resume Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-430, 0]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ JSON.stringify({ok:false,error_code:$json.status_code===401?'UNAUTHENTICATED':'INVALID_RESUME_REQUEST',message:$json.status_code===401?'The private Blueprint session is missing or expired.':'The stalled-run recovery request is incomplete.'}) }}", "options": {"responseCode": "={{ $json.status_code }}", "responseHeaders": {"entries": [{"name": "Content-Type", "value": "application/json"}]}}},
+      "id": "b1a60401-0140-4010-8010-0de012000104",
+      "name": "Respond Invalid Resume",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [-170, 170]
+    },
+    {
+      "parameters": {"url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/user", "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth", "sendHeaders": true, "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $('Validate Resume Request').item.json.authorization }}"}]}, "options": {"timeout": 15000}},
+      "id": "b1a60401-0140-4010-8010-0de012000105",
+      "name": "Verify Resume Supabase User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [-170, -80],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60401-0140-4010-8010-0de012000202", "leftValue": "={{ Boolean($json.id) }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"}, "options": {}},
+      "id": "b1a60401-0140-4010-8010-0de012000106",
+      "name": "Resume User Authenticated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [70, -80]
+    },
+    {
+      "parameters": {"jsCode": "const x=$('Validate Resume Request').first().json;const u=$input.first()?.json??{};return [{json:{command:'RESUME',authorization:x.authorization,owner_id:u.id,project_id:x.project_id,run_id:x.run_id,profile_version:x.profile_version,idea_text:x.idea_text,requested_research:x.requested_research,planning_mode:'DISCOVER',controller_cycle:0,correlation_id:x.correlation_id,test_mode:false,recovery_reason:'EXPIRED_TASK_LEASE'}}];"},
+      "id": "b1a60401-0140-4010-8010-0de012000107",
+      "name": "Prepare Safe Supervisor Resume",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [310, -150]
+    },
+    {
+      "parameters": {"source": "database", "workflowId": {"__rl": true, "value": "bp00Supervisor", "mode": "id"}, "mode": "once", "options": {"waitForSubWorkflow": false}},
+      "id": "b1a60401-0140-4010-8010-0de012000108",
+      "name": "Resume BP-00 Supervisor",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [550, -150]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ JSON.stringify({ok:true,status:'RECOVERY_DISPATCHED',run_id:$json.run_id,poll_after_ms:2000,correlation_id:$json.correlation_id,message:'The expired task lease was returned to the Supervisor for a bounded recovery.'}) }}", "options": {"responseCode": 202, "responseHeaders": {"entries": [{"name": "Content-Type", "value": "application/json"}]}}},
+      "id": "b1a60401-0140-4010-8010-0de012000109",
+      "name": "Respond Recovery Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [550, 10]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ JSON.stringify({ok:false,error_code:'UNAUTHENTICATED',message:'The private Blueprint session is invalid or expired.'}) }}", "options": {"responseCode": 401, "responseHeaders": {"entries": [{"name": "Content-Type", "value": "application/json"}]}}},
+      "id": "b1a60401-0140-4010-8010-0de012000110",
+      "name": "Respond Invalid Resume Session",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [310, 90]
+    }
+  ],
+  "connections": {
+    "POST Blueprint Resume": {"main": [[{"node": "Validate Resume Request", "type": "main", "index": 0}]]},
+    "Validate Resume Request": {"main": [[{"node": "Resume Request Valid?", "type": "main", "index": 0}]]},
+    "Resume Request Valid?": {"main": [[{"node": "Verify Resume Supabase User", "type": "main", "index": 0}], [{"node": "Respond Invalid Resume", "type": "main", "index": 0}]]},
+    "Verify Resume Supabase User": {"main": [[{"node": "Resume User Authenticated?", "type": "main", "index": 0}]]},
+    "Resume User Authenticated?": {"main": [[{"node": "Prepare Safe Supervisor Resume", "type": "main", "index": 0}], [{"node": "Respond Invalid Resume Session", "type": "main", "index": 0}]]},
+    "Prepare Safe Supervisor Resume": {"main": [[{"node": "Resume BP-00 Supervisor", "type": "main", "index": 0}, {"node": "Respond Recovery Accepted", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": true,
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 60},
+  "versionId": "b1a60401-0140-4010-8010-0de012000199",
+  "meta": {"templateCredsSetupCompleted": true},
+  "id": "bpApi04ResumeStalledRun",
+  "tags": []
+}

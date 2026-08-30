@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -6,6 +7,7 @@ from blueprint.workspace_ui import (
     _local_chat_answer,
     _open_workspace_view,
     _project_title,
+    _running_age_seconds,
     _return_to_workspace,
 )
 
@@ -61,6 +63,21 @@ class WorkspaceTitleTests(unittest.TestCase):
         )
 
         self.assertLessEqual(len(title.split()), 5)
+
+
+class WorkspaceRunningStateTests(unittest.TestCase):
+    def test_running_age_uses_the_latest_durable_task_timestamp(self):
+        stamp = (datetime.now(timezone.utc) - timedelta(seconds=215)).isoformat()
+
+        age = _running_age_seconds({"updated_at": stamp})
+
+        self.assertIsNotNone(age)
+        self.assertGreaterEqual(age, 210)
+        self.assertLess(age, 225)
+
+    def test_running_age_is_unknown_for_missing_or_malformed_state(self):
+        self.assertIsNone(_running_age_seconds(None))
+        self.assertIsNone(_running_age_seconds({"updated_at": "not-a-timestamp"}))
 
 
 class WorkspaceNavigationTests(unittest.TestCase):

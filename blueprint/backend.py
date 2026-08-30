@@ -270,6 +270,36 @@ def hydrate_current_run(*, force: bool = False, max_age_seconds: int = 3) -> dic
     return bundle
 
 
+def resume_stalled_run(bundle: dict[str, Any] | None = None, config: AppConfig | None = None) -> dict[str, Any]:
+    """Return an expired internal task lease to BP-00 without creating a new run."""
+    config = config or load_config()
+    bundle = bundle or st.session_state.get("backend_bundle") or {}
+    context = bundle.get("research_context") or {}
+    project = context.get("project") or {}
+    tasks = [task for task in (context.get("orchestration_tasks") or []) if isinstance(task, dict)]
+    profile_versions = [int(task.get("profile_version") or 0) for task in tasks]
+    selected = [
+        str(task.get("module_key"))
+        for task in tasks
+        if str(task.get("module_key")) in RESEARCH_MODULES.values()
+    ]
+    payload = {
+        "project_id": st.session_state.get("backend_project_id"),
+        "run_id": st.session_state.get("backend_run_id"),
+        "profile_version": max(profile_versions or [1]),
+        "idea_text": project.get("idea_text") or st.session_state.get("idea", ""),
+        "requested_research": normalize_research_selection(selected),
+        "correlation_id": f"streamlit-stale-recovery-{uuid.uuid4()}",
+    }
+    response = _authenticated_request(
+        "POST", _n8n_webhook(config, "resume"), config=config, json=payload
+    )
+    body = _json_or_empty(response)
+    if response.status_code not in {200, 202} or not isinstance(body, dict) or not body.get("ok"):
+        raise _safe_error(response, "Blueprint could not recover the expired task lease safely.")
+    return body
+
+
 def resolve_founder_checkpoint(
     checkpoint_id: str,
     expected_state_version: int,
