@@ -76,7 +76,7 @@
 <rect x="315" y="865" width="264" height="42" rx="21" fill="#E8F2ED" stroke="#E8F2ED" stroke-width="1"/>
 <text x="332" y="893" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#176447">22 Supabase migrations</text>
 <rect x="620" y="865" width="183" height="42" rx="21" fill="#F1EDF8" stroke="#F1EDF8" stroke-width="1"/>
-<text x="637" y="893" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#6D5AA6">35 Python tests</text>
+<text x="637" y="893" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#6D5AA6">39 Python tests</text>
 <rect x="875" y="865" width="234" height="42" rx="21" fill="#FBF3DD" stroke="#FBF3DD" stroke-width="1"/>
 <text x="892" y="893" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#9A6A14">85 agentic eval cases</text>
 <rect x="1190" y="865" width="161" height="42" rx="21" fill="#E8F2ED" stroke="#E8F2ED" stroke-width="1"/>

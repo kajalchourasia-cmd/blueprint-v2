@@ -222,7 +222,7 @@ def project_canvas() -> None:
             f.arrow_between(xx + 320, 700, xx + 348, 700)
     f.pill(70, 865, "27 n8n workflows", BLUE_SOFT, BLUE)
     f.pill(315, 865, "22 Supabase migrations", GREEN_SOFT, GREEN)
-    f.pill(620, 865, "35 Python tests", VIOLET_SOFT, VIOLET)
+    f.pill(620, 865, "39 Python tests", VIOLET_SOFT, VIOLET)
     f.pill(875, 865, "85 agentic eval cases", AMBER_SOFT, AMBER)
     f.pill(1190, 865, "Human gates", GREEN_SOFT, GREEN)
     f.pill(1400, 865, "Fail-closed evidence", RED_SOFT, RED)
@@ -396,7 +396,7 @@ def failure_flow() -> None:
 
 def evaluation_flow() -> None:
     f = Figure("Evaluation, Observability and Release Gates", "Blueprint measures workflow completion, grounding and recovery—not a single attractive answer")
-    f.card(70, 230, 400, 220, "Contract tests", "35 Python tests for auth, API boundaries, deterministic Foundation, navigation, titles and grounded chat fallbacks.", GREEN_SOFT, GREEN)
+    f.card(70, 230, 400, 220, "Contract tests", "39 Python tests for auth, API boundaries, deterministic Foundation, navigation, research quality and grounded chat fallbacks.", GREEN_SOFT, GREEN)
     f.card(500, 230, 400, 220, "Workflow structure", "Node IDs, connection targets, code syntax, error bindings, secret scanning and schema contracts.", WHITE, LINE)
     f.card(930, 230, 400, 220, "Agentic eval suite", "85 cases across scope, security, routing, state, HITL, grounding, memory, reruns, budgets and failures.", VIOLET_SOFT, VIOLET)
     f.card(1360, 230, 490, 220, "Live acceptance", "Fresh owner-scoped run, partial visibility, gate resume, unhappy path, state restoration and second-user isolation.", BLUE_SOFT, BLUE)
@@ -405,7 +405,7 @@ def evaluation_flow() -> None:
     f.card(230, 825, 440, 130, "Release gate 1", "No unsupported claim affects a verdict.", WHITE, AMBER)
     f.card(740, 825, 440, 130, "Release gate 2", "No write or stage advance bypasses HITL.", WHITE, GREEN)
     f.card(1250, 825, 440, 130, "Release gate 3", "Happy and unhappy paths both terminate clearly.", WHITE, RED)
-    f.footer("Current automated acceptance after this documentation pass: 35/35 Python tests and 85/85 agentic eval cases.")
+    f.footer("Current automated acceptance: 39/39 Python, 11/11 workflow, 85/85 agentic and 21/21 closed-loop checks.")
     f.save("10-evaluation-observability")
 
 

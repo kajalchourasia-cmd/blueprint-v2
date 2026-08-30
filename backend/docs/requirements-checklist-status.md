@@ -17,7 +17,7 @@ Legend: **DONE** = implemented and evidenced; **READY LOCALLY** = complete for t
 | 9. Add human-in-the-loop | DONE | Gate 1, Gate 2, rerun impact confirmation, profile-change consequences, contradictions and transition-cap escalation. |
 | 10. Handle failures | DONE | Retry, repair, reload, partial completion, needs input, human review, policy denial and safe fail. |
 | 11. Add observability | DONE | Correlation/run/task identity, route reason, attempt, provider/model, latency/error/evidence outcome and terminal state without chain of thought. |
-| 12. Evaluate the system | DONE | 35/35 Python, 85/85 agentic regressions, 11/11 workflow structure and deterministic Foundation pass. |
+| 12. Evaluate the system | DONE | 39/39 Python, 85/85 agentic regressions, 21/21 closed-loop checks, 11/11 workflow structure and deterministic Foundation pass. |
 | 13. Prepare interface and output | DONE | No-login Streamlit workflow, visible state, detailed research, sources, actions, Full Blueprint, Financial Plan and section-scoped chat. |
 | 14. Prepare submission assets | DONE | README, architecture pack, DOCX/PDF submission, demo runbook, transcript, limitations and repository handoff. |
 | Public hosting | READY LOCALLY | Requires stable public HTTPS n8n endpoint before Streamlit Cloud can use the live orchestrator. |

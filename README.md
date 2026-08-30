@@ -117,6 +117,13 @@ Ask Blueprint is section-scoped and owner-scoped:
 
 Uploaded-document RAG and LlamaIndex ingestion are planned for V2; they are not represented as completed V1 functionality.
 
+## Research output contract
+
+- **Customer/User Research** explains how to find and screen the first participants, maps evidence-bounded personas and pain points, separates what alternatives already solve from gaps still to prove, and produces non-leading interview questions anchored in past behavior.
+- **Competitor Research** separates direct, indirect, service, manual and non-consumption alternatives; every profile identifies its core user, focus, geography, MVP, strengths, complaints, pricing boundary, gap and next validation test.
+- **Market Research** is secondary research. A market KPI is displayed only when its value or range, period, geography, interpretation and accepted evidence are all present; unsupported TAM, CAGR, revenue and conversion figures are withheld.
+- Every material signal, competitor, pain row, KPI and opportunity-gap row must reference accepted evidence IDs or the specialist result is routed to bounded repair.
+
 ## Human-in-the-loop and safety
 
 Reads are autonomous. These actions require explicit human approval:
@@ -189,7 +196,7 @@ node backend/scripts/verify-phase6b-workflows.js
 node backend/scripts/run-phase6-evals.js
 ```
 
-Current acceptance evidence is **35/35 Python tests**, **11/11 Phase 6B workflow-structure checks**, and **85/85 agentic regression cases**. The repository contains **27 importable n8n workflows** and **22 Supabase migrations**, plus deterministic agentic fixtures, planner branch tests, resilience injection and browser closed-loop checks. Release success means end-to-end task completion, not one impressive model response.
+Current acceptance evidence is **39/39 Python tests**, **11/11 Phase 6B workflow-structure checks**, **85/85 agentic regression cases**, and **21/21 closed-loop checks**. The repository contains **27 importable n8n workflows** and **22 Supabase migrations**, plus deterministic agentic fixtures, planner branch tests, resilience injection and browser closed-loop checks. Release success means end-to-end task completion, not one impressive model response.
 
 ## Current limitations
 
@@ -232,6 +239,7 @@ blueprint-v2/
 - [Submission document — PDF](docs/submission/Blueprint-Week-3-Submission.pdf)
 - [Information architecture](docs/information-architecture.md)
 - [Video transcript](docs/VIDEO-TRANSCRIPT.md)
+- [Evaluator review and 94/100 readiness score](docs/SUBMISSION-EVALUATOR-REVIEW.md)
 - [Walkthrough guide](docs/LOOM-WALKTHROUGH.md)
 
 ## Deployment path

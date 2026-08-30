@@ -17,12 +17,35 @@ from blueprint.workspace_ui import (
     _project_title,
     _running_age_seconds,
     _return_to_workspace,
+    _customer_recruitment_rows,
+    _pain_point_rows,
+    _market_kpi_rows,
+    _competitor_opportunity_rows,
     _safe_customer_finding,
     _safe_discovery_questions,
 )
 
 
 class WorkspaceChatFallbackTests(unittest.TestCase):
+    def test_customer_recruitment_plan_is_practical_and_screened(self):
+        rows = _customer_recruitment_rows({"first_user_channels": ["Dental association groups"]})
+        self.assertEqual("Dental association groups", rows[0]["where"])
+        self.assertIn("experienced the problem recently", rows[0]["screen"])
+
+    def test_pain_landscape_separates_current_solution_and_unmet_gap(self):
+        rows = _pain_point_rows({"pain_point_landscape": [{"pain": "Missed calls", "current_solution": "Voicemail", "unmet_gap": "Immediate qualification", "evidence_status": "Observed"}]})
+        self.assertEqual("Voicemail", rows[0]["current"])
+        self.assertEqual("Immediate qualification", rows[0]["gap"])
+
+    def test_market_kpi_requires_visible_scope_and_evidence(self):
+        rows = _market_kpi_rows({"market_kpis": [{"metric": "Digital adoption", "value": "42%", "period_geography": "India, 2025", "source": "EV-1"}]})
+        self.assertEqual("India, 2025", rows[0]["scope"])
+        self.assertEqual("EV-1", rows[0]["evidence"])
+
+    def test_competitor_gap_fallback_stays_a_hypothesis(self):
+        rows = _competitor_opportunity_rows({}, [{"gap": "Weak regional support", "core_user_group": "Small clinics"}])
+        self.assertIn("not yet a proven customer need", rows[0]["why"])
+
     def test_basic_foundation_question_has_plain_language_answer(self):
         answer = _local_chat_answer(
             "What is foundation?",

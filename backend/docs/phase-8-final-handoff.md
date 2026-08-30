@@ -43,8 +43,9 @@ All checkpoint decisions are owner-scoped, allowlisted and state-version checked
 
 ## Acceptance evidence
 
-- 35/35 Python tests pass.
+- 39/39 Python tests pass.
 - 85/85 agentic regression cases pass.
+- 21/21 closed-loop checks pass.
 - 11/11 Phase 6B workflow structural checks pass.
 - Deterministic Foundation contract passes.
 - All 27 n8n workflow JSON files parse; all connection targets resolve.

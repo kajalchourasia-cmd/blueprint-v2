@@ -34,7 +34,7 @@ For a short hackathon video, show the product first. Show n8n for no more than 1
 3. **Full Blueprint** — opened from that completed dashboard
 4. **Financial Plan** — opened from that completed dashboard
 5. **n8n Supervisor** — `BP-00` or the workflow list, with credentials and execution payloads hidden
-6. **Adaptive orchestration diagram** — `docs/figures/architecture/03-adaptive-orchestration-routing.png`
+6. **Adaptive orchestration diagram** — `docs/figures/architecture/04-adaptive-orchestration-routing.png`
 7. **Failure and human-gate diagram** — `docs/figures/architecture/09-failure-hitl-recovery.png`
 8. **GitHub README** — the final pushed commit, used only for the closing implementation summary
 
@@ -78,9 +78,9 @@ Why this works well for the demo:
 
 The last prior-work answer is important. It lets the Evidence Audit correctly state that the run contains desk research, not primary interviews or proven demand.
 
-## 5. Five-minute screen sequence
+## 5. Seven-to-eight-minute screen sequence
 
-### Scene 1 — The problem and promise (0:00–0:30)
+### Scene 1 — The problem and promise (0:00–0:45)
 
 Open the landing page.
 
@@ -90,7 +90,7 @@ Say:
 
 Point briefly to “Turn the unfinished idea into your next provable move” and the uncertainty-to-evidence visual.
 
-### Scene 2 — Founder context and task completion (0:30–1:05)
+### Scene 2 — Founder context and task completion (0:45–1:25)
 
 Paste the demo idea, select the onboarding values above, and generate the Blueprint.
 
@@ -102,7 +102,7 @@ On the dedicated loading screen, say:
 
 > The start request is idempotent. Blueprint creates one owned project and one durable run, then hands the work to the n8n Supervisor.
 
-### Scene 3 — Immediate Foundation and adaptive routing (1:05–1:40)
+### Scene 3 — Immediate Foundation and adaptive routing (1:25–2:00)
 
 The dashboard should open on Foundation immediately.
 
@@ -122,7 +122,7 @@ If external research is not finished, switch to the pre-completed run and say:
 
 > The research continues asynchronously. For the rest of the demonstration I am opening the completed version of this same scenario so we can inspect the decisions rather than wait on provider latency.
 
-### Scene 4 — User Research, not fabricated interviews (1:40–2:20)
+### Scene 4 — User Research, not fabricated interviews (2:00–3:05)
 
 Open Customer Research.
 
@@ -135,6 +135,8 @@ Show:
 - Priority user personas;
 - user goals and current behaviour;
 - research objectives;
+- participant recruitment channels, outreach method, and screening criteria;
+- the pain-point landscape showing what alternatives solve today and what remains unproven;
 - questions for real customer conversations;
 - first-user recruitment channels;
 - willingness-to-pay status and the primary-research boundary;
@@ -142,11 +144,11 @@ Show:
 
 Ask Blueprint:
 
-> Turn these personas into a seven-question problem interview guide that avoids leading questions. Separate what we know from what the interviews still need to establish.
+> Which persona should I recruit first, where can I find five contrasting interviewees, and give me seven non-leading questions about the last time the problem occurred? Separate what we know from what interviews still need to establish.
 
 Expected behavior: a plain-language, section-grounded answer; no claim that interviews were already conducted; citations only when an external factual claim is used.
 
-### Scene 5 — Competitor and Market intelligence (2:20–3:05)
+### Scene 5 — Competitor and Market intelligence (3:05–4:05)
 
 Open Competitor Research.
 
@@ -157,11 +159,13 @@ Say:
 Show the comparison table and open two competitor profiles. Point to:
 
 - core offer and MVP;
+- core user group, primary job, focus, and geography;
 - what each competitor does well;
 - customer praise and complaints;
 - geography or India relevance;
 - pricing boundary;
 - the gap worth testing;
+- the opportunity-gap map and its next validation test;
 - what this research changes in the founder’s idea.
 
 Ask Blueprint:
@@ -170,9 +174,9 @@ Ask Blueprint:
 
 Then open Market Research and say:
 
-> Market Research is explicitly secondary research. It shows the current category, direction of travel, reachable beachhead, demand and adoption forces, constraints, fit and misalignment, and evidence-backed ranges. Unsupported TAM, CAGR, revenue, conversion, and willingness-to-pay numbers are withheld.
+> Market Research is explicitly secondary research. It shows the current category, direction of travel, reachable beachhead, demand and adoption forces, constraints, fit and misalignment, and attributable market KPIs. Every KPI needs a value, period, geography, interpretation, and accepted evidence. Unsupported TAM, CAGR, revenue, conversion, and willingness-to-pay numbers are withheld.
 
-### Scene 6 — Independent audit, verdict, and human gate (3:05–3:45)
+### Scene 6 — Independent audit, verdict, and human gate (4:05–5:05)
 
 Open Evidence Audit and then Research Verdict.
 
@@ -188,7 +192,7 @@ Say:
 
 Select the appropriate improvements and choose “Run focused validation first” or “Continue to Stage 2,” depending on the live verdict. Start Stage 2.
 
-### Scene 7 — Progressive Blueprint and financial boundary (3:45–4:15)
+### Scene 7 — Progressive Blueprint and financial boundary (5:05–5:50)
 
 Open Full Blueprint.
 
@@ -204,7 +208,7 @@ Say:
 
 Return to the dashboard to demonstrate state preservation.
 
-### Scene 8 — Guarded unhappy path (4:15–4:45)
+### Scene 8 — Guarded unhappy path (5:50–6:45)
 
 In a completed section’s Ask Blueprint box, enter:
 
@@ -226,7 +230,7 @@ Optional trust-boundary demonstration, if time permits, ask:
 
 Expected behavior: Blueprint refuses the request without retrieving project evidence or calling the answer model, explains that prompts, credentials, private traces, and cross-owner data are protected, and offers a safe public architecture summary instead.
 
-### Scene 9 — Close (4:45–5:00)
+### Scene 9 — Architecture, evaluation, and close (6:45–7:30)
 
 Say:
 

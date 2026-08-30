@@ -25,8 +25,9 @@ Blueprint V1 is complete for local judging and final handoff. The no-login Strea
 
 | Gate | Result |
 |---|---:|
-| Python contracts and UI logic | 35/35 pass |
+| Python contracts and UI logic | 39/39 pass |
 | Agentic regression cases | 85/85 pass |
+| Closed-loop checks | 21/21 pass |
 | Phase 6B workflow structure | 11/11 pass |
 | Deterministic Foundation contract | Pass |
 | Workflow JSON parse and connection audit | Pass |

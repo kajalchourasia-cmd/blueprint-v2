@@ -537,6 +537,85 @@ def _safe_discovery_questions(output: dict) -> list[str]:
     return safe[:9]
 
 
+def _customer_recruitment_rows(output: dict) -> list[dict]:
+    """Normalise a practical first-customer recruitment plan for display."""
+    rows: list[dict] = []
+    raw = _items(output.get("customer_recruitment_playbook")) or _items(output.get("first_user_channels"))
+    for index, value in enumerate(raw[:8], 1):
+        item = _dict(value)
+        rows.append({
+            "where": _field_text(item, "where", "channel", "community", "source", fallback=_item_text(value)),
+            "who": _field_text(item, "who", "persona", "target_user", "segment", fallback="A priority persona from this research"),
+            "approach": _field_text(item, "approach", "outreach", "how_to_reach", fallback="Ask for a short problem-learning conversation; do not pitch the solution."),
+            "screen": _field_text(item, "screening_criteria", "screen", "qualifier", fallback="They experienced the problem recently and can describe what they did."),
+        })
+    if rows:
+        return rows
+    return [
+        {"where": "Professional communities and role-specific groups", "who": "People matching the priority persona", "approach": "Ask moderators or peers for introductions to people who experienced the problem recently.", "screen": "Recent experience, current workaround, and decision involvement."},
+        {"where": "Competitor review communities", "who": "Users actively evaluating or replacing alternatives", "approach": "Recruit for a neutral workflow interview; never scrape or message private identities without permission.", "screen": "A recent switch, complaint, cancellation, or workaround."},
+        {"where": "Founder network and warm referrals", "who": "Contrasting users—not only supportive friends", "approach": "Request one introduction after each interview and deliberately include skeptics.", "screen": "Matches the segment but has no obligation to endorse the idea."},
+    ]
+
+
+def _pain_point_rows(output: dict) -> list[dict]:
+    """Separate observed pain, current solution, and the opportunity still to test."""
+    raw = _items(output.get("pain_point_landscape")) or _items(output.get("pain_signals") or output.get("pains"))
+    rows: list[dict] = []
+    for index, value in enumerate(raw[:10], 1):
+        item = _dict(value)
+        rows.append({
+            "pain": _field_text(item, "pain", "problem", "signal", "claim", fallback=_item_text(value)),
+            "current": _field_text(item, "current_solution", "current_alternative", "competitor_response", "workaround", fallback="Not established"),
+            "gap": _field_text(item, "unmet_gap", "fresh_gap", "opportunity", "what_remains", fallback="Requires direct validation"),
+            "evidence": _field_text(item, "evidence_status", "evidence", "confidence", fallback="Desk-research signal; validate frequency and impact."),
+        })
+    return rows
+
+
+def _market_kpi_rows(output: dict) -> list[dict]:
+    """Expose only attributable market metrics; absence remains visible."""
+    raw = _items(output.get("market_kpis"))
+    rows: list[dict] = []
+    for index, value in enumerate(raw[:10], 1):
+        item = _dict(value)
+        rows.append({
+            "metric": _field_text(item, "metric", "name", "measure", fallback=f"Metric {index}"),
+            "value": _field_text(item, "value", "range", "finding", fallback="Withheld"),
+            "scope": _field_text(item, "scope", "period_geography", "period", "geography", fallback="Scope not established"),
+            "meaning": _field_text(item, "interpretation", "why_it_matters", "meaning", fallback="Interpretation not established"),
+            "evidence": _field_text(item, "source", "evidence_id", "evidence_status", fallback="Source required"),
+        })
+    return rows
+
+
+def _competitor_opportunity_rows(output: dict, competitors: list[Any]) -> list[dict]:
+    """Create a compact opportunity map without converting gaps into facts."""
+    raw = _items(output.get("opportunity_gap_map"))
+    rows: list[dict] = []
+    for index, value in enumerate(raw[:8], 1):
+        item = _dict(value)
+        rows.append({
+            "user": _field_text(item, "underserved_user", "user", "segment", fallback="Priority user not established"),
+            "gap": _field_text(item, "gap", "pain", "unmet_need", fallback=_item_text(value)),
+            "why": _field_text(item, "why_gap_exists", "reason", "evidence", fallback="Why this gap persists still needs validation"),
+            "test": _field_text(item, "test", "validation_test", "next_test", fallback="Run a customer problem interview before changing the offer."),
+        })
+    if rows:
+        return rows
+    for value in competitors[:6]:
+        item = _dict(value)
+        gap = _field_text(item, "gap", "opportunity", fallback="")
+        if gap:
+            rows.append({
+                "user": _field_text(item, "core_user_group", "target_user", "customer_segment", fallback="User group not established"),
+                "gap": gap,
+                "why": "Inferred from the accepted competitor evidence; not yet a proven customer need.",
+                "test": _field_text(item, "validation_test", "next_test", fallback="Ask affected users how they handle this gap today and what changing would require."),
+            })
+    return rows
+
+
 def _render_evidence_boundary(text: str, *, tone: str = "evidence", title: str = "Evidence boundary") -> None:
     if not text:
         return
@@ -701,6 +780,11 @@ def _render_customer_research(output: dict) -> None:
         "Find behavioural or commitment evidence that can challenge the founder’s assumptions.",
     ])
     _render_personas(output)
+    _render_research_table(
+        "How to find the first research participants",
+        _customer_recruitment_rows(output),
+        [("where", "Where to find them"), ("who", "Who to recruit"), ("approach", "How to approach"), ("screen", "Screen for")],
+    )
     _render_list("Who appears to feel the problem most", output.get("customer_segments"))
     _render_report_pairs([
         ("Jobs they are trying to complete", output.get("jobs_to_be_done") or output.get("customer_jobs")),
@@ -715,13 +799,23 @@ def _render_customer_research(output: dict) -> None:
         _render_evidence_boundary(willingness_text, tone=tone, title="Willingness-to-pay status")
 
     _render_list("What users are signalling", output.get("observed_signals"))
+    pain_rows = _pain_point_rows(output)
+    _render_research_table(
+        "Pain-point landscape: solved, unsolved, and still to prove",
+        pain_rows,
+        [("pain", "Pain or job"), ("current", "How it is solved today"), ("gap", "Gap this idea could test"), ("evidence", "Evidence status")],
+    )
     _render_report_pairs([
         ("What users expect from a credible solution", output.get("user_expectations") or output.get("customer_expectations") or output.get("desired_outcomes")),
         ("Pain intensity or frequency", output.get("pain_signals") or output.get("problem_frequency") or output.get("pains")),
         ("Behaviour that indicates urgency", output.get("commitment_signals") or output.get("behaviour_signals")),
         ("What is still only an inference", output.get("inferences")),
     ])
-    _render_list("Questions for real customer conversations", _safe_discovery_questions(output))
+    _render_list("Customer interview guide: ask about the last real occurrence", _safe_discovery_questions(output))
+    _render_evidence_boundary(
+        "Interview in this order: establish context, reconstruct the last occurrence, quantify frequency and impact, inspect the current workaround, ask what they already tried, identify the buying decision, and only then discuss commitment. Avoid pitching, hypotheticals, and asking whether they like the idea.",
+        title="How to run the conversation",
+    )
     _render_list("Where the first users may be reachable", output.get("first_user_channels"))
     _render_report_pairs([
         ("Primary research method", output.get("primary_research_method") or output.get("primary_research_plan") or ["Run problem interviews with the priority personas before showing a solution.", "Capture exact past behaviour, frequency, current spend, workarounds, and the cost of doing nothing.", "Treat compliments and hypothetical intent as weak evidence; record commitments separately."]),
@@ -782,6 +876,20 @@ def _render_market_research(output: dict) -> None:
         ("Regulatory or operating constraints", output.get("regulatory_constraints")),
         ("Evidence-supported market signals", output.get("observed_signals")),
     ])
+
+    market_kpis = _market_kpi_rows(output)
+    if market_kpis:
+        _render_research_table(
+            "Attributable market indicators",
+            market_kpis,
+            [("metric", "Indicator"), ("value", "Supported value"), ("scope", "Period / geography"), ("meaning", "What it means"), ("evidence", "Evidence")],
+        )
+    else:
+        _render_evidence_boundary(
+            "No decision-grade market KPI survived the evidence boundary in this run. Blueprint withholds unsupported TAM, CAGR, revenue, and conversion figures rather than converting search snippets into false precision.",
+            tone="warning",
+            title="Market KPIs withheld",
+        )
 
     ranges = output.get("evidence_backed_ranges")
     range_rows: list[dict] = []
@@ -888,6 +996,7 @@ def _render_competitors(output: dict) -> None:
             rows.append({
                 "Competitor": item.get("name") or item.get("competitor") or "Unknown",
                 "Type": item.get("type") or item.get("category") or "Unclassified",
+                "Core user": _field_text(item, "core_user_group", "target_user", "customer_segment"),
                 "Core offer": _field_text(item, "core_offer", "mvp", "description"),
                 "What customers value": _field_text(item, "customer_praise", "strengths"),
                 "Gap worth testing": _field_text(item, "gap", "opportunity"),
@@ -901,7 +1010,7 @@ def _render_competitors(output: dict) -> None:
         _render_research_table(
             "Competitor landscape at a glance",
             rows,
-            [("Competitor", "Competitor"), ("Type", "Type"), ("Core offer", "Core offer"), ("What customers value", "What customers value"), ("Gap worth testing", "Gap worth testing")],
+            [("Competitor", "Competitor"), ("Type", "Type"), ("Core user", "Core user"), ("Core offer", "Core offer"), ("What customers value", "What customers value"), ("Gap worth testing", "Gap worth testing")],
         )
         st.markdown(
             '<aside class="report-callout"><small>How to read competitor type</small><p><b>Direct</b> means it solves substantially the same job for substantially the same buyer. <b>Indirect</b> solves the job differently. <b>Manual / service</b> is a human workaround, while <b>status quo</b> means doing nothing or continuing the current process.</p></aside>',
@@ -923,6 +1032,8 @@ def _render_competitors(output: dict) -> None:
             )
             attributes = (
                 ("What it is", _field_text(item, "core_offer", "description", "mvp")),
+                ("Who it is focused on", _field_text(item, "core_user_group", "target_user", "customer_segment")),
+                ("Primary job and positioning", _field_text(item, "primary_job", "focus", "positioning", "differentiator")),
                 ("What it does well", _field_text(item, "strengths", "customer_praise", "differentiator")),
                 ("Where customers struggle", _field_text(item, "weaknesses", "customer_complaints", "limitations")),
                 ("Pricing and commercial model", _field_text(item, "pricing", "pricing_model", "business_model")),
@@ -947,6 +1058,12 @@ def _render_competitors(output: dict) -> None:
             if text and text not in opportunities:
                 opportunities.append(text)
         opportunities.extend(_clean(output.get("contextual_actions") or output.get("recommendations")))
+        _render_research_table(
+            "Opportunity-gap map: what to test—not what to assume",
+            _competitor_opportunity_rows(output, competitors),
+            [("user", "Underserved user"), ("gap", "Observed / inferred gap"), ("why", "Why it may exist"), ("test", "Next validation test")],
+        )
+        _render_list("Positioning options to validate", output.get("positioning_options"))
         _render_list("How to sharpen your idea from this research", opportunities[:7])
         st.caption("Treat these as positioning hypotheses to validate with customers—not as proof of demand.")
     else:
