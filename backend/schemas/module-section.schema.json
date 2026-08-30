@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/module-section.schema.json",
+  "title": "Blueprint Detailed Module Section",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "section_key", "label", "status", "profile_version", "executive_finding", "content", "evidence_ids", "opposing_evidence_ids", "assumptions", "unknowns", "limitations", "open_questions", "next_actions", "rerun"],
+  "properties": {
+    "schema_version": { "const": "bp-module-section-v1" },
+    "section_key": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "label": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "status": { "enum": ["NOT_REQUESTED", "PLANNED", "BLOCKED", "READY", "RUNNING", "AGENT_DONE", "NEEDS_INPUT", "HUMAN_REVIEW", "COMPLETED", "PARTIAL", "STALE", "NOT_APPLICABLE", "SAFE_FAILED", "CANCELLED"] },
+    "profile_version": { "type": "integer", "minimum": 1 },
+    "executive_finding": { "type": ["string", "null"], "maxLength": 5000 },
+    "goal_relevance": { "type": ["string", "null"], "maxLength": 2000 },
+    "content": { "type": "object" },
+    "evidence_ids": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "opposing_evidence_ids": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "assumptions": { "type": "array", "items": { "type": "object" } },
+    "unknowns": { "type": "array", "items": { "type": "string", "maxLength": 2000 } },
+    "limitations": { "type": "array", "items": { "type": "string", "maxLength": 2000 } },
+    "open_questions": { "type": "array", "items": { "type": "string", "maxLength": 2000 } },
+    "next_actions": { "type": "array", "minItems": 0, "maxItems": 3, "items": { "$ref": "next-action.schema.json" } },
+    "dependencies": { "type": "array", "items": { "type": "string", "maxLength": 100 } },
+    "coverage": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "last_run_at": { "type": ["string", "null"], "format": "date-time" },
+    "rerun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "requires_confirmation"],
+      "properties": {
+        "eligible": { "type": "boolean" },
+        "requires_confirmation": { "const": true },
+        "blocked_reason": { "type": ["string", "null"], "maxLength": 1000 },
+        "endpoint": { "type": ["string", "null"], "maxLength": 500 }
+      }
+    }
+  }
+}

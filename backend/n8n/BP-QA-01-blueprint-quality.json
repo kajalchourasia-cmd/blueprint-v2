@@ -1,0 +1,421 @@
+{
+  "id": "bpQa01BlueprintQuality",
+  "name": "BP-QA-01 Blueprint Quality Gate",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "da041f3a-7501-5922-a755-c2c9e1fdbebe",
+      "name": "Run Quality Gate Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{blueprint:{schema_version:'bp-blueprint-v1',status:'PARTIAL',product_idea:'An evidence workspace for founders validating an existing idea.',starting_position:{idea_text:'An evidence workspace for founders validating an existing idea.'},dashboard:{completion_percent:65,open_assumptions:3,positive_signals:4,open_risks:2},executive_decision:{decision:'VALIDATE_NEXT',reason:'Directional evidence exists but payment proof is unknown.'},sections:[{section_key:'customer_demand',status:'AGENT_DONE',completion_percent:70,summary:{finding:'Founders report manual validation work.'},open_questions:['Will founders pay?'],evidence_ids:['ev-test-1']}],financial_plan:{limitations:['Scenario, not forecast.']},citations:[{evidence_id:'ev-test-1',source_url:'https://example.com/founder-research',excerpt:'Founders report manual validation work.',limitations:['Directional excerpt only.'],auditor_verdict:'ACCEPT_WITH_LIMITATION'}],next_route:'VALIDATION',limitations:['Willingness to pay remains unknown.']},revision_count:0,correlation_id:'bp-quality-safe-test',test_mode:true}}];"
+      },
+      "id": "46fb20e5-cb8b-56df-8996-ef48b3941d14",
+      "name": "Create Safe Quality Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "0696e22a-e311-5dc0-a7c4-496b9d4fee3a",
+      "name": "When Called for Blueprint Quality",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const b=src.blueprint??src;if(!b||typeof b!=='object'||Array.isArray(b))throw new Error('QUALITY_INPUT_MISSING_BLUEPRINT');const required=['schema_version','status','product_idea','starting_position','dashboard','sections','next_route'];const missing=required.filter(k=>b[k]==null);if(missing.length)throw new Error('QUALITY_SCHEMA_MISSING:'+missing.join(','));if(!Array.isArray(b.sections)||!Array.isArray(b.citations??[]))throw new Error('QUALITY_SCHEMA_ARRAYS');const revision=Math.max(0,Math.min(1,Number(src.revision_count??0)));return [{json:{blueprint:b,revision_count:revision,correlation_id:String(src.correlation_id??`bp-quality-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true}}];"
+      },
+      "id": "82deefb7-7788-5429-bf19-a0cd485ee746",
+      "name": "Validate Quality Contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const rubric={groundedness:'Every material factual statement is supported by an accepted citation or explicitly labelled assumption/unknown.',completeness:'Requested sections have a useful result or an explicit blocker/question.',consistency:'Sections, dashboard, decision and next route do not contradict each other.',actionability:'Next actions are specific, bounded and measurable.',assumption_hygiene:'Facts, calculations, recommendations, assumptions and unknowns are separated.',calculation_integrity:'Financial values are deterministic scenarios with inputs and limitations, never invented forecasts.',scope_compliance:'No messaging, publishing, buying, booking, paying, deleting or other external write is claimed.'};return [{json:{...x,request:{model:'openai/gpt-oss-120b',reasoning_effort:'low',temperature:0,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are Blueprint Final Quality Critic, independent from research and synthesis. Score the supplied Blueprint against every rubric item from 0 to 1. Return JSON with verdict PASS|REPAIR|FAIL|HUMAN_REVIEW, overall_score, rubric_scores with all seven named keys, failed_rules array, repair_instructions array, requires_human boolean, and critic_notes array. PASS requires overall_score >= 0.78, groundedness >= 0.80, assumption_hygiene >= 0.80, calculation_integrity >= 0.80, scope_compliance = 1, no unsupported high-stakes claim, and valid citations. REPAIR only when exact bounded edits can fix it. HUMAN_REVIEW is for contradictions or authority. Never reward confident prose.'},{role:'user',content:JSON.stringify({rubric,blueprint:x.blueprint})}]}}}];"
+      },
+      "id": "d7ee0c3e-c893-5f1e-8467-9eed139ec7cd",
+      "name": "Prepare Independent Blueprint Critic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "ef823811-0160-5397-939a-38e346031f19",
+      "name": "Nebius — Blueprint Quality Critic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -100,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Validate Quality Contract').first().json;const r=$input.first().json;const content=r.choices?.[0]?.message?.content;if(!content)throw new Error('QUALITY_CRITIC_EMPTY_OR_PROVIDER_FAILURE');let q;try{q=typeof content==='string'?JSON.parse(content.replace(/^```json\\s*|\\s*```$/g,'')):content}catch{throw new Error('QUALITY_CRITIC_JSON_PARSE_FAILED')}const keys=['groundedness','completeness','consistency','actionability','assumption_hygiene','calculation_integrity','scope_compliance'];const scores=q.rubric_scores&&typeof q.rubric_scores==='object'?q.rubric_scores:{};for(const k of keys)if(!Number.isFinite(Number(scores[k])))throw new Error('QUALITY_SCORE_MISSING:'+k);const cited=new Set((x.blueprint.citations??[]).map(c=>c.evidence_id));const badRefs=(x.blueprint.sections??[]).flatMap(s=>(s.evidence_ids??[]).filter(id=>!cited.has(id)));const highStake=JSON.stringify(x.blueprint).match(/(?:TAM|SAM|SOM|market size|will pay|conversion rate|revenue forecast)/gi)??[];const deterministicPass=Number(q.overall_score)>=0.78&&Number(scores.groundedness)>=0.8&&Number(scores.assumption_hygiene)>=0.8&&Number(scores.calculation_integrity)>=0.8&&Number(scores.scope_compliance)>=0.999&&badRefs.length===0;let verdict=['PASS','REPAIR','FAIL','HUMAN_REVIEW'].includes(q.verdict)?q.verdict:'FAIL';if(verdict==='PASS'&&!deterministicPass)verdict=x.revision_count<1?'REPAIR':'FAIL';const instructions=Array.isArray(q.repair_instructions)?q.repair_instructions.map(String).slice(0,12):[];const repair=verdict==='REPAIR'&&x.revision_count<1&&instructions.length>0;return [{json:{...x,quality:{...q,verdict,failed_rules:[...(Array.isArray(q.failed_rules)?q.failed_rules:[]),...(badRefs.length?[`Unknown evidence IDs: ${[...new Set(badRefs)].join(', ')}`]:[])],repair_instructions:instructions,requires_human:q.requires_human===true||verdict==='HUMAN_REVIEW',diagnostics:{unknown_evidence_ids:[...new Set(badRefs)],high_stakes_terms_seen:[...new Set(highStake)]}},repair_needed:repair,critic_model:r.model}}];"
+      },
+      "id": "e4650c82-ac78-54ce-9033-571e401cb21b",
+      "name": "Parse and Enforce Quality Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5ae815e3-8ed0-574c-b608-132e90d0229f",
+              "leftValue": "={{ $json.repair_needed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8f88c047-4996-594f-a04b-7c3e379d2000",
+      "name": "One Blueprint Revision?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        380,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.05,max_tokens:3000,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the bounded Blueprint Reviser. Apply only the supplied critic instructions to the supplied Blueprint. Preserve all supported content and citation IDs. Do not add research, sources, market numbers, willingness-to-pay claims, forecasts or external actions. Unknowns stay unknown. Return the complete revised Blueprint JSON only.'},{role:'user',content:JSON.stringify({blueprint:x.blueprint,repair_instructions:x.quality.repair_instructions})}]}}}];"
+      },
+      "id": "441603eb-6fad-5e44-b04b-0eeecec53773",
+      "name": "Prepare Bounded Blueprint Revision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 45000
+        }
+      },
+      "id": "ff651308-18e9-5e79-b477-374d19472f50",
+      "name": "Nebius — One Blueprint Revision",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        860,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Parse and Enforce Quality Verdict').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error('BLUEPRINT_REVISION_EMPTY');let parsed;try{parsed=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c}catch{throw new Error('BLUEPRINT_REVISION_JSON_PARSE_FAILED')}let b=parsed.blueprint??parsed;for(const k of ['schema_version','status','product_idea','starting_position','dashboard','sections','next_route'])if(b[k]==null)throw new Error('BLUEPRINT_REVISION_SCHEMA_MISSING:'+k);const originalCitations=x.blueprint.citations??[];const citationById=new Map(originalCitations.map(e=>[e.evidence_id,e]));const attemptedIds=new Set([...(b.citations??[]).map(e=>e.evidence_id),...(b.sections??[]).flatMap(s=>s.evidence_ids??[])]);const invented=[...attemptedIds].filter(id=>!citationById.has(id));b.citations=originalCitations;const sectionKeys=new Set(['foundation','customer_demand','competitor_intelligence','market_economics','operating_model','financial_readiness','validation','launch_distribution','growth_optimization','final_blueprint']);const statuses=new Set(['NOT_REQUESTED','BLOCKED','NEEDS_INPUT','IN_PROGRESS','AGENT_DONE','HUMAN_REVIEW','COMPLETED','PARTIAL','SAFE_FAILED']);b.sections=(Array.isArray(b.sections)?b.sections:[]).filter(s=>sectionKeys.has(s.section_key)).map(s=>({section_key:s.section_key,status:statuses.has(s.status)?s.status:'PARTIAL',completion_percent:Math.max(0,Math.min(100,Math.round(Number(s.completion_percent)||0))),summary:s.summary??{},open_questions:Array.isArray(s.open_questions)?s.open_questions.map(String):[],evidence_ids:Array.isArray(s.evidence_ids)?s.evidence_ids.filter(id=>citationById.has(id)):[]}));b.limitations=[...(Array.isArray(b.limitations)?b.limitations:[]),...(invented.length?[`Revision attempted unapproved evidence IDs and they were removed: ${invented.join(', ')}`]:[])];return [{json:{...x,blueprint:b,revision_count:1,before_quality:x.quality,revision_diagnostics:{invented_evidence_ids_removed:invented},request:{model:'openai/gpt-oss-120b',reasoning_effort:'low',temperature:0,max_tokens:1200,response_format:{type:'json_object'},messages:[{role:'system',content:'Final independent re-score after the only allowed Blueprint revision. Use the same seven rubric keys. Return JSON with verdict PASS|FAIL|HUMAN_REVIEW, overall_score, rubric_scores, failed_rules, repair_instructions as an empty array, requires_human, and critic_notes. Do not request another revision. Fail closed on unsupported high-stakes claims, invented facts, removed/unapproved evidence, or broken citations.'},{role:'user',content:JSON.stringify({blueprint:b,previous_critic:x.quality,revision_diagnostics:{invented_evidence_ids_removed:invented}})}]}}}];"
+      },
+      "id": "4e3b7074-fe39-5f33-9894-a7138ef29c29",
+      "name": "Parse Bounded Revision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "03375e11-2375-5c57-bb96-2ed8d7005ccc",
+      "name": "Nebius — Final Blueprint Re-Critic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1340,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Parse Bounded Revision').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error('FINAL_QUALITY_CRITIC_EMPTY');let q;try{q=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c}catch{throw new Error('FINAL_QUALITY_JSON_PARSE_FAILED')}const s=q.rubric_scores??{};const pass=q.verdict==='PASS'&&Number(q.overall_score)>=0.78&&Number(s.groundedness)>=0.8&&Number(s.assumption_hygiene)>=0.8&&Number(s.calculation_integrity)>=0.8&&Number(s.scope_compliance)>=0.999;return [{json:{blueprint:x.blueprint,quality:{...q,verdict:pass?'PASS':(q.requires_human?'HUMAN_REVIEW':'FAIL'),repair_instructions:[]},before_quality:x.before_quality,revision_count:1,quality_improved:Number(q.overall_score)>Number(x.before_quality.overall_score),status:pass?'QUALITY_PASSED':(q.requires_human?'HUMAN_REVIEW':'QUALITY_FAILED'),next_route:pass?'MEMORY_INDEX':(q.requires_human?'HUMAN_REVIEW':'PARTIAL_COMPLETE'),correlation_id:x.correlation_id,agent_trace:[...(x.blueprint.agent_trace??[]),{agent:'BLUEPRINT_CRITIC',model:r.model,status:pass?'SUCCEEDED':'PARTIAL',revision_count:1}]}}];"
+      },
+      "id": "3122b300-8584-5ab7-b238-a39a6a6cf5a6",
+      "name": "Finalize Revised Quality",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const pass=x.quality.verdict==='PASS';return [{json:{blueprint:x.blueprint,quality:x.quality,before_quality:null,revision_count:x.revision_count,quality_improved:null,status:pass?'QUALITY_PASSED':(x.quality.requires_human?'HUMAN_REVIEW':'QUALITY_FAILED'),next_route:pass?'MEMORY_INDEX':(x.quality.requires_human?'HUMAN_REVIEW':'PARTIAL_COMPLETE'),correlation_id:x.correlation_id,agent_trace:[...(x.blueprint.agent_trace??[]),{agent:'BLUEPRINT_CRITIC',model:x.critic_model,status:pass?'SUCCEEDED':'PARTIAL',revision_count:x.revision_count}]}}];"
+      },
+      "id": "7bea6b93-0b53-554a-b780-e9b3bcbc4fa6",
+      "name": "Use First Quality Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        120
+      ]
+    }
+  ],
+  "connections": {
+    "Run Quality Gate Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Quality Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Quality Fixture": {
+      "main": [
+        [
+          {
+            "node": "Validate Quality Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called for Blueprint Quality": {
+      "main": [
+        [
+          {
+            "node": "Validate Quality Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Quality Contract": {
+      "main": [
+        [
+          {
+            "node": "Prepare Independent Blueprint Critic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Independent Blueprint Critic": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Blueprint Quality Critic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Blueprint Quality Critic": {
+      "main": [
+        [
+          {
+            "node": "Parse and Enforce Quality Verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and Enforce Quality Verdict": {
+      "main": [
+        [
+          {
+            "node": "One Blueprint Revision?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One Blueprint Revision?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Bounded Blueprint Revision",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Use First Quality Verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Bounded Blueprint Revision": {
+      "main": [
+        [
+          {
+            "node": "Nebius — One Blueprint Revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — One Blueprint Revision": {
+      "main": [
+        [
+          {
+            "node": "Parse Bounded Revision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Bounded Revision": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Final Blueprint Re-Critic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Final Blueprint Re-Critic": {
+      "main": [
+        [
+          {
+            "node": "Finalize Revised Quality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 120
+  },
+  "versionId": "d70e5b23-6d94-5f0f-b31e-6cceac6636e3",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

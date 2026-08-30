@@ -1,0 +1,120 @@
+{
+  "name": "BP-VERDICT-01 Research Viability Gate",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c4b80101-9b27-451c-8470-0de011000101",
+      "name": "Run Verdict Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-760, -140]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{requested_streams:['user_research','competitor_research','market_research'],completed_streams:['user_research','competitor_research','market_research'],dimension_scores:{user_demand:{score:80,coverage:0.82,evidence_ids:['test-user-1'],unknowns:[]},competitive_opportunity:{score:70,coverage:0.75,evidence_ids:['test-competitor-1'],unknowns:[]},market_accessibility:{score:65,coverage:0.72,evidence_ids:['test-market-1'],unknowns:['Exact market size remains unknown.']}},evidence_coverage:0.76,evidence_ids:[],critical_blockers:[],evidence_audit_status:'PASS',explanation:'The idea has strong demand language, a conditional competitive opening, and an accessible niche, but market sizing remains uncertain.',profile_version:1,correlation_id:'bp-verdict-safe-test',test_mode:true}}];"
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000102",
+      "name": "Create Safe Verdict Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-520, -140]
+    },
+    {
+      "parameters": {"inputSource": "passthrough"},
+      "id": "c4b80101-9b27-451c-8470-0de011000103",
+      "name": "When Called after Evidence Audit",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [-760, 80]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const allowed=['user_research','competitor_research','market_research'];const uniq=a=>[...new Set((Array.isArray(a)?a:[]).map(String).filter(x=>allowed.includes(x)))];const requested=uniq(src.requested_streams);const completed=uniq(src.completed_streams);if(requested.length<1)throw new Error('VERDICT_REQUIRES_AT_LEAST_ONE_RESEARCH_STREAM');const dims=src.dimension_scores&&typeof src.dimension_scores==='object'?src.dimension_scores:{};const coverage=Number(src.evidence_coverage);if(!Number.isFinite(coverage)||coverage<0||coverage>1)throw new Error('EVIDENCE_COVERAGE_INVALID');const blockers=Array.isArray(src.critical_blockers)?src.critical_blockers.map(String).slice(0,20):[];const auditPassed=String(src.evidence_audit_status??'').toUpperCase()==='PASS';const fullRequested=requested.length===3&&allowed.every(x=>requested.includes(x));const fullCompleted=completed.length===3&&allowed.every(x=>completed.includes(x));const getScore=k=>{const n=Number(dims?.[k]?.score);return Number.isFinite(n)&&n>=0&&n<=100?n:null};const user=getScore('user_demand'),competitor=getScore('competitive_opportunity'),market=getScore('market_accessibility');let score=null,score_status='WITHHELD',verdict,decision_capable=false;if(!fullRequested){verdict='LIMITED_VERDICT'}else if(!fullCompleted||coverage<0.60||!auditPassed||[user,competitor,market].some(x=>x===null)){verdict='INSUFFICIENT_EVIDENCE'}else{score=Math.round(((user*0.40)+(competitor*0.30)+(market*0.30))*100)/100;score_status='DECISION_CAPABLE';decision_capable=true;verdict=blockers.length?'HOLD_OR_PIVOT':score>=75?'STRONG_GO':score>=60?'CONDITIONAL_GO':'HOLD_OR_PIVOT'}const decisions=['STRONG_GO','CONDITIONAL_GO'].includes(verdict)?['PROCEED','PAUSE_OR_REVISE']:verdict==='LIMITED_VERDICT'?['RUN_MISSING_RESEARCH','CONTINUE_ANYWAY','PAUSE_OR_REVISE']:['TARGETED_VALIDATION','CONTINUE_ANYWAY','PAUSE_OR_REVISE'];const explanation=String(src.explanation??'Research verdict calculated from audited evidence.').trim().slice(0,4000);if(explanation.length<10)throw new Error('VERDICT_EXPLANATION_TOO_SHORT');const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(src.authorization??'');const persist_required=!src.test_mode&&uuid.test(String(src.owner_id??''))&&uuid.test(String(src.project_id??''))&&uuid.test(String(src.run_id??''))&&Number(src.profile_version)>0&&/^Bearer\\s+\\S+$/i.test(authorization);return [{json:{schema_version:'bp-research-verdict-v1',owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,profile_version:Math.trunc(Number(src.profile_version)||0),requested_streams:requested,completed_streams:completed,dimension_scores:dims,evidence_coverage:coverage,evidence_ids:Array.isArray(src.evidence_ids)?src.evidence_ids:[],critical_blockers:blockers,evidence_audit_status:auditPassed?'PASS':'NOT_PASSED',research_viability_score:score,score_status,verdict,decision_capable,route:'HUMAN_CHECKPOINT',requires_human:true,available_decisions:decisions,primary_ui_actions:['REVIEW_STAGE_1_RESULTS','CONTINUE_OR_CHOOSE_NEXT_STEP'],explanation,calculation_version:'research-viability-v1',correlation_id:String(src.correlation_id??`bp-verdict-${Date.now()}`).slice(0,200),authorization,persist_required,test_mode:src.test_mode===true}}];"
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000104",
+      "name": "Calculate Audited Research Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-260, -20]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "c4b80101-9b27-451c-8470-0de011000151", "leftValue": "={{ $json.persist_required }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000105",
+      "name": "Persist Production Verdict?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-20, -20]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{result:x,authorization:x.authorization,rpc_body:{p_run_id:x.run_id,p_profile_version:x.profile_version,p_requested_streams:x.requested_streams,p_completed_streams:x.completed_streams,p_dimension_scores:x.dimension_scores,p_evidence_coverage:x.evidence_coverage,p_evidence_ids:x.evidence_ids,p_critical_blockers:x.critical_blockers,p_explanation:x.explanation}}}];"
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000106",
+      "name": "Prepare Verdict Persistence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, -120]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_research_verdict",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $json.authorization }}"}, {"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000107",
+      "name": "Persist Verdict and Founder Checkpoint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [480, -120],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep=$('Prepare Verdict Persistence').first().json;const p=$input.first()?.json??{};const ok=p.persisted===true;return [{json:{...prep.result,verdict:p.verdict??prep.result.verdict,research_viability_score:p.score??prep.result.research_viability_score,score_status:p.score_status??prep.result.score_status,decision_capable:p.decision_capable??prep.result.decision_capable,available_decisions:p.available_decisions??prep.result.available_decisions,checkpoint_id:p.checkpoint_id??null,persistence:ok?p:{persisted:false,reason:'VERDICT_PERSISTENCE_FAILED'},route:ok?'HUMAN_CHECKPOINT':'HUMAN_REVIEW',requires_human:true}}];"
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000108",
+      "name": "Return Persisted Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [740, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{...x,authorization:undefined,persist_required:undefined,test_mode:undefined,persistence:{persisted:false,reason:x.test_mode?'TEST_MODE':'AUTHENTICATED_CONTEXT_REQUIRED'}}}];"
+      },
+      "id": "c4b80101-9b27-451c-8470-0de011000109",
+      "name": "Return Safe Test Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 100]
+    }
+  ],
+  "connections": {
+    "Run Verdict Test": {"main": [[{"node": "Create Safe Verdict Fixture", "type": "main", "index": 0}]]},
+    "Create Safe Verdict Fixture": {"main": [[{"node": "Calculate Audited Research Verdict", "type": "main", "index": 0}]]},
+    "When Called after Evidence Audit": {"main": [[{"node": "Calculate Audited Research Verdict", "type": "main", "index": 0}]]},
+    "Calculate Audited Research Verdict": {"main": [[{"node": "Persist Production Verdict?", "type": "main", "index": 0}]]},
+    "Persist Production Verdict?": {"main": [[{"node": "Prepare Verdict Persistence", "type": "main", "index": 0}], [{"node": "Return Safe Test Verdict", "type": "main", "index": 0}]]},
+    "Prepare Verdict Persistence": {"main": [[{"node": "Persist Verdict and Founder Checkpoint", "type": "main", "index": 0}]]},
+    "Persist Verdict and Founder Checkpoint": {"main": [[{"node": "Return Persisted Verdict", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 60},
+  "versionId": "c4b80101-9b27-451c-8470-0de011000199",
+  "meta": {"templateCredsSetupCompleted": true},
+  "id": "bpVerdict01ResearchViability",
+  "tags": []
+}

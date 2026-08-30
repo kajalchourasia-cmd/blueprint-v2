@@ -1,0 +1,32 @@
+# Blueprint Evidence Dev — n8n Workflows
+
+Sanitized workflow exports will live here. Credential values, pinned private data, production webhook URLs, and tokens must never be exported.
+
+## Import convention
+
+- Workflow JSON files contain nodes, connections, non-secret endpoints and credential references only.
+- API-key values remain exclusively in n8n Credentials.
+- Import files use existing workflow IDs when an in-place update is intended; take a rollback export first.
+- Imported workflows default to inactive.
+
+Current workflow:
+
+- `BP-SETUP-00-provider-smoke-tests.json` — manual checks for You.com, Nebius, Pinecone and Supabase. Replace the visible `YOUR_PROJECT_REF` placeholder before running.
+- `BP-90-error-audit.json` — active global Error Trigger workflow. Its RPC node is bound to the server-only `BP Supabase Error Writer` Header Auth credential. Select workflow ID `bp90ErrorAudit01` from every Blueprint workflow's **Settings → Error Workflow** field. It has no public endpoint.
+- `BP-TEST-90-controlled-failure.json` — private test harness used to prove BP-90 end to end. Keep it unpublished. Its temporary Schedule Trigger is only activated for a controlled test and must be unpublished immediately afterward.
+- `BP-SETUP-01-phase-2-validation.json` — inactive manual provider gate. It selects currently available Nebius Fast/Strong/Audit roles, asserts strict structured JSON, and performs a synthetic Pinecone upsert/search/delete with cleanup.
+- `BP-API-01-start-run.json` — published authenticated `POST /blueprint/start` workflow. It validates the founder request, denies operational writes, verifies the Supabase JWT, calls the owner-scoped idempotent start RPC, returns safe envelopes, and routes unexpected failures to BP-90. The live denial probe returns `422 OUT_OF_SCOPE`; real JWT success/replay remains Phase 7.
+- `BP-CORE-45-evidence-blueprint.json` — published 42-node Phase 4–5 engine for framing, bounded You.com research, customer/competitor/market specialists, deterministic finance, first-user/validation/distribution planning, different-family audit, one bounded repair, cited synthesis, and safe partial output. Regenerate from `scripts/build_phase45_workflow.py` and validate with `scripts/validate_n8n_workflow.js` after source changes.
+- `BP-PLAN-01-dynamic-task-planner.json` — published gate-aware Phase 6B planner. `DISCOVER` creates only Foundation, selected User/Competitor/Market research, Evidence Audit, Research Verdict and Research Blueprint tasks. `PROVE_AND_DESIGN` requires a resolved Gate 1; `COMPLETE_ACTION_BLUEPRINT` requires Gate 2 and remains advisory. Nebius may prioritize only supplied tasks; deterministic locks prevent task invention and gate bypass. Guard precedence is regression-covered.
+- `BP-RESILIENCE-01-failure-route-observability.json` — published Phase 6F caught-failure controller. It classifies and redacts expected failures, chooses bounded retry/repair/replan/degraded/partial/HITL/safe-fail routes, records owner-scoped observations in production, and contains a live-safe 15-case failure matrix that currently passes 15/15.
+- `BP-00-adaptive-supervisor.json` and `BP-QA-01-blueprint-quality.json` — published supervisor and independent quality-gate dependencies for the start API.
+- `BP-VERDICT-01-research-viability.json` — inactive deterministic Research Viability Gate. It calculates the 40/30/30 score only after audited User, Competitor and Market inputs, withholds a decision-capable score for limited/insufficient evidence, and persists the verdict plus founder checkpoint through `persist_research_verdict`. Its safe fixture passed live in 402 ms with score `72.5`, verdict `CONDITIONAL_GO`, and no production persistence.
+- `BP-STAGE1-01-research-specialist.json` — inactive parameterized Stage 1 worker for Foundation, Customer Demand, Competitor Intelligence and Market Economics. Production research uses bounded You.com retrieval plus a grounded Nebius role; invalid roles are denied, weak retrieval becomes a retryable observation, and citation failures become targeted repair rather than accepted output. Its safe fixture passed live in 539 ms.
+- `BP-SCHED-01-eligible-task-scheduler.json` — inactive Phase 6B scheduler. It atomically claims only modules with installed adapters, loads the exact profile/dependency context, dispatches each task separately, converts each result into a typed observation, and calls `observe_orchestration_task` to retry, stop, or unlock dependants. Its two-task safe fan-out passed live in 1.039 seconds and returned two distinct `SUPERVISOR_REEVALUATE` observations.
+- `BP-AUDIT-01-independent-evidence-auditor.json` — inactive independent Stage 1 audit worker. It checks stream completion, evidence coverage, citation allowlists and contradictions, then creates the only accepted input contract for the deterministic verdict. Its safe fixture passed live with `PASS` and `0.76` coverage.
+- `BP-SYNTH-01-research-blueprint.json` — inactive grounded Research Blueprint V1 synthesizer. It consolidates all Stage 1 sections, audit, verdict, five honest signals, limitations and contextual actions, and can persist an immutable `RESEARCH` version. Its safe fixture passed live without writing production data.
+- `BP-STAGE1-ROUTER-01.json` — inactive allowlisted router for the four research roles, independent audit, deterministic verdict and Research Blueprint synthesis. Unknown modules return `POLICY_DENIED`; the safe foundation route passed live.
+- `BP-SUPERVISOR-REEVAL-01.json` — inactive bounded re-evaluation decision worker. Five live-safe fixtures verified READY dispatch, founder input, contradiction review, checkpoint resume and terminal completion branches with a 20-transition circuit breaker aligned to the database invariant.
+- `BP-HITL-01-checkpoint-resume.json` — inactive durable founder decision worker. It accepts only an allowed checkpoint decision, uses expected-state versioning, returns an idempotent replay for the same decision, rejects stale/conflicting decisions, and emits the correct `DISCOVER` or `PROVE_AND_DESIGN` planner input. Its safe `PROCEED` fixture passed live.
+
+Published production chain: `BP-API-01 → BP-00 → BP-CORE-45 → BP-QA-01`, plus `BP-PLAN-01` and `BP-RESILIENCE-01`. `BP-90` remains the active global Error Trigger. Private setup and controlled-failure harnesses stay unpublished. Phase 7 must still prove the production start chain with a real Streamlit Supabase JWT before public deployment.

@@ -1,0 +1,10 @@
+step_type,framework_title,resource_title,resource_type,url,usage_note
+research,Problem hypothesis,How to Evaluate Startup Ideas,Video and transcript,https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/,Write the problem solution insight and unfair-advantage beliefs as testable statements.
+interview,Behavior interview,How to Talk to Users,Video and transcript,https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/,Ask about the last real occurrence and existing workarounds instead of pitching the idea.
+validate,Value proposition test,The Value Proposition Canvas,Official framework,https://www.strategyzer.com/library/the-value-proposition-canvas,Connect a specific customer job and pain to one measurable promise you can test.
+build,Minimum viable test,How to Build an MVP,Startup School videos,https://www.ycombinator.com/blog/startup-school-videos,Build only the mechanism required to observe the riskiest behavior.
+sell,Pricing commitment test,Startup Business Models and Pricing,Startup School videos,https://www.ycombinator.com/blog/startup-school-videos,Ask for money a deposit or a signed commitment before treating interest as demand.
+measure,Lean Canvas,Lean Canvas,Official framework,https://leanspark.leanstack.com/leancanvas,Track the riskiest assumptions and the evidence that changes each one.
+operate,Business Model Canvas,Business Model Canvas,Official template,https://assets.strategyzer.com/assets/resources/the-business-model-canvas.pdf,Map partners activities resources costs and revenue before scaling operations.
+launch,Narrow cohort launch,The Best Way to Launch Your Startup,Startup School videos,https://www.ycombinator.com/blog/startup-school-videos,Launch to one defined cohort with one activation and retention threshold.
+learn_skill,Founder learning loop,YC Startup Library,Learning library,https://www.ycombinator.com/library,Learn only the skill required for the next evidence-producing action.

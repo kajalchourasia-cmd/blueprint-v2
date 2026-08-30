@@ -1,0 +1,1265 @@
+{
+  "id": "bpCore45Evidence01",
+  "name": "BP-CORE-45 Evidence Blueprint",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "aa22024b-ebf5-5716-bdda-0290e2ea0b5c",
+      "name": "Run Phase 4-5 Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1800,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{\n  idea_text:'A private evidence workspace that helps an early-stage founder validate an existing product idea before committing a large build budget.',\n  optional_industry:'Founder tools', geography:'Global',\n  requested_modules:['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'],\n  founder_inputs:{available_budget:5000,monthly_build_budget:1000,hours_per_week:12,target_monthly_price:49,currency:'USD',current_stage:'idea',work_completed:[],constraints:['solo founder']},\n  test_mode:true, correlation_id:'bp-phase45-safe-test'\n}}];"
+      },
+      "id": "80beb71e-3997-590b-8683-2b15e802fa32",
+      "name": "Create Safe Test Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1580,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "8a07fc73-9295-5aad-ad1c-5ea038b1be55",
+      "name": "When Called by Supervisor",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1800,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};\nconst forbidden=['recipient','email_to','message_to','phone_number','payment','publish_target','delete_target'];\nconst bad=forbidden.filter(k=>src[k]!=null);\nconst idea=String(src.idea_text??'').trim();\nif(bad.length) throw new Error('OUT_OF_SCOPE_ACTION_FIELDS:'+bad.join(','));\nif(idea.length<10||idea.length>10000) throw new Error('INVALID_IDEA_TEXT');\nconst allowed=['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation','launch_distribution','growth_optimization'];\nconst requested=Array.isArray(src.requested_modules)&&src.requested_modules.length?src.requested_modules.filter(x=>allowed.includes(x)):['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'];\nconst fi=src.founder_inputs&&typeof src.founder_inputs==='object'?src.founder_inputs:{};\nfor(const k of ['available_budget','monthly_build_budget','hours_per_week','target_monthly_price']) if(fi[k]!=null&&(!Number.isFinite(Number(fi[k]))||Number(fi[k])<0)) throw new Error('INVALID_FOUNDER_INPUT:'+k);\nreturn [{json:{schema_version:'bp-research-input-v1',owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,correlation_id:String(src.correlation_id??`bp-${Date.now()}`).slice(0,200),idea_text:idea,optional_industry:String(src.optional_industry??'').trim()||null,geography:String(src.geography??'').trim()||null,requested_modules:[...new Set(requested)],founder_inputs:{...fi,currency:fi.currency?String(fi.currency).toUpperCase():null},test_mode:src.test_mode===true}}];"
+      },
+      "id": "d6d9d2d0-fbbd-5f38-a018-99f593f9dec1",
+      "name": "Validate and Normalize Research Contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1340,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;\nconst prompt=`Founder idea: ${x.idea_text}\\nOptional industry: ${x.optional_industry??'unknown'}\\nGeography: ${x.geography??'unknown'}\\nFounder starting position: ${JSON.stringify(x.founder_inputs)}\\nRequested modules: ${x.requested_modules.join(', ')}`;\nreturn [{json:{...x,request:{model:'Qwen/Qwen3-30B-A3B-Instruct-2507',temperature:0.1,max_tokens:1000,response_format:{type:'json_object'},messages:[{role:'system',content:'You are Blueprint Idea Framer. Normalize only what the founder supplied. Do not invent facts. Return JSON with product_summary, target_customer, problem, desired_outcome, proposed_solution, industry, geography, assumptions (array), missing_questions (array), research_terms (array), and confidence 0..1. Unknown values must be the string UNKNOWN and create a precise missing question.'},{role:'user',content:prompt}]}}}];"
+      },
+      "id": "ca88bd9e-cfc0-54ff-8acf-da3f733b8a5f",
+      "name": "Prepare Idea Framer Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "e29bf033-f70f-59a7-b1f4-cc63bca814a4",
+      "name": "Nebius — Idea Framer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -900,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input=$input.first().json; const base=$('Validate and Normalize Research Contract').first().json;\nfunction parse(r){const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'IDEA_FRAME_EMPTY');return typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;}\nconst f=parse(input); const keys=['product_summary','target_customer','problem','desired_outcome','proposed_solution','industry','geography'];\nfor(const k of keys) if(typeof f[k]!=='string'||!f[k].trim()) throw new Error('IDEA_FRAME_SCHEMA:'+k);\nf.assumptions=Array.isArray(f.assumptions)?f.assumptions.map(String).slice(0,12):[]; f.missing_questions=Array.isArray(f.missing_questions)?f.missing_questions.map(String).slice(0,10):[]; f.research_terms=Array.isArray(f.research_terms)?f.research_terms.map(String).slice(0,12):[]; f.confidence=Math.max(0,Math.min(1,Number(f.confidence)||0));\nreturn [{json:{...base,idea_frame:f,agent_trace:[{agent:'IDEA_FRAME',model:input.model??'Qwen/Qwen3-30B-A3B-Instruct-2507',status:'SUCCEEDED'}]}}];"
+      },
+      "id": "2b9e406f-0870-5dc5-b375-a1d89b217d94",
+      "name": "Parse and Check Idea Frame",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json; const f=x.idea_frame; const geo=f.geography==='UNKNOWN'?'':f.geography;\nconst cap=s=>String(s).trim().split(/\\s+/).slice(0,45).join(' ').slice(0,380).trim();\nconst target=String(f.target_customer??'').split(/\\s+/).slice(0,10).join(' ');\nconst terms=f.research_terms.slice(0,3).join(' ');\nconst core=[target,terms].filter(v=>v&&v!=='UNKNOWN').join(' ');\nconst qs={\n customer:cap(`${core} pain complaints reviews willingness to pay alternatives reddit g2 capterra ${geo}`),\n competitor:cap(`${core} competitors alternatives pricing features customer reviews ${geo}`),\n market:cap(`${core} market size industry report adoption spending statistics ${geo}`)\n};\nreturn [{json:{...x,research_plan:{version:'bp-plan-v1',queries:qs,search_budget:4,repair_budget:1,source_target:12,route:['customer_demand','competitor_intelligence','market_economics','evidence_audit']}}}];"
+      },
+      "id": "aead6ea5-b734-5b78-8d75-5b3f54941d0a",
+      "name": "Research Planner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: $('Research Planner').first().json.research_plan.queries.customer, count: 8 }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "7e9cb61b-5255-5710-9abe-f818f7b61eb0",
+      "name": "You — Customer Demand Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -240,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yX3JLZ7MVY7LXlZ4",
+          "name": "BP You Search"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: $('Research Planner').first().json.research_plan.queries.competitor, count: 8 }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "15c33bc4-2ac7-5d88-8c98-9e9253b63a46",
+      "name": "You — Competitor Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -20,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yX3JLZ7MVY7LXlZ4",
+          "name": "BP You Search"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: $('Research Planner').first().json.research_plan.queries.market, count: 8 }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "4ea99d0a-5e85-5149-8af8-fdaad8a27c4b",
+      "name": "You — Market Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        200,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yX3JLZ7MVY7LXlZ4",
+          "name": "BP You Search"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Research Planner').first().json; const now=new Date().toISOString();\nfunction h(s){let v=2166136261;for(const c of s){v^=c.charCodeAt(0);v=Math.imul(v,16777619)}return (v>>>0).toString(16).padStart(8,'0')}\nfunction domain(u){try{return new URL(u).hostname.replace(/^www\\./,'')}catch{return 'unknown.invalid'}}\nfunction type(d){if(/\\.gov\\b/.test(d))return'GOVERNMENT';if(/\\.edu\\b|doi\\.org|arxiv/.test(d))return'ACADEMIC';if(/reddit|quora|forum/.test(d))return'COMMUNITY';if(/g2|capterra|trustpilot|producthunt/.test(d))return'REVIEW';if(/techcrunch|reuters|forbes|news/.test(d))return'NEWS';return'OTHER'}\nfunction candidates(obj){const out=[];const seen=new Set();function walk(v,d=0){if(d>5||v==null)return;if(Array.isArray(v)){for(const z of v)walk(z,d+1);return}if(typeof v!=='object')return;const u=v.url??v.link??v.source_url; if(typeof u==='string'&&u.startsWith('https://')&&!seen.has(u)){seen.add(u);out.push(v)}for(const z of Object.values(v))if(typeof z==='object')walk(z,d+1)}walk(obj);return out}\nconst specs=[['customer_demand','You — Customer Demand Search',base.research_plan.queries.customer],['competitor_intelligence','You — Competitor Search',base.research_plan.queries.competitor],['market_economics','You — Market Search',base.research_plan.queries.market]];\nconst cards=[]; const provider_failures=[];\nfor(const [stream,name,q] of specs){const raw=$(name).first().json??{};if(raw.error){provider_failures.push({stream,provider:'YOU',error_class:'PROVIDER'});continue}for(const r of candidates(raw).slice(0,8)){const u=r.url??r.link??r.source_url;const d=domain(u);const title=String(r.title??r.name??'Untitled source').slice(0,1000);const snippetText=Array.isArray(r.snippets)?r.snippets.slice(0,2).join(' '):'';const ex=String(snippetText||r.snippet||r.excerpt||r.description||r.text||'').trim().slice(0,4000);if(!ex)continue;cards.push({evidence_id:`ev-${h(stream+'|'+u+'|'+ex)}`,stream,claim:ex,source_url:u,source_title:title,source_domain:d,source_type:type(d),provider:'YOU',query:q,excerpt:ex,retrieved_at:now,limitations:['Search-result excerpt; suitable for directional research only until its source page is verified. Never treat it as payment, market-size, or other high-stakes proof.'],auditor_verdict:'PENDING'})}}\nconst unique=[...new Map(cards.map(c=>[c.source_url+'|'+c.claim,c])).values()];\nreturn [{json:{...base,evidence_cards:unique,provider_failures,coverage:{customer_demand:unique.filter(c=>c.stream==='customer_demand').length,competitor_intelligence:unique.filter(c=>c.stream==='competitor_intelligence').length,market_economics:unique.filter(c=>c.stream==='market_economics').length,total:unique.length},agent_trace:[...base.agent_trace,{agent:'RESEARCH_PLANNER',status:'SUCCEEDED'},{agent:'PROVIDER_GATEWAY',provider:'YOU',status:provider_failures.length?'PARTIAL':'SUCCEEDED',tool_calls:3}]}}];"
+      },
+      "id": "cc39a8bc-9760-5956-adf0-4c8cef498950",
+      "name": "Normalize Evidence Cards",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json; const cards=x.evidence_cards.filter(c=>c.stream==='customer_demand');\nconst payload={idea_frame:x.idea_frame,evidence:cards.map(c=>({id:c.evidence_id,title:c.source_title,url:c.source_url,excerpt:c.excerpt,limitations:c.limitations}))};\nreturn [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.1,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the Customer Demand specialist inside Blueprint. Use only supplied evidence. Never use model memory as evidence. Distinguish observed signals, reasonable inferences, assumptions, contradictions, and unknowns. Every factual claim must cite evidence_ids. Return JSON with summary, observed_signals (array of objects with claim and evidence_ids), assumptions (array), risks (array), contradictions (array), unknowns (array), and recommended_next_tests (array).'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "8ce20353-ce41-5dea-bc1f-97c1906411b5",
+      "name": "Prepare Customer Evidence Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "56570234-b2a9-5a3a-ba04-9f14a6322034",
+      "name": "Nebius — Customer Evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        860,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Normalize Evidence Cards').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'CUSTOMER_AGENT_EMPTY');const a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;return [{json:{...x,analyses:{customer_demand:a},agent_trace:[...x.agent_trace,{agent:'CUSTOMER_DEMAND',model:r.model,status:'SUCCEEDED'}]}}];"
+      },
+      "id": "b01a3064-de6f-52ca-960c-ef75550682e6",
+      "name": "Parse Customer Evidence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json; const cards=x.evidence_cards.filter(c=>c.stream==='competitor_intelligence');\nconst payload={idea_frame:x.idea_frame,evidence:cards.map(c=>({id:c.evidence_id,title:c.source_title,url:c.source_url,excerpt:c.excerpt,limitations:c.limitations}))};\nreturn [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.1,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the Competitor Intelligence specialist inside Blueprint. Use only supplied evidence. Never use model memory as evidence. Distinguish observed signals, reasonable inferences, assumptions, contradictions, and unknowns. Every factual claim must cite evidence_ids. Return JSON with summary, observed_signals (array of objects with claim and evidence_ids), assumptions (array), risks (array), contradictions (array), unknowns (array), and recommended_next_tests (array).'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "ce05ddc9-e70b-531f-b8b9-03698160d569",
+      "name": "Prepare Competitor Intelligence Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "7ae841ab-82e2-5d79-b2dc-f319838ff63f",
+      "name": "Nebius — Competitor Intelligence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1520,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Parse Customer Evidence').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'COMPETITOR_AGENT_EMPTY');const a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;return [{json:{...x,analyses:{...x.analyses,competitor_intelligence:a},agent_trace:[...x.agent_trace,{agent:'COMPETITOR_INTELLIGENCE',model:r.model,status:'SUCCEEDED'}]}}];"
+      },
+      "id": "e5c6e007-1e94-5596-8a02-53d5d15b5f2b",
+      "name": "Parse Competitor Intelligence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1740,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json; const cards=x.evidence_cards.filter(c=>c.stream==='market_economics');\nconst payload={idea_frame:x.idea_frame,evidence:cards.map(c=>({id:c.evidence_id,title:c.source_title,url:c.source_url,excerpt:c.excerpt,limitations:c.limitations}))};\nreturn [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.1,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the Market and Economics specialist inside Blueprint. Use only supplied evidence. Never use model memory as evidence. Distinguish observed signals, reasonable inferences, assumptions, contradictions, and unknowns. Every factual claim must cite evidence_ids. Return JSON with summary, observed_signals (array of objects with claim and evidence_ids), assumptions (array), risks (array), contradictions (array), unknowns (array), and recommended_next_tests (array).'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "9556fa48-c4f6-5cec-981a-9bad1378f6a3",
+      "name": "Prepare Market Economics Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "817d973a-f705-5bc9-8fb2-71592db8240a",
+      "name": "Nebius — Market Economics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2180,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Parse Competitor Intelligence').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'MARKET_AGENT_EMPTY');const a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;return [{json:{...x,analyses:{...x.analyses,market_economics:a},agent_trace:[...x.agent_trace,{agent:'MARKET_ECONOMICS',model:r.model,status:'SUCCEEDED'}]}}];"
+      },
+      "id": "ee096df0-db43-55f0-8833-740e888c6771",
+      "name": "Parse Market Economics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const f=x.founder_inputs??{};const n=v=>v==null?null:Number(v);const budget=n(f.available_budget),monthly=n(f.monthly_build_budget),price=n(f.target_monthly_price);const currency=f.currency??null;\nconst questions=[];if(budget==null)questions.push('What total amount can you afford to risk before receiving payment evidence?');if(monthly==null)questions.push('What monthly build-and-validation spend can you sustain?');if(price==null)questions.push('What price or price range do you want to test with real buyers?');if(!currency)questions.push('Which currency should the financial plan use?');\nconst evidenceBudget=budget==null?null:Math.round(budget*0.2*100)/100;const reserve=budget==null?null:Math.round(budget*0.5*100)/100;const buildCap=budget==null?null:Math.round(budget*0.3*100)/100;\nconst scenarios=['lean','base','stretch'].map((name,i)=>{const factor=[0.6,1,1.4][i];const monthlySpend=monthly==null?null:Math.round(monthly*factor*100)/100;const runway=budget==null||!monthlySpend?null:Math.floor(budget/monthlySpend*10)/10;const customers=price==null||!monthlySpend?null:Math.ceil(monthlySpend/price);return{name,monthly_spend:monthlySpend,runway_months:runway,customers_to_cover_monthly_spend:customers,assumption:`${name} scenario uses ${factor}x the founder's stated monthly build budget.`}});\nconst plan={calculation_version:'bp-finance-v1',currency,founder_inputs:{available_budget:budget,monthly_build_budget:monthly,hours_per_week:n(f.hours_per_week),target_monthly_price:price},staged_capital:{validation_budget:evidenceBudget,build_budget_cap:buildCap,reserve},scenarios,spend_gates:[{gate:'problem evidence',unlock:'Run low-cost interviews and demand tests',required_signal:'Repeated pain plus current workaround'},{gate:'payment evidence',unlock:'Increase build spend',required_signal:'Deposit, preorder, paid pilot, or signed LOI with budget owner'},{gate:'retention evidence',unlock:'Scale distribution spend',required_signal:'Repeat usage or renewal behavior'}],open_questions:questions,limitations:['These are deterministic scenarios from founder inputs, not a forecast.','Market-search excerpts do not justify revenue projections.']};\nreturn [{json:{...x,financial_plan:plan,agent_trace:[...x.agent_trace,{agent:'FINANCIAL_SCENARIO',model:'DETERMINISTIC',status:questions.length?'PARTIAL':'SUCCEEDED'}]}}];"
+      },
+      "id": "b9e2df48-91dc-535d-8e7f-db8883de5d42",
+      "name": "Deterministic Financial Scenario Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2620,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const payload={idea_frame:x.idea_frame,founder_inputs:x.founder_inputs,customer_analysis:x.analyses.customer_demand,competitor_analysis:x.analyses.competitor_intelligence,market_analysis:x.analyses.market_economics,evidence:x.evidence_cards};return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.1,max_tokens:1800,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the Validation and Distribution specialist. Using only supplied evidence, design how this founder can find the first reachable users and test demand before scaling. Return JSON with first_user_definition, reachable_channels (array with channel, why_reachable, evidence_ids), experiment_ladder (array with hypothesis, smallest_test, success_threshold, failure_threshold, duration_days, cost_cap, human_approval_required), launch_sequence (array), growth_hypotheses (array), open_questions (array), risks (array), and assumptions (array). Never send messages, publish, buy ads, recruit people, or claim willingness to pay without binding payment evidence. All external actions are proposals requiring founder approval.'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "d4f84023-093c-566f-b484-21e01bc85dfb",
+      "name": "Prepare Validation and Distribution Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "0c7050d4-c9e9-56d3-9a81-cd1847aee79f",
+      "name": "Nebius — Validation and Distribution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        3060,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Deterministic Financial Scenario Agent').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'VALIDATION_AGENT_EMPTY');const a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;for(const e of (a.experiment_ladder??[]))e.human_approval_required=true;return [{json:{...x,analyses:{...x.analyses,validation_distribution:a},agent_trace:[...x.agent_trace,{agent:'EXPERIMENT_DESIGNER',model:r.model,status:'SUCCEEDED'}]}}];"
+      },
+      "id": "dbe7ce9f-cb3c-5830-9b66-e8d6a31a762a",
+      "name": "Parse Validation and Distribution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const evidence=x.evidence_cards.map(({auditor_verdict,...e})=>e);const payload={idea_frame:x.idea_frame,evidence,analyses:x.analyses,coverage:x.coverage,provider_failures:x.provider_failures};return [{json:{...x,request:{model:'openai/gpt-oss-120b',reasoning_effort:'low',temperature:0,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the silent independent Evidence Auditor. You assign the first audit verdict; do not interpret the absence of a prior verdict as failure. Do not add research or rewrite the answer. Grade each evidence ID by whether its URL, title, and excerpt support a specific analyst claim. A relevant search excerpt may be accepted with limitation for directional findings such as named alternatives, reported pain, workflows, or experiment ideas. It must NOT prove exact market size, revenue, willingness to pay, purchase intent, or other high-stakes numeric claims unless the excerpt is from an appropriate primary source and directly states it. Unsupported analyst claims remain assumptions; that alone does not block a PARTIAL evidence-led blueprint. Set can_synthesize true when at least three relevant IDs are accepted and each requested research stream has usable directional coverage; use human_review only for a genuine contradiction, unsafe request, or decision needing human authority. Return JSON: verdict PASS|REPAIR|HUMAN_REVIEW|FAIL, can_synthesize boolean, repair_needed boolean, human_review boolean, coverage_scores object (0..1 per stream), accepted_ids array, rejected_ids array, contradictions array, reasons array, weakest_stream, and repair_query. Never accept a claim merely because it sounds plausible.'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "9b90cc27-1c7b-5415-95f2-0ba912cbcaa2",
+      "name": "Prepare Independent Evidence Auditor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "ef22933a-526b-5ef2-a8d2-b3e87b95d8c3",
+      "name": "Nebius — Independent Evidence Audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        3720,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Parse Validation and Distribution').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'AUDITOR_EMPTY');let a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;a.accepted_ids=Array.isArray(a.accepted_ids)?a.accepted_ids.filter(id=>x.evidence_cards.some(e=>e.evidence_id===id)):[];a.rejected_ids=Array.isArray(a.rejected_ids)?a.rejected_ids:[];a.reasons=Array.isArray(a.reasons)?a.reasons.map(String):[];const weak=Object.entries(x.coverage).filter(([k])=>k!=='total').sort((p,q)=>p[1]-q[1])[0]?.[0]??'customer_demand';const deterministicRepair=x.coverage.total<6||Object.values(x.coverage).slice(0,3).some(v=>v<1);const repair_needed=!a.human_review&&(deterministicRepair||a.repair_needed===true||a.verdict==='REPAIR');const can_synthesize=!repair_needed&&!a.human_review&&a.can_synthesize===true&&a.accepted_ids.length>=3;const repair_query=String(a.repair_query??`${x.idea_frame.target_customer} ${x.idea_frame.problem} ${weak} primary source statistics pricing`).slice(0,2000);return [{json:{...x,audit:{...a,weakest_stream:a.weakest_stream??weak,repair_query},repair_needed,can_synthesize,human_review:a.human_review===true,repair_applied:false,agent_trace:[...x.agent_trace,{agent:'EVIDENCE_AUDITOR',model:r.model,status:repair_needed?'RETRYING':(can_synthesize?'SUCCEEDED':'PARTIAL')}]}}];"
+      },
+      "id": "09b333a6-3304-5433-968f-a1e6ba08cd74",
+      "name": "Parse Audit and Decide Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3940,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b0948c8e-888e-5653-b947-401ab037e0f8",
+              "leftValue": "={{ $json.repair_needed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4a055e81-a217-544f-86b3-67c3f1834ba1",
+      "name": "One Bounded Research Repair?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4160,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const raw=x.audit.repair_query||`${x.idea_frame.target_customer} ${x.idea_frame.problem} primary source evidence`;const repair_query=String(raw).trim().split(/\\s+/).slice(0,45).join(' ').slice(0,380).trim();return [{json:{...x,repair_query}}];"
+      },
+      "id": "5114bd16-cf62-5021-9d9d-8d1e8ca391e7",
+      "name": "Prepare Repair Query",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3720,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: $json.repair_query, count: 8 }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "1e2133fb-f8b7-5aaf-8fcb-3b6c81a21ce0",
+      "name": "You — One Repair Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        3940,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yX3JLZ7MVY7LXlZ4",
+          "name": "BP You Search"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Prepare Repair Query').first().json;const raw=$input.first().json;const now=new Date().toISOString();let arr=[];function walk(v,d=0){if(d>5||v==null)return;if(Array.isArray(v)){for(const z of v)walk(z,d+1);return}if(typeof v!=='object')return;const u=v.url??v.link??v.source_url;if(typeof u==='string'&&u.startsWith('https://'))arr.push(v);for(const z of Object.values(v))if(typeof z==='object')walk(z,d+1)}if(!raw.error)walk(raw);const existing=new Set(x.evidence_cards.map(e=>e.source_url));const cards=[];for(const r of arr){const u=r.url??r.link??r.source_url;if(existing.has(u))continue;const snippetText=Array.isArray(r.snippets)?r.snippets.slice(0,2).join(' '):'';const ex=String(snippetText||r.snippet||r.excerpt||r.description||r.text||'').trim();if(!ex)continue;let d='unknown.invalid';try{d=new URL(u).hostname.replace(/^www\\./,'')}catch{};const id=`ev-repair-${cards.length}-${Date.now().toString(36)}`;cards.push({evidence_id:id,stream:'repair',claim:ex.slice(0,4000),source_url:u,source_title:String(r.title??r.name??'Repair source').slice(0,1000),source_domain:d,source_type:/\\.gov\\b/.test(d)?'GOVERNMENT':(/\\.edu\\b|doi/.test(d)?'ACADEMIC':'OTHER'),provider:'YOU',query:x.repair_query,excerpt:ex.slice(0,4000),retrieved_at:now,limitations:['Bounded repair search excerpt; directional use only until source-page verification.'],auditor_verdict:'PENDING'});existing.add(u);if(cards.length>=8)break}return [{json:{...x,evidence_cards:[...x.evidence_cards,...cards],coverage:{...x.coverage,total:x.evidence_cards.length+cards.length,repair:cards.length},repair_applied:true,repair_needed:false,agent_trace:[...x.agent_trace,{agent:'PROVIDER_GATEWAY',provider:'YOU',status:raw.error?'FAILED':'SUCCEEDED',tool_calls:1,reason:'BOUNDED_REPAIR'}]}}];"
+      },
+      "id": "df8021c7-ed3d-5a8f-ae98-9277eddac4a5",
+      "name": "Merge Repair Evidence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4160,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const evidence=x.evidence_cards.map(({auditor_verdict,...e})=>e);return [{json:{...x,request:{model:'openai/gpt-oss-120b',reasoning_effort:'low',temperature:0,max_tokens:1200,response_format:{type:'json_object'},messages:[{role:'system',content:'You are performing the final independent evidence re-audit after the single allowed repair. Assign verdicts yourself. A relevant search excerpt may support directional claims with a limitation, but cannot prove exact market size, revenue, willingness to pay, or purchase intent. Unsupported claims remain UNKNOWN and must not enter the blueprint as facts. Set can_synthesize true when at least three IDs are relevant and the requested streams have enough directional coverage for an explicitly PARTIAL blueprint. Use human_review only for genuine contradiction, unsafe scope, or human authority—not merely because further real-world validation is recommended. Return JSON with verdict PASS|HUMAN_REVIEW|FAIL, can_synthesize boolean, human_review boolean, accepted_ids array, rejected_ids array, contradictions array, reasons array, coverage_scores object. Do not request another repair.'},{role:'user',content:JSON.stringify({idea_frame:x.idea_frame,evidence,analyses:x.analyses})}]}}}];"
+      },
+      "id": "2c5fc9d5-c52d-512c-b1d3-5815f04e2f49",
+      "name": "Prepare Re-Audit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4380,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "2c087dc7-2e2b-5ec4-9db7-d2c82fc19195",
+      "name": "Nebius — Final Re-Audit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        4600,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Merge Repair Evidence').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'REAUDIT_EMPTY');const a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;const accepted=Array.isArray(a.accepted_ids)?a.accepted_ids.filter(id=>x.evidence_cards.some(e=>e.evidence_id===id)):[];const can=a.can_synthesize===true&&a.human_review!==true&&accepted.length>=3;return [{json:{...x,audit:{...a,accepted_ids:accepted},can_synthesize:can,human_review:a.human_review===true,repair_needed:false,agent_trace:[...x.agent_trace,{agent:'EVIDENCE_AUDITOR',model:r.model,status:can?'SUCCEEDED':(a.human_review?'PARTIAL':'FAILED'),reason:'FINAL_REAUDIT'}]}}];"
+      },
+      "id": "ee0bfc21-ece0-51ea-b27f-4ea2f80d5300",
+      "name": "Parse Final Re-Audit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4820,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{...x,repair_applied:false}}];"
+      },
+      "id": "77008cb2-813f-5709-9a01-558d28eb17e8",
+      "name": "Use First Audit Without Repair",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3720,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const accepted=new Set(x.audit.accepted_ids??[]);const cards=x.evidence_cards.map(e=>({...e,auditor_verdict:accepted.has(e.evidence_id)?'ACCEPT':((x.audit.rejected_ids??[]).includes(e.evidence_id)?'REJECT':'ACCEPT_WITH_LIMITATION')}));return [{json:{...x,evidence_cards:cards,accepted_evidence:cards.filter(e=>accepted.has(e.evidence_id)),can_synthesize:x.can_synthesize===true&&accepted.size>=3}}];"
+      },
+      "id": "fb5df9d9-4b6b-5f70-b71f-ce7134e0a33a",
+      "name": "Finalize Audited State",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5040,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "90f517f0-aa69-50e1-bc55-6eb72c2296d8",
+              "leftValue": "={{ $json.can_synthesize }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4b44890f-de0c-5ca7-864b-a11005b29daf",
+      "name": "Evidence Gate Passed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const payload={idea_frame:x.idea_frame,founder_inputs:x.founder_inputs,requested_modules:x.requested_modules,analyses:x.analyses,financial_plan:x.financial_plan,audit:x.audit,evidence:x.accepted_evidence};return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0.1,max_tokens:3000,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the Blueprint Synthesis Agent. Produce an actionable founder blueprint using only audited evidence and deterministic calculations supplied. Unknowns stay explicit. Return JSON with status COMPLETED|PARTIAL, executive_decision, dashboard {completion_percent,open_assumptions,positive_signals,open_risks}, sections array where every section has section_key,status,completion_percent,summary,open_questions,evidence_ids, plus next_route VALIDATION|FOUNDER_INPUT|HUMAN_REVIEW|COMPLETE and limitations array. Include requested sections and mark unrequested/dependent future sections honestly. Never invent market size, customer willingness to pay, competitor features, or financial projections.'},{role:'user',content:JSON.stringify(payload)}]}}}];"
+      },
+      "id": "c4dfee7c-df0d-5381-ab9a-ee926fe02bdb",
+      "name": "Prepare Blueprint Synthesis Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5480,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 45000
+        }
+      },
+      "id": "df6c5b7b-0def-5ca7-afd6-adf7afac6652",
+      "name": "Nebius — Blueprint Synthesis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        5700,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Finalize Audited State').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error(r.error?.message??'SYNTHESIS_EMPTY');const b=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c;const sectionKeys=['foundation','customer_demand','competitor_intelligence','market_economics','operating_model','financial_readiness','validation','launch_distribution','growth_optimization','final_blueprint'];const sections=Array.isArray(b.sections)?b.sections.filter(s=>sectionKeys.includes(s.section_key)).map(s=>({section_key:s.section_key,status:s.status??'PARTIAL',completion_percent:Math.max(0,Math.min(100,Math.round(Number(s.completion_percent)||0))),summary:s.summary??{},open_questions:Array.isArray(s.open_questions)?s.open_questions.map(String):[],evidence_ids:Array.isArray(s.evidence_ids)?s.evidence_ids.filter(id=>x.accepted_evidence.some(e=>e.evidence_id===id)):[]})):[];return [{json:{schema_version:'bp-blueprint-v1',status:b.status==='COMPLETED'?'COMPLETED':'PARTIAL',product_idea:x.idea_frame.product_summary,starting_position:{idea_text:x.idea_text,industry:x.optional_industry,geography:x.geography,founder_inputs:x.founder_inputs,idea_frame:x.idea_frame},dashboard:b.dashboard??{completion_percent:0,open_assumptions:x.idea_frame.assumptions.length,positive_signals:0,open_risks:0},executive_decision:b.executive_decision??{},sections,financial_plan:x.financial_plan,citations:x.accepted_evidence,next_route:['VALIDATION','FOUNDER_INPUT','HUMAN_REVIEW','COMPLETE'].includes(b.next_route)?b.next_route:'VALIDATION',limitations:[...(Array.isArray(b.limitations)?b.limitations:[]),...(x.provider_failures.length?['One or more research providers returned a partial failure.']:[])],audit:x.audit,agent_trace:[...x.agent_trace,{agent:'BLUEPRINT_SYNTHESIS',model:r.model,status:'SUCCEEDED'}],persistence_envelope:{owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id,correlation_id:x.correlation_id}}}];"
+      },
+      "id": "76d1c76a-5cde-54c1-b401-eab945c09b6b",
+      "name": "Parse Complete Blueprint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5920,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const qs=[...(x.idea_frame.missing_questions??[]),...(x.financial_plan.open_questions??[])];const sections=['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation','launch_distribution','growth_optimization'].map(k=>({section_key:k,status:x.requested_modules.includes(k)?(x.human_review?'HUMAN_REVIEW':'PARTIAL'):'NOT_REQUESTED',completion_percent:k==='foundation'?60:0,summary:k==='foundation'?x.idea_frame:{message:'Evidence gate did not support a complete section.'},open_questions:qs,evidence_ids:[]}));return [{json:{schema_version:'bp-blueprint-v1',status:x.human_review?'HUMAN_REVIEW':'PARTIAL',product_idea:x.idea_frame.product_summary,starting_position:{idea_text:x.idea_text,industry:x.optional_industry,geography:x.geography,founder_inputs:x.founder_inputs,idea_frame:x.idea_frame},dashboard:{completion_percent:10,open_assumptions:x.idea_frame.assumptions.length,positive_signals:0,open_risks:(x.audit.contradictions??[]).length+1},executive_decision:{decision:'INSUFFICIENT_EVIDENCE',reason:'The evidence gate did not support a trustworthy complete blueprint.'},sections,financial_plan:x.financial_plan,citations:x.evidence_cards.filter(e=>e.auditor_verdict==='ACCEPT'),next_route:x.human_review?'HUMAN_REVIEW':'FOUNDER_INPUT',limitations:x.audit.reasons??['Insufficient audited evidence.'],audit:x.audit,agent_trace:x.agent_trace,persistence_envelope:{owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id,correlation_id:x.correlation_id}}}];"
+      },
+      "id": "25a2522f-641a-53d5-80df-f40f25edde86",
+      "name": "Build Safe Partial Blueprint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5480,
+        120
+      ]
+    }
+  ],
+  "connections": {
+    "Run Phase 4-5 Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Test Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Test Input": {
+      "main": [
+        [
+          {
+            "node": "Validate and Normalize Research Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Supervisor": {
+      "main": [
+        [
+          {
+            "node": "Validate and Normalize Research Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate and Normalize Research Contract": {
+      "main": [
+        [
+          {
+            "node": "Prepare Idea Framer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Idea Framer Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Idea Framer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Idea Framer": {
+      "main": [
+        [
+          {
+            "node": "Parse and Check Idea Frame",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse and Check Idea Frame": {
+      "main": [
+        [
+          {
+            "node": "Research Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Planner": {
+      "main": [
+        [
+          {
+            "node": "You — Customer Demand Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "You — Customer Demand Search": {
+      "main": [
+        [
+          {
+            "node": "You — Competitor Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "You — Competitor Search": {
+      "main": [
+        [
+          {
+            "node": "You — Market Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "You — Market Search": {
+      "main": [
+        [
+          {
+            "node": "Normalize Evidence Cards",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Evidence Cards": {
+      "main": [
+        [
+          {
+            "node": "Prepare Customer Evidence Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Customer Evidence Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Customer Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Customer Evidence": {
+      "main": [
+        [
+          {
+            "node": "Parse Customer Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Customer Evidence": {
+      "main": [
+        [
+          {
+            "node": "Prepare Competitor Intelligence Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Competitor Intelligence Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Competitor Intelligence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Competitor Intelligence": {
+      "main": [
+        [
+          {
+            "node": "Parse Competitor Intelligence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Competitor Intelligence": {
+      "main": [
+        [
+          {
+            "node": "Prepare Market Economics Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Market Economics Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Market Economics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Market Economics": {
+      "main": [
+        [
+          {
+            "node": "Parse Market Economics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Market Economics": {
+      "main": [
+        [
+          {
+            "node": "Deterministic Financial Scenario Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deterministic Financial Scenario Agent": {
+      "main": [
+        [
+          {
+            "node": "Prepare Validation and Distribution Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Validation and Distribution Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Validation and Distribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Validation and Distribution": {
+      "main": [
+        [
+          {
+            "node": "Parse Validation and Distribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Validation and Distribution": {
+      "main": [
+        [
+          {
+            "node": "Prepare Independent Evidence Auditor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Independent Evidence Auditor": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Independent Evidence Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Independent Evidence Audit": {
+      "main": [
+        [
+          {
+            "node": "Parse Audit and Decide Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Audit and Decide Route": {
+      "main": [
+        [
+          {
+            "node": "One Bounded Research Repair?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One Bounded Research Repair?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Repair Query",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Use First Audit Without Repair",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Repair Query": {
+      "main": [
+        [
+          {
+            "node": "You — One Repair Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "You — One Repair Search": {
+      "main": [
+        [
+          {
+            "node": "Merge Repair Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Repair Evidence": {
+      "main": [
+        [
+          {
+            "node": "Prepare Re-Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Re-Audit": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Final Re-Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Final Re-Audit": {
+      "main": [
+        [
+          {
+            "node": "Parse Final Re-Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Final Re-Audit": {
+      "main": [
+        [
+          {
+            "node": "Finalize Audited State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use First Audit Without Repair": {
+      "main": [
+        [
+          {
+            "node": "Finalize Audited State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize Audited State": {
+      "main": [
+        [
+          {
+            "node": "Evidence Gate Passed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evidence Gate Passed?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Blueprint Synthesis Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Safe Partial Blueprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Blueprint Synthesis Agent": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Blueprint Synthesis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Blueprint Synthesis": {
+      "main": [
+        [
+          {
+            "node": "Parse Complete Blueprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "saveExecutionProgress": true
+  },
+  "versionId": "8fa787c6-2ebe-58e2-ad61-1a1dcb5c5edb",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

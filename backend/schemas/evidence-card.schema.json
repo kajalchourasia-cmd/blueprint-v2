@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/evidence-card.schema.json",
+  "title": "Blueprint Evidence Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidence_id", "stream", "claim", "source_url", "source_domain", "source_type", "provider", "retrieved_at", "auditor_verdict"],
+  "properties": {
+    "evidence_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+    "stream": { "enum": ["customer_demand", "competitor_intelligence", "market_economics", "repair"] },
+    "claim": { "type": "string", "minLength": 5, "maxLength": 8000 },
+    "source_url": { "type": "string", "pattern": "^https://" },
+    "source_title": { "type": ["string", "null"], "maxLength": 1000 },
+    "source_domain": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "source_type": { "enum": ["FIRST_PARTY", "GOVERNMENT", "ACADEMIC", "INDUSTRY", "NEWS", "REVIEW", "COMMUNITY", "MARKETPLACE", "OTHER"] },
+    "provider": { "enum": ["YOU", "DIRECT", "OTHER"] },
+    "query": { "type": ["string", "null"], "maxLength": 2000 },
+    "excerpt": { "type": ["string", "null"], "maxLength": 12000 },
+    "retrieved_at": { "type": "string", "format": "date-time" },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "auditor_verdict": { "enum": ["PENDING", "ACCEPT", "ACCEPT_WITH_LIMITATION", "REPAIR", "REJECT", "HUMAN_REVIEW"] }
+  }
+}

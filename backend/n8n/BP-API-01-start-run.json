@@ -1,0 +1,528 @@
+{
+  "id": "bpApi01StartRun",
+  "name": "BP-API-01 Start Run",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "blueprint/start",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "6f55ee21-6f98-4d08-b53c-b01ec53ea101",
+      "name": "POST Blueprint Start",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1040,
+        0
+      ],
+      "webhookId": "bp-api-01-start-run"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first()?.json ?? {};\nlet body = raw.body ?? raw;\nif (typeof body === 'string') {\n  try { body = JSON.parse(body); } catch { body = {}; }\n}\nif (!body || typeof body !== 'object' || Array.isArray(body)) body = {};\nconst headers = {};\nfor (const [key, value] of Object.entries(raw.headers ?? {})) headers[String(key).toLowerCase()] = value;\nconst authorization = String(headers.authorization ?? '').trim();\nconst ideaText = typeof body.idea_text === 'string' ? body.idea_text.trim() : '';\nconst idempotencyKey = String(body.idempotency_key ?? headers['idempotency-key'] ?? '').trim();\nconst optionalIndustry = typeof body.optional_industry === 'string' ? (body.optional_industry.trim() || null) : null;\nconst geography = typeof body.geography === 'string' ? (body.geography.trim() || null) : null;\nconst constraints = body.constraints && typeof body.constraints === 'object' && !Array.isArray(body.constraints) ? body.constraints : {};\nconst researchAliases={user_research:'customer_demand',customer_research:'customer_demand',customer_demand:'customer_demand',competitor_research:'competitor_intelligence',competitor_intelligence:'competitor_intelligence',market_research:'market_economics',market_economics:'market_economics'};\nconst rawResearch=Array.isArray(body.requested_research)?body.requested_research:[];\nconst requestedResearch=[...new Set(rawResearch.map(value=>researchAliases[String(value).toLowerCase()]).filter(Boolean))];\nconst correlationId = String(headers['x-correlation-id'] ?? `bp-${Date.now()}-${$execution.id}`).slice(0, 200);\nconst allowedFields = new Set(['idempotency_key', 'idea_text', 'optional_industry', 'geography', 'constraints', 'requested_research']);\nconst unexpectedFields = Object.keys(body).filter(key => !allowedFields.has(key));\nconst externalActionFields = ['to', 'recipient', 'phone_number', 'message_to_send', 'email_to_send', 'payment', 'booking', 'publish_to'];\nconst hasExternalActionPayload = externalActionFields.some(key => Object.prototype.hasOwnProperty.call(body, key));\nconst actionVerb = '(send|email|message|ping|call|contact|reach out to|post|publish|buy|pay|book|schedule|delete|remove)';\nconst explicitActionRequest = [\n  new RegExp(`^(please\\\\s+)?${actionVerb}\\\\b`, 'i'),\n  new RegExp(`^(can|could|would|will)\\\\s+you\\\\s+${actionVerb}\\\\b`, 'i'),\n  new RegExp(`^i\\\\s+(want|need|would like)\\\\s+you\\\\s+to\\\\s+${actionVerb}\\\\b`, 'i')\n].some(pattern => pattern.test(ideaText));\nconst scopeDenied = explicitActionRequest || hasExternalActionPayload;\nconst errors = [];\nif (!/^Bearer\\s+\\S+$/i.test(authorization)) errors.push('AUTHORIZATION_REQUIRED');\nif (scopeDenied) errors.push('OUT_OF_SCOPE_ACTION');\nif (unexpectedFields.length) errors.push('UNEXPECTED_FIELDS');\nif (ideaText.length < 10 || ideaText.length > 10000) errors.push('IDEA_TEXT_LENGTH');\nif (idempotencyKey.length < 8 || idempotencyKey.length > 200 || !/^[A-Za-z0-9._:-]+$/.test(idempotencyKey)) errors.push('IDEMPOTENCY_KEY_FORMAT');\nif (optionalIndustry && optionalIndustry.length > 200) errors.push('INDUSTRY_LENGTH');\nif (geography && geography.length > 200) errors.push('GEOGRAPHY_LENGTH');\nif (Object.keys(constraints).length > 30) errors.push('TOO_MANY_CONSTRAINTS');\nif (!Array.isArray(body.requested_research) || requestedResearch.length < 1 || requestedResearch.length > 3 || requestedResearch.length !== rawResearch.length) errors.push('REQUESTED_RESEARCH_INVALID');\nconst statusCode = scopeDenied ? 422 : (errors.includes('AUTHORIZATION_REQUIRED') ? 401 : 400);\nconst errorCode = scopeDenied ? 'OUT_OF_SCOPE' : (errors.includes('AUTHORIZATION_REQUIRED') ? 'UNAUTHENTICATED' : 'INVALID_REQUEST');\nconst safeMessage = scopeDenied\n  ? 'Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.'\n  : (errorCode === 'UNAUTHENTICATED' ? 'Please sign in before starting a Blueprint.' : 'Check the idea, idempotency key, and optional fields, then try again.');\nreturn [{ json: {\n  valid: errors.length === 0,\n  errors,\n  scope_denied: scopeDenied,\n  unexpected_fields: unexpectedFields,\n  status_code: statusCode,\n  error_code: errorCode,\n  safe_message: safeMessage,\n  authorization,\n  correlation_id: correlationId,\n  request: { idempotency_key: idempotencyKey, idea_text: ideaText, optional_industry: optionalIndustry, geography, constraints, requested_research: requestedResearch }\n} }];"
+      },
+      "id": "47985a85-f1b6-4166-8209-f8ab62fda102",
+      "name": "Validate and Normalize Start Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a39220c9-b0ae-4853-b41d-74580c9ba103",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7e4fc0e9-f4fa-467e-b423-f92d40bea104",
+      "name": "Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -590,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error_code: $json.error_code, message: $json.safe_message, correlation_id: $json.correlation_id }) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "d7c0d532-1678-481f-b0c1-69fc3caaa105",
+      "name": "Respond Invalid Request",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -350,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Validate and Normalize Start Request').item.json.authorization }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "61b7c6e0-df43-4ef1-a3c9-b966c6fca106",
+      "name": "Verify Supabase User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -350,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d234aa19-1fd8-4478-a2ee-47c0b18aa107",
+              "leftValue": "={{ /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test($json.id ?? '') }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9bd98571-a1ea-43b5-8e27-b0a8b33ca108",
+      "name": "Authenticated User?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -110,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const validated = $('Validate and Normalize Start Request').first().json;\nconst authUser = $input.first()?.json ?? {};\nif (!authUser.id) throw new Error('AUTH_CONTEXT_MISSING');\nconst request = validated.request;\nreturn [{ json: {\n  correlation_id: validated.correlation_id,\n  authorization: validated.authorization,\n  authenticated_user_id: authUser.id,\n  rpc_body: {\n    p_idempotency_key: request.idempotency_key,\n    p_idea_text: request.idea_text,\n    p_optional_industry: request.optional_industry,\n    p_geography: request.geography,\n    p_constraints: {...request.constraints,requested_research:request.requested_research},\n    p_original_request: {\n      source: 'BP-API-01',\n      correlation_id: validated.correlation_id,\n      idea_text: request.idea_text,\n      optional_industry: request.optional_industry,\n      geography: request.geography,\n      constraints: request.constraints,\n      requested_research: request.requested_research\n    }\n  }\n} }];"
+      },
+      "id": "e902e14e-a035-453c-a99b-30d1a269a109",
+      "name": "Prepare Authenticated Start",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        130,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error_code: 'UNAUTHENTICATED', message: 'Your session is invalid or expired. Please sign in again.', correlation_id: $('Validate and Normalize Start Request').item.json.correlation_id }) }}",
+        "options": {
+          "responseCode": 401,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "572182d0-e29f-40cd-b734-307ca52da110",
+      "name": "Respond Unauthenticated",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        130,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/start_blueprint_run",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "3cddbc5e-3720-4faa-8efa-56549094a111",
+      "name": "Create Idempotent Blueprint Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        370,
+        -160
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first()?.json ?? {};\nconst correlationId = $('Prepare Authenticated Start').first().json.correlation_id;\nconst uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;\nconst ok = uuid.test(raw.project_id ?? '') && uuid.test(raw.run_id ?? '') && raw.status === 'NEW';\nif (ok) {\n  return [{ json: { ok: true, status_code: 202, response: { ok: true, correlation_id: correlationId, project_id: raw.project_id, run_id: raw.run_id, status: raw.status, duplicate: Boolean(raw.duplicate), created_at: raw.created_at, poll_after_ms: 2000 } } }];\n}\nconst technical = String(raw.error?.message ?? raw.message ?? raw.code ?? 'UNKNOWN').toUpperCase();\nconst conflict = technical.includes('CONFLICT') || technical.includes('DUPLICATE') || technical.includes('409');\nreturn [{ json: { ok: false, status_code: conflict ? 409 : 500, response: { ok: false, error_code: conflict ? 'CONFLICT' : 'START_FAILED', message: conflict ? 'This request conflicts with an existing start operation.' : 'Blueprint could not start safely. No partial run will be continued.', correlation_id: correlationId } } }];"
+      },
+      "id": "b60852be-8775-4054-9ef0-ea3a475ba112",
+      "name": "Classify Start Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        610,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d22c33ed-d543-4d51-bc8a-a89b0c6ba113",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6ddfcb83-470c-46c8-80e2-bbb6a7b5a114",
+      "name": "Run Created?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        850,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const p=$('Prepare Authenticated Start').first().json;const r=p.rpc_body;const aliases={user_research:'customer_demand',customer_research:'customer_demand',customer_demand:'customer_demand',competitor_research:'competitor_intelligence',competitor_intelligence:'competitor_intelligence',market_research:'market_economics',market_economics:'market_economics'};const selected=[...new Set((r.p_constraints?.requested_research??[]).map(value=>aliases[String(value).toLowerCase()]).filter(Boolean))];if(!selected.length)throw new Error('REQUESTED_RESEARCH_MISSING');return [{json:{command:'START',authorization:p.authorization,owner_id:p.authenticated_user_id,project_id:x.response.project_id,run_id:x.response.run_id,correlation_id:p.correlation_id,idea_text:r.p_idea_text,optional_industry:r.p_optional_industry,geography:r.p_geography,requested_modules:['foundation',...selected],founder_inputs:r.p_constraints??{},state:{transition_count:0,search_cycle_count:0,tool_call_count:0,revision_count:0},test_mode:false}}];"
+      },
+      "id": "dc1f53e9-4c20-4b28-9ea7-2650a8ad6211",
+      "name": "Prepare Supervisor Start Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1090,
+        -400
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bp00Supervisor",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "id": "6f7d012d-fbfd-401d-a341-bf3526bf62cd",
+      "name": "Dispatch BP-00 Adaptive Supervisor",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1330,
+        -400
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": 202,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "41e22f63-68d7-4c17-845a-1f5d7beba115",
+      "name": "Respond Start Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1090,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "910cb5f5-9b29-4789-8cd0-d520db18a116",
+      "name": "Respond Safe Start Failure",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1090,
+        -80
+      ]
+    }
+  ],
+  "connections": {
+    "POST Blueprint Start": {
+      "main": [
+        [
+          {
+            "node": "Validate and Normalize Start Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate and Normalize Start Request": {
+      "main": [
+        [
+          {
+            "node": "Request Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Valid?": {
+      "main": [
+        [
+          {
+            "node": "Verify Supabase User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Supabase User": {
+      "main": [
+        [
+          {
+            "node": "Authenticated User?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authenticated User?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Authenticated Start",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unauthenticated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Authenticated Start": {
+      "main": [
+        [
+          {
+            "node": "Create Idempotent Blueprint Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Idempotent Blueprint Run": {
+      "main": [
+        [
+          {
+            "node": "Classify Start Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Start Result": {
+      "main": [
+        [
+          {
+            "node": "Run Created?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Created?": {
+      "main": [
+        [
+          {
+            "node": "Respond Start Accepted",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Supervisor Start Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Safe Start Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supervisor Start Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Dispatch BP-00 Adaptive Supervisor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 60
+  },
+  "versionId": "b72746d3-adb5-4d25-8f2b-a0485a667117",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

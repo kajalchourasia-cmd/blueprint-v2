@@ -1,0 +1,86 @@
+{
+  "name": "BP-HITL-01 Durable Checkpoint Resume",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b0eb0101-0180-4080-8080-0de018000101",
+      "name": "Run Resume Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-760, -160]
+    },
+    {
+      "parameters": {"jsCode": "return [{json:{checkpoint_id:'00000000-0000-4000-8000-000000000601',expected_state_version:7,decision:'PROCEED',decision_payload:{founder_note:'Safe structural fixture.'},run_id:'00000000-0000-4000-8000-000000000602',correlation_id:'bp-hitl-safe-test',test_mode:true}}];"},
+      "id": "b0eb0101-0180-4080-8080-0de018000102",
+      "name": "Create Safe Resume Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-520, -160]
+    },
+    {
+      "parameters": {"inputSource": "passthrough"},
+      "id": "b0eb0101-0180-4080-8080-0de018000103",
+      "name": "When Called by Authenticated API",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [-760, 80]
+    },
+    {
+      "parameters": {"jsCode": "const x=$input.first()?.json??{};const allowed=['PROCEED','TARGETED_VALIDATION','RUN_MISSING_RESEARCH','CONTINUE_ANYWAY','PAUSE_OR_REVISE','CANCEL'];const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const decision=String(x.decision??'').toUpperCase();const authorization=String(x.authorization??'');const valid=uuid.test(String(x.checkpoint_id??''))&&Number(x.expected_state_version)>0&&allowed.includes(decision);const persist_required=valid&&!x.test_mode&&/^Bearer\\s+\\S+$/i.test(authorization);return [{json:{schema_version:'bp-checkpoint-resolution-request-v1',checkpoint_id:x.checkpoint_id??null,expected_state_version:Math.trunc(Number(x.expected_state_version)||0),decision,decision_payload:x.decision_payload&&typeof x.decision_payload==='object'?x.decision_payload:{},run_id:x.run_id??null,authorization,persist_required,valid,correlation_id:String(x.correlation_id??`bp-hitl-${Date.now()}`).slice(0,200),test_mode:x.test_mode===true}}];"},
+      "id": "b0eb0101-0180-4080-8080-0de018000104",
+      "name": "Validate Founder Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-260, -20]
+    },
+    {
+      "parameters": {"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"b0eb0101-0180-4080-8080-0de018000151","leftValue":"={{ $json.persist_required }}","rightValue":true,"operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},
+      "id": "b0eb0101-0180-4080-8080-0de018000105",
+      "name": "Resolve Production Checkpoint?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-20, -20]
+    },
+    {
+      "parameters": {"method":"POST","url":"https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/resolve_founder_checkpoint","authentication":"genericCredentialType","genericAuthType":"httpHeaderAuth","sendHeaders":true,"headerParameters":{"parameters":[{"name":"Authorization","value":"={{ $json.authorization }}"},{"name":"Content-Type","value":"application/json"}]},"sendBody":true,"contentType":"raw","rawContentType":"application/json","body":"={{ JSON.stringify({p_checkpoint_id:$json.checkpoint_id,p_expected_state_version:$json.expected_state_version,p_decision:$json.decision,p_decision_payload:$json.decision_payload,p_correlation_id:$json.correlation_id}) }}","options":{"timeout":20000}},
+      "id": "b0eb0101-0180-4080-8080-0de018000106",
+      "name": "Persist Decision and Advance Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [240, -120],
+      "credentials": {"httpHeaderAuth":{"id":"fguxqwSfKfj2xfo9","name":"BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {"jsCode": "const req=$('Validate Founder Decision').first().json;const p=$input.first()?.json??{};const ok=p.resolved===true;return [{json:{schema_version:'bp-checkpoint-resume-result-v1',status:ok?'RESOLVED':'HUMAN_REVIEW',route:ok?(p.requires_replan?'TASK_PLANNER':p.route):'HUMAN_REVIEW',requires_human:!ok,checkpoint_id:req.checkpoint_id,decision:req.decision,state_version:p.state_version??req.expected_state_version,idempotent:p.idempotent===true,planner_input:ok&&p.requires_replan?{command:'PLAN',planning_mode:p.planning_mode,run_id:p.run_id??req.run_id,gate_context:{decision:req.decision,state_version:p.state_version},correlation_id:req.correlation_id}:null,panel_item:ok?null:{item_type:'HUMAN_REVIEW',severity:'HIGH',blocking:true,title:'The decision could not be applied safely',message:String(p.message??p.error??'The checkpoint may be stale or already resolved differently.'),allowed_decisions:['REFRESH_STATE','CONTACT_SUPPORT'],next_route:'HUMAN_REVIEW'},provider_response:p,correlation_id:req.correlation_id,test_mode:false}}];"},
+      "id": "b0eb0101-0180-4080-8080-0de018000107",
+      "name": "Return Durable Resume Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, -120]
+    },
+    {
+      "parameters": {"jsCode": "const x=$input.first().json;if(!x.valid)return [{json:{schema_version:'bp-checkpoint-resume-result-v1',status:'SAFE_FAILED',route:'HUMAN_REVIEW',requires_human:true,panel_item:{item_type:'INVALID_DECISION',severity:'HIGH',blocking:true,title:'This decision is not valid',message:'Refresh the panel and choose one of the currently allowed decisions.',allowed_decisions:['REFRESH_STATE'],next_route:'HUMAN_REVIEW'},correlation_id:x.correlation_id,test_mode:x.test_mode}}];const planningMode=x.decision==='RUN_MISSING_RESEARCH'?'DISCOVER':['PROCEED','CONTINUE_ANYWAY','TARGETED_VALIDATION'].includes(x.decision)?'PROVE_AND_DESIGN':null;return [{json:{schema_version:'bp-checkpoint-resume-result-v1',status:'RESOLVED',route:planningMode?'TASK_PLANNER':x.decision==='CANCEL'?'CANCEL':'HUMAN_REVIEW',requires_human:!planningMode,checkpoint_id:x.checkpoint_id,decision:x.decision,state_version:x.expected_state_version+1,idempotent:false,planner_input:planningMode?{command:'PLAN',planning_mode:planningMode,run_id:x.run_id,gate_context:{decision:x.decision,state_version:x.expected_state_version+1},correlation_id:x.correlation_id}:null,persistence:{persisted:false,reason:'TEST_MODE'},correlation_id:x.correlation_id,test_mode:true}}];"},
+      "id": "b0eb0101-0180-4080-8080-0de018000108",
+      "name": "Return Safe Resume Contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 100]
+    }
+  ],
+  "connections": {
+    "Run Resume Test":{"main":[[{"node":"Create Safe Resume Fixture","type":"main","index":0}]]},
+    "Create Safe Resume Fixture":{"main":[[{"node":"Validate Founder Decision","type":"main","index":0}]]},
+    "When Called by Authenticated API":{"main":[[{"node":"Validate Founder Decision","type":"main","index":0}]]},
+    "Validate Founder Decision":{"main":[[{"node":"Resolve Production Checkpoint?","type":"main","index":0}]]},
+    "Resolve Production Checkpoint?":{"main":[[{"node":"Persist Decision and Advance Run","type":"main","index":0}],[{"node":"Return Safe Resume Contract","type":"main","index":0}]]},
+    "Persist Decision and Advance Run":{"main":[[{"node":"Return Durable Resume Result","type":"main","index":0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder":"v1","timezone":"Asia/Calcutta","errorWorkflow":"bp90ErrorAudit01","executionTimeout":60},
+  "versionId": "b0eb0101-0180-4080-8080-0de018000199",
+  "meta": {"templateCredsSetupCompleted":true},
+  "id": "bpHitl01CheckpointResume",
+  "tags": []
+}

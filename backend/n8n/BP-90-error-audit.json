@@ -1,0 +1,215 @@
+{
+  "id": "bp90ErrorAudit01",
+  "name": "BP-90 Error and Audit",
+  "description": "Global Blueprint Evidence Dev error workflow. Normalizes and redacts n8n failures, classifies retryability, and persists owned run failures through the server-only Supabase RPC.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        0
+      ],
+      "id": "ebf027b4-2fa9-47c2-b948-faf75d9492d8",
+      "name": "On Workflow Error"
+    },
+    {
+      "parameters": {
+        "content": "## BP-90 — Error and Audit\n\nSelect this workflow from every Blueprint workflow's **Settings → Error Workflow**.\n\nBefore testing, bind the HTTP node to the server-only `BP Supabase Error Writer` Header Auth credential (`apikey: sb_secret_...`). Never put that key in Streamlit, GitHub, a Code node, pinned data, or an exported workflow.\n\nThe failed workflow must include `owner_id`, `project_id`, `run_id`, and `correlation_id` in a structured Stop And Error context after authentication. Pre-authentication failures return a redacted local audit envelope and never create a founder-owned database row.",
+        "height": 410,
+        "width": 520,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        -520
+      ],
+      "id": "27caa91e-9095-49d9-bfe6-b79f98df45c6",
+      "name": "BP-90 Setup and Security"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first()?.json ?? {};\nconst error = input.error ?? input.execution?.error ?? {};\nconst rawContext = error.context?.metadata?.blueprint ?? error.context?.blueprint ?? error.metadata?.blueprint ?? error.context ?? input.blueprint_context ?? {};\n\nconst redactString = (value) => String(value ?? '')\n  .replace(/Bearer\\s+[A-Za-z0-9._~+\\/-]+=*/gi, 'Bearer [REDACTED]')\n  .replace(/sb_(?:secret|publishable)_[A-Za-z0-9_-]+/gi, 'sb_[REDACTED]')\n  .replace(/(?:apikey|api[_-]?key|token|password|secret)\\s*[:=]\\s*[^\\s,;]+/gi, '[CREDENTIAL_REDACTED]')\n  .replace(/eyJ[A-Za-z0-9_-]+\\.eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+/g, '[JWT_REDACTED]')\n  .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi, '[EMAIL_REDACTED]');\n\nconst rawMessage = error.message ?? input.message ?? 'Unexpected workflow failure';\nconst message = redactString(rawMessage).slice(0, 1000);\nconst lower = message.toLowerCase();\n\nlet errorClass = 'UNKNOWN';\nif (/unauthor|forbidden|jwt|auth|credential/.test(lower)) errorClass = 'AUTH';\nelse if (/429|rate.?limit|quota|too many requests/.test(lower)) errorClass = 'RATE_LIMIT';\nelse if (/timeout|timed out|etimedout|deadline/.test(lower)) errorClass = 'TIMEOUT';\nelse if (/schema|json|parse|structured output/.test(lower)) errorClass = 'SCHEMA';\nelse if (/validat|invalid input|bad request|400/.test(lower)) errorClass = 'VALIDATION';\nelse if (/409|conflict|duplicate|state version|concurrent/.test(lower)) errorClass = 'CONFLICT';\nelse if (/budget|transition limit|tool call limit|cost limit/.test(lower)) errorClass = 'BUDGET';\nelse if (/quality|citation|evidence gate|auditor/.test(lower)) errorClass = 'QUALITY';\nelse if (/you\\.com|nebius|pinecone|supabase|provider|502|503|504|network|econn/.test(lower)) errorClass = 'PROVIDER';\nelse if (/internal|500|exception/.test(lower)) errorClass = 'INTERNAL';\n\nconst retryable = ['RATE_LIMIT', 'TIMEOUT', 'PROVIDER'].includes(errorClass);\nconst retryCount = Number(rawContext.retry_count ?? rawContext.retryCount ?? 0);\nconst retryExhausted = rawContext.retry_exhausted === true || rawContext.retryExhausted === true || retryCount >= 2 || !retryable;\nconst uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;\nconst ownerId = rawContext.owner_id ?? rawContext.ownerId ?? null;\nconst projectId = rawContext.project_id ?? rawContext.projectId ?? null;\nconst runId = rawContext.run_id ?? rawContext.runId ?? null;\nconst workflowName = input.workflow?.name ?? input.execution?.workflowName ?? 'Unknown Blueprint workflow';\nconst nodeName = input.lastNodeExecuted ?? input.node?.name ?? error.node?.name ?? null;\nconst executionId = input.execution?.id ?? null;\nconst correlationId = rawContext.correlation_id ?? rawContext.correlationId ?? executionId ?? `bp-error-${Date.now()}`;\nconst hasOwnerContext = uuid.test(String(ownerId ?? '')) && (!projectId || uuid.test(String(projectId))) && (!runId || uuid.test(String(runId)));\n\nconst safeMessages = {\n  AUTH: 'Authentication failed safely. Please sign in again.',\n  VALIDATION: 'The request could not be validated. Please review the submitted information.',\n  RATE_LIMIT: 'A research service is temporarily busy. The run has been stopped safely.',\n  TIMEOUT: 'A research step exceeded its time limit. The run has been stopped safely.',\n  SCHEMA: 'An agent returned an invalid structured response. The run has been stopped safely.',\n  QUALITY: 'The evidence quality gate did not pass. Human review is required.',\n  CONFLICT: 'Another worker updated this run first. The stale operation was rejected.',\n  BUDGET: 'The run reached a configured safety limit and was stopped.',\n  PROVIDER: 'A required research service failed. Successful work has been preserved.',\n  INTERNAL: 'An internal workflow step failed. The run has been stopped safely.',\n  UNKNOWN: 'An unexpected workflow error occurred. The run has been stopped safely.'\n};\n\nconst recovery = retryable && !retryExhausted\n  ? 'Retry only from the owning workflow within its configured limit.'\n  : (errorClass === 'AUTH' || errorClass === 'VALIDATION'\n      ? 'Return a safe response without automatic replay.'\n      : 'Inspect the redacted audit record before any replay.');\n\nreturn [{ json: {\n  has_owner_context: hasOwnerContext,\n  owner_id: hasOwnerContext ? ownerId : null,\n  project_id: hasOwnerContext ? projectId : null,\n  run_id: hasOwnerContext ? runId : null,\n  error_class: errorClass,\n  retryable,\n  retry_count: retryCount,\n  retry_exhausted: retryExhausted,\n  workflow_name: redactString(workflowName).slice(0, 300),\n  node_name: redactString(nodeName).slice(0, 300) || null,\n  safe_message: safeMessages[errorClass],\n  redacted_details: { redacted_message: message, execution_id: executionId, source: 'n8n_error_trigger', classification_version: 'bp-error-v1' },\n  recovery_action: recovery,\n  correlation_id: redactString(correlationId).slice(0, 300),\n  payload_reference: { execution_id: executionId, workflow_id: input.workflow?.id ?? input.execution?.workflowId ?? null, replay_source: 'n8n_execution' }\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        0
+      ],
+      "id": "2f595d9a-e440-40cf-96ca-f6f323d1332e",
+      "name": "Normalize Redact and Classify"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "475b5ab6-2650-4725-aee2-a84a944e6915",
+              "leftValue": "={{ $json.has_owner_context }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        0
+      ],
+      "id": "48a32a42-dd12-4f72-a730-f40dd21e8ff6",
+      "name": "Owned Run Context?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/record_workflow_failure",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ p_owner_id: $json.owner_id, p_error_class: $json.error_class, p_retryable: $json.retryable, p_workflow_name: $json.workflow_name, p_safe_message: $json.safe_message, p_correlation_id: $json.correlation_id, p_project_id: $json.project_id, p_run_id: $json.run_id, p_node_name: $json.node_name, p_redacted_details: $json.redacted_details, p_recovery_action: $json.recovery_action, p_retry_exhausted: $json.retry_exhausted, p_payload_reference: $json.payload_reference }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        80,
+        -100
+      ],
+      "id": "8a2682cb-6227-41cd-a52b-2ac214860a37",
+      "name": "Record Failure via Supabase RPC",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "xGdqdOfSB6pRVi1b",
+          "name": "BP Supabase Error Writer"
+        }
+      },
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first()?.json ?? {};\nconst failed = response.error ?? null;\nreturn [{ json: {\n  audit_recorded: !failed && response.recorded === true,\n  safe_message: failed ? 'The database audit writer failed. Review this n8n execution before replay.' : 'The failure was recorded safely.',\n  error_id: response.error_id ?? null,\n  dead_letter_id: response.dead_letter_id ?? null,\n  run_id: response.run_id ?? null,\n  run_status: response.run_status ?? null,\n  correlation_id: response.correlation_id ?? null,\n  audit_writer_error_class: failed ? (failed.name ?? failed.message ?? 'audit_writer_failed') : null\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        380,
+        -100
+      ],
+      "id": "c6667360-d3b4-4806-92f5-b57f85d5bb37",
+      "name": "Return Safe Audit Result"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first()?.json ?? {};\nreturn [{ json: {\n  audit_recorded: false,\n  reason: 'NO_VERIFIED_OWNER_CONTEXT',\n  safe_message: item.safe_message ?? 'An unexpected workflow error occurred safely.',\n  error_class: item.error_class ?? 'UNKNOWN',\n  workflow_name: item.workflow_name ?? 'Unknown Blueprint workflow',\n  node_name: item.node_name ?? null,\n  correlation_id: item.correlation_id ?? null,\n  action: 'Review the redacted n8n execution. Do not create a founder-owned Supabase row without verified ownership.'\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        120
+      ],
+      "id": "bdfc7ea3-612a-42a9-a3d4-50ecbf1ab552",
+      "name": "Safe Local Audit — No Owner"
+    }
+  ],
+  "connections": {
+    "On Workflow Error": {
+      "main": [
+        [
+          {
+            "node": "Normalize Redact and Classify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Redact and Classify": {
+      "main": [
+        [
+          {
+            "node": "Owned Run Context?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Owned Run Context?": {
+      "main": [
+        [
+          {
+            "node": "Record Failure via Supabase RPC",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Safe Local Audit — No Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Failure via Supabase RPC": {
+      "main": [
+        [
+          {
+            "node": "Return Safe Audit Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "saveExecutionProgress": true,
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "tags": []
+}

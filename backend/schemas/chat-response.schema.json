@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/chat-response.schema.json",
+  "title": "Blueprint Research Copilot Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "intent", "answer", "citations", "suggested_actions"],
+  "properties": {
+    "status": { "enum": ["ANSWERED", "PARTIALLY_ANSWERED", "INSUFFICIENT_EVIDENCE", "NEEDS_CONFIRMATION", "QUEUED", "NEEDS_INPUT", "OUT_OF_SCOPE", "SAFE_FAILED"] },
+    "intent": { "enum": ["QUESTION", "SOURCE_TRACE", "COMPARE_VERSIONS", "EXPLAIN_PHASE", "NEXT_STEP", "RUN_MODULE", "CORRECTION", "CANCEL", "OUT_OF_SCOPE", "AMBIGUOUS"] },
+    "answer": { "type": "string" },
+    "citations": { "type": "array", "items": { "type": "string" } },
+    "suggested_actions": { "type": "array", "items": { "type": "object" } },
+    "command": { "type": ["object", "null"] },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "grounding_status": { "enum": ["GROUNDED", "PARTIALLY_GROUNDED", "NO_ACCEPTED_EVIDENCE", "NOT_REQUIRED"] },
+    "blueprint_versions_used": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+    "denial_reason_code": { "type": ["string", "null"], "maxLength": 100 },
+    "correlation_id": { "type": ["string", "null"] }
+  }
+}

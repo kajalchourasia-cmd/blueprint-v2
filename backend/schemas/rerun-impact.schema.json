@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/rerun-impact.schema.json",
+  "title": "Blueprint Rerun Impact Preview",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "current_profile_version", "target_profile_version", "mode", "requested_modules", "reusable_modules", "stale_modules", "tasks_to_run", "requires_confirmation"],
+  "properties": {
+    "schema_version": { "const": "bp-rerun-impact-v1" },
+    "run_id": { "type": "string", "format": "uuid" },
+    "current_profile_version": { "type": "integer", "minimum": 1 },
+    "target_profile_version": { "type": "integer", "minimum": 1 },
+    "mode": { "enum": ["TARGETED", "FULL"] },
+    "requested_modules": { "type": "array", "items": { "type": "string", "maxLength": 100 } },
+    "changed_fields": { "type": "array", "items": { "type": "string", "maxLength": 500 } },
+    "reusable_modules": { "type": "array", "items": { "type": "string", "maxLength": 100 } },
+    "stale_modules": { "type": "array", "items": { "type": "string", "maxLength": 100 } },
+    "tasks_to_run": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "estimated_tool_calls": { "type": ["integer", "null"], "minimum": 0 },
+    "estimated_seconds": { "type": ["integer", "null"], "minimum": 0 },
+    "estimated_cost_usd": { "type": ["number", "null"], "minimum": 0 },
+    "requires_confirmation": { "const": true },
+    "idempotency_key": { "type": ["string", "null"], "maxLength": 200 }
+  }
+}

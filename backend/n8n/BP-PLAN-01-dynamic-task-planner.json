@@ -1,0 +1,473 @@
+{
+  "name": "BP-PLAN-01 Dynamic Task Planner",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0101",
+      "name": "Run Planner Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const d=String(x.gate_context?.decision??'').toUpperCase();if(x.planning_mode==='PROVE_AND_DESIGN'&&d==='RUN_MISSING_RESEARCH')return [{json:{...x,needs_input:true,guard_status:'REPLAN_DISCOVER',guard_route:'TASK_PLANNER'}}];if(x.planning_mode==='PROVE_AND_DESIGN'&&['PAUSE_OR_REVISE','CANCEL'].includes(d))return [{json:{...x,needs_input:true,guard_status:'PAUSED',guard_route:'HUMAN_REVIEW'}}];return [{json:x}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0104b",
+      "name": "Enforce Explicit Gate Decision Precedence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const tasks=Array.isArray(x.candidate_tasks)?x.candidate_tasks.map(t=>({...t})):[];const keys=new Set(tasks.map(t=>t.task_key));const blueprint=tasks.find(t=>t.task_key==='s1_research_blueprint');if(blueprint){blueprint.dependency_keys=['s1_foundation','s1_customer_demand','s1_competitor_intelligence','s1_market_economics','s1_evidence_audit','s1_research_verdict'].filter(k=>keys.has(k));}return [{json:{...x,candidate_tasks:tasks}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0104c",
+      "name": "Finalize Stage 1 Data Dependencies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{command:'PLAN',planning_mode:'DISCOVER',idea_text:'An evidence workspace that helps a solo founder validate a product idea before committing the build budget.',goal_status:'MISSING',goal:null,requested_research:['user_research','competitor_research','market_research'],founder_inputs:{available_budget:5000,hours_per_week:12,currency:'USD',current_stage:'IDEA',constraints:['solo founder']},profile_version:1,gate_context:{decision:null},correlation_id:'bp-plan-discover-safe-test',test_mode:true}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0102",
+      "name": "Create Safe Planner Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0103",
+      "name": "When Called by Supervisor",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -960,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const idea=String(src.idea_text??src.profile?.idea_text??'').trim();const profileVersion=Math.max(0,Math.trunc(Number(src.profile_version??src.profile?.profile_version??0)));const mode=String(src.planning_mode??'DISCOVER').toUpperCase();const modes=new Set(['DISCOVER','PROVE_AND_DESIGN','COMPLETE_ACTION_BLUEPRINT']);const goal=src.goal&&typeof src.goal==='object'?src.goal:(src.profile?.goal&&typeof src.profile.goal==='object'?src.profile.goal:null);const goalStatus=String(src.goal_status??src.profile?.goal_status??(goal?'CONFIRMED':'MISSING')).toUpperCase();const founderInputs=src.founder_inputs&&typeof src.founder_inputs==='object'?src.founder_inputs:{};const gateDecision=String(src.gate_context?.decision??src.founder_decision??'').toUpperCase();const aliases={user_research:'customer_demand',customer_demand:'customer_demand',competitor_research:'competitor_intelligence',competitor_intelligence:'competitor_intelligence',market_research:'market_economics',market_economics:'market_economics'};const raw=Array.isArray(src.requested_research)?src.requested_research:(Array.isArray(src.initial_research_selection)?src.initial_research_selection:[]);const selected=[...new Set((raw.length?raw:['user_research','competitor_research','market_research']).map(x=>aliases[String(x).toLowerCase()]).filter(Boolean))];const missing=[];let guardStatus='READY',guardRoute='TASK_PLANNER';if(!modes.has(mode)){missing.push({field:'planning_mode',question:'The requested Blueprint planning stage is invalid.'});guardStatus='SAFE_FAILED';guardRoute='SAFE_FAIL';}if(idea.length<10){missing.push({field:'idea_text',question:'Describe the product or business idea in at least one clear sentence.'});guardStatus='NEEDS_INPUT';guardRoute='FOUNDER_INPUT';}if(!src.test_mode&&profileVersion<1){missing.push({field:'profile_version',question:'Save the founder profile before planning the Blueprint.'});guardStatus='NEEDS_INPUT';guardRoute='FOUNDER_INPUT';}if(mode==='PROVE_AND_DESIGN'&&['RUN_MISSING_RESEARCH'].includes(gateDecision)){missing.push({field:'gate_context.decision',question:'Return to Discover and complete the missing research before Stage 2.'});guardStatus='REPLAN_DISCOVER';guardRoute='TASK_PLANNER';}if(mode==='PROVE_AND_DESIGN'&&['PAUSE_OR_REVISE','CANCEL'].includes(gateDecision)){missing.push({field:'gate_context.decision',question:'Stage 2 is paused until the founder changes the decision.'});guardStatus='PAUSED';guardRoute='HUMAN_REVIEW';}if(mode==='PROVE_AND_DESIGN'&&!['PROCEED','CONTINUE_ANYWAY','TARGETED_VALIDATION'].includes(gateDecision)){missing.push({field:'gate_context.decision',question:'Resolve the Research Verdict Gate before Stage 2 planning.'});guardStatus='NEEDS_INPUT';guardRoute='HUMAN_REVIEW';}if(mode==='COMPLETE_ACTION_BLUEPRINT'&&!['PROCEED','CONTINUE_ANYWAY'].includes(gateDecision)){missing.push({field:'gate_context.decision',question:'Resolve the Action Blueprint Readiness Gate before completing the advisory Blueprint.'});guardStatus='NEEDS_INPUT';guardRoute='HUMAN_REVIEW';}if(mode!=='DISCOVER'&&goalStatus==='MISSING'){missing.push({field:'goal',question:'Confirm the founder outcome before goal-specific planning.'});guardStatus='NEEDS_INPUT';guardRoute='FOUNDER_INPUT';}if(!modes.has(mode)){guardStatus='SAFE_FAILED';guardRoute='SAFE_FAIL';}else if(mode==='PROVE_AND_DESIGN'&&gateDecision==='RUN_MISSING_RESEARCH'){guardStatus='REPLAN_DISCOVER';guardRoute='TASK_PLANNER';}else if(mode==='PROVE_AND_DESIGN'&&['PAUSE_OR_REVISE','CANCEL'].includes(gateDecision)){guardStatus='PAUSED';guardRoute='HUMAN_REVIEW';}const mk=(task_key,module_key,goalText,deps=[],decision='RUN',tools=[],model='STRONG',locked=false)=>({task_key,module_key,goal:goalText,plan_decision:decision,dependency_keys:deps,input_refs:[{type:'PROFILE_VERSION',version:profileVersion},{type:'PLANNING_MODE',value:mode}],output_schema_version:module_key==='final_blueprint'||module_key==='action_blueprint'?'bp-progressive-blueprint-v1':'bp-task-output-v1',allowed_tools:tools,model_role:model,budgets:{max_attempts:3,max_repairs:2,max_tool_calls:tools.length?12:0,timeout_seconds:120},completion_criteria:[{rule:'SCHEMA_VALID'},{rule:'LIMITATIONS_EXPLICIT'},{rule:'EVIDENCE_OR_ASSUMPTION_LABELS_PRESENT'},{rule:'CONTEXTUAL_ACTIONS_ONLY'}],locked});const stage1=(decision='RUN')=>{const a=[mk('s1_foundation','foundation','Frame the idea, founder constraints, customer/problem hypotheses and riskiest assumptions.',[],decision,[],'STRONG',true)];for(const m of selected){const cfg={customer_demand:['Find evidence-backed customer pains, workarounds, reachable segments and willingness-to-pay signals.'],competitor_intelligence:['Map direct, indirect, service, manual and non-consumption alternatives, pricing, praise, complaints, gaps and wedges.'],market_economics:['Assess market structure, accessible beachhead, trends, constraints and evidence-backed ranges without false precision.']}[m];a.push(mk(`s1_${m}`,m,cfg[0],['s1_foundation'],decision,['YOU_SEARCH','DIRECT_WEB'],'STRONG',true));}const researchKeys=a.filter(t=>t.module_key!=='foundation').map(t=>t.task_key);a.push(mk('s1_evidence_audit','evidence_audit','Verify material claims, citations, relevance, freshness, contradictions and stream-level coverage.',researchKeys,decision,['DIRECT_SOURCE_VERIFY'],'AUDIT',true));a.push(mk('s1_research_verdict','research_verdict','Calculate the deterministic audited Research Viability verdict and create the founder checkpoint.', ['s1_evidence_audit'],decision,[],'NONE',true));a.push(mk('s1_research_blueprint','final_blueprint','Create immutable Research Blueprint V1 from audited Stage 1 results, verdict, limitations and contextual actions.', ['s1_research_verdict'],decision,[],'STRONG',true));return a;};const goalType=String(goal?.type??'VALIDATE_DEMAND').toUpperCase();const stage2=(decision='RUN')=>{const deps=selected.map(m=>`s1_${m}`);const a=[mk('s2_assumptions_risks','assumptions_risks','Re-rank assumptions, contradictions and critical risks against the founder goal.',deps,decision,[],'AUDIT',true),mk('s2_offer_pricing','offer_pricing','Create evidence-labelled offer, packaging and pricing hypotheses with test thresholds.',[...deps],decision,[],'STRONG',true),mk('s2_validation_proof','validation_proof','Design the smallest useful validation experiments with measurable pass/fail criteria.', ['s2_assumptions_risks','s2_offer_pricing'],decision,[],'STRONG',true)];if(['SIDE_INCOME','REDUCE_FINANCIAL_BURDEN','LAUNCH_READINESS','FUNDRAISING_READINESS','CUSTOM'].includes(goalType))a.push(mk('s2_operating_model','operating_model','Define feasible delivery choices and dependencies within founder time, team and budget constraints.',['s2_assumptions_risks'],decision,[],'STRONG'));if(['PAID_CUSTOMERS','SIDE_INCOME','REDUCE_FINANCIAL_BURDEN','LAUNCH_READINESS','FUNDRAISING_READINESS','CUSTOM'].includes(goalType))a.push(mk('s2_financial_readiness','financial_readiness','Calculate transparent founder-input-based pricing, runway and break-even scenarios without invented financial facts.',['s2_offer_pricing'],decision,['DETERMINISTIC_FINANCE'],'NONE'));a.push(mk('s2_action_readiness','execution_readiness','Assess whether evidence is sufficient to complete the advisory Action Blueprint and create Gate 2.',a.map(t=>t.task_key),decision,[],'AUDIT',true));return a;};let candidate=[];if(mode==='DISCOVER')candidate=stage1('RUN');if(mode==='PROVE_AND_DESIGN'){candidate=[...stage1('REUSE'),...stage2('RUN')];if(gateDecision==='TARGETED_VALIDATION')candidate=candidate.map(t=>t.task_key==='s2_offer_pricing'||t.task_key==='s2_validation_proof'||t.task_key==='s2_assumptions_risks'||t.module_key==='execution_readiness'||t.task_key.startsWith('s1_')?t:{...t,plan_decision:'NOT_APPLICABLE',planner_reason:'Targeted validation mode excludes nonessential Stage 2 analysis.'});}if(mode==='COMPLETE_ACTION_BLUEPRINT'){const s2=stage2('REUSE');candidate=[...stage1('REUSE'),...s2];const readiness='s2_action_readiness';candidate.push(mk('s3_mvp_distribution','launch_distribution','Advise on MVP boundary, first-customer routes, distribution options and milestone sequence; do not execute launch or create weekly task schedules.',[readiness],'RUN',[],'STRONG',true));const stage=String(founderInputs.current_stage??src.profile?.stage??'UNKNOWN').toUpperCase();const traction=founderInputs.traction_confirmed===true&&['LAUNCHED','GROWING'].includes(stage);if(goalType==='GROWTH')candidate.push(mk('s3_growth_guidance','growth_optimization',traction?'Use measured traction to identify growth opportunities and prerequisites.':'Provide growth prerequisites only; do not invent conversion, retention or activation metrics.',['s3_mvp_distribution'],traction?'RUN':'NOT_APPLICABLE',[],'STRONG'));candidate.push(mk('s3_action_blueprint','action_blueprint','Create immutable Action Blueprint V2 with MVP, first-customer, distribution, financial and milestone guidance; advisory only.',candidate.filter(t=>t.task_key.startsWith('s2_')||t.task_key.startsWith('s3_')).map(t=>t.task_key), 'RUN',[],'STRONG',true));}return [{json:{schema_version:'bp-staged-plan-input-v2',authorization:String(src.authorization??''),owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,profile_version:profileVersion,planning_mode:mode,idea_text:idea,goal_status:goalStatus,goal,founder_inputs:founderInputs,requested_research:selected,gate_context:{decision:gateDecision||null,verdict_id:src.gate_context?.verdict_id??null,state_version:src.gate_context?.state_version??null},candidate_tasks:candidate,missing_information:missing,needs_input:missing.length>0,guard_status:guardStatus,guard_route:guardRoute,advisory_only:true,correlation_id:String(src.correlation_id??`bp-plan-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0104",
+      "name": "Normalize Profile and Build Candidate Graph",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -460,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01a9f249-33f0-4e11-93ba-cb8730af0151",
+              "leftValue": "={{ $json.needs_input }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0105",
+      "name": "Founder Input Required?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -60,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-staged-plan-result-v2',status:x.guard_status,route:x.guard_route,planning_mode:x.planning_mode,requires_human:['NEEDS_INPUT','PAUSED'].includes(x.guard_status)||x.guard_route==='HUMAN_REVIEW',terminal:['SAFE_FAILED','PAUSED'].includes(x.guard_status),message:x.guard_status==='REPLAN_DISCOVER'?'Stage 2 was not created. The Supervisor must return to the missing Stage 1 research.':(x.guard_status==='PAUSED'?'The founder paused progression. Completed research remains available and no later task was created.':'Blueprint needs a gate decision or founder truth before it can safely create this stage.'),questions:x.missing_information,correlation_id:x.correlation_id,persistence:{persisted:false,reason:x.guard_status}}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0106",
+      "name": "Return Founder Clarification Checkpoint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const prompt={planning_mode:x.planning_mode,idea:x.idea_text,goal_status:x.goal_status,goal:x.goal,founder_inputs:x.founder_inputs,requested_research:x.requested_research,gate_context:x.gate_context,candidate_tasks:x.candidate_tasks.map(t=>({task_key:t.task_key,module_key:t.module_key,goal:t.goal,plan_decision:t.plan_decision,locked:t.locked,dependency_keys:t.dependency_keys}))};return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0,max_tokens:1800,response_format:{type:'json_object'},messages:[{role:'system',content:'You are the bounded Blueprint Staged Planner. The deterministic controller has already selected the only tasks allowed at the current founder gate. You may rank unlocked candidate tasks or mark an unlocked task WAIT/NOT_APPLICABLE when the supplied founder facts justify it. Never invent, remove, rename, unlock, or add tasks, tools, sources, facts, dependencies, stages, external actions, launch execution, or weekly schedules. Never modify a locked task. Never bypass a gate. Return JSON only: {decisions:[{task_key,plan_decision,priority,reason}],planner_questions:[],route_reason}. Allowed decisions are RUN, WAIT, REUSE, NOT_APPLICABLE, NOT_REQUESTED.'},{role:'user',content:JSON.stringify(prompt)}]}}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0107",
+      "name": "Prepare Nebius Planner Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0108",
+      "name": "Nebius — Dynamic Task Planner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        300,
+        40
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Prepare Nebius Planner Decision').first().json;const r=$input.first()?.json??{};let parsed=null;const c=r.choices?.[0]?.message?.content;try{parsed=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c}catch{}const allowed=new Set(['RUN','WAIT','REUSE','NOT_APPLICABLE','NOT_REQUESTED']);const decisions=new Map((Array.isArray(parsed?.decisions)?parsed.decisions:[]).map(d=>[String(d.task_key),d]));const tasks=base.candidate_tasks.map(t=>{const d=decisions.get(t.task_key)??{};let choice=allowed.has(String(d.plan_decision))?String(d.plan_decision):t.plan_decision;if(t.locked)choice=t.plan_decision;return {...t,plan_decision:choice,planner_priority:Math.max(1,Math.min(100,Math.round(Number(d.priority)||50))),planner_reason:String(t.locked?'Deterministic gate controller locked this task.':(d.reason??(c?'Planner returned no valid bounded decision; deterministic default retained.':'Nebius planner was unavailable; deterministic safe plan retained.'))).slice(0,1000)};});const viable=new Set(tasks.filter(t=>['RUN','WAIT','REUSE'].includes(t.plan_decision)).map(t=>t.task_key));for(const t of tasks){if(['RUN','REUSE'].includes(t.plan_decision)&&t.dependency_keys.some(d=>!viable.has(d))){t.plan_decision='WAIT';t.planner_reason='A dependency is not runnable; this task is held for Supervisor replan.';}}const plannerQuestions=Array.isArray(parsed?.planner_questions)?parsed.planner_questions.map(String).slice(0,5):[];return [{json:{...base,schema_version:'bp-staged-task-plan-v2',tasks,planner_questions:plannerQuestions,route_reason:String(parsed?.route_reason??(c?'NEBIUS_BOUNDED_PLAN_VALIDATED':'DETERMINISTIC_FALLBACK')).slice(0,1000),planner_mode:c?'NEBIUS_BOUNDED':'DETERMINISTIC_FALLBACK',model:r.model??null,request:undefined}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0109",
+      "name": "Validate Decisions and Freeze Typed Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const persist_required=!x.test_mode&&uuid.test(String(x.owner_id??''))&&uuid.test(String(x.project_id??''))&&uuid.test(String(x.run_id??''))&&x.profile_version>0&&/^Bearer\\s+\\S+$/i.test(x.authorization);return [{json:{plan:x,persist_required,authorization:x.authorization,rpc_body:{p_run_id:x.run_id,p_profile_version:x.profile_version,p_tasks:x.tasks,p_route_reason:`${x.planning_mode}:${x.route_reason}`}}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0110",
+      "name": "Prepare Atomic Plan Persistence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        820,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01a9f249-33f0-4e11-93ba-cb8730af0152",
+              "leftValue": "={{ $json.persist_required }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0111",
+      "name": "Persist Production Plan?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1060,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_dynamic_task_plan",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0112",
+      "name": "Persist Dynamic Task Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1300,
+        -40
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep=$('Prepare Atomic Plan Persistence').first().json;const p=$input.first()?.json??{};const ok=p.persisted===true;return [{json:{schema_version:'bp-staged-plan-result-v2',status:ok?'PLANNED':'HUMAN_REVIEW',route:ok?'TASK_SCHEDULER':'HUMAN_REVIEW',planning_mode:prep.plan.planning_mode,advisory_only:true,requires_human:!ok,terminal:false,message:ok?'Gate-aware task graph persisted; only currently eligible work may be scheduled.':'The staged plan was produced but durable persistence failed; no task will run until state is safe.',tasks:prep.plan.tasks,planner_questions:prep.plan.planner_questions,planner_mode:prep.plan.planner_mode,route_reason:prep.plan.route_reason,correlation_id:prep.plan.correlation_id,persistence:ok?p:{persisted:false,reason:'PLAN_PERSISTENCE_FAILED',provider_response:p}}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0113",
+      "name": "Return Persisted Task Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-staged-plan-result-v2',status:'PLANNED',route:'TASK_SCHEDULER',planning_mode:x.plan.planning_mode,advisory_only:true,requires_human:false,terminal:false,message:'Safe gate-aware plan created. Production scheduling requires authenticated durable state.',tasks:x.plan.tasks,planner_questions:x.plan.planner_questions,planner_mode:x.plan.planner_mode,route_reason:x.plan.route_reason,correlation_id:x.plan.correlation_id,persistence:{persisted:false,reason:x.plan.test_mode?'TEST_MODE':'AUTHENTICATED_CONTEXT_REQUIRED'}}}];"
+      },
+      "id": "01a9f249-33f0-4e11-93ba-cb8730af0114",
+      "name": "Return Nonproduction Task Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        140
+      ]
+    }
+  ],
+  "connections": {
+    "Run Planner Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Planner Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Planner Fixture": {
+      "main": [
+        [
+          {
+            "node": "Normalize Profile and Build Candidate Graph",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Supervisor": {
+      "main": [
+        [
+          {
+            "node": "Normalize Profile and Build Candidate Graph",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Profile and Build Candidate Graph": {
+      "main": [
+        [
+          {
+            "node": "Enforce Explicit Gate Decision Precedence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enforce Explicit Gate Decision Precedence": {
+      "main": [
+        [
+          {
+            "node": "Finalize Stage 1 Data Dependencies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize Stage 1 Data Dependencies": {
+      "main": [
+        [
+          {
+            "node": "Founder Input Required?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Founder Input Required?": {
+      "main": [
+        [
+          {
+            "node": "Return Founder Clarification Checkpoint",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Nebius Planner Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Nebius Planner Decision": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Dynamic Task Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Dynamic Task Planner": {
+      "main": [
+        [
+          {
+            "node": "Validate Decisions and Freeze Typed Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Decisions and Freeze Typed Plan": {
+      "main": [
+        [
+          {
+            "node": "Prepare Atomic Plan Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Atomic Plan Persistence": {
+      "main": [
+        [
+          {
+            "node": "Persist Production Plan?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Production Plan?": {
+      "main": [
+        [
+          {
+            "node": "Persist Dynamic Task Plan",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Nonproduction Task Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Dynamic Task Plan": {
+      "main": [
+        [
+          {
+            "node": "Return Persisted Task Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 120
+  },
+  "versionId": "01a9f249-33f0-4e11-93ba-cb8730af0199",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "bpPlan01DynamicTaskPlanner",
+  "tags": []
+}

@@ -1,0 +1,11 @@
+step_type,industry,layer_type,content_prompt_template
+research,ai_product,unseen,Which repeated workflow behavior is being assumed rather than observed?
+interview,saas,missing_voice,The person who must use this every day may reject extra workflow.
+validate,service,real_cost,Sales conversations take more calendar time than the meeting itself.
+launch,creator,unseen,What happens after the first audience spike fades?
+interview,saas,unseen,Which part of the current workflow is painful enough to justify switching tools?
+interview,marketplace,missing_voice,The supply-side participant who receives no qualified demand sees the hidden liquidity problem.
+validate,ai_product,real_cost,A concierge AI test includes prompt review correction time support and model usage beyond the visible demo.
+sell,online_business,missing_voice,The budget owner paying for the outcome cares about reliability and measurable change more than novelty.
+measure,consumer_product,unseen,What repeat-use threshold separates curiosity from a durable product habit?
+operate,creator,real_cost,An online audience can consume evenings publishing cycles and recovery time even before revenue is predictable.

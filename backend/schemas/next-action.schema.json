@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/next-action.schema.json",
+  "title": "Blueprint Next Action",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action_id", "module_key", "title", "why", "owner", "priority", "effort", "success_metric", "evidence_ids", "status", "can_agent_run", "approval_required"],
+  "properties": {
+    "action_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "module_key": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "title": { "type": "string", "minLength": 3, "maxLength": 300 },
+    "why": { "type": "string", "minLength": 3, "maxLength": 2000 },
+    "owner": { "enum": ["FOUNDER", "SYSTEM"] },
+    "priority": { "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+    "effort": { "enum": ["SMALL", "MEDIUM", "LARGE"] },
+    "time_horizon_days": { "type": ["integer", "null"], "minimum": 0, "maximum": 3650 },
+    "prerequisite_ids": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "success_metric": { "type": "string", "minLength": 3, "maxLength": 1000 },
+    "evidence_ids": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "status": { "enum": ["SUGGESTED", "APPROVAL_REQUIRED", "APPROVED", "IN_PROGRESS", "DONE", "REJECTED", "BLOCKED", "CANCELLED"] },
+    "can_agent_run": { "type": "boolean" },
+    "approval_required": { "type": "boolean" }
+  }
+}

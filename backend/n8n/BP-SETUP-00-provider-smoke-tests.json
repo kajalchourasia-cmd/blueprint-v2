@@ -1,0 +1,284 @@
+{
+  "id": "d0BIX0NshOLMTLb7",
+  "name": "BP-SETUP-00 Provider Smoke Tests",
+  "description": "Manual, inactive Phase 0 smoke tests for Blueprint Evidence Dev providers. Secrets are referenced through n8n credentials and are never embedded in this file.",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "975a813b-319f-4302-912d-866f1685f041",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## Blueprint provider smoke tests\n\n1. Keep this workflow inactive.\n2. Run it manually.\n3. Each provider node continues on failure so all four checks run.\n4. Never paste API keys into nodes; they are bound through the `BP ...` credentials.",
+        "height": 250,
+        "width": 420,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -420
+      ],
+      "id": "37f04f0d-37cc-49ed-9d36-7c4f16801f93",
+      "name": "Setup Instructions"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\"query\":\"founder customer discovery evidence\",\"count\":3}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        320,
+        -240
+      ],
+      "id": "e5228a93-80d3-4d59-b810-c6de9d9fc327",
+      "name": "Smoke — You.com Search",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yX3JLZ7MVY7LXlZ4",
+          "name": "BP You Search"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://api.tokenfactory.nebius.com/v1/models?verbose=true",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        320,
+        -80
+      ],
+      "id": "910e5c74-98b4-4a05-ad43-597d21fbd8ba",
+      "name": "Smoke — Nebius Models",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://api.pinecone.io/indexes/blueprint-evidence-dev",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Pinecone-Api-Version",
+              "value": "2026-04"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        320,
+        80
+      ],
+      "id": "83fd4577-34ae-4b81-9e96-163df2f9d3fd",
+      "name": "Smoke — Pinecone Index",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "nzD1J7Z7qq5LmIsh",
+          "name": "BP Pinecone"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/settings",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        320,
+        240
+      ],
+      "id": "9a47fa4c-c70d-4e4c-b07a-2bfad79750f7",
+      "name": "Smoke — Supabase Auth",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first()?.json ?? {};\nconst error = input.error ?? null;\nreturn [{ json: { provider: 'You.com', ok: !error, errorClass: error ? (error.name || error.message || 'request_failed') : null, checkedAt: new Date().toISOString() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -240
+      ],
+      "id": "d768350e-3a4e-4033-ad03-94970fc6cb59",
+      "name": "Result — You.com"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first()?.json ?? {};\nconst error = input.error ?? null;\nreturn [{ json: { provider: 'Nebius', ok: !error, errorClass: error ? (error.name || error.message || 'request_failed') : null, checkedAt: new Date().toISOString() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -80
+      ],
+      "id": "c4d1fae3-1e64-4d9b-8bd4-dac5072cb904",
+      "name": "Result — Nebius"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first()?.json ?? {};\nconst error = input.error ?? null;\nreturn [{ json: { provider: 'Pinecone', ok: !error, errorClass: error ? (error.name || error.message || 'request_failed') : null, checkedAt: new Date().toISOString() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        80
+      ],
+      "id": "a5171454-020a-4aa3-b84e-709278cd356d",
+      "name": "Result — Pinecone"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first()?.json ?? {};\nconst error = input.error ?? null;\nreturn [{ json: { provider: 'Supabase', ok: !error, errorClass: error ? (error.name || error.message || 'request_failed') : null, checkedAt: new Date().toISOString() } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        240
+      ],
+      "id": "b3d5bb90-b09f-4e68-bc0f-78219508108a",
+      "name": "Result — Supabase"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Smoke — You.com Search",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Smoke — Nebius Models",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Smoke — Pinecone Index",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Smoke — Supabase Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smoke — You.com Search": {
+      "main": [
+        [
+          {
+            "node": "Result — You.com",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smoke — Nebius Models": {
+      "main": [
+        [
+          {
+            "node": "Result — Nebius",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smoke — Pinecone Index": {
+      "main": [
+        [
+          {
+            "node": "Result — Pinecone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smoke — Supabase Auth": {
+      "main": [
+        [
+          {
+            "node": "Result — Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "tags": []
+}

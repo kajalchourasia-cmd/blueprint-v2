@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/supervisor-route.schema.json",
+  "title": "Blueprint Supervisor Route Decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route", "reason_code", "confidence", "next_status", "requires_human", "terminal"],
+  "properties": {
+    "route": { "enum": ["IDEA_FRAME", "RESEARCH_SUITE", "BLUEPRINT_QUALITY", "MEMORY_INDEX", "FOUNDER_INPUT", "HUMAN_REVIEW", "RESEARCH_COPILOT", "PARTIAL_COMPLETE", "SAFE_FAIL", "COMPLETE", "CANCEL"] },
+    "reason_code": { "type": "string", "minLength": 3, "maxLength": 100 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "next_status": { "enum": ["FRAMING", "NEEDS_INPUT", "PLANNING", "RESEARCHING", "AUDITING", "WAITING_APPROVAL", "SYNTHESIZING", "COMPLETED", "PARTIAL", "HUMAN_REVIEW", "SAFE_FAILED", "CANCELLED"] },
+    "requires_human": { "type": "boolean" },
+    "terminal": { "type": "boolean" },
+    "missing_information": { "type": "array", "items": { "type": "string", "maxLength": 1000 } },
+    "allowed_next_routes": { "type": "array", "items": { "type": "string" } },
+    "route_evidence": { "type": "array", "items": { "type": "string", "maxLength": 1000 } },
+    "budget_snapshot": { "type": "object" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/blueprint-quality.schema.json",
+  "title": "Blueprint Final Quality Verdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "overall_score", "rubric_scores", "failed_rules", "repair_instructions", "requires_human"],
+  "properties": {
+    "verdict": { "enum": ["PASS", "REPAIR", "FAIL", "HUMAN_REVIEW"] },
+    "overall_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "rubric_scores": {
+      "type": "object",
+      "required": ["groundedness", "completeness", "consistency", "actionability", "assumption_hygiene", "calculation_integrity", "scope_compliance"],
+      "properties": {
+        "groundedness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "completeness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "consistency": { "type": "number", "minimum": 0, "maximum": 1 },
+        "actionability": { "type": "number", "minimum": 0, "maximum": 1 },
+        "assumption_hygiene": { "type": "number", "minimum": 0, "maximum": 1 },
+        "calculation_integrity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scope_compliance": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "failed_rules": { "type": "array", "items": { "type": "string" } },
+    "repair_instructions": { "type": "array", "items": { "type": "string" } },
+    "requires_human": { "type": "boolean" },
+    "critic_notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

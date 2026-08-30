@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/supervisor-input.schema.json",
+  "title": "Blueprint Supervisor Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["command", "correlation_id"],
+  "properties": {
+    "command": { "enum": ["START", "RESUME", "RUN_MODULE", "ANSWER_CHAT", "CANCEL"] },
+    "owner_id": { "type": ["string", "null"], "format": "uuid" },
+    "project_id": { "type": ["string", "null"], "format": "uuid" },
+    "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "correlation_id": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "idea_text": { "type": ["string", "null"], "maxLength": 10000 },
+    "optional_industry": { "type": ["string", "null"], "maxLength": 200 },
+    "geography": { "type": ["string", "null"], "maxLength": 200 },
+    "requested_modules": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["foundation", "customer_demand", "competitor_intelligence", "market_economics", "financial_readiness", "validation", "launch_distribution", "growth_optimization"] }
+    },
+    "founder_inputs": { "type": "object" },
+    "human_decision": {
+      "type": ["object", "null"],
+      "properties": {
+        "decision": { "enum": ["APPROVE", "REJECT", "EDIT", "REQUEST_CHANGES", "MORE_INFORMATION"] },
+        "proposal_hash": { "type": "string", "maxLength": 128 },
+        "edits": { "type": ["object", "null"] }
+      }
+    },
+    "state": { "type": ["object", "null"] }
+  }
+}

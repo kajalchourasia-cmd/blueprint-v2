@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/start-response.schema.json",
+  "title": "Blueprint Start Accepted Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ok", "correlation_id", "project_id", "run_id", "status", "duplicate", "poll_after_ms"],
+  "properties": {
+    "ok": { "const": true },
+    "correlation_id": { "type": "string" },
+    "project_id": { "type": "string", "format": "uuid" },
+    "run_id": { "type": "string", "format": "uuid" },
+    "status": { "const": "NEW" },
+    "duplicate": { "type": "boolean" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "poll_after_ms": { "type": "integer", "minimum": 250 }
+  }
+}

@@ -1,0 +1,1 @@
+event_id,idea_id,phase_name,step_id,evidence_type,source_type,source_reference,observed_at,participant_segment,sample_size,metric_name,metric_value,metric_unit,threshold_low,threshold_high,evidence_quality,confidence,signal_direction,founder_decision,cash_spent,hours_spent,notes

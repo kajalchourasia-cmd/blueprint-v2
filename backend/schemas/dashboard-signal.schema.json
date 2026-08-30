@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/dashboard-signal.schema.json",
+  "title": "Blueprint Dynamic Dashboard Signal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["signal_id", "label", "value_status", "confidence", "rule_id", "evidence_ids", "selection_reason", "next_action_id"],
+  "properties": {
+    "signal_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "label": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "value": { "type": ["number", "integer", "string", "boolean", "null"] },
+    "unit": { "type": ["string", "null"], "maxLength": 100 },
+    "value_status": { "enum": ["KNOWN", "ESTIMATED", "UNKNOWN", "NOT_APPLICABLE"] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "rule_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "formula_description": { "type": ["string", "null"], "maxLength": 1000 },
+    "evidence_ids": { "type": "array", "items": { "type": "string", "maxLength": 200 } },
+    "selection_reason": { "type": "string", "minLength": 3, "maxLength": 1000 },
+    "next_action_id": { "type": ["string", "null"], "maxLength": 200 },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

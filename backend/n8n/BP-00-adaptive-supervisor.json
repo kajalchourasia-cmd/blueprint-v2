@@ -1,0 +1,539 @@
+{
+  "id": "bp00Supervisor",
+  "name": "BP-00 Adaptive Supervisor",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "49fd9117-22af-54a2-9c51-5c0917f3f809",
+      "name": "Run Supervisor Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1080,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{command:'START',idea_text:'A private evidence workspace that helps an early-stage founder validate an existing product idea before committing a large build budget.',optional_industry:'Founder tools',geography:'Global',requested_modules:['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'],founder_inputs:{available_budget:5000,monthly_build_budget:1000,hours_per_week:12,target_monthly_price:49,currency:'USD',current_stage:'idea',work_completed:[],constraints:['solo founder']},correlation_id:'bp-supervisor-safe-test',state:{transition_count:0,search_cycle_count:0,tool_call_count:0,revision_count:0},test_mode:true}}];"
+      },
+      "id": "9ad935bd-4c54-5f25-aee3-ff0d5489c25e",
+      "name": "Create Safe Supervisor Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -860,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "b5d31dc8-49c4-55c2-8868-9acfbe45cb7f",
+      "name": "When Called by Start Chat or Resume",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1080,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const command=String(src.command??'START').toUpperCase();const allowedCommands=['START','RESUME','RUN_MODULE','ANSWER_CHAT','CANCEL'];if(!allowedCommands.includes(command))throw new Error('SUPERVISOR_COMMAND_INVALID');const idea=String(src.idea_text??src.state?.project?.idea_text??'').trim();const forbidden=['recipient','email_to','message_to','phone_number','payment','publish_target','delete_target'];const forbiddenFields=forbidden.filter(k=>src[k]!=null);const actionText=String(src.message??'').trim();const operational=/\\b(send|email|message|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(actionText);const draftOnly=/\\b(draft|write|prepare)\\b/i.test(actionText)&&!/\\b(send|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(actionText);const external=operational&&!draftOnly;const allowedModules=['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation','launch_distribution','growth_optimization'];const requested=Array.isArray(src.requested_modules)?[...new Set(src.requested_modules.filter(x=>allowedModules.includes(x)))]:[];const s=src.state&&typeof src.state==='object'?src.state:{};const counters={transition_count:Number(s.transition_count??0),search_cycle_count:Number(s.search_cycle_count??0),tool_call_count:Number(s.tool_call_count??0),revision_count:Number(s.revision_count??0)};const budgetExceeded=counters.transition_count>=20||counters.search_cycle_count>=3||counters.tool_call_count>=80||counters.revision_count>=3;const scopeDenied=forbiddenFields.length>0||external;const missing=[];if(command!=='CANCEL'&&idea.length<10)missing.push('Describe the product or business idea in at least one clear sentence.');const route=scopeDenied?{route:'SAFE_FAIL',reason_code:'OUT_OF_SCOPE',confidence:1,next_status:'SAFE_FAILED',requires_human:false,terminal:true}:budgetExceeded?{route:'SAFE_FAIL',reason_code:'RUN_BUDGET_EXHAUSTED',confidence:1,next_status:'SAFE_FAILED',requires_human:false,terminal:true}:command==='CANCEL'?{route:'CANCEL',reason_code:'FOUNDER_CANCELLED',confidence:1,next_status:'CANCELLED',requires_human:false,terminal:true}:missing.length?{route:'FOUNDER_INPUT',reason_code:'MISSING_IDEA',confidence:1,next_status:'NEEDS_INPUT',requires_human:true,terminal:false}:{route:'RESEARCH_SUITE',reason_code:command==='RUN_MODULE'?'FOUNDER_REQUESTED_MODULE':'VALID_START',confidence:1,next_status:'RESEARCHING',requires_human:false,terminal:false};return [{json:{schema_version:'bp-supervisor-state-v1',command,authorization:String(src.authorization??''),owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,correlation_id:String(src.correlation_id??`bp-supervisor-${Date.now()}`).slice(0,200),idea_text:idea,optional_industry:String(src.optional_industry??'').trim()||null,geography:String(src.geography??'').trim()||null,requested_modules:requested.length?requested:['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'],founder_inputs:src.founder_inputs&&typeof src.founder_inputs==='object'?src.founder_inputs:{},human_decision:src.human_decision??null,state:s,test_mode:src.test_mode===true,route_decision:{...route,missing_information:missing,allowed_next_routes:route.route==='RESEARCH_SUITE'?['BLUEPRINT_QUALITY','FOUNDER_INPUT','HUMAN_REVIEW','PARTIAL_COMPLETE']:[],route_evidence:[route.reason_code],budget_snapshot:counters},should_execute_core:route.route==='RESEARCH_SUITE'}}];"
+      },
+      "id": "0784216c-a592-507b-bdd8-a4add161d935",
+      "name": "Validate Supervisor Contract and Guard Scope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "467ef998-4dd8-5e65-be23-91cb3aa58a1e",
+              "leftValue": "={{ $json.should_execute_core }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fb32d903-7275-5a2a-9583-63a61a573b27",
+      "name": "Run Research Engine?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -380,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const denied=x.route_decision.reason_code==='OUT_OF_SCOPE';return [{json:{schema_version:'bp-supervisor-result-v1',status:x.route_decision.next_status,route:x.route_decision.route,terminal:x.route_decision.terminal,requires_human:x.route_decision.requires_human,message:denied?'Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.':(x.route_decision.route==='FOUNDER_INPUT'?x.route_decision.missing_information[0]:(x.route_decision.route==='CANCEL'?'The Blueprint run was cancelled safely.':'The run reached a configured safety limit and stopped safely.')),missing_information:x.route_decision.missing_information,route_decision:x.route_decision,correlation_id:x.correlation_id,persistence_envelope:{owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id}}}];"
+      },
+      "id": "9e11a7b5-f49e-5c3e-b70c-efd6d6074800",
+      "name": "Build Visible Supervisor Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpCore45Evidence01",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "7c082a76-f000-5539-b43f-ef42ba4fb83c",
+      "name": "Execute BP-CORE-45 Research Engine",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -140,
+        -120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b=$input.first()?.json??{};const hasBlueprint=b.schema_version==='bp-blueprint-v1'&&Array.isArray(b.sections);if(!hasBlueprint)throw new Error('RESEARCH_ENGINE_INVALID_OUTPUT');const needsHuman=['HUMAN_REVIEW','NEEDS_INPUT','SAFE_FAILED'].includes(b.status)||['HUMAN_REVIEW','FOUNDER_INPUT','SAFE_FAIL'].includes(b.next_route);return [{json:{blueprint:b,revision_count:Number(b.audit?.revision_count??0),correlation_id:b.persistence_envelope?.correlation_id??'bp-supervisor',research_requires_human:needsHuman,supervisor_route:needsHuman?'HUMAN_REVIEW':'BLUEPRINT_QUALITY'}}];"
+      },
+      "id": "2a621855-4a43-59d8-9db6-e8dd0b4c4016",
+      "name": "Inspect Research Result and Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8027eefb-6b6e-51e5-a9c8-4e3df95d5d05",
+              "leftValue": "={{ $json.research_requires_human }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "146dbef4-8c9a-5b78-a7a2-6a483a07df08",
+      "name": "Research Needs Human?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        340,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-supervisor-result-v1',status:'HUMAN_REVIEW',route:'HUMAN_REVIEW',terminal:false,requires_human:true,message:'Research completed partially and needs a founder decision or clarification before it can continue.',blueprint:x.blueprint,questions:x.blueprint.sections.flatMap(s=>s.open_questions??[]).slice(0,8),limitations:x.blueprint.limitations??[],correlation_id:x.correlation_id}}];"
+      },
+      "id": "796cd5e1-dfa3-5b42-8ce2-5dc1d2126baf",
+      "name": "Build Research Human Checkpoint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpQa01BlueprintQuality",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "1f1670d6-5387-5715-a0c3-1668c06131dd",
+      "name": "Execute BP-QA-01 Quality Gate",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        580,
+        -220
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const q=$input.first()?.json??{};if(!q.quality||!q.blueprint)throw new Error('QUALITY_GATE_INVALID_OUTPUT');const pass=q.status==='QUALITY_PASSED'&&q.quality.verdict==='PASS';const human=q.status==='HUMAN_REVIEW'||q.quality.requires_human===true;const citations=(q.blueprint.citations??[]).filter(c=>['ACCEPT','ACCEPT_WITH_LIMITATION'].includes(c.auditor_verdict));return [{json:{schema_version:'bp-supervisor-result-v1',status:pass?'COMPLETED':(human?'HUMAN_REVIEW':'PARTIAL'),route:pass?'MEMORY_INDEX':(human?'HUMAN_REVIEW':'PARTIAL_COMPLETE'),terminal:pass||!human,requires_human:human,message:pass?'Blueprint passed the independent final quality gate. Accepted evidence is ready for project-isolated memory indexing.':(human?'The Blueprint needs a founder or reviewer decision.':'The best safe partial Blueprint has been preserved with its quality warning.'),blueprint:q.blueprint,quality:q.quality,revision_count:q.revision_count,quality_improved:q.quality_improved,accepted_evidence_for_memory:pass?citations:[],memory_write_authorized:pass,correlation_id:q.correlation_id,agent_trace:[...(q.agent_trace??[]),{agent:'SUPERVISOR',status:pass?'SUCCEEDED':(human?'PARTIAL':'SUCCEEDED'),route:pass?'MEMORY_INDEX':(human?'HUMAN_REVIEW':'PARTIAL_COMPLETE')}],persistence_envelope:q.blueprint.persistence_envelope??{}}}];"
+      },
+      "id": "4ee003f7-f0fa-52cd-9e7e-24ff3bbe09db",
+      "name": "Finalize Supervisor Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        820,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const result=$input.first()?.json??{};const v=$('Validate Supervisor Contract and Guard Scope').first().json;const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const enriched={...result,command:v.command,owner_id:v.owner_id,project_id:v.project_id,run_id:v.run_id,persistence_envelope:{...(result.persistence_envelope??{}),owner_id:v.owner_id,project_id:v.project_id,run_id:v.run_id,correlation_id:v.correlation_id}};const persist_required=!v.test_mode&&uuid.test(String(v.owner_id??''))&&uuid.test(String(v.project_id??''))&&uuid.test(String(v.run_id??''))&&/^Bearer\\s+\\S+$/i.test(v.authorization);return [{json:{result:enriched,persist_required,authorization:v.authorization,rpc_body:{p_result:enriched}}}];"
+      },
+      "id": "c860b84b-d557-5c95-8c10-e529407c56d2",
+      "name": "Prepare Supervisor Persistence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b8195091-55e2-580d-beb8-fdab9fdf30a3",
+              "leftValue": "={{ $json.persist_required }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5dd364bb-1226-5c87-9045-c77254768460",
+      "name": "Persist Production Supervisor Result?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1300,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_supervisor_result",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "0c1e2b56-2c00-5e95-bbe2-940de0f962eb",
+      "name": "Persist Supervisor Result Atomically",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1540,
+        -120
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep=$('Prepare Supervisor Persistence').first().json;const p=$input.first()?.json??{};if(p.error||p.persisted!==true)return [{json:{...prep.result,status:'HUMAN_REVIEW',route:'HUMAN_REVIEW',terminal:false,requires_human:true,message:'The research result was preserved in this execution, but durable persistence failed. Review the audit before retrying.',persistence:{persisted:false,reason:'SUPABASE_PERSISTENCE_FAILED'}}}];return [{json:{...prep.result,persistence:p}}];"
+      },
+      "id": "dbad192a-486e-52c5-a02d-6f132cde1b8a",
+      "name": "Return Persisted Supervisor Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{...x.result,persistence:{persisted:false,reason:$('Validate Supervisor Contract and Guard Scope').first().json.test_mode?'TEST_MODE':'AUTHENTICATED_CONTEXT_REQUIRED'}}}];"
+      },
+      "id": "ef808ad0-0565-5f6d-a4bc-a96d21e86b95",
+      "name": "Return Nonproduction Supervisor Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Run Supervisor Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Supervisor Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Supervisor Fixture": {
+      "main": [
+        [
+          {
+            "node": "Validate Supervisor Contract and Guard Scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Called by Start Chat or Resume": {
+      "main": [
+        [
+          {
+            "node": "Validate Supervisor Contract and Guard Scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Supervisor Contract and Guard Scope": {
+      "main": [
+        [
+          {
+            "node": "Run Research Engine?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Research Engine?": {
+      "main": [
+        [
+          {
+            "node": "Execute BP-CORE-45 Research Engine",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Visible Supervisor Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute BP-CORE-45 Research Engine": {
+      "main": [
+        [
+          {
+            "node": "Inspect Research Result and Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inspect Research Result and Route": {
+      "main": [
+        [
+          {
+            "node": "Research Needs Human?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Needs Human?": {
+      "main": [
+        [
+          {
+            "node": "Build Research Human Checkpoint",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute BP-QA-01 Quality Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute BP-QA-01 Quality Gate": {
+      "main": [
+        [
+          {
+            "node": "Finalize Supervisor Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Visible Supervisor Outcome": {
+      "main": [
+        [
+          {
+            "node": "Prepare Supervisor Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Research Human Checkpoint": {
+      "main": [
+        [
+          {
+            "node": "Prepare Supervisor Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize Supervisor Decision": {
+      "main": [
+        [
+          {
+            "node": "Prepare Supervisor Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supervisor Persistence": {
+      "main": [
+        [
+          {
+            "node": "Persist Production Supervisor Result?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Production Supervisor Result?": {
+      "main": [
+        [
+          {
+            "node": "Persist Supervisor Result Atomically",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Nonproduction Supervisor Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Supervisor Result Atomically": {
+      "main": [
+        [
+          {
+            "node": "Return Persisted Supervisor Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 240
+  },
+  "versionId": "981618a1-2154-599f-9874-d59d85a01fca",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

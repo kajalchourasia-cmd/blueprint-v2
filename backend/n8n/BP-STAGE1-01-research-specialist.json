@@ -1,0 +1,206 @@
+{
+  "name": "BP-STAGE1-01 Research Specialist",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b1a60101-0110-4010-8010-0de012000101",
+      "name": "Run Specialist Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-1000, -180]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{task:{id:'00000000-0000-4000-8000-000000000101',task_key:'s1_customer_demand',module_key:'customer_demand',goal:'Find evidence-backed demand signals.',attempt_count:1,budgets:{max_tool_calls:12,max_repairs:2}},idea_text:'An evidence workspace that helps a solo founder validate a product idea before committing build budget.',profile_version:1,founder_inputs:{current_stage:'IDEA'},correlation_id:'bp-stage1-specialist-safe-test',test_mode:true}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000102",
+      "name": "Create Safe Specialist Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-780, -180]
+    },
+    {
+      "parameters": {"inputSource": "passthrough"},
+      "id": "b1a60101-0110-4010-8010-0de012000103",
+      "name": "When Called by Scheduler",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [-1000, 80]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const task=src.task&&typeof src.task==='object'?src.task:src;const module=String(task.module_key??'').toLowerCase();const allowed=new Set(['foundation','customer_demand','competitor_intelligence','market_economics']);const idea=String(src.idea_text??task.idea_text??src.profile?.idea_text??'').trim();const denied=!allowed.has(module)||idea.length<10;const prompts={foundation:'Frame the idea, target-user hypothesis, problem hypothesis, founder constraints, scope, unknowns, and riskiest assumptions. Do not invent market facts.',customer_demand:'Using only supplied web evidence, identify customer pains, triggering events, current workflows and workarounds, reachable segments, buying roles, switching barriers, willingness-to-pay evidence level, opposing signals and next validation questions.',competitor_intelligence:'Using only supplied web evidence, map direct, indirect, service, manual and non-consumption alternatives; pricing, positioning, praise, complaints, strengths, gaps and founder opportunities.',market_economics:'Using only supplied web evidence, assess market structure, category maturity, accessible beachhead, trends, constraints, source quality, evidence-backed ranges and unresolved assumptions. Never invent TAM.'};const querySuffix={customer_demand:'customer pain complaints workflow alternatives willingness to pay reddit reviews',competitor_intelligence:'competitors alternatives pricing features customer reviews g2 capterra',market_economics:'market structure industry report adoption spending statistics regulation'};const query=[idea.split(/\\s+/).slice(0,24).join(' '),querySuffix[module]??''].join(' ').trim().slice(0,450);return [{json:{schema_version:'bp-stage1-worker-input-v1',authorization:String(src.authorization??''),owner_id:src.owner_id??task.owner_id??null,project_id:src.project_id??task.project_id??null,run_id:src.run_id??task.run_id??null,profile_version:Number(src.profile_version??task.profile_version??0),task:{id:task.id??null,task_key:String(task.task_key??''),module_key:module,goal:String(task.goal??''),attempt_count:Number(task.attempt_count??0),repair_count:Number(task.repair_count??0),budgets:task.budgets??{}},idea_text:idea,founder_inputs:src.founder_inputs??{},query,role_prompt:prompts[module]??'',needs_web:module!=='foundation',policy_denied:denied,correlation_id:String(src.correlation_id??`bp-worker-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000104",
+      "name": "Validate Task and Prepare Bounded Role",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-540, -40]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60101-0110-4010-8010-0de012000151", "leftValue": "={{ $json.policy_denied }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000105",
+      "name": "Task Outside Stage 1 Boundary?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-300, -40]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.task.module_key,status:'SAFE_FAILED',observation:{verdict:'POLICY_DENIED',summary:'The scheduler requested a task outside this specialist’s allowlisted Stage 1 role, or the idea was invalid.',output:{},evidence_ids:[],limitations:['No research was executed.'],retryable:false,proposed_route:'SUPERVISOR_REPLAN'},correlation_id:x.correlation_id,test_mode:x.test_mode}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000106",
+      "name": "Return Policy Denial",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-40, -180]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60101-0110-4010-8010-0de012000152", "leftValue": "={{ $json.test_mode }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000107",
+      "name": "Safe Test Mode?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-40, 20]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.task.module_key,status:'COMPLETED',observation:{verdict:'VALID',summary:`Safe fixture completed the bounded ${x.task.module_key} specialist contract.`,output:{schema_version:'bp-module-section-v1',module_key:x.task.module_key,executive_finding:'Safe structural fixture only; no real research was performed.',observed_signals:[],inferences:[],assumptions:['This is explicitly synthetic test output.'],risks:[],contradictions:[],unknowns:['Production evidence was intentionally not requested.'],contextual_actions:[{title:'Run the authenticated production task when ready',why:'Safe mode verifies routing without consuming provider calls or creating evidence.'}],evidence_cards:[],coverage:0},evidence_ids:[],limitations:['TEST_MODE: not founder-facing research.'],retryable:false,proposed_route:'OBSERVE_AND_UNLOCK'},provider_trace:[{provider:'NONE',status:'SKIPPED_TEST_MODE'}],correlation_id:x.correlation_id,test_mode:true}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000108",
+      "name": "Return Safe Specialist Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, -80]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60101-0110-4010-8010-0de012000153", "leftValue": "={{ $json.needs_web }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000109",
+      "name": "Web Evidence Required?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [220, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ydc-index.io/v1/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ query: $json.query, count: 8 }) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000110",
+      "name": "You — Bounded Stage 1 Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [480, 40],
+      "credentials": {"httpHeaderAuth": {"id": "yX3JLZ7MVY7LXlZ4", "name": "BP You Search"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Validate Task and Prepare Bounded Role').first().json;const raw=$input.first()?.json??{};const out=[];const seen=new Set();const walk=(v,d=0)=>{if(d>5||v==null)return;if(Array.isArray(v)){for(const z of v)walk(z,d+1);return;}if(typeof v!=='object')return;const u=v.url??v.link??v.source_url;if(typeof u==='string'&&/^https:\\/\\//.test(u)&&!seen.has(u)){seen.add(u);const excerpt=String((Array.isArray(v.snippets)?v.snippets.slice(0,2).join(' '):'')||v.snippet||v.excerpt||v.description||v.text||'').trim().slice(0,3000);if(excerpt)out.push({evidence_id:`web-${base.task.module_key}-${out.length+1}`,source_url:u,source_title:String(v.title??v.name??'Untitled source').slice(0,500),excerpt,provider:'YOU',auditor_verdict:'PENDING',limitations:['Search excerpt; must pass evidence audit before a decision-capable verdict.']});}for(const z of Object.values(v))if(typeof z==='object')walk(z,d+1);};if(!raw.error)walk(raw);return [{json:{...base,evidence_cards:out.slice(0,8),provider_failed:Boolean(raw.error),provider_error:String(raw.error?.message??'').slice(0,500)}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000111",
+      "name": "Normalize Search Evidence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 40]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b1a60101-0110-4010-8010-0de012000154", "leftValue": "={{ !$json.provider_failed && $json.evidence_cards.length >= 2 }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000112",
+      "name": "Minimum Evidence Available?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [960, 40]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.task.module_key,status:'PARTIAL',observation:{verdict:'TOOL_FAILED',summary:x.provider_failed?'The search provider failed safely.':'The search returned too little usable evidence for grounded analysis.',output:{evidence_cards:x.evidence_cards},evidence_ids:[],limitations:['Successful prior state must be preserved.','No unsupported analysis was generated.'],retryable:true,proposed_route:'BOUNDED_RETRY_OR_FALLBACK'},provider_trace:[{provider:'YOU',status:x.provider_failed?'FAILED':'INSUFFICIENT'}],correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000113",
+      "name": "Return Search Failure Observation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1210, 160]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const evidence=Array.isArray(x.evidence_cards)?x.evidence_cards:[];const contract='Return JSON only with: executive_finding, observed_signals (array of {claim,evidence_ids}), inferences (array), assumptions (array), risks (array), contradictions (array), unknowns (array), contextual_actions (array of {title,why}), and limitations (array). Every observed signal must cite supplied evidence_ids. If evidence is absent, factual observed_signals must be empty. Separate facts, inferences, assumptions and unknowns. Never claim real interviews, purchases, payments or exact market size without evidence. Never perform an external action.';return [{json:{...x,request:{model:'Qwen/Qwen3-235B-A22B-Instruct-2507',temperature:0,max_tokens:1700,response_format:{type:'json_object'},messages:[{role:'system',content:`You are the bounded Blueprint ${x.task.module_key} specialist. ${x.role_prompt} ${contract}`},{role:'user',content:JSON.stringify({idea:x.idea_text,founder_inputs:x.founder_inputs,evidence:evidence.map(e=>({evidence_id:e.evidence_id,title:e.source_title,url:e.source_url,excerpt:e.excerpt,limitations:e.limitations}))})}]}}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000114",
+      "name": "Prepare Grounded Specialist Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1210, 20]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {"timeout": 30000}
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000115",
+      "name": "Nebius — Bounded Stage 1 Analyst",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [1450, 20],
+      "credentials": {"httpHeaderAuth": {"id": "ewsT8nomHwfqyWCx", "name": "BP Nebius Token Factory"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Prepare Grounded Specialist Analysis').first().json;const r=$input.first()?.json??{};const content=r.choices?.[0]?.message?.content;let a=null;try{a=typeof content==='string'?JSON.parse(content.replace(/^```json\\s*|\\s*```$/g,'')):content}catch{}const evidence=Array.isArray(x.evidence_cards)?x.evidence_cards:[];const allowedIds=new Set(evidence.map(e=>e.evidence_id));const signals=Array.isArray(a?.observed_signals)?a.observed_signals:[];const citationInvalid=signals.some(s=>!Array.isArray(s.evidence_ids)||s.evidence_ids.length===0||s.evidence_ids.some(id=>!allowedIds.has(String(id))));if(!a||citationInvalid){return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.task.module_key,status:'PARTIAL',observation:{verdict:a?'NEEDS_REPAIR':'TOOL_FAILED',summary:a?'The analysis failed citation enforcement and requires one bounded repair.':'The analysis provider failed or returned malformed output.',output:{evidence_cards:evidence},evidence_ids:[],limitations:['No unsupported material claim was accepted.'],retryable:true,proposed_route:a?'TARGETED_SCHEMA_REPAIR':'BOUNDED_RETRY_OR_FALLBACK'},provider_trace:[{provider:'NEBIUS',status:a?'INVALID_CITATIONS':'FAILED'}],correlation_id:x.correlation_id,test_mode:false}}];}const section={schema_version:'bp-module-section-v1',module_key:x.task.module_key,executive_finding:String(a.executive_finding??''),observed_signals:signals,inferences:Array.isArray(a.inferences)?a.inferences:[],assumptions:Array.isArray(a.assumptions)?a.assumptions:[],risks:Array.isArray(a.risks)?a.risks:[],contradictions:Array.isArray(a.contradictions)?a.contradictions:[],unknowns:Array.isArray(a.unknowns)?a.unknowns:[],contextual_actions:Array.isArray(a.contextual_actions)?a.contextual_actions.slice(0,3):[],limitations:[...(Array.isArray(a.limitations)?a.limitations:[]),...evidence.flatMap(e=>e.limitations??[])],evidence_cards:evidence,coverage:evidence.length?Math.min(1,evidence.length/6):0};return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task.id,task_key:x.task.task_key,module_key:x.task.module_key,status:'COMPLETED',observation:{verdict:'VALID',summary:section.executive_finding||`${x.task.module_key} completed with grounded structured output.`,output:section,evidence_ids:[],limitations:section.limitations,retryable:false,proposed_route:'OBSERVE_AND_UNLOCK'},provider_trace:[{provider:'YOU',status:x.needs_web?'SUCCEEDED':'NOT_REQUIRED'},{provider:'NEBIUS',status:'SUCCEEDED',model:r.model??null}],correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "b1a60101-0110-4010-8010-0de012000116",
+      "name": "Enforce Grounding and Return Observation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1690, 20]
+    }
+  ],
+  "connections": {
+    "Run Specialist Test": {"main": [[{"node": "Create Safe Specialist Fixture", "type": "main", "index": 0}]]},
+    "Create Safe Specialist Fixture": {"main": [[{"node": "Validate Task and Prepare Bounded Role", "type": "main", "index": 0}]]},
+    "When Called by Scheduler": {"main": [[{"node": "Validate Task and Prepare Bounded Role", "type": "main", "index": 0}]]},
+    "Validate Task and Prepare Bounded Role": {"main": [[{"node": "Task Outside Stage 1 Boundary?", "type": "main", "index": 0}]]},
+    "Task Outside Stage 1 Boundary?": {"main": [[{"node": "Return Policy Denial", "type": "main", "index": 0}], [{"node": "Safe Test Mode?", "type": "main", "index": 0}]]},
+    "Safe Test Mode?": {"main": [[{"node": "Return Safe Specialist Result", "type": "main", "index": 0}], [{"node": "Web Evidence Required?", "type": "main", "index": 0}]]},
+    "Web Evidence Required?": {"main": [[{"node": "You — Bounded Stage 1 Search", "type": "main", "index": 0}], [{"node": "Prepare Grounded Specialist Analysis", "type": "main", "index": 0}]]},
+    "You — Bounded Stage 1 Search": {"main": [[{"node": "Normalize Search Evidence", "type": "main", "index": 0}]]},
+    "Normalize Search Evidence": {"main": [[{"node": "Minimum Evidence Available?", "type": "main", "index": 0}]]},
+    "Minimum Evidence Available?": {"main": [[{"node": "Prepare Grounded Specialist Analysis", "type": "main", "index": 0}], [{"node": "Return Search Failure Observation", "type": "main", "index": 0}]]},
+    "Prepare Grounded Specialist Analysis": {"main": [[{"node": "Nebius — Bounded Stage 1 Analyst", "type": "main", "index": 0}]]},
+    "Nebius — Bounded Stage 1 Analyst": {"main": [[{"node": "Enforce Grounding and Return Observation", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 150},
+  "versionId": "b1a60101-0110-4010-8010-0de012000199",
+  "meta": {"templateCredsSetupCompleted": true},
+  "id": "bpStage101ResearchSpecialist",
+  "tags": []
+}

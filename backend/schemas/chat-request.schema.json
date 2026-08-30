@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/chat-request.schema.json",
+  "title": "Blueprint Research Copilot Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["message", "project_id", "correlation_id"],
+  "properties": {
+    "message": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "project_id": { "type": "string", "format": "uuid" },
+    "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "blueprint_version": { "type": ["integer", "null"], "minimum": 1 },
+    "comparison_blueprint_versions": {
+      "type": "array",
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1 }
+    },
+    "thread_id": { "type": ["string", "null"], "format": "uuid" },
+    "correlation_id": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "confirmed_command": { "type": "boolean", "default": false }
+  }
+}

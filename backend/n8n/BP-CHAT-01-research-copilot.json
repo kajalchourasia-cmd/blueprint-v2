@@ -1,0 +1,947 @@
+{
+  "id": "bpChat01ResearchCopilot",
+  "name": "BP-CHAT-01 Research Copilot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "blueprint/chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "fec26990-9dcc-567d-b71d-8d88ae37693e",
+      "name": "POST Blueprint Research Chat",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1220,
+        0
+      ],
+      "webhookId": "8eb626fe-dba4-5075-b444-e22fd8c896b4"
+    },
+    {
+      "parameters": {},
+      "id": "0d8da73e-710c-5c6d-b204-f25871dcea09",
+      "name": "Run Research Copilot Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{body:{message:'What should I validate next and which evidence supports that?',project_id:'00000000-0000-4000-8000-000000000001',run_id:null,thread_id:null,correlation_id:'bp-chat-safe-test',confirmed_command:false},test_mode:true,context:{run:{status:'COMPLETED',current_route:'COMPLETE'},project:{idea_text:'An evidence workspace for founders.'},sections:[{section_key:'customer_demand',status:'AGENT_DONE',open_questions:['Will founders pay for this?'],evidence_ids:['ev-test-1']}],accepted_evidence:[{id:'ev-test-1',claim:'Founders report manual validation work.',source_url:'https://example.com/founder-research',auditor_verdict:'ACCEPT_WITH_LIMITATION'}],quality_checks:[{verdict:'PASS'}]}}}];"
+      },
+      "id": "7b372872-cbdf-5d9c-a3c0-4ea3cab4b872",
+      "name": "Create Safe Chat Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1000,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw=$input.first()?.json??{};let b=raw.body??raw;if(typeof b==='string'){try{b=JSON.parse(b)}catch{b={}}}const headers=Object.fromEntries(Object.entries(raw.headers??{}).map(([k,v])=>[String(k).toLowerCase(),v]));const message=String(b.message??'').trim();const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(headers.authorization??'').trim();const projectId=String(b.project_id??'');const testMode=raw.test_mode===true;const operational=/\\b(send|email|message|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(message);const draftOnly=/\\b(draft|write|prepare)\\b/i.test(message)&&!/\\b(send|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(message);const action=operational&&!draftOnly;const errors=[];if(message.length<1||message.length>4000)errors.push('MESSAGE_LENGTH');if(!uuid.test(projectId))errors.push('PROJECT_ID');if(!testMode&&!/^Bearer\\s+\\S+$/i.test(authorization))errors.push('AUTHORIZATION_REQUIRED');return [{json:{valid:errors.length===0&&!action,scope_denied:action,errors,status_code:action?422:(errors.includes('AUTHORIZATION_REQUIRED')?401:400),message,project_id:projectId,run_id:uuid.test(String(b.run_id??''))?b.run_id:null,thread_id:uuid.test(String(b.thread_id??''))?b.thread_id:null,correlation_id:String(b.correlation_id??`bp-chat-${Date.now()}`).slice(0,200),confirmed_command:b.confirmed_command===true,authorization,test_mode:testMode,context:raw.context??null}}];"
+      },
+      "id": "8d4d8b7e-94bc-52c4-976e-4d98305105b5",
+      "name": "Validate Chat Request and Scope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b2fd32a1-f050-5f1a-8842-08a31be67356",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8f2a1d1a-b20b-59f0-8290-4d2ad8adf16b",
+      "name": "Chat Request Allowed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{status_code:x.status_code,response:{status:x.scope_denied?'OUT_OF_SCOPE':'SAFE_FAILED',intent:x.scope_denied?'OUT_OF_SCOPE':'AMBIGUOUS',answer:x.scope_denied?'Blueprint can discuss and research your idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything. I can turn that request into a founder-run experiment or draft.':'The chat request is invalid or the session is missing. Please sign in and try again.',citations:[],suggested_actions:[],command:null,limitations:x.errors,correlation_id:x.correlation_id}}}];"
+      },
+      "id": "5cbf09fd-4381-5ceb-9de4-3fcb431645be",
+      "name": "Build Chat Denial or Validation Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -280,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9bc47e5-f7cf-5aee-81d6-8e3cd66fc75a",
+              "leftValue": "={{ $json.test_mode }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a4c2ac57-b918-5950-a8d3-4ca2e5958846",
+      "name": "Use Embedded Test Context?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -280,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Validate Chat Request and Scope').first().json;return [{json:{...x,context:x.context??{}}}];"
+      },
+      "id": "78cc7ebb-c95b-5bad-98de-7381768f72a8",
+      "name": "Use Safe Embedded Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $('Validate Chat Request and Scope').first().json.authorization }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "03ebaeb6-8f1a-568f-8d10-ca7ead3c4fa1",
+      "name": "Verify Chat Supabase User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -40,
+        20
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const v=$('Validate Chat Request and Scope').first().json;const u=$input.first().json;if(!u.id)throw new Error('CHAT_UNAUTHENTICATED');if(!v.run_id)throw new Error('CHAT_RUN_REQUIRED_FOR_RESEARCH_QA');return [{json:{...v,authenticated_user_id:u.id,rpc_body:{p_run_id:v.run_id}}}];"
+      },
+      "id": "937995ad-2c67-5aee-9be5-bc345efb93c9",
+      "name": "Prepare Supervisor Context Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/get_supervisor_context",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "b168148d-44b8-506c-bda9-22a9a1036a78",
+      "name": "Load Grounded Supervisor Context",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        20
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const v=$('Validate Chat Request and Scope').first().json;const ctx=$input.first().json;if(ctx.error)throw new Error('CHAT_CONTEXT_LOAD_FAILED');return [{json:{...v,context:ctx}}];"
+      },
+      "id": "0cb06214-f25e-596e-a72c-0901f8bb39f9",
+      "name": "Attach Loaded Chat Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const m=x.message.toLowerCase();let intent='QUESTION',target=null;if(/\\b(cancel|stop)\\b/.test(m))intent='CANCEL';else if(/\\b(run|rerun|research|analy[sz]e|investigate)\\b/.test(m)){intent='RUN_MODULE';if(/compet/.test(m))target='competitor_intelligence';else if(/customer|user|demand|pain|willing/.test(m))target='customer_demand';else if(/market|industry|econom/.test(m))target='market_economics';else if(/financ|budget|runway|price|break.?even/.test(m))target='financial_readiness';else if(/validat|experiment|test/.test(m))target='validation'}else if(/\\bnext\\b|what should i do|recommend.*step/.test(m))intent='NEXT_STEP';else if(/phase|status|progress|what was done/.test(m))intent='EXPLAIN_PHASE';else if(/wrong|correct|change my|update my/.test(m))intent='CORRECTION';const runAllowed=intent==='RUN_MODULE'&&target&&x.confirmed_command;const needsConfirmation=intent==='RUN_MODULE'&&target&&!x.confirmed_command;return [{json:{...x,intent,target_module:target,run_allowed:runAllowed,needs_confirmation:needsConfirmation,answer_allowed:!['RUN_MODULE','CANCEL'].includes(intent)||!runAllowed}}];"
+      },
+      "id": "b3badbed-4e4d-5b2e-b570-42ac953c79ba",
+      "name": "Classify Chat Intent Deterministically",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eab95da2-4106-57ec-954e-49dd62f5a56a",
+              "leftValue": "={{ $json.run_allowed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "afd3c580-b1fe-5a58-8f4f-f96b80f1978c",
+      "name": "Execute Confirmed Research Command?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1160,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const p=x.context.project??{};return [{json:{command:'RUN_MODULE',authorization:x.authorization,owner_id:x.authenticated_user_id??null,project_id:x.project_id,run_id:x.run_id,correlation_id:x.correlation_id,idea_text:String(p.idea_text??''),optional_industry:p.optional_industry??null,geography:p.geography??null,requested_modules:[x.target_module],founder_inputs:x.context.run?.original_request?.founder_inputs??{},state:x.context.run??{},message:x.message,test_mode:x.test_mode}}];"
+      },
+      "id": "5a77feee-fb65-5c10-a746-23c35dc6d880",
+      "name": "Prepare Supervisor Chat Command",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bp00Supervisor",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "04bd69e1-bda0-5870-8227-22fa25904cfa",
+      "name": "Ask BP-00 to Run Research",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1640,
+        -220
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s=$input.first().json;return [{json:{status_code:202,response:{status:s.status==='COMPLETED'?'QUEUED':(s.status??'QUEUED'),intent:'RUN_MODULE',answer:s.message??'The requested research module was routed through the Supervisor.',citations:(s.blueprint?.citations??[]).map(c=>c.evidence_id).slice(0,12),suggested_actions:[],command:{route:s.route,status:s.status},limitations:s.blueprint?.limitations??[],correlation_id:s.correlation_id}}}];"
+      },
+      "id": "1001e855-6359-524c-9e8e-6327a329bb27",
+      "name": "Build Queued Research Chat Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "53b8c42d-afe0-5fe9-a17c-44790384d7ca",
+              "leftValue": "={{ $json.needs_confirmation }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d4b9e7e3-ddfb-5d9c-88d3-614de0f8c60b",
+      "name": "Chat Needs Confirmation?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1400,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{status_code:200,response:{status:'NEEDS_CONFIRMATION',intent:'RUN_MODULE',answer:`I can ask the Supervisor to run ${x.target_module.replaceAll('_',' ')} research. This is read-only but will use research/model calls and update this Blueprint. Confirm to continue.`,citations:[],suggested_actions:[{action:'CONFIRM_RUN_MODULE',target_module:x.target_module}],command:{command:'RUN_MODULE',target_module:x.target_module,confirmation_required:true},limitations:[],correlation_id:x.correlation_id}}}];"
+      },
+      "id": "7c693d38-f68b-50ef-8c85-8af23de94c1c",
+      "name": "Build Research Confirmation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;const allowedEvidence=(x.context.accepted_evidence??[]).slice(0,30);const context={run:x.context.run??{},project:x.context.project??{},sections:x.context.sections??[],accepted_evidence:allowedEvidence,quality_checks:(x.context.quality_checks??[]).slice(0,5),approvals:(x.context.approvals??[]).slice(0,5),errors:(x.context.errors??[]).slice(0,5)};return [{json:{...x,request:{model:'Qwen/Qwen3-30B-A3B-Instruct-2507',temperature:0.1,max_tokens:1200,response_format:{type:'json_object'},messages:[{role:'system',content:'You are Blueprint Research Copilot. Answer only from the supplied project/run context and accepted evidence. Explain what was done, current status, evidence-supported findings, limitations, and next permitted steps. Every factual research statement must cite an evidence ID from the context. If the context does not answer the question, say UNKNOWN and suggest a bounded research module or founder input. Never claim to have run an action, never expose hidden reasoning, and never contact, send, publish, buy, book, pay, or delete. Return JSON with answer, citations array of accepted evidence IDs, suggested_actions array, limitations array.'},{role:'user',content:JSON.stringify({message:x.message,intent:x.intent,context})}]}}}];"
+      },
+      "id": "c8f48a22-0147-5ed2-b5a4-d7c58179dcf9",
+      "name": "Prepare Grounded Copilot Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tokenfactory.nebius.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.request) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "78ea5cb3-b247-5402-91ce-2be4a4500df2",
+      "name": "Nebius — Grounded Research Copilot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1880,
+        160
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ewsT8nomHwfqyWCx",
+          "name": "BP Nebius Token Factory"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Classify Chat Intent Deterministically').first().json;const r=$input.first().json;const c=r.choices?.[0]?.message?.content;if(!c)throw new Error('CHAT_MODEL_EMPTY');let a;try{a=typeof c==='string'?JSON.parse(c.replace(/^```json\\s*|\\s*```$/g,'')):c}catch{throw new Error('CHAT_MODEL_JSON_PARSE_FAILED')}const allowed=new Set((x.context.accepted_evidence??[]).map(e=>e.id??e.evidence_id));const citations=Array.isArray(a.citations)?a.citations.filter(id=>allowed.has(id)):[];return [{json:{status_code:200,response:{status:'ANSWERED',intent:x.intent,answer:String(a.answer??'UNKNOWN').slice(0,8000),citations,suggested_actions:Array.isArray(a.suggested_actions)?a.suggested_actions.slice(0,6):[],command:null,limitations:Array.isArray(a.limitations)?a.limitations:[],correlation_id:x.correlation_id}}}];"
+      },
+      "id": "11dddf3f-c2d4-5623-8817-3814272d29fb",
+      "name": "Validate Grounded Chat Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2120,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const result=$input.first()?.json??{};const v=$('Validate Chat Request and Scope').first().json;let classified=null;try{classified=$('Classify Chat Intent Deterministically').first().json}catch{}const persist_required=!v.test_mode&&!v.scope_denied&&/^Bearer\\s+\\S+$/i.test(v.authorization)&&v.run_id!=null&&result.response?.answer;return [{json:{result,persist_required,authorization:v.authorization,rpc_body:{p_payload:{project_id:v.project_id,run_id:v.run_id,thread_id:v.thread_id,message:v.message,intent:result.response?.intent??classified?.intent??'AMBIGUOUS',target_module:classified?.target_module??null,response:result.response??{},correlation_id:v.correlation_id}}}}];"
+      },
+      "id": "25fa764a-85bf-5eb1-80ae-303f9f21cee0",
+      "name": "Prepare Chat Exchange Persistence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d5ce5e99-4302-5c27-984d-20793b0b862e",
+              "leftValue": "={{ $json.persist_required }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c72e2c99-dec7-5914-bddd-b7de3a38d874",
+      "name": "Persist Authenticated Chat Exchange?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/append_chat_exchange",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "e515522e-f61d-5689-afa1-9d40f492bf0d",
+      "name": "Persist Chat Exchange Atomically",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2840,
+        -100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep=$('Prepare Chat Exchange Persistence').first().json;const p=$input.first()?.json??{};if(p.error||p.persisted!==true)return [{json:{...prep.result,response:{...prep.result.response,limitations:[...(prep.result.response?.limitations??[]),'Chat history persistence failed; the answer is still visible in this response.']}}}];return [{json:{...prep.result,response:{...prep.result.response,thread_id:p.thread_id}}}];"
+      },
+      "id": "3e476339-f4be-54a5-84d6-fde000753926",
+      "name": "Return Persisted Chat Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3080,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:$input.first().json.result}];"
+      },
+      "id": "d36bd2b8-072b-5324-ad12-ae185c7473a0",
+      "name": "Return Ephemeral Chat Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2840,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "7e0e3824-7f76-562f-b1f8-54ebaefdf28b",
+      "name": "Respond Research Copilot",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3320,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "POST Blueprint Research Chat": {
+      "main": [
+        [
+          {
+            "node": "Validate Chat Request and Scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Research Copilot Test": {
+      "main": [
+        [
+          {
+            "node": "Create Safe Chat Fixture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Safe Chat Fixture": {
+      "main": [
+        [
+          {
+            "node": "Validate Chat Request and Scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Chat Request and Scope": {
+      "main": [
+        [
+          {
+            "node": "Chat Request Allowed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Request Allowed?": {
+      "main": [
+        [
+          {
+            "node": "Use Embedded Test Context?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Chat Denial or Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Chat Denial or Validation Error": {
+      "main": [
+        [
+          {
+            "node": "Prepare Chat Exchange Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Embedded Test Context?": {
+      "main": [
+        [
+          {
+            "node": "Use Safe Embedded Context",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verify Chat Supabase User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Chat Supabase User": {
+      "main": [
+        [
+          {
+            "node": "Prepare Supervisor Context Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supervisor Context Request": {
+      "main": [
+        [
+          {
+            "node": "Load Grounded Supervisor Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Grounded Supervisor Context": {
+      "main": [
+        [
+          {
+            "node": "Attach Loaded Chat Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Safe Embedded Context": {
+      "main": [
+        [
+          {
+            "node": "Classify Chat Intent Deterministically",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Loaded Chat Context": {
+      "main": [
+        [
+          {
+            "node": "Classify Chat Intent Deterministically",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Chat Intent Deterministically": {
+      "main": [
+        [
+          {
+            "node": "Execute Confirmed Research Command?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Confirmed Research Command?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Supervisor Chat Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chat Needs Confirmation?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supervisor Chat Command": {
+      "main": [
+        [
+          {
+            "node": "Ask BP-00 to Run Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask BP-00 to Run Research": {
+      "main": [
+        [
+          {
+            "node": "Build Queued Research Chat Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Queued Research Chat Response": {
+      "main": [
+        [
+          {
+            "node": "Prepare Chat Exchange Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Needs Confirmation?": {
+      "main": [
+        [
+          {
+            "node": "Build Research Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Grounded Copilot Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Research Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Prepare Chat Exchange Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Grounded Copilot Answer": {
+      "main": [
+        [
+          {
+            "node": "Nebius — Grounded Research Copilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nebius — Grounded Research Copilot": {
+      "main": [
+        [
+          {
+            "node": "Validate Grounded Chat Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Grounded Chat Answer": {
+      "main": [
+        [
+          {
+            "node": "Prepare Chat Exchange Persistence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Chat Exchange Persistence": {
+      "main": [
+        [
+          {
+            "node": "Persist Authenticated Chat Exchange?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Authenticated Chat Exchange?": {
+      "main": [
+        [
+          {
+            "node": "Persist Chat Exchange Atomically",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Ephemeral Chat Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Chat Exchange Atomically": {
+      "main": [
+        [
+          {
+            "node": "Return Persisted Chat Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Persisted Chat Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Research Copilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Return Ephemeral Chat Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Research Copilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 300
+  },
+  "versionId": "bb8442a8-b34b-5383-aa72-f0562302ea23",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

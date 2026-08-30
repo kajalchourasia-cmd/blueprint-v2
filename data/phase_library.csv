@@ -1,0 +1,22 @@
+archetype,phase_order,phase_name,focus,completion_signal,accent
+universal,1,Foundation,Define the founder constraint and riskiest belief,A falsifiable problem statement,blue
+universal,2,Customer research,Observe the problem in real customer behavior,Five repeated problem patterns,peach
+universal,3,Market research,Map alternatives demand and market access,A credible reachable segment,lilac
+universal,4,Solution test,Test the smallest promise before building,A measurable behavior change,pink
+universal,5,Revenue model,Test willingness to pay and pricing logic,One paid or binding commitment,yellow
+universal,6,Business model,Prove acquisition delivery and unit economics,A viable repeatable loop,violet
+universal,7,Launch,Release to a narrow first cohort,Retention or repeat-use evidence,green
+digital_product,1,Foundation,Define the user job and technical constraint,A testable product thesis,blue
+digital_product,2,Customer research,Interview people who experience the job now,Ten behavior-based interviews,peach
+digital_product,3,Market research,Compare software manual and do-nothing alternatives,A specific underserved wedge,lilac
+digital_product,4,Prototype test,Test a clickable or concierge version,Five successful task completions,pink
+digital_product,5,Pricing,Test packaging and willingness to pay,Three pricing commitments,yellow
+digital_product,6,Growth model,Prove one acquisition and retention loop,A repeatable user loop,violet
+digital_product,7,Beta launch,Release to a narrow beta cohort,Four-week retained usage,green
+online_business,1,Foundation,Define the online customer job and founder constraints,A testable commercial thesis,blue
+online_business,2,Customer research,Observe digital workflows communities and buying triggers,Ten behavior-based interviews,peach
+online_business,3,Market research,Map search demand competitors communities and channel access,A reachable online niche,lilac
+online_business,4,Offer test,Run a landing page concierge or presale test,Paid intent before production,pink
+online_business,5,Unit economics,Test pricing delivery cost and acquisition limits,A contribution-positive offer,yellow
+online_business,6,Operating model,Prove digital delivery support and retention workflow,A repeatable delivery cycle,violet
+online_business,7,Controlled launch,Release to a narrow online cohort,Repeat use referrals or renewals,green

@@ -1,0 +1,16 @@
+archetype,phase_name,signal_key,signal_label,measurement,weak_threshold,developing_threshold,strong_threshold,direction,collection_method,minimum_sample,decision_use
+digital_product,Customer research,repeated_pain,Repeated pain patterns,count,0-2,3-4,5+,higher,behavior interviews,10,Continue only when independent users repeat the same problem
+digital_product,Customer research,problem_frequency,Problem frequency,events per month,<1,1-3,4+,higher,interview timeline,10,Prioritize frequent problems over memorable rare problems
+digital_product,Market research,review_gap,Competitor complaint concentration,percent,<10,10-24,25+,higher,review mining,50,Choose a wedge only when complaints cluster
+digital_product,Prototype test,activation,Test activation,percent,<30,30-59,60+,higher,prototype events,5,Revise intake if users cannot reach the core action
+digital_product,Prototype test,action_completion,Care action completion,percent,<25,25-59,60+,higher,follow-up evidence,5,Do not build if advice does not change behavior
+digital_product,Pricing,paid_commitment,Paid commitments,count,0,1-2,3+,higher,payment or deposit,8,Treat payment as stronger than stated willingness
+digital_product,Growth model,qualified_referral,Qualified referral rate,percent,<10,10-24,25+,higher,channel funnel,20,Invest only in channels that produce qualified users
+digital_product,Beta launch,week_two_repeat,Week-two repeat use,percent,<15,15-34,35+,higher,cohort analytics,20,Use repeat behavior as the launch gate
+online_business,Customer research,repeated_pain,Repeated online workflow pain,count,0-2,3-4,5+,higher,behavior interviews,10,Continue only when independent users repeat the same pain
+online_business,Solution test,qualified_activation,Qualified activation,percent,<20,20-49,50+,higher,landing page or concierge events,20,Use completed behavior instead of clicks or stated interest
+online_business,Unit economics,contribution_margin,Contribution margin,percent,<35,35-59,60+,higher,payment delivery and support log,20 transactions,Change pricing or delivery before scaling acquisition
+universal,Foundation,assumption_quality,Testable assumptions,percent,<40,40-74,75+,higher,assumption audit,5,Every top risk needs a threshold and test
+universal,Customer research,behavior_evidence,Behavior-based interviews,percent,<40,40-69,70+,higher,interview audit,10,Reject opinion-heavy interview conclusions
+universal,Revenue model,binding_commitment,Binding commitments,count,0,1-2,3+,higher,payment or signed pilot,8,Do not equate interest with demand
+universal,Launch,retained_usage,Retained or repeated usage,percent,<15,15-34,35+,higher,cohort tracking,20,Use retention to decide whether to broaden launch

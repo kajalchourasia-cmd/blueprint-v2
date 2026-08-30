@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/blueprint-output.schema.json",
+  "title": "Blueprint Evidence Dev Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "product_idea", "starting_position", "dashboard", "sections", "next_route"],
+  "properties": {
+    "schema_version": { "const": "bp-blueprint-v1" },
+    "status": { "enum": ["COMPLETED", "PARTIAL", "NEEDS_INPUT", "HUMAN_REVIEW", "SAFE_FAILED"] },
+    "product_idea": { "type": "string", "minLength": 10 },
+    "starting_position": { "type": "object" },
+    "dashboard": {
+      "type": "object",
+      "required": ["completion_percent", "open_assumptions", "positive_signals", "open_risks"],
+      "properties": {
+        "completion_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "open_assumptions": { "type": "integer", "minimum": 0 },
+        "positive_signals": { "type": "integer", "minimum": 0 },
+        "open_risks": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["section_key", "status", "completion_percent", "summary", "open_questions", "evidence_ids"],
+        "properties": {
+          "section_key": { "type": "string" },
+          "status": { "enum": ["NOT_REQUESTED", "BLOCKED", "NEEDS_INPUT", "IN_PROGRESS", "AGENT_DONE", "HUMAN_REVIEW", "COMPLETED", "PARTIAL", "SAFE_FAILED"] },
+          "completion_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "summary": {},
+          "open_questions": { "type": "array", "items": { "type": "string" } },
+          "evidence_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "financial_plan": { "type": ["object", "null"] },
+    "citations": { "type": "array", "items": { "$ref": "evidence-card.schema.json" } },
+    "next_route": { "enum": ["FOUNDER_INPUT", "RESEARCH_MORE", "HUMAN_REVIEW", "VALIDATION", "COMPLETE", "SAFE_FAIL"] },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,135 @@
+from __future__ import annotations
+
+import time
+import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
+
+from blueprint.auth import AUTH_STATE_KEY, clear_local_session, get_auth_session, sign_in
+from blueprint.backend import load_recent_blueprints, normalize_research_selection, start_blueprint
+from blueprint.config import AppConfig
+
+
+CONFIG = AppConfig(
+    supabase_url="https://example.supabase.co",
+    supabase_publishable_key="public-test-key",
+    n8n_start_webhook_url="https://n8n.example.test/webhook/blueprint/start",
+    request_timeout_seconds=10,
+)
+
+
+class FakeResponse:
+    def __init__(self, status_code: int, payload: dict):
+        self.status_code = status_code
+        self._payload = payload
+
+    def json(self):
+        return self._payload
+
+
+class AuthenticationTests(unittest.TestCase):
+    def test_sign_in_stores_real_supabase_session(self):
+        state = {}
+        response = FakeResponse(
+            200,
+            {
+                "access_token": "access",
+                "refresh_token": "refresh",
+                "expires_in": 3600,
+                "user": {"id": "owner-1", "email": "founder@example.com"},
+            },
+        )
+        with patch("blueprint.auth.st.session_state", state), patch(
+            "blueprint.auth.requests.post", return_value=response
+        ) as request:
+            session = sign_in(" founder@example.com ", "password123", CONFIG)
+
+        self.assertEqual(session["user"]["id"], "owner-1")
+        self.assertEqual(state[AUTH_STATE_KEY]["access_token"], "access")
+        self.assertEqual(
+            request.call_args.kwargs["headers"]["apikey"],
+            "public-test-key",
+        )
+        self.assertEqual(request.call_args.kwargs["json"]["email"], "founder@example.com")
+
+    def test_expired_session_that_cannot_refresh_is_cleared(self):
+        state = {
+            AUTH_STATE_KEY: {
+                "access_token": "expired",
+                "refresh_token": "refresh",
+                "expires_at": int(time.time()) - 1,
+                "user": {"id": "owner-1"},
+            },
+            "backend_project_id": "project-1",
+        }
+        with patch("blueprint.auth.st.session_state", state), patch(
+            "blueprint.auth.refresh_auth_session", return_value=None
+        ):
+            self.assertIsNone(get_auth_session())
+        self.assertNotIn(AUTH_STATE_KEY, state)
+        self.assertNotIn("backend_project_id", state)
+
+    def test_clear_local_session_removes_blueprint_owner_state(self):
+        state = {AUTH_STATE_KEY: {"access_token": "x"}, "backend_run_id": "run-1", "unrelated": 1}
+        with patch("blueprint.auth.st.session_state", state):
+            clear_local_session()
+        self.assertEqual(state, {"unrelated": 1})
+
+
+class BackendContractTests(unittest.TestCase):
+    def test_research_selection_normalizes_and_deduplicates(self):
+        self.assertEqual(
+            normalize_research_selection(["Competitor research", "competitor_intelligence"]),
+            ["competitor_intelligence"],
+        )
+
+    def test_empty_selection_defaults_to_all_three(self):
+        self.assertEqual(
+            set(normalize_research_selection([])),
+            {"customer_demand", "competitor_intelligence", "market_economics"},
+        )
+
+    def test_start_blueprint_sends_owner_jwt_boundary_payload(self):
+        profile = SimpleNamespace(
+            idea="A cited founder research workspace",
+            goal="startup",
+            success_definition="Find ten paying customers",
+            target_customer="Solo founders",
+            hours_per_week=10,
+            money_available=2000,
+            launch_timeline="Within 3 months",
+            current_work="Customer conversations",
+            constraints=["Full-time job"],
+            location="India",
+        )
+        answers = {
+            "research_selection": ["Customer research", "Market research"],
+            "industry": "Founder tools",
+        }
+        response = FakeResponse(202, {"ok": True, "project_id": "project-1", "run_id": "run-1"})
+        with patch("blueprint.backend._authenticated_request", return_value=response) as request:
+            result = start_blueprint(profile, answers, idempotency_key="stable-key-001", config=CONFIG)
+
+        payload = request.call_args.kwargs["json"]
+        self.assertEqual(result["run_id"], "run-1")
+        self.assertEqual(payload["idempotency_key"], "stable-key-001")
+        self.assertEqual(payload["requested_research"], ["customer_demand", "market_economics"])
+        self.assertEqual(payload["constraints"]["onboarding_answers"], answers)
+
+    def test_recent_blueprints_attach_only_latest_run_per_project(self):
+        projects = [
+            {"id": "project-1", "idea_text": "First"},
+            {"id": "project-2", "idea_text": "Second"},
+        ]
+        runs = [
+            {"id": "run-new", "project_id": "project-1", "status": "RESEARCHING"},
+            {"id": "run-old", "project_id": "project-1", "status": "PARTIAL"},
+        ]
+        with patch("blueprint.backend._supabase_table_select", side_effect=[projects, runs]):
+            result = load_recent_blueprints(CONFIG)
+        self.assertEqual(result[0]["latest_run"]["id"], "run-new")
+        self.assertIsNone(result[1]["latest_run"])
+
+
+if __name__ == "__main__":
+    unittest.main()

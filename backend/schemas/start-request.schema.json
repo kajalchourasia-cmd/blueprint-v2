@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/start-request.schema.json",
+  "title": "Blueprint Start Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["idempotency_key", "idea_text", "requested_research"],
+  "properties": {
+    "idempotency_key": { "type": "string", "minLength": 8, "maxLength": 200, "pattern": "^[A-Za-z0-9._:-]+$" },
+    "idea_text": { "type": "string", "minLength": 10, "maxLength": 10000 },
+    "optional_industry": { "type": ["string", "null"], "maxLength": 200 },
+    "geography": { "type": ["string", "null"], "maxLength": 200 },
+    "requested_research": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["customer_demand", "competitor_intelligence", "market_economics"]
+      }
+    },
+    "constraints": { "type": "object", "maxProperties": 30 }
+  }
+}

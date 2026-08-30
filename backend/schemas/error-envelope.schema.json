@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/error-envelope.schema.json",
+  "title": "Blueprint Safe Error Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ok", "error_code", "message", "correlation_id"],
+  "properties": {
+    "ok": { "const": false },
+    "error_code": { "enum": ["INVALID_REQUEST", "UNAUTHENTICATED", "OUT_OF_SCOPE", "CONFLICT", "START_FAILED"] },
+    "message": { "type": "string", "maxLength": 300 },
+    "correlation_id": { "type": "string" }
+  }
+}

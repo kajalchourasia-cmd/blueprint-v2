@@ -1,0 +1,109 @@
+{
+  "name": "BP-SYNTH-01 Research Blueprint V1",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e7b80101-0150-4050-8050-0de015000101",
+      "name": "Run Synthesis Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-820, -160]
+    },
+    {
+      "parameters": {
+        "jsCode": "const section=(m)=>({task_key:`s1_${m}`,module_key:m,status:'COMPLETED',output:{schema_version:'bp-module-section-v1',module_key:m,executive_finding:`Safe ${m} structural finding.`,observed_signals:[],inferences:[],assumptions:['Synthetic fixture only.'],risks:[],contradictions:[],unknowns:['Production research was not run.'],contextual_actions:[{title:'Run authenticated research',why:'Populate this section with audited evidence.'}],evidence_cards:[],coverage:0}});return [{json:{task:{id:'00000000-0000-4000-8000-000000000401',task_key:'s1_research_blueprint',module_key:'final_blueprint'},profile_version:1,profile:{idea_text:'An evidence workspace for founder validation.',goal:{type:'VALIDATE_DEMAND'}},dependency_outputs:[section('foundation'),section('customer_demand'),section('competitor_intelligence'),section('market_economics'),{task_key:'s1_evidence_audit',module_key:'evidence_audit',status:'COMPLETED',output:{audit_status:'PASS',evidence_coverage:0.76,critical_blockers:[]}},{task_key:'s1_research_verdict',module_key:'research_verdict',status:'COMPLETED',output:{verdict:'CONDITIONAL_GO',research_viability_score:72.5,score_status:'DECISION_CAPABLE',decision_capable:true,explanation:'Safe structural verdict.',available_decisions:['PROCEED','PAUSE_OR_REVISE']}}],correlation_id:'bp-synthesis-safe-test',test_mode:true}}];"
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000102",
+      "name": "Create Safe Synthesis Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-580, -160]
+    },
+    {
+      "parameters": {"inputSource": "passthrough"},
+      "id": "e7b80101-0150-4050-8050-0de015000103",
+      "name": "When Called by Stage 1 Router",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [-820, 80]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const deps=Array.isArray(src.dependency_outputs)?src.dependency_outputs:[];const byModule=Object.fromEntries(deps.map(d=>[d.module_key,d.output??{}]));const modules=['foundation','customer_demand','competitor_intelligence','market_economics'];const sections=modules.filter(m=>byModule[m]).map(m=>({section_key:m,title:{foundation:'Foundation',customer_demand:'Customer Research',competitor_intelligence:'Competitor Research',market_economics:'Market Research'}[m],status:deps.find(d=>d.module_key===m)?.status??'PARTIAL',content:byModule[m],actionables:Array.isArray(byModule[m]?.contextual_actions)?byModule[m].contextual_actions.slice(0,5):[]}));const audit=byModule.evidence_audit??{};const verdict=byModule.research_verdict??src.latest_stage_verdict??{};const signalCandidates=sections.flatMap(s=>(s.content.observed_signals??[]).map(x=>({section_key:s.section_key,claim:String(x.claim??''),evidence_ids:Array.isArray(x.evidence_ids)?x.evidence_ids:[]}))).filter(x=>x.claim);const risks=sections.flatMap(s=>(s.content.risks??[]).map(x=>({section_key:s.section_key,risk:typeof x==='string'?x:String(x?.risk??x?.title??'')}))).filter(x=>x.risk);const assumptions=sections.flatMap(s=>(s.content.assumptions??[]).map(x=>({section_key:s.section_key,assumption:typeof x==='string'?x:String(x?.assumption??x?.title??'')}))).filter(x=>x.assumption);const unknowns=sections.flatMap(s=>(s.content.unknowns??[]).map(String));const topSignals=[{key:'research_verdict',label:'Research verdict',value:verdict.verdict??'WITHHELD',value_status:verdict.decision_capable?'MEASURED':'UNKNOWN'},{key:'evidence_coverage',label:'Evidence coverage',value:Number(audit.evidence_coverage??verdict.evidence_coverage??0),value_status:'DERIVED'},{key:'open_risks',label:'Open risks',value:risks.length,value_status:'MEASURED'},{key:'open_assumptions',label:'Open assumptions',value:assumptions.length,value_status:'MEASURED'},{key:'blueprint_completion',label:'Stage 1 completion',value:Math.round(sections.filter(s=>s.status==='COMPLETED').length/4*100),value_status:'DERIVED'}];const blueprint={schema_version:'bp-progressive-blueprint-v1',version_kind:'RESEARCH',artifact_stage:'DISCOVER',title:'Blueprint Evidence — Research Blueprint V1',idea_text:String(src.profile?.idea_text??src.idea_text??''),founder_goal:src.profile?.goal??null,generated_from_profile_version:Number(src.profile_version??0),verdict:{verdict:verdict.verdict??'WITHHELD',score:verdict.research_viability_score??verdict.score??null,score_status:verdict.score_status??'WITHHELD',decision_capable:verdict.decision_capable===true,explanation:verdict.explanation??'The verdict is unavailable until evidence audit completes.',available_decisions:verdict.available_decisions??[]},top_signals:topSignals,sections,top_evidence_signals:signalCandidates.slice(0,5),open_risks:risks.slice(0,20),open_assumptions:assumptions.slice(0,20),unknowns:[...new Set(unknowns)].slice(0,30),limitations:['This is research and planning support, not a guarantee of commercial success.','No customer interview, purchase, payment, investment, message, or launch action is claimed unless supplied as evidence.'],next_gate:'RESEARCH_VERDICT_GATE'};const complete=sections.length>=4&&audit.audit_status==='PASS'&&Boolean(verdict.verdict);const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(src.authorization??'');const persist_required=!src.test_mode&&uuid.test(String(src.run_id??''))&&Number(src.profile_version)>0&&/^Bearer\\s+\\S+$/i.test(authorization);const verdictId=String(verdict.id??verdict.verdict_id??'');const rpc_body={p_run_id:src.run_id,p_profile_version:Number(src.profile_version),p_version_kind:'RESEARCH',p_artifact_stage:'DISCOVER',p_status:complete?'COMPLETED':'PARTIAL',p_blueprint:blueprint,p_change_summary:'Stage 1 research, evidence audit, deterministic verdict and contextual actions consolidated into immutable Research Blueprint V1.',p_source_verdict_ids:uuid.test(verdictId)?[verdictId]:[]};return [{json:{schema_version:'bp-synthesis-prepared-v1',task_id:src.task?.id??null,task_key:src.task?.task_key??'s1_research_blueprint',blueprint,complete,persist_required,authorization,rpc_body,correlation_id:String(src.correlation_id??`bp-synth-${Date.now()}`).slice(0,200),test_mode:src.test_mode===true}}];"
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000104",
+      "name": "Synthesize Grounded Research Blueprint",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-300, -20]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "e7b80101-0150-4050-8050-0de015000151", "leftValue": "={{ $json.persist_required }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000105",
+      "name": "Persist Production Blueprint?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-20, -20]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/create_progressive_blueprint_version",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $json.authorization }}"}, {"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000106",
+      "name": "Create Immutable Research Blueprint Version",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [240, -120],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep=$('Synthesize Grounded Research Blueprint').first().json;const p=$input.first()?.json??{};const persisted=Boolean(p.id&&p.version);return [{json:{schema_version:'bp-task-worker-result-v1',task_id:prep.task_id,task_key:prep.task_key,module_key:'final_blueprint',status:persisted&&prep.complete?'COMPLETED':'PARTIAL',observation:{verdict:persisted?'VALID':'TOOL_FAILED',summary:persisted?`Research Blueprint V${p.version} was created immutably.`:'Blueprint persistence failed safely; the generated payload is retained for review.',output:{blueprint:prep.blueprint,blueprint_version_id:p.id??null,blueprint_version:p.version??null,persisted},evidence_ids:[],limitations:prep.blueprint.limitations,retryable:!persisted,proposed_route:persisted?'OBSERVE_AND_UNLOCK':'HUMAN_REVIEW'},correlation_id:prep.correlation_id,test_mode:false}}];"
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000107",
+      "name": "Return Persisted Blueprint Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-task-worker-result-v1',task_id:x.task_id,task_key:x.task_key,module_key:'final_blueprint',status:x.complete?'COMPLETED':'PARTIAL',observation:{verdict:'VALID',summary:'Safe fixture produced the grounded progressive Blueprint contract without writing data.',output:{blueprint:x.blueprint,persisted:false},evidence_ids:[],limitations:x.blueprint.limitations,retryable:false,proposed_route:'OBSERVE_AND_UNLOCK'},correlation_id:x.correlation_id,test_mode:true}}];"
+      },
+      "id": "e7b80101-0150-4050-8050-0de015000108",
+      "name": "Return Safe Blueprint Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 100]
+    }
+  ],
+  "connections": {
+    "Run Synthesis Test": {"main": [[{"node": "Create Safe Synthesis Fixture", "type": "main", "index": 0}]]},
+    "Create Safe Synthesis Fixture": {"main": [[{"node": "Synthesize Grounded Research Blueprint", "type": "main", "index": 0}]]},
+    "When Called by Stage 1 Router": {"main": [[{"node": "Synthesize Grounded Research Blueprint", "type": "main", "index": 0}]]},
+    "Synthesize Grounded Research Blueprint": {"main": [[{"node": "Persist Production Blueprint?", "type": "main", "index": 0}]]},
+    "Persist Production Blueprint?": {"main": [[{"node": "Create Immutable Research Blueprint Version", "type": "main", "index": 0}], [{"node": "Return Safe Blueprint Result", "type": "main", "index": 0}]]},
+    "Create Immutable Research Blueprint Version": {"main": [[{"node": "Return Persisted Blueprint Result", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 60},
+  "versionId": "e7b80101-0150-4050-8050-0de015000199",
+  "meta": {"templateCredsSetupCompleted": true},
+  "id": "bpSynth01ResearchBlueprint",
+  "tags": []
+}

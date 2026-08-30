@@ -1,0 +1,276 @@
+{
+  "name": "BP-SCHED-01 Eligible Task Scheduler",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b5c40101-0120-4020-8020-0de013000101",
+      "name": "Run Scheduler Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-1120, -180]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{run_id:'00000000-0000-4000-8000-000000000201',profile_version:1,idea_text:'An evidence workspace that helps a solo founder validate a product idea before committing build budget.',profile:{idea_text:'An evidence workspace that helps a solo founder validate a product idea before committing build budget.',constraints:{currency:'USD',hours_per_week:12,risk_tolerance:'MEDIUM',items:['solo founder']}},tasks:[{id:'00000000-0000-4000-8000-000000000211',task_key:'s1_foundation',module_key:'foundation',goal:'Frame the idea and riskiest assumptions.',status:'RUNNING',attempt_count:1,budgets:{}},{id:'00000000-0000-4000-8000-000000000212',task_key:'s1_customer_demand',module_key:'customer_demand',goal:'Find evidence-backed demand signals.',status:'RUNNING',attempt_count:1,budgets:{}}],correlation_id:'bp-scheduler-safe-test',test_mode:true}}];"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000102",
+      "name": "Create Safe Scheduler Fixture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-900, -180]
+    },
+    {
+      "parameters": {"inputSource": "passthrough"},
+      "id": "b5c40101-0120-4020-8020-0de013000103",
+      "name": "When Called by Supervisor Loop",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [-1120, 80]
+    },
+    {
+      "parameters": {
+        "jsCode": "const src=$input.first()?.json??{};const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const allowed=['foundation','customer_demand','competitor_intelligence','market_economics','evidence_audit','research_verdict','final_blueprint'];const authorization=String(src.authorization??'');const runId=src.run_id??null;const testMode=src.test_mode===true;const canClaim=!testMode&&uuid.test(String(runId??''))&&/^Bearer\\s+\\S+$/i.test(authorization);return [{json:{schema_version:'bp-scheduler-request-v1',authorization,run_id:runId,profile_version:Number(src.profile_version??0),idea_text:String(src.idea_text??src.profile?.idea_text??''),profile:src.profile??{},provided_tasks:Array.isArray(src.tasks)?src.tasks:[],allowed_modules:allowed,claim_limit:Math.max(1,Math.min(3,Math.trunc(Number(src.claim_limit??3)))),can_claim:canClaim,test_mode:testMode,correlation_id:String(src.correlation_id??`bp-scheduler-${Date.now()}`).slice(0,200)}}];"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000104",
+      "name": "Normalize Scheduler Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-660, -40]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b5c40101-0120-4020-8020-0de013000151", "leftValue": "={{ $json.can_claim }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000105",
+      "name": "Claim Production Tasks?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-420, -40]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/claim_dispatchable_orchestration_tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $json.authorization }}"}, {"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({p_run_id:$json.run_id,p_limit:$json.claim_limit,p_allowed_modules:$json.allowed_modules}) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000106",
+      "name": "Claim Dispatchable Tasks Atomically",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [-180, -140],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Normalize Scheduler Request').first().json;const raw=$input.all().flatMap(i=>Array.isArray(i.json)?i.json:[i.json]);const tasks=raw.filter(x=>x&&x.id&&!x.error);if(!tasks.length)return [{json:{dispatchable:false,no_ready_tasks:!raw.some(x=>x?.error),claim_failed:raw.some(x=>x?.error),reason:raw.some(x=>x?.error)?'CLAIM_RPC_FAILED':'NO_DISPATCHABLE_READY_TASKS',authorization:req.authorization,run_id:req.run_id,correlation_id:req.correlation_id,test_mode:false}}];return tasks.map(task=>({json:{dispatchable:true,claimed_task:task,authorization:req.authorization,run_id:req.run_id,correlation_id:req.correlation_id,test_mode:false}}));"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000107",
+      "name": "Normalize Production Claims",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [60, -140]
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$input.first().json;if(!req.test_mode)return [{json:{dispatchable:false,reason:'AUTHENTICATED_RUN_CONTEXT_REQUIRED',authorization:req.authorization,run_id:req.run_id,correlation_id:req.correlation_id,test_mode:false}}];if(!req.provided_tasks.length)return [{json:{dispatchable:false,no_ready_tasks:true,reason:'NO_SAFE_FIXTURE_TASKS',run_id:req.run_id,correlation_id:req.correlation_id,test_mode:true}}];return req.provided_tasks.map(task=>({json:{dispatchable:req.allowed_modules.includes(String(task.module_key)),claimed_task:task,profile:req.profile,idea_text:req.idea_text,profile_version:req.profile_version,run_id:req.run_id,correlation_id:req.correlation_id,test_mode:true}}));"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000108",
+      "name": "Fan Out Safe Claimed Tasks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-180, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b5c40101-0120-4020-8020-0de013000152", "leftValue": "={{ $json.dispatchable && !$json.test_mode }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000109",
+      "name": "Load Production Task Context?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [300, -40]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/get_orchestration_task_context",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $json.authorization }}"}, {"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({p_task_id:$json.claimed_task.id}) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000110",
+      "name": "Load Versioned Task Execution Context",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [540, -140],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const req=$('Normalize Scheduler Request').first().json;const context=$json??{};if(context?.error||!context?.task)return {json:{dispatchable:false,reason:'TASK_CONTEXT_LOAD_FAILED',authorization:req.authorization,run_id:req.run_id,correlation_id:req.correlation_id,test_mode:false}};const module=String(context.task.module_key??'');return {json:{...context,dispatchable:req.allowed_modules.includes(module),authorization:req.authorization,idea_text:String(context.profile?.idea_text??''),founder_inputs:context.profile?.constraints??{},correlation_id:req.correlation_id,test_mode:false}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000111",
+      "name": "Bind Production Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [780, -140]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const x=$json;if(!x.test_mode)return {json:x};return {json:{schema_version:'bp-task-execution-context-v1',task:x.claimed_task,profile:x.profile,profile_version:x.profile_version,idea_text:x.idea_text,founder_inputs:x.profile?.constraints??{},dependency_outputs:[],pending_checkpoints:[],dispatchable:x.dispatchable,run_id:x.run_id,correlation_id:x.correlation_id,test_mode:true}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000112",
+      "name": "Bind Safe Test Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [540, 80]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b5c40101-0120-4020-8020-0de013000153", "leftValue": "={{ $json.dispatchable }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000113",
+      "name": "Dispatch Adapter Installed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1020, -20]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {"__rl": true, "value": "bpStage1Router01", "mode": "id"},
+        "mode": "each",
+        "options": {"waitForSubWorkflow": true}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000114",
+      "name": "Execute Typed Stage 1 Worker Router",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [1260, -100],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-scheduler-cycle-result-v1',status:x.no_ready_tasks?'IDLE':'SAFE_FAILED',route:x.no_ready_tasks?'WAIT_FOR_ELIGIBLE_TASK':'SUPERVISOR_REPLAN',requires_human:!x.no_ready_tasks,terminal:false,message:x.no_ready_tasks?'No installed worker has an eligible READY task.':'The scheduler refused to dispatch without an installed allowlisted adapter and durable context.',reason:x.reason??'ADAPTER_NOT_INSTALLED',run_id:x.run_id??null,correlation_id:x.correlation_id,test_mode:x.test_mode===true}}];"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000115",
+      "name": "Return Idle or Safe Refusal",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1260, 100]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const worker=$json??{};const obs=worker.observation&&typeof worker.observation==='object'?worker.observation:{verdict:'TOOL_FAILED',summary:'The specialist returned no valid observation envelope.',output:{},evidence_ids:[],limitations:['Malformed specialist result.'],retryable:true,proposed_route:'BOUNDED_RETRY_OR_FALLBACK'};const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String($('Normalize Scheduler Request').first().json.authorization??'');const persist_required=worker.test_mode!==true&&uuid.test(String(worker.task_id??''))&&/^Bearer\\s+\\S+$/i.test(authorization);return {json:{worker,observation:obs,authorization,persist_required,rpc_body:{p_task_id:worker.task_id,p_verdict:obs.verdict,p_summary:String(obs.summary??'Task observation').slice(0,4000),p_output:obs.output??{},p_evidence_ids:Array.isArray(obs.evidence_ids)?obs.evidence_ids:[],p_limitations:Array.isArray(obs.limitations)?obs.limitations:[],p_retryable:obs.retryable===true,p_proposed_route:String(obs.proposed_route??obs.verdict).slice(0,500)}}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000116",
+      "name": "Prepare Typed Task Observation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, -100]
+    },
+    {
+      "parameters": {
+        "conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2}, "conditions": [{"id": "b5c40101-0120-4020-8020-0de013000154", "leftValue": "={{ $json.persist_required }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"},
+        "options": {}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000117",
+      "name": "Persist Production Observation?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1740, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/observe_orchestration_task",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ $json.authorization }}"}, {"name": "Content-Type", "value": "application/json"}]},
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {"timeout": 20000}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000118",
+      "name": "Record Observation and Unlock Dependencies",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [1980, -180],
+      "credentials": {"httpHeaderAuth": {"id": "fguxqwSfKfj2xfo9", "name": "BP Supabase Public"}},
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const prep=$('Prepare Typed Task Observation').item.json;const p=$json??{};const ok=p.recorded===true;return {json:{schema_version:'bp-scheduler-cycle-result-v1',status:ok?'OBSERVED':'HUMAN_REVIEW',route:ok?'SUPERVISOR_REEVALUATE':'HUMAN_REVIEW',requires_human:!ok,terminal:false,worker:prep.worker,observation_persistence:ok?p:{recorded:false,reason:'OBSERVATION_PERSISTENCE_FAILED',provider_response:p},correlation_id:prep.worker.correlation_id,test_mode:false}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000119",
+      "name": "Return Persisted Scheduler Cycle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2220, -180]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const x=$json;return {json:{schema_version:'bp-scheduler-cycle-result-v1',status:'OBSERVED',route:'SUPERVISOR_REEVALUATE',requires_human:false,terminal:false,worker:x.worker,observation_persistence:{recorded:false,reason:'TEST_MODE'},correlation_id:x.worker.correlation_id,test_mode:true}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000120",
+      "name": "Return Safe Scheduler Cycle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, 0]
+    }
+  ],
+  "connections": {
+    "Run Scheduler Test": {"main": [[{"node": "Create Safe Scheduler Fixture", "type": "main", "index": 0}]]},
+    "Create Safe Scheduler Fixture": {"main": [[{"node": "Normalize Scheduler Request", "type": "main", "index": 0}]]},
+    "When Called by Supervisor Loop": {"main": [[{"node": "Normalize Scheduler Request", "type": "main", "index": 0}]]},
+    "Normalize Scheduler Request": {"main": [[{"node": "Claim Production Tasks?", "type": "main", "index": 0}]]},
+    "Claim Production Tasks?": {"main": [[{"node": "Claim Dispatchable Tasks Atomically", "type": "main", "index": 0}], [{"node": "Fan Out Safe Claimed Tasks", "type": "main", "index": 0}]]},
+    "Claim Dispatchable Tasks Atomically": {"main": [[{"node": "Normalize Production Claims", "type": "main", "index": 0}]]},
+    "Normalize Production Claims": {"main": [[{"node": "Load Production Task Context?", "type": "main", "index": 0}]]},
+    "Fan Out Safe Claimed Tasks": {"main": [[{"node": "Load Production Task Context?", "type": "main", "index": 0}]]},
+    "Load Production Task Context?": {"main": [[{"node": "Load Versioned Task Execution Context", "type": "main", "index": 0}], [{"node": "Bind Safe Test Context", "type": "main", "index": 0}]]},
+    "Load Versioned Task Execution Context": {"main": [[{"node": "Bind Production Context", "type": "main", "index": 0}]]},
+    "Bind Production Context": {"main": [[{"node": "Dispatch Adapter Installed?", "type": "main", "index": 0}]]},
+    "Bind Safe Test Context": {"main": [[{"node": "Dispatch Adapter Installed?", "type": "main", "index": 0}]]},
+    "Dispatch Adapter Installed?": {"main": [[{"node": "Execute Typed Stage 1 Worker Router", "type": "main", "index": 0}], [{"node": "Return Idle or Safe Refusal", "type": "main", "index": 0}]]},
+    "Execute Typed Stage 1 Worker Router": {"main": [[{"node": "Prepare Typed Task Observation", "type": "main", "index": 0}]]},
+    "Prepare Typed Task Observation": {"main": [[{"node": "Persist Production Observation?", "type": "main", "index": 0}]]},
+    "Persist Production Observation?": {"main": [[{"node": "Record Observation and Unlock Dependencies", "type": "main", "index": 0}], [{"node": "Return Safe Scheduler Cycle", "type": "main", "index": 0}]]},
+    "Record Observation and Unlock Dependencies": {"main": [[{"node": "Return Persisted Scheduler Cycle", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Calcutta", "errorWorkflow": "bp90ErrorAudit01", "executionTimeout": 180},
+  "versionId": "b5c40101-0120-4020-8020-0de013000199",
+  "meta": {"templateCredsSetupCompleted": true},
+  "id": "bpSched01EligibleTaskScheduler",
+  "tags": []
+}

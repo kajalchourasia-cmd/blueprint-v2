@@ -1,0 +1,16 @@
+archetype,stage,bucket,allocation_percent,purpose,release_condition,warning_threshold,typical_low,typical_high,unit,cash_or_non_cash,source_type
+digital_product,pre_validation,Customer evidence,15,"Recruiting interviews and field observation","Release immediately for evidence work",25,50,300,USD,cash,Blueprint template
+digital_product,pre_validation,Prototype tests,25,"Concierge prototypes landing pages and test tooling","Release after repeated pain appears",40,100,800,USD,cash,Blueprint template
+digital_product,pre_validation,Product build,30,"Only the mechanism needed after behavior validation","Release after prototype and commitment thresholds pass",45,300,3000,USD,cash,Blueprint template
+digital_product,pre_validation,Distribution,10,"Channel and partner experiments","Release after one audience segment is clear",20,50,600,USD,cash,Blueprint template
+digital_product,pre_validation,Reserve,20,"Unexpected API expert legal or support cost","Do not spend before launch decision",15,200,1200,USD,cash,Blueprint template
+online_business,pre_validation,Customer evidence,15,"Interview recruiting workflow observation and community research","Release immediately",25,0,300,USD,cash,Blueprint template
+online_business,pre_validation,Offer tests,25,"Landing pages concierge delivery and presale tooling","Release after repeated pain",40,50,700,USD,cash,Blueprint template
+online_business,pre_validation,Delivery system,25,"No-code tools contractor support and operating setup","Release after paid commitment",40,100,1800,USD,cash,Blueprint template
+online_business,pre_validation,Distribution,15,"Community partnerships content and channel experiments","Release after segment clarity",25,50,1000,USD,cash,Blueprint template
+online_business,pre_validation,Reserve,20,"API support legal or second-test costs","Hold until evidence requires it",15,100,1500,USD,cash,Blueprint template
+universal,pre_validation,Research,15,"Customer and market evidence","Release immediately",25,50,500,USD,cash,Blueprint template
+universal,pre_validation,Validation,25,"Smallest credible behavior and payment tests","Release after problem evidence",40,100,1000,USD,cash,Blueprint template
+universal,pre_validation,Build or delivery,30,"Deliver the tested promise","Release after commitment threshold",45,300,4000,USD,cash,Blueprint template
+universal,pre_validation,Distribution,10,"Reach and conversion tests","Release after target segment clarity",20,50,800,USD,cash,Blueprint template
+universal,pre_validation,Reserve,20,"Unknown costs and second test cycle","Hold until evidence requires it",15,200,1500,USD,cash,Blueprint template

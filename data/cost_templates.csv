@@ -1,0 +1,10 @@
+industry,city_size,step_type,cash_low,cash_high,hours_low,hours_high,relationship_impact_level,health_impact_level,opportunity_cost_factor
+ai_product,anywhere,research,0,150,6,15,low,low,0.1
+saas,large_city,interview,0,100,8,20,none,low,0.2
+service,anywhere,validate,0,250,5,12,low,low,0.1
+creator,anywhere,launch,0,150,10,25,medium,medium,0.15
+saas,anywhere,interview,0,120,5,12,low,low,0.12
+ai_product,anywhere,validate,0,500,12,28,medium,medium,0.2
+online_business,anywhere,sell,0,200,8,18,low,medium,0.15
+marketplace,anywhere,measure,0,150,4,10,none,low,0.12
+consumer_product,anywhere,operate,100,1200,18,40,high,high,0.35

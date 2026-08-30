@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/research-suite-input.schema.json",
+  "title": "Blueprint Research Suite Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["idea_text"],
+  "properties": {
+    "owner_id": { "type": ["string", "null"], "format": "uuid" },
+    "project_id": { "type": ["string", "null"], "format": "uuid" },
+    "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "correlation_id": { "type": ["string", "null"], "maxLength": 200 },
+    "idea_text": { "type": "string", "minLength": 10, "maxLength": 10000 },
+    "optional_industry": { "type": ["string", "null"], "maxLength": 200 },
+    "geography": { "type": ["string", "null"], "maxLength": 200 },
+    "requested_modules": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["foundation", "customer_demand", "competitor_intelligence", "market_economics", "financial_readiness", "validation", "launch_distribution", "growth_optimization"]
+      }
+    },
+    "founder_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "available_budget": { "type": ["number", "null"], "minimum": 0 },
+        "monthly_build_budget": { "type": ["number", "null"], "minimum": 0 },
+        "hours_per_week": { "type": ["number", "null"], "minimum": 0, "maximum": 168 },
+        "target_monthly_price": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "current_stage": { "type": ["string", "null"], "maxLength": 200 },
+        "work_completed": { "type": "array", "items": { "type": "string", "maxLength": 500 } },
+        "constraints": { "type": "array", "items": { "type": "string", "maxLength": 500 } }
+      }
+    }
+  }
+}
