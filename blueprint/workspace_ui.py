@@ -82,10 +82,13 @@ def _project_title(idea: str) -> str:
     clean = re.sub(r"^(?:build|create|launch|start|make)\s+(?:an?\s+)?", "", clean, flags=re.I)
     clean = re.split(r"\s+(?:that|which|so that)\s+", clean, maxsplit=1, flags=re.I)[0]
     clean = re.split(r"[,:;]|\s+(?:because|where|while|with the goal of|in order to|to help)\s+", clean, maxsplit=1, flags=re.I)[0]
-    product_phrase = re.match(r"^(.+?\b(?:app|platform|service|tool|marketplace|store|business|product|tracker|assistant|dashboard|system|solution|studio))\s+for\b", clean, flags=re.I)
+    product_phrase = re.match(r"^(.+?\b(?:app|platform|service|tool|marketplace|store|business|product|tracker|assistant|receptionist|copilot|concierge|dashboard|system|solution|studio))\s+for\b", clean, flags=re.I)
     if product_phrase:
         clean = product_phrase.group(1)
-    words = clean.split()[:5]
+    clean = re.sub(r"^(?:an?|the)\s+", "", clean, flags=re.I)
+    words = clean.split()[:6]
+    while words and words[-1].lower() in {"a", "an", "and", "for", "in", "of", "the", "to", "with"}:
+        words.pop()
     small = {"a", "an", "and", "for", "in", "of", "the", "to", "with"}
     return " ".join(word if word.isupper() else (word.lower() if i and word.lower() in small else word.capitalize()) for i, word in enumerate(words)) or "Untitled Blueprint"
 
@@ -234,7 +237,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .state-banner span{{display:block;margin-top:4px}}.state-banner small{{display:block;margin-top:5px;color:#8a928c;font:9px var(--ui)}}.section-preview{{margin:12px 0 22px;padding:17px 18px;border:1px solid #e0e5e1;border-radius:14px;background:#fff}}.section-preview b{{font:600 13px/1.25 var(--ui);color:#28332b}}.section-preview p{{max-width:720px;margin:7px 0 0;color:#657068;font:12px/1.55 var(--ui)}}.empty-state{{display:grid!important;align-items:start!important;place-items:initial!important;min-height:245px!important;padding-top:24px!important;text-align:left!important}}.empty-state>div{{max-width:720px;padding:20px;border:1px solid #e1e6e2;border-radius:15px;background:#fafbfa}}.empty-state small{{display:block;margin-bottom:8px;color:#7a837c;font:650 9px/1.2 var(--ui);letter-spacing:.05em;text-transform:uppercase}}.empty-state b{{font:600 19px/1.25 var(--ui)!important}}.empty-state p{{max-width:660px!important;margin:8px 0 14px!important}}.empty-state em{{display:block;padding-top:12px;border-top:1px solid #e5e8e5;color:#8a918c;font:normal 10px/1.45 var(--ui)}}.chat-disabled{{padding:14px 15px;border:1px solid #e2d7d0;border-radius:17px;background:#fbf9f7;color:#77706b}}.chat-disabled b{{display:block;color:#4a413b;font:600 12px/1.3 var(--ui)}}.chat-disabled span{{display:block;margin:4px 0 11px;font:10px/1.45 var(--ui)}}.chat-disabled div{{padding:12px 13px;border:1px solid #e5dfda;border-radius:12px;background:#f3f1ef;color:#aaa39e;font:11px/1.2 var(--ui)}}
 .research-lead{{max-width:850px;margin:18px 0 27px;color:#344039;font:17px/1.68 var(--ui)}}.research-subtitle{{margin:31px 0 12px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.competitor-depth-title{{margin-top:38px}}.narrative-block{{max-width:870px;margin:31px 0 0;padding:0;border:0;background:transparent}}.narrative-block h3,.decision-frame h3,.constraint-strip h3,.foundation-assumptions h3,.research-table-wrap h3,.report-pairs h3{{margin:0 0 13px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.narrative-block ul{{margin:0;padding:0 0 0 21px}}.narrative-block li{{margin:0 0 10px;padding-left:3px;color:#3f4a43;font:14px/1.62 var(--ui)}}.narrative-block li::marker,.report-pairs li::marker{{color:#4b805e}}.narrative-limitations{{margin-top:30px;padding:15px 17px;border-left:3px solid #b6937e;background:#faf7f4}}.narrative-limitations h3{{font-size:13px;color:#5f4b40}}.narrative-limitations li{{font-size:12px;color:#6e625b}}.decision-frame{{max-width:900px;margin:0 0 31px;padding:0}}.decision-frame dl{{margin:0;border-top:1px solid #dfe4e0}}.decision-frame dl>div{{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:15px 0;border-bottom:1px solid #e4e8e5}}.decision-frame dt{{color:#6b756e;font:600 11px/1.45 var(--ui);text-transform:uppercase;letter-spacing:.035em}}.decision-frame dd{{margin:0;color:#2e3931;font:14px/1.58 var(--ui)}}.constraint-strip{{max-width:900px;margin:31px 0}}.constraint-strip>div{{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid #dfe4e0;border-bottom:1px solid #dfe4e0}}.constraint-strip>div>div{{min-width:180px;flex:1;padding:14px 17px 14px 0}}.constraint-strip span{{display:block;color:#7a837c;font:600 9px/1.2 var(--ui);text-transform:uppercase}}.constraint-strip b{{display:block;margin-top:7px;color:#263129;font:600 13px/1.35 var(--ui)}}.foundation-assumptions{{max-width:900px;margin:31px 0}}.foundation-assumptions ol{{margin:0;padding:0;list-style:none;counter-reset:foundation}}.foundation-assumptions li{{position:relative;padding:15px 0 15px 45px;border-top:1px solid #e0e4e1;counter-increment:foundation}}.foundation-assumptions li:last-child{{border-bottom:1px solid #e0e4e1}}.foundation-assumptions li:before{{content:counter(foundation,decimal-leading-zero);position:absolute;left:0;top:16px;color:#528065;font:650 10px var(--ui)}}.foundation-assumptions b{{display:block;color:#273229;font:600 14px/1.5 var(--ui)}}.foundation-assumptions span{{display:block;margin-top:5px;color:#727a74;font:12px/1.55 var(--ui)}}.report-pairs{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:900px;margin:32px 0;border-top:1px solid #dfe4e0}}.report-pairs article{{min-width:0;padding:20px 25px 20px 0;border-bottom:1px solid #e4e8e5}}.report-pairs article:nth-child(odd){{border-right:1px solid #e4e8e5}}.report-pairs article:nth-child(even){{padding-left:25px}}.report-pairs h3{{font-size:16px}}.report-pairs p,.report-pairs li{{color:#414c44;font:13px/1.62 var(--ui)}}.report-pairs p{{margin:0}}.report-pairs ul{{margin:0;padding-left:19px}}.report-pairs li{{margin-bottom:7px}}.report-callout{{max-width:870px;margin:24px 0;padding:17px 20px;border-left:3px solid #4f825f;background:#f2f6f3}}.report-callout.warning{{border-left-color:#b57a4c;background:#faf5f0}}.report-callout small{{display:block;margin-bottom:7px;color:#3f694c;font:650 10px/1.2 var(--ui);letter-spacing:.04em;text-transform:uppercase}}.report-callout.warning small{{color:#8a5837}}.report-callout p{{margin:0;color:#48534b;font:13px/1.6 var(--ui)}}.research-table-wrap{{max-width:900px;margin:34px 0}}.research-table-scroll{{overflow-x:auto;border-top:1px solid #d9dfda;border-bottom:1px solid #d9dfda}}.research-table{{width:100%;border-collapse:collapse;table-layout:auto}}.research-table th{{padding:11px 13px;background:#f4f6f4;color:#59635c;text-align:left;font:650 10px/1.3 var(--ui);letter-spacing:.03em;text-transform:uppercase}}.research-table td{{min-width:105px;padding:13px;color:#354138;border-top:1px solid #e8ebe8;vertical-align:top;font:12px/1.55 var(--ui)}}.audit-summary{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:900px;margin:25px 0 34px;border-top:1px solid #dce2dd;border-bottom:1px solid #dce2dd}}.audit-summary>div{{padding:17px 19px 17px 0}}.audit-summary>div+div{{padding-left:19px;border-left:1px solid #e1e5e2}}.audit-summary small{{display:block;color:#7b837d;font:600 9px/1.2 var(--ui);letter-spacing:.04em;text-transform:uppercase}}.audit-summary b{{display:block;margin-top:7px;color:#243128;font:600 21px/1.2 var(--ui)}}.competitor-profile{{max-width:900px;margin:0;padding:24px 0;border-top:1px solid #dfe4e0}}.competitor-profile:last-of-type{{border-bottom:1px solid #dfe4e0}}.competitor-profile header{{display:flex;align-items:center;gap:10px;margin-bottom:18px}}.competitor-profile h4{{margin:0;color:#1e2821;font:650 22px/1.2 var(--ui)}}.competitor-profile header span{{padding:5px 8px;border-radius:99px;background:#e9f1eb;color:#3f684d;font:600 9px/1 var(--ui)}}.competitor-profile dl{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0}}.competitor-profile dl>div{{padding:12px 0;border-top:1px solid #edf0ed}}.competitor-profile dt{{color:#69736c;font:600 10px/1.3 var(--ui);text-transform:uppercase;letter-spacing:.025em}}.competitor-profile dd{{margin:5px 0 0;color:#38433b;font:13px/1.55 var(--ui)}}[data-testid="stChatMessage"]{{padding:8px 0!important;border:0!important;border-radius:0!important;background:transparent!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]){{width:fit-content!important;max-width:76%!important;margin-left:auto!important;padding:10px 14px!important;border:1px solid #eadfd7!important;border-radius:15px!important;background:#f7f0eb!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]){{max-width:880px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] p,[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] li{{font:14px/1.62 var(--ui)!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] h3{{margin:11px 0 7px!important;color:#233028!important;font:650 16px/1.3 var(--ui)!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] ul,[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] ol{{padding-left:21px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] li{{margin-bottom:6px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:48px!important}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;bottom:8px!important}}.gate-score{{padding-bottom:15px;border-bottom:1px solid #e1e5e1}}.gate-score small{{display:block;color:#79827b;font:600 9px var(--ui);text-transform:uppercase}}.gate-score b{{display:block;margin:7px 0 3px;color:#233027;font:650 20px/1.25 var(--ui)}}.gate-score strong{{color:#3c744e;font:650 15px var(--ui)}}.conditional-score{{display:flex;align-items:center;gap:15px;margin:15px 0;padding:13px 14px;border-left:3px solid #4f825f;background:#f0f5f1}}.conditional-score b{{white-space:nowrap;color:#2e6540;font:650 19px var(--ui)}}.conditional-score span{{color:#68726b;font:11px/1.45 var(--ui)}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
-[class*="st-key-bp_chat_composer_"]{{position:fixed!important;left:calc(14.3vw + 36px)!important;right:34px!important;bottom:10px!important;width:auto!important;z-index:120!important}}.st-key-bp_center_pane{{padding-bottom:185px!important}}@media(max-width:760px){{[class*="st-key-bp_chat_composer_"]{{position:sticky!important;left:auto!important;right:auto!important;bottom:8px!important}}}}
+[class*="st-key-bp_chat_composer_"]{{position:fixed!important;left:calc(14.3vw + 36px)!important;right:34px!important;bottom:10px!important;width:auto!important;z-index:120!important}}.st-key-bp_center_pane{{padding-bottom:235px!important}}.st-key-bp_center_pane:after{{content:'';position:fixed;z-index:115;left:14.3vw;right:0;bottom:0;height:178px;background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 33%,#fff);pointer-events:none}}.kpi-label{{color:#767d78!important;font-size:11px!important;font-weight:500!important;letter-spacing:.065em!important;text-transform:uppercase!important}}.section-title{{margin:9px 0 0!important}}.research-lead{{margin:22px 0 34px!important;color:#344039!important;font:14px/1.62 var(--ui)!important}}.decision-frame dd,.narrative-block li,.foundation-assumptions b,.report-pairs p,.report-pairs li,.report-callout p,.competitor-profile dd{{font-family:var(--ui)!important;font-size:14px!important;line-height:1.62!important}}.report-signal-strip{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:900px;margin:4px 0 38px;border:1px solid #dce3dd;border-radius:14px;background:#f8faf8;overflow:hidden}}.report-signal-strip>div{{min-width:0;padding:17px 16px}}.report-signal-strip>div+div{{border-left:1px solid #e1e6e2}}.report-signal-strip small{{display:block;color:#748078;font:500 9px/1.25 var(--ui);letter-spacing:.055em;text-transform:uppercase}}.report-signal-strip b{{display:block;margin-top:8px;color:#233029;font:600 17px/1.28 var(--ui);overflow-wrap:anywhere}}.report-signal-strip span{{display:block;margin-top:7px;color:#778079;font:10px/1.45 var(--ui)}}.report-signal-strip.customer{{border-top:3px solid #4d8060}}.report-signal-strip.market{{border-top:3px solid #547a8e}}.report-signal-strip.foundation{{border-top:3px solid #9a735d}}.research-table-scroll{{max-width:100%;overflow:auto!important}}.competitor-profile dd ul{{margin:0;padding-left:18px}}.competitor-profile dd li{{margin:0 0 6px}}.verdict-hero{{display:grid;grid-template-columns:1fr auto;gap:6px 24px;margin-bottom:31px!important}}.verdict-hero small{{grid-column:1/-1;color:#9fc0aa;font:500 9px/1.2 var(--ui);letter-spacing:.06em;text-transform:uppercase}}.verdict-hero strong{{align-self:center}}.verdict-hero>b{{align-self:center;color:#d8f4df;font:600 24px/1 var(--ui)}}.verdict-hero p{{grid-column:1/-1;margin:9px 0 0!important;font-size:14px!important;line-height:1.6!important}}.score-row{{margin:0 0 34px}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] p,.st-key-bp_left_companion [data-testid="stExpanderDetails"] a{{font-size:9px!important;line-height:1.35!important}}@media(max-width:1100px){{.report-signal-strip{{grid-template-columns:repeat(2,1fr)}}.report-signal-strip>div:nth-child(3){{border-left:0;border-top:1px solid #e1e6e2}}.report-signal-strip>div:nth-child(4){{border-top:1px solid #e1e6e2}}}}@media(max-width:760px){{.st-key-bp_center_pane:after{{display:none}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;left:auto!important;right:auto!important;bottom:8px!important}}}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -451,6 +454,41 @@ def _render_evidence_boundary(text: str, *, tone: str = "evidence", title: str =
     )
 
 
+def _render_signal_strip(items: list[tuple[str, Any, str]], *, tone: str = "green") -> None:
+    """Render compact, evidence-safe report KPIs without inventing missing values."""
+    cells = []
+    for label, value, note in items:
+        display = _display_text(value) if value not in (None, "", []) else "Not established"
+        cells.append(
+            f'<div><small>{html.escape(label)}</small><b>{html.escape(display)}</b>'
+            f'<span>{html.escape(note)}</span></div>'
+        )
+    if cells:
+        st.markdown(
+            f'<section class="report-signal-strip {html.escape(tone)}">{"".join(cells)}</section>',
+            unsafe_allow_html=True,
+        )
+
+
+def _first_text(output: dict, *fields: str, fallback: str = "Not established by current evidence") -> str:
+    for field in fields:
+        value = output.get(field)
+        if value not in (None, "", [], {}):
+            rows = _clean(value)
+            return rows[0] if rows else _item_text(value)
+    return fallback
+
+
+def _normalise_audit_output(output: dict) -> dict:
+    """Accept the audit worker's flat and nested envelopes used by existing runs."""
+    merged = dict(output)
+    for field in ("audit", "audit_result", "quality_audit", "evidence_audit", "verdict_input"):
+        nested = output.get(field)
+        if isinstance(nested, dict):
+            merged = {**nested, **merged}
+    return merged
+
+
 def _render_foundation(output: dict) -> None:
     finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
     if finding:
@@ -472,6 +510,13 @@ def _render_foundation(output: dict) -> None:
 
     constraints = _dict(output.get("founder_constraints"))
     if constraints:
+        constraint_values = [value for value in constraints.values() if value not in (None, "", [])]
+        _render_signal_strip([
+            ("Launch horizon", constraints.get("launch_timeline") or constraints.get("timeline"), "The plan must fit this founder-supplied window."),
+            ("Weekly capacity", constraints.get("hours_per_week") or constraints.get("time_available"), "Available founder time—not an agent estimate."),
+            ("Capital available", constraints.get("money_available") or constraints.get("available_budget") or constraints.get("budget"), "Used only for bounded scenarios; never as forecast revenue."),
+            ("Known constraints", len(constraint_values), "Inputs that downstream agents must respect."),
+        ], tone="foundation")
         entries = "".join(
             f'<div><span>{html.escape(str(key).replace("_", " ").title())}</span><b>{html.escape(_display_text(value))}</b></div>'
             for key, value in constraints.items()
@@ -514,6 +559,17 @@ def _render_customer_research(output: dict) -> None:
     if finding:
         st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
 
+    segments = _clean(output.get("customer_segments"))
+    signals = _clean(output.get("observed_signals"))
+    barriers = _clean(output.get("switching_barriers"))
+    willingness = output.get("willingness_to_pay_status")
+    _render_signal_strip([
+        ("Priority user groups", len(segments) if segments else None, "Segments surfaced by the current research."),
+        ("Accepted user signals", len(signals) if signals else None, "Observed signals retained after evidence checks."),
+        ("Switching barriers", len(barriers) if barriers else None, "Reasons an interested user may still do nothing."),
+        ("Payment evidence", _item_text(willingness) if willingness not in (None, "", []) else "Unknown", "Interest is never presented as willingness to pay."),
+    ], tone="customer")
+
     _render_evidence_boundary(
         "This report distinguishes observed desk-research signals from founder assumptions. Interest, complaints, or stated intent are not treated as willingness to pay unless the evidence includes a payment, deposit, preorder, or explicit price commitment.",
         title="How to read this research",
@@ -526,13 +582,18 @@ def _render_customer_research(output: dict) -> None:
         ("What prevents switching", output.get("switching_barriers")),
     ])
 
-    willingness = output.get("willingness_to_pay_status")
     if willingness not in (None, "", []):
         willingness_text = _item_text(willingness)
         tone = "warning" if "unknown" in willingness_text.lower() or "not " in willingness_text.lower() else "evidence"
         _render_evidence_boundary(willingness_text, tone=tone, title="Willingness-to-pay status")
 
-    _render_list("What the evidence actually shows", output.get("observed_signals"))
+    _render_list("What users are signalling", output.get("observed_signals"))
+    _render_report_pairs([
+        ("What users expect from a credible solution", output.get("user_expectations") or output.get("customer_expectations") or output.get("desired_outcomes")),
+        ("Pain intensity or frequency", output.get("pain_signals") or output.get("problem_frequency") or output.get("pains")),
+        ("Behaviour that indicates urgency", output.get("commitment_signals") or output.get("behaviour_signals")),
+        ("What is still only an inference", output.get("inferences")),
+    ])
     _render_list("Questions for real customer conversations", output.get("discovery_questions"))
     _render_list("Where the first users may be reachable", output.get("first_user_channels"))
     _render_list("What this changes in your idea", output.get("contextual_actions") or output.get("recommendations"))
@@ -551,6 +612,13 @@ def _render_market_research(output: dict) -> None:
     if finding:
         st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
 
+    _render_signal_strip([
+        ("Market today", _first_text(output, "market_structure", "category_maturity"), "Current category structure supported by the research."),
+        ("Direction of travel", _first_text(output, "future_direction", "market_outlook", "trends", "demand_drivers"), "A directional signal—not a guaranteed forecast."),
+        ("Best initial beachhead", _first_text(output, "beachhead", "initial_beachhead"), "The narrowest reachable market boundary found."),
+        ("Idea–market fit", _first_text(output, "idea_market_fit", "strategic_fit", "positioning_fit"), "Where the idea aligns or conflicts with current evidence."),
+    ], tone="market")
+
     facts = []
     for label, field in (
         ("Market structure", "market_structure"),
@@ -565,6 +633,10 @@ def _render_market_research(output: dict) -> None:
         st.markdown(f'<section class="decision-frame market-frame"><h3>The market boundary</h3><dl>{body}</dl></section>', unsafe_allow_html=True)
 
     _render_report_pairs([
+        ("Where the market is now", output.get("market_structure") or output.get("category_maturity")),
+        ("Where the market appears to be moving", output.get("future_direction") or output.get("market_outlook") or output.get("trends")),
+        ("Where this idea fits", output.get("idea_market_fit") or output.get("strategic_fit") or output.get("positioning_fit")),
+        ("Where this idea may be misaligned", output.get("misalignment") or output.get("market_gaps") or output.get("contradictions")),
         ("Forces creating demand", output.get("demand_drivers")),
         ("Barriers slowing adoption", output.get("adoption_barriers")),
         ("Regulatory or operating constraints", output.get("regulatory_constraints")),
@@ -602,6 +674,7 @@ def _render_market_research(output: dict) -> None:
 
 
 def _render_evidence_audit(output: dict) -> None:
+    output = _normalise_audit_output(output)
     status = str(output.get("audit_status") or output.get("status") or "NOT PASSED").replace("_", " ").title()
     coverage = output.get("evidence_coverage")
     coverage_text = "Not established"
@@ -618,7 +691,10 @@ def _render_evidence_audit(output: dict) -> None:
     )
 
     findings = []
-    for item in _items(output.get("stream_findings")):
+    stream_values = output.get("stream_findings") or output.get("stream_scores") or output.get("research_streams")
+    if isinstance(stream_values, dict):
+        stream_values = [{"module_key": key, **(_dict(value) if isinstance(value, dict) else {"coverage": value})} for key, value in stream_values.items()]
+    for item in _items(stream_values):
         data = _dict(item)
         findings.append({
             "stream": str(data.get("module_key") or "Unknown").replace("_", " ").title(),
@@ -632,6 +708,11 @@ def _render_evidence_audit(output: dict) -> None:
         findings,
         [("stream", "Research stream"), ("coverage", "Coverage"), ("signals", "Accepted signals"), ("contradictions", "Contradictions"), ("citation_errors", "Citation errors")],
     )
+    if not findings:
+        st.markdown(
+            '<section class="report-callout warning"><small>Stream detail unavailable</small><p>The audit result exists, but this earlier run did not persist stream-level scores. Blueprint will not fabricate them. The accepted-evidence register and verdict blockers below remain inspectable.</p></section>',
+            unsafe_allow_html=True,
+        )
     _render_list("Decision blockers", output.get("critical_blockers"))
     _render_list("Research streams still missing", output.get("missing_streams"))
     accepted = _items(output.get("accepted_evidence")) or _items(output.get("evidence_cards"))
@@ -644,7 +725,7 @@ def _render_evidence_audit(output: dict) -> None:
             "excerpt": data.get("excerpt") or data.get("claim") or "Inspect the source link for the accepted excerpt.",
         })
     _render_research_table("Accepted evidence register", accepted_rows, [("source", "Source"), ("provider", "Evidence type"), ("excerpt", "Why it was retained")])
-    if status.upper() != "PASS":
+    if status.upper() not in {"PASS", "PASSED"}:
         _render_evidence_boundary(
             "The verdict must remain cautious or withheld until the listed blockers, missing streams, or citation problems are resolved. A failed audit is not silently converted into confidence.",
             tone="warning",
@@ -681,6 +762,10 @@ def _render_competitors(output: dict) -> None:
             rows,
             [("Competitor", "Competitor"), ("Type", "Type"), ("Core offer", "Core offer"), ("What customers value", "What customers value"), ("Gap worth testing", "Gap worth testing")],
         )
+        st.markdown(
+            '<aside class="report-callout"><small>How to read competitor type</small><p><b>Direct</b> means it solves substantially the same job for substantially the same buyer. <b>Indirect</b> solves the job differently. <b>Manual / service</b> is a human workaround, while <b>status quo</b> means doing nothing or continuing the current process.</p></aside>',
+            unsafe_allow_html=True,
+        )
         st.markdown('<h3 class="research-subtitle competitor-depth-title">What each competitor means for your idea</h3>', unsafe_allow_html=True)
         for item in competitors[:8]:
             if not isinstance(item, dict):
@@ -703,10 +788,11 @@ def _render_competitors(output: dict) -> None:
                 ("India and geographic relevance", region),
                 ("Opportunity for this idea", _field_text(item, "gap", "opportunity")),
             )
-            body = "".join(
-                f'<div><dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd></div>'
-                for label, value in attributes
-            )
+            body = ""
+            for label, value in attributes:
+                points = [part.strip() for part in re.split(r"\s*[;•]\s*|(?<=\.)\s+(?=[A-Z0-9])", str(value)) if part.strip()]
+                detail = f'<ul>{"".join(f"<li>{html.escape(point)}</li>" for point in points[:5])}</ul>' if len(points) > 1 else html.escape(str(value))
+                body += f'<div><dt>{html.escape(label)}</dt><dd>{detail}</dd></div>'
             st.markdown(
                 f'<section class="competitor-profile"><header><h4>{html.escape(str(name))}</h4><span>{html.escape(str(category))}</span></header><dl>{body}</dl></section>',
                 unsafe_allow_html=True,
@@ -729,7 +815,8 @@ def _render_competitors(output: dict) -> None:
 def _render_verdict(output: dict, checkpoint: dict | None) -> None:
     score = _score(output); label = VERDICT_LABELS.get(str(output.get("verdict") or "WITHHELD").upper(), str(output.get("verdict") or "Withheld").replace("_", " ").title())
     explanation = str(output.get("explanation") or output.get("rationale") or "The decision explanation is not available yet.")
-    st.markdown(f'<div class="verdict-hero"><strong>{html.escape(label)}</strong><p>{html.escape(explanation)}</p></div>', unsafe_allow_html=True)
+    score_display = f"{score:.0f}/100" if score is not None else "Score withheld"
+    st.markdown(f'<div class="verdict-hero"><small>Stage 1 research verdict</small><strong>{html.escape(label)}</strong><b>{html.escape(score_display)}</b><p>{html.escape(explanation)}</p></div>', unsafe_allow_html=True)
     coverage = output.get("evidence_coverage", output.get("coverage")); coverage_text = "Unknown"
     if isinstance(coverage, (int, float)):
         coverage_text = f"{float(coverage) * 100 if float(coverage) <= 1 else float(coverage):.0f}%"
@@ -737,10 +824,35 @@ def _render_verdict(output: dict, checkpoint: dict | None) -> None:
     st.markdown(f'<div class="score-row"><div class="score-cell"><b>{f"{score:.0f}/100" if score is not None else "Withheld"}</b><span>Viability score</span></div><div class="score-cell"><b>{coverage_text}</b><span>Evidence coverage</span></div><div class="score-cell"><b>{html.escape(status)}</b><span>Decision status</span></div></div>', unsafe_allow_html=True)
     dimensions = _dict(output.get("dimension_scores"))
     if dimensions:
-        st.dataframe([{"Dimension": key.replace("_", " ").title(), "Score": value} for key, value in dimensions.items()], hide_index=True, use_container_width=True)
+        dimension_notes = {
+            "user_demand": "Strength of observed customer pain, behaviour, and commitment evidence.",
+            "customer_demand": "Strength of observed customer pain, behaviour, and commitment evidence.",
+            "competitive_opportunity": "Evidence that a meaningful and testable gap exists among current alternatives.",
+            "market_attractiveness": "Strength of the reachable market, access, timing, and constraint evidence.",
+        }
+        dimension_rows = []
+        for key, value in dimensions.items():
+            data = _dict(value)
+            raw_score = data.get("score", data.get("value", data.get("weighted_score"))) if data else value
+            score_text = f"{float(raw_score):.0f}/100" if isinstance(raw_score, (int, float)) else _item_text(raw_score)
+            dimension_rows.append({
+                "dimension": key.replace("_", " ").title(),
+                "score": score_text,
+                "meaning": data.get("explanation") or data.get("rationale") or dimension_notes.get(key, "A configured component of the audited viability decision."),
+            })
+        _render_research_table(
+            "Why this score was assigned",
+            dimension_rows,
+            [("dimension", "Decision dimension"), ("score", "Score"), ("meaning", "What this measures")],
+        )
     _render_list("Evidence supporting the decision", output.get("supporting_signals") or output.get("observed_signals"))
     _render_list("What weakens the decision", output.get("critical_blockers") or output.get("risks"))
-    _render_list("What would change this verdict", output.get("next_evidence_needed") or output.get("unknowns"))
+    _render_list("What to improve before committing more", output.get("contextual_actions") or output.get("recommendations"))
+    _render_list("What new evidence could change this verdict", output.get("next_evidence_needed") or output.get("unknowns"))
+    _render_evidence_boundary(
+        "Selecting an improvement does not rewrite your original idea and does not increase this score. It records a founder-approved Stage 2 constraint. The score changes only if a later run accepts new evidence.",
+        title="How improvements affect the Blueprint",
+    )
     if checkpoint and st.button("Review decision and unlock the next stage", type="primary", use_container_width=True):
         _gate_dialog(checkpoint, output)
 
@@ -805,6 +917,8 @@ def _instant_foundation(context: dict, idea: str) -> dict:
         if item and item.lower() != "not sure"
     )
     success = clean(constraints.get("success_definition") or answers.get("success_definition") or answers.get("success_type") or constraints.get("goal") or answers.get("goal"))
+    if re.match(r"^not sure\s*:\s*\S", success, flags=re.I):
+        success = success.split(":", 1)[1].strip()
     hours = constraints.get("hours_per_week", answers.get("hours_per_week"))
     budget = constraints.get("available_budget", answers.get("money_available"))
     timeline = clean(constraints.get("launch_timeline") or answers.get("launch_timeline"))
@@ -1214,58 +1328,75 @@ def _render_right(key: str, task: dict | None, output: dict, sources: list[dict]
                 st.session_state.pop("bp_rerun_preview", None); st.session_state.pop("bp_rerun_proposal", None); st.rerun()
 
 
-def _verdict_actions(verdict_data: dict) -> list[str]:
-    candidates = []
+def _verdict_actions(verdict_data: dict) -> list[dict[str, str]]:
+    candidates: list[Any] = []
     for field in ("next_evidence_needed", "contextual_actions", "recommendations", "critical_blockers", "risks"):
-        candidates.extend(_clean(verdict_data.get(field)))
-    unique = []
+        candidates.extend(_items(verdict_data.get(field)))
+    unique: list[dict[str, str]] = []
+    seen: set[str] = set()
     for item in candidates:
-        if item not in unique:
-            unique.append(item)
+        data = _dict(item)
+        title = _item_text(item)
+        canonical = re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
+        if title and canonical not in seen:
+            seen.add(canonical)
+            unique.append({
+                "title": title,
+                "why": _field_text(data, "why", "impact", "reason", fallback="Stage 2 will treat this as a planning constraint and define the evidence needed to resolve it."),
+            })
         if len(unique) == 5:
             break
     defaults = [
-        "Narrow the first-customer segment before designing the offer.",
-        "Validate the highest-risk problem assumption with observable customer behaviour.",
-        "Test one evidence-backed differentiation against the strongest current alternative.",
+        {"title": "Narrow the first-customer segment before designing the offer.", "why": "A narrower buyer and use case makes customer proof and competitor comparisons more meaningful."},
+        {"title": "Validate the highest-risk problem assumption with observable customer behaviour.", "why": "Behavioural evidence is stronger than stated interest and prevents premature offer design."},
+        {"title": "Test one evidence-backed differentiation against the strongest current alternative.", "why": "This converts a research gap into a falsifiable positioning hypothesis."},
     ]
     for item in defaults:
         if len(unique) >= 3:
             break
-        if item not in unique:
+        if re.sub(r"[^a-z0-9]+", " ", item["title"].lower()).strip() not in seen:
             unique.append(item)
     return unique
 
 
-def _projected_score(current_score: float | None, accepted_actions: int) -> float | None:
-    if current_score is None:
-        return None
-    return min(100.0, current_score + min(20, max(0, accepted_actions) * 4))
+ROUTE_EXPLANATIONS = {
+    "PROCEED": "Start the complete Prove & Design stage using the selected improvements as constraints.",
+    "CONTINUE_ANYWAY": "Continue despite the caution, while keeping every unresolved risk visible.",
+    "TARGETED_VALIDATION": "Start only the essential assumption, offer, and validation work needed to reduce uncertainty.",
+    "RUN_MISSING_RESEARCH": "Return to Discover and complete the evidence streams that are still missing.",
+    "PAUSE_OR_REVISE": "Keep this run and its evidence, but do not start Stage 2 yet.",
+    "CANCEL": "Stop this Blueprint run without starting any later stage.",
+}
 
 
 def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
-    @st.dialog("Your Stage 1 decision", width="small")
+    @st.dialog("Your Stage 1 decision", width="medium")
     def gate() -> None:
         raw = str(verdict_data.get("verdict") or checkpoint.get("title") or "WITHHELD").upper(); score = _score(verdict_data)
         label = VERDICT_LABELS.get(raw, raw.replace('_', ' ').title())
         st.markdown(f'<div class="gate-score"><small>Current verdict</small><b>{html.escape(label)}</b><strong>{f"{score:.0f}/100" if score is not None else "Score withheld"}</strong></div>', unsafe_allow_html=True)
         st.write(verdict_data.get("explanation") or checkpoint.get("message") or "Review the completed research before continuing.")
         st.caption("60+ is the commercial-readiness threshold for proceeding. Below 60, Blueprint recommends narrowing or targeted validation before further commitment.")
-        st.markdown("#### Which improvements will you carry forward?")
-        accepted_actions = []
+        st.markdown("#### Improvements Stage 2 must respect")
+        st.caption("These do not edit the original idea or increase the current score. They become founder-approved planning constraints.")
+        accepted_actions: list[dict[str, str]] = []
         for index, action in enumerate(_verdict_actions(verdict_data)):
-            if st.checkbox(action, key=f"gate_action_{checkpoint.get('checkpoint_id')}_{index}"):
+            if st.checkbox(action["title"], key=f"gate_action_{checkpoint.get('checkpoint_id')}_{index}"):
                 accepted_actions.append(action)
-        projected = _projected_score(score, len(accepted_actions))
-        if projected is not None:
-            st.markdown(
-                f'<div class="conditional-score"><b>{score:.0f} → {projected:.0f}/100</b><span>Conditional planning estimate if the selected improvements produce new accepted evidence. This is not a guaranteed score.</span></div>',
-                unsafe_allow_html=True,
-            )
+            st.caption(action["why"])
+        if score is not None:
+            st.markdown(f'<div class="conditional-score"><b>{score:.0f}/100</b><span>The score stays unchanged until later work produces new accepted evidence.</span></div>', unsafe_allow_html=True)
         allowed = _items(checkpoint.get("allowed_decisions"))
         if not allowed: st.error("No safe decision is currently available. Refresh the run state."); return
-        decision = st.radio("Choose the next route", allowed, format_func=lambda value: DECISION_LABELS.get(value, str(value).replace("_", " ").title())); note = st.text_area("Optional founder note", placeholder="Add context that Stage 2 should respect.")
-        if st.button("Apply decision and start the next route", type="primary", use_container_width=True):
+        decision = st.radio(
+            "Choose what Blueprint should do next",
+            allowed,
+            format_func=lambda value: f"{DECISION_LABELS.get(value, str(value).replace('_', ' ').title())} — {ROUTE_EXPLANATIONS.get(str(value), '')}",
+        )
+        note = st.text_area("Optional founder note", placeholder="Add context that Stage 2 should respect.")
+        starts_stage_2 = str(decision) in {"PROCEED", "CONTINUE_ANYWAY", "TARGETED_VALIDATION"}
+        cta = "Start Stage 2 · Prove & Design" if starts_stage_2 else ("Return to missing research" if str(decision) == "RUN_MISSING_RESEARCH" else "Save this decision")
+        if st.button(cta, type="primary", use_container_width=True):
             if str(decision) in {"PROCEED", "CONTINUE_ANYWAY", "TARGETED_VALIDATION"} and not accepted_actions:
                 st.error("Select at least one improvement for Stage 2 to respect before continuing.")
                 return
@@ -1273,12 +1404,12 @@ def _gate_dialog(checkpoint: dict, verdict_data: dict) -> None:
                 "founder_note": note,
                 "accepted_actions": accepted_actions,
                 "current_score": score,
-                "conditional_score": projected,
+                "score_policy": "UNCHANGED_UNTIL_NEW_ACCEPTED_EVIDENCE",
             }
-            with st.spinner("Applying your decision and returning control to the Supervisor…"):
+            with st.spinner("Recording your decision and preparing Stage 2…"):
                 try: result = resolve_founder_checkpoint(str(checkpoint["checkpoint_id"]), int(checkpoint["state_version"]), str(decision), decision_payload)
                 except BackendError as exc: st.error(str(exc)); return
-            st.session_state.pop("backend_bundle", None); st.session_state["backend_last_refresh_at"] = 0; st.session_state["bp_gate1_approved"] = str(decision) in {"PROCEED", "CONTINUE_ANYWAY", "TARGETED_VALIDATION"}; st.session_state["bp_selected_section"] = "assumptions_risks" if st.session_state["bp_gate1_approved"] else "research_verdict"; st.session_state["bp_transition_notice"] = result.get("message") or DECISION_LABELS.get(str(decision), "Decision applied"); st.rerun()
+            st.session_state.pop("backend_bundle", None); st.session_state["backend_last_refresh_at"] = 0; st.session_state["bp_gate1_approved"] = starts_stage_2; st.session_state["bp_stage_transition_pending"] = "PROVE_AND_DESIGN" if starts_stage_2 else None; st.session_state["bp_workspace_polling"] = starts_stage_2; st.session_state["bp_selected_section"] = "assumptions_risks" if starts_stage_2 else "research_verdict"; st.session_state["bp_transition_notice"] = result.get("message") or DECISION_LABELS.get(str(decision), "Decision applied"); st.rerun()
     gate()
 
 
@@ -1292,7 +1423,15 @@ def _workspace_body() -> None:
     _recover_expired_task(tasks, bundle)
     checkpoints = [item for item in _items(control.get("panel_items")) if isinstance(item, dict) and item.get("item_type") == "HUMAN_CHECKPOINT"]; checkpoint = checkpoints[0] if checkpoints else None
     verdicts = [item for item in _items(dashboard.get("latest_verdicts")) if isinstance(item, dict)]; dashboard_verdict = next((item for item in verdicts if item.get("gate") == "RESEARCH_VERDICT"), {}); latest_verdict = _dict(context.get("latest_verdict")) or dashboard_verdict
-    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
+    stage_2_keys = ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness")
+    gate_1 = st.session_state.get("bp_gate1_approved", False) or any(key in tasks for key in stage_2_keys); gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint")); states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
+    if any(key in tasks for key in stage_2_keys):
+        st.session_state.pop("bp_stage_transition_pending", None)
+    active_statuses = {"READY", "PLANNED", "RUNNING", "CLAIMED", "RETRY_WAIT"}
+    has_active_work = any(str(task.get("status") or "").upper() in active_statuses for task in tasks.values()) or bool(st.session_state.get("bp_stage_transition_pending"))
+    if st.session_state.get("bp_workspace_polling", True) and not has_active_work:
+        st.session_state["bp_workspace_polling"] = False
+        st.rerun()
     if checkpoint and not gate_1:
         states["research_verdict"] = ("ready", "Awaiting your decision")
     current_run_id = str(st.session_state.get("backend_run_id") or "")
@@ -1335,7 +1474,9 @@ def _workspace_body() -> None:
             if recovery_notice := st.session_state.pop("bp_recovery_notice", None):
                 st.info(str(recovery_notice))
             if notice := st.session_state.pop("bp_transition_notice", None): st.success(str(notice))
-            st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)} · {html.escape(state[1])}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
+            if _stage_number(selected) == 2 and st.session_state.get("bp_stage_transition_pending") and selected not in tasks:
+                st.markdown('<div class="state-banner"><div class="state-spinner"></div><div><b>Stage 2 is being prepared</b><span>Your Stage 1 decision is saved. The Supervisor is creating the Prove &amp; Design tasks on this same durable run.</span><small>This view refreshes automatically; no second click is required.</small></div></div>', unsafe_allow_html=True)
             if foundation_preview:
                 st.markdown('<div class="state-banner"><div class="state-spinner"></div><div><b>Foundation is ready to review</b><span>This input-only view was prepared immediately. Blueprint is persisting the canonical copy and starting Customer, Competitor, and Market Research in parallel.</span></div></div>', unsafe_allow_html=True)
             _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state, task); _render_chat(selected, output, state)
@@ -1566,7 +1707,16 @@ def _live_workspace() -> None:
     _workspace_body()
 
 
+@st.fragment
+def _stable_workspace() -> None:
+    """Stop timed rerenders at checkpoints so reading and navigation stay responsive."""
+    _workspace_body()
+
+
 def render_blueprint_workspace() -> None:
     if not st.session_state.get("backend_run_id"):
         _empty_workspace(); return
-    _live_workspace()
+    if st.session_state.get("bp_workspace_polling", True):
+        _live_workspace()
+    else:
+        _stable_workspace()

@@ -206,7 +206,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const r=$json;const x=$('Validate Checkpoint API Request').first().json;return [{json:{command:'RESUME',authorization:x.authorization,project_id:x.project_id,run_id:r.planner_input?.run_id??x.run_id,profile_version:x.profile_version,idea_text:x.idea_text,profile:x.profile,founder_inputs:x.profile?.constraints??{},requested_research:x.requested_research,planning_mode:r.planner_input.planning_mode,gate_context:r.planner_input.gate_context,controller_cycle:0,correlation_id:x.correlation_id,test_mode:false,resolution:r}}];"
+        "jsCode": "const r=$json;const x=$('Validate Checkpoint API Request').first().json;const accepted=Array.isArray(x.decision_payload?.accepted_actions)?x.decision_payload.accepted_actions:[];const founderInputs={...(x.profile?.constraints??{}),gate_1_improvements:accepted,gate_1_founder_note:String(x.decision_payload?.founder_note??''),stage_1_score:x.decision_payload?.current_score??null};return [{json:{command:'RESUME',authorization:x.authorization,project_id:x.project_id,run_id:r.planner_input?.run_id??x.run_id,profile_version:x.profile_version,idea_text:x.idea_text,profile:x.profile,founder_inputs:founderInputs,requested_research:x.requested_research,planning_mode:r.planner_input.planning_mode,gate_context:{...r.planner_input.gate_context,decision_payload:x.decision_payload},controller_cycle:0,correlation_id:x.correlation_id,test_mode:false,resolution:r}}];"
       },
       "id": "d5a5e2cf-978b-522a-932e-11f4d7e1a49e",
       "name": "Prepare Resume Supervisor Dispatch",

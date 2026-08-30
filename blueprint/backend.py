@@ -315,8 +315,19 @@ def resolve_founder_checkpoint(
     project = context.get("project") or {}
     dashboard = bundle.get("blueprint") or {}
     current = (dashboard.get("current_version") or {}).get("blueprint") or {}
-    profile = current.get("starting_position") or {}
-    answers = st.session_state.get("dialog_answers") or {}
+    stored_constraints = project.get("constraints") if isinstance(project.get("constraints"), dict) else {}
+    answers = stored_constraints.get("onboarding_answers") if isinstance(stored_constraints.get("onboarding_answers"), dict) else {}
+    answers = answers or st.session_state.get("dialog_answers") or {}
+    starting_position = current.get("starting_position") if isinstance(current.get("starting_position"), dict) else {}
+    goal = answers.get("goal") or stored_constraints.get("goal") or starting_position.get("goal")
+    idea_text = project.get("idea_text") or current.get("product_idea") or st.session_state.get("idea", "")
+    profile = {
+        **starting_position,
+        "idea_text": idea_text,
+        "goal": goal,
+        "goal_status": "CONFIRMED" if goal and str(goal).strip().lower() not in {"not sure", "unknown"} else "MISSING",
+        "constraints": {**stored_constraints, "onboarding_answers": answers},
+    }
     payload = {
         "checkpoint_id": checkpoint_id,
         "expected_state_version": int(expected_state_version),
@@ -325,7 +336,7 @@ def resolve_founder_checkpoint(
         "project_id": st.session_state.get("backend_project_id"),
         "run_id": st.session_state.get("backend_run_id"),
         "profile_version": int(run.get("profile_version") or current.get("profile_version") or 1),
-        "idea_text": project.get("idea_text") or current.get("product_idea") or st.session_state.get("idea", ""),
+        "idea_text": idea_text,
         "profile": profile,
         "requested_research": normalize_research_selection(answers.get("research_selection")),
         "correlation_id": f"streamlit-checkpoint-{uuid.uuid4()}",

@@ -14,7 +14,6 @@ from blueprint.workspace_ui import (
     _instant_foundation,
     _local_chat_answer,
     _open_workspace_view,
-    _projected_score,
     _project_title,
     _running_age_seconds,
     _return_to_workspace,
@@ -71,12 +70,6 @@ class WorkspaceChatFallbackTests(unittest.TestCase):
             )
         )
 
-    def test_verdict_projection_is_bounded_and_conditional(self):
-        self.assertEqual(60, _projected_score(48, 3))
-        self.assertEqual(100, _projected_score(96, 5))
-        self.assertIsNone(_projected_score(None, 3))
-
-
 class WorkspaceTitleTests(unittest.TestCase):
     def test_long_founder_idea_becomes_a_short_product_title(self):
         title = _project_title(
@@ -92,7 +85,14 @@ class WorkspaceTitleTests(unittest.TestCase):
             "to trustworthy customer discovery opportunities"
         )
 
-        self.assertLessEqual(len(title.split()), 5)
+        self.assertLessEqual(len(title.split()), 6)
+
+    def test_receptionist_title_is_complete_not_a_truncated_sentence(self):
+        title = _project_title(
+            "An AI receptionist for independent dental clinics in India that answers calls, qualifies patients, and books appointments."
+        )
+
+        self.assertEqual("AI Receptionist", title)
 
 
 class WorkspaceRunningStateTests(unittest.TestCase):

@@ -176,10 +176,9 @@ class BackendContractTests(unittest.TestCase):
             "backend_project_id": "project-1", "backend_run_id": "run-1",
             "backend_bundle": {
                 "snapshot": {"run": {"profile_version": 2}},
-                "research_context": {"project": {"idea_text": "A founder evidence workspace"}},
+                "research_context": {"project": {"idea_text": "A founder evidence workspace", "constraints": {"onboarding_answers": {"goal": "Test whether an idea can work", "research_selection": ["Customer research", "Competitor research", "Market research"]}}}},
                 "blueprint": {"current_version": {"blueprint": {"starting_position": {"goal": {"type": "PAID_CUSTOMERS"}}}}},
             },
-            "dialog_answers": {"research_selection": ["Customer research", "Competitor research", "Market research"]},
         }
         with patch("blueprint.backend.st.session_state", state), patch(
             "blueprint.backend.load_config", return_value=CONFIG
@@ -189,6 +188,8 @@ class BackendContractTests(unittest.TestCase):
         self.assertEqual(result["status"], "PLANNING")
         self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/checkpoint")
         self.assertEqual(request.call_args.kwargs["json"]["requested_research"], ["customer_demand", "competitor_intelligence", "market_economics"])
+        self.assertEqual(request.call_args.kwargs["json"]["profile"]["goal"], "Test whether an idea can work")
+        self.assertEqual(request.call_args.kwargs["json"]["profile"]["goal_status"], "CONFIRMED")
 
     def test_stalled_run_recovery_resumes_the_same_durable_run(self):
         response = FakeResponse(202, {"ok": True, "status": "RECOVERY_DISPATCHED", "run_id": "run-1"})

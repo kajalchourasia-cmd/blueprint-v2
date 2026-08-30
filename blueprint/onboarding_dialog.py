@@ -101,6 +101,7 @@ def questions_dialog() -> None:
             "generation_error": None,
             "bp_selected_section": "foundation",
             "bp_auto_selected_run_id": start_result["run_id"],
+            "bp_workspace_polling": True,
         })
         st.session_state.setdefault("projects", {})[profile.idea or "Untitled project"] = {"profile": profile, "project_id": start_result["project_id"], "run_id": start_result["run_id"]}
         st.rerun()
