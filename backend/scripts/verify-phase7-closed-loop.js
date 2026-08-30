@@ -69,6 +69,15 @@ assert(discoverScheduled.allowed_modules.length === 7, 'Discover scheduler must 
 const chat = load('BP-CHAT-01-research-copilot.json');
 assert(code(chat, 'Validate Chat Request and Scope').includes('section_key'), 'Chat does not retain section scope.');
 assert(code(chat, 'Prepare Grounded Copilot Answer').includes('requested_section'), 'Chat prompt does not prioritize the selected section.');
+assert((code(chat, 'Validate Chat Request and Scope').match(/section_key:String/g) || []).length === 1, 'Chat section scope patch is not idempotent.');
+const explainResearch = runCode(code(chat, 'Classify Chat Intent Deterministically'), {
+  message: 'What did the competitor research find?', confirmed_command: false,
+});
+assert(explainResearch.intent !== 'RUN_MODULE', 'A research explanation was incorrectly classified as a rerun command.');
+const rerunResearch = runCode(code(chat, 'Classify Chat Intent Deterministically'), {
+  message: 'Rerun competitor research', confirmed_command: false,
+});
+assert(rerunResearch.intent === 'RUN_MODULE' && rerunResearch.needs_confirmation === true, 'An explicit research rerun did not require confirmation.');
 
 const checkpoint = load('BP-API-03-founder-checkpoint.json');
 const invalid = runCode(code(checkpoint, 'Validate Checkpoint API Request'), { body: {}, headers: {} });
@@ -101,12 +110,13 @@ assert(deskVerdictInput.critical_blockers.some((x) => /no direct interview/i.tes
 assert(deskWeighted < 60, 'Desk-only research can still cross the commercial viability threshold.');
 
 console.log(JSON.stringify({
-  passed: 17,
+  passed: 20,
   checks: [
     'safe_advisory_fixture', 'synthetic_fixture_label', 'founder_input_finance',
     'finance_no_forecast_boundary', 'goal_specific_stage2', 'no_stage3_leak',
     'scheduler_allowlist_limit', 'gate2_scheduled', 'discover_allowlist_exact', 'section_scoped_chat',
-    'section_scoped_prompt', 'checkpoint_auth_rejection', 'supervisor_resume_command',
+    'section_scoped_prompt', 'idempotent_chat_scope', 'research_explanation_not_rerun',
+    'explicit_rerun_confirmation', 'checkpoint_auth_rejection', 'supervisor_resume_command',
     'direct_demand_gate', 'desk_research_label', 'desk_only_blocker', 'desk_only_score_ceiling',
   ],
 }, null, 2));

@@ -177,7 +177,7 @@ def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
 .detail-heading{{margin:23px 0 9px;font:500 9px 'DM Mono';text-transform:uppercase;color:#6e776f}}.insight-list{{display:grid;gap:8px}}.insight{{padding:11px 13px;border:1px solid #e1e5e1;border-radius:12px;background:#fff;font:12px/1.48 'Space Grotesk'}}.empty-state{{display:grid;place-items:center;min-height:260px;text-align:center;color:#737d75}}.empty-state b{{display:block;font:500 22px 'Space Grotesk';color:#2a352d}}.empty-state p{{max-width:500px;font:12px/1.5 'Space Grotesk'}}
 .verdict-hero{{margin:17px 0;padding:22px;border-radius:20px;background:linear-gradient(135deg,#193f2a,#286345);color:#f2f8f3}}.verdict-hero strong{{font:500 25px 'Space Grotesk'}}.verdict-hero p{{color:#c8dbce;font:12px/1.5 'Space Grotesk'}}.score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}.score-cell{{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}}.score-cell b{{display:block;font:500 18px 'Space Grotesk'}}.score-cell span{{font:8px 'DM Mono';text-transform:uppercase;color:#7c857e}}
 .empty-start-card{{position:relative;overflow:hidden;margin-top:22px;padding:30px 30px 27px;border:1px solid #d9e1da;border-radius:24px;background:linear-gradient(140deg,#f7fbf7,#edf5ef);box-shadow:0 18px 50px rgba(35,65,45,.08)}}.empty-start-card:after{{content:'';position:absolute;right:-70px;top:-95px;width:260px;height:260px;border:1px solid rgba(48,126,78,.14);border-radius:50%;box-shadow:inset 0 0 0 40px rgba(48,126,78,.035),inset 0 0 0 80px rgba(48,126,78,.025)}}.empty-start-card>*{{position:relative;z-index:1}}.empty-eyebrow{{font:500 8px 'DM Mono';letter-spacing:.09em;text-transform:uppercase;color:#477157}}.empty-start-card h2{{max-width:620px;margin:11px 0 9px;font:500 clamp(30px,3.5vw,50px)/.98 'Space Grotesk';letter-spacing:-.065em}}.empty-start-card p{{max-width:650px;margin:0 0 22px;color:#617067;font:13px/1.55 'Space Grotesk'}}.empty-steps{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}}.empty-step{{padding:11px;border:1px solid #dae3dc;border-radius:13px;background:rgba(255,255,255,.62);font:9px/1.35 'DM Mono';color:#657069}}.empty-step b{{display:block;margin-bottom:4px;color:#2e6042;font-size:8px}}.st-key-empty_idea_entry [data-testid="stTextAreaRootElement"]{{border:1px solid #cbd8ce!important;border-radius:15px!important;background:#fff!important;box-shadow:none!important}}.st-key-empty_idea_entry textarea{{min-height:105px!important;font:13px/1.5 'Space Grotesk'!important}}.st-key-empty_idea_entry [data-testid="stFormSubmitButton"] button{{height:43px!important;border:0!important;border-radius:13px!important;background:#1d4c31!important;color:#fff!important;font:500 9px 'DM Mono'!important}}.empty-right-card{{margin-top:14px;padding:15px;border:1px solid #dde2dd;border-radius:17px;background:#fff}}.empty-right-card h4{{margin:0 0 11px;font:600 13px 'Space Grotesk'}}.empty-right-row{{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-top:1px solid #edf0ed;color:#727b74;font:10px/1.4 'Space Grotesk'}}.empty-right-row i{{flex:0 0 16px;height:16px;display:grid;place-items:center;border-radius:50%;background:#edf3ee;color:#397753;font:500 7px 'DM Mono'}}
-.chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border-radius:15px!important}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 11px!important;border:1px solid #dfe4df;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(31,48,36,.06)}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:600 13px 'Space Grotesk'}}.action-head span{{font:8px 'DM Mono';color:#8b918c}}.action-progress{{height:6px;margin:12px 0 10px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#173b28,#3e9160);transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:7px 1px!important;align-items:flex-start!important;font:11px/1.4 'Space Grotesk'!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#8a908b;font:10px/1.45 'Space Grotesk'}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
+.chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.chat-guide{{margin:6px 0 10px;padding:14px 15px;border:1px solid #dbe2dc;border-radius:16px;background:linear-gradient(135deg,#f7faf7,#eef4ef)}}.chat-guide b{{display:block;font:500 14px 'Space Grotesk';letter-spacing:-.025em}}.chat-guide span{{display:block;margin-top:4px;color:#707a72;font:9px/1.45 'DM Mono'}}[class*="st-key-chat_starter_"] button{{min-height:36px!important;border:1px solid #d7dfd8!important;border-radius:13px!important;background:#fff!important;color:#405047!important;font:500 8px 'DM Mono'!important;box-shadow:none!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#6b9276!important;background:#edf5ef!important}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border:1px solid #e1e6e1!important;border-radius:15px!important}}.chat-grounding{{margin-top:7px;color:#7b847d;font:7px 'DM Mono';letter-spacing:.05em;text-transform:uppercase}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 11px!important;border:1px solid #dfe4df;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(31,48,36,.06)}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:600 13px 'Space Grotesk'}}.action-head span{{font:8px 'DM Mono';color:#8b918c}}.action-progress{{height:6px;margin:12px 0 10px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#173b28,#3e9160);transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:7px 1px!important;align-items:flex-start!important;font:11px/1.4 'Space Grotesk'!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#8a908b;font:10px/1.45 'Space Grotesk'}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto;min-height:0;border-radius:18px}}}}
 </style>""", unsafe_allow_html=True)
 
@@ -274,19 +274,52 @@ def _render_empty(key: str, state: tuple[str, str]) -> None:
 
 
 def _render_chat(key: str) -> None:
-    label = LABELS[key]; st.markdown('<div class="chat-divider"></div>', unsafe_allow_html=True)
-    st.caption(f"Ask about {label}. Answers are restricted to this Blueprint and its accepted evidence.")
-    chats = st.session_state.setdefault("bp_section_chats", {}); threads = st.session_state.setdefault("bp_section_threads", {}); history = chats.setdefault(key, [])
+    label = LABELS[key]
+    st.markdown('<div class="chat-divider"></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="chat-guide"><b>Ask Blueprint about {html.escape(label)}</b><span>Get a plain-language explanation, trace the supporting evidence, or turn an existing actionable into practical steps.</span></div>', unsafe_allow_html=True)
+    chats = st.session_state.setdefault("bp_section_chats", {})
+    threads = st.session_state.setdefault("bp_section_threads", {})
+    history = chats.setdefault(key, [])
     for message in history[-8:]:
         with st.chat_message(message["role"]):
             st.write(message["content"])
-            if message.get("citations"): st.caption("Evidence: " + ", ".join(message["citations"]))
-    if question := st.chat_input(f"Ask about {label.lower()}…", key=f"chat_{key}"):
+            if message.get("citations"):
+                st.caption("Evidence references: " + ", ".join(message["citations"]))
+            if message.get("suggested_actions"):
+                st.caption("Suggested next move: " + " · ".join(_item_text(action) for action in message["suggested_actions"][:3]))
+            if message.get("grounding_status"):
+                st.markdown(f'<div class="chat-grounding">{html.escape(str(message["grounding_status"]).replace("_", " "))}</div>', unsafe_allow_html=True)
+    starter_question = None
+    if not history:
+        starters = ("Explain this simply", "What evidence supports this?", "What should I do next?")
+        starter_cols = st.columns(3)
+        for index, (column, starter) in enumerate(zip(starter_cols, starters)):
+            if column.button(starter, key=f"chat_starter_{key}_{index}", use_container_width=True):
+                starter_question = starter
+    typed_question = st.chat_input(f"Ask about {label.lower()}…", key=f"chat_{key}")
+    question = typed_question or starter_question
+    if question:
+        conversation = [{"role": item["role"], "content": str(item["content"])} for item in history[-8:]]
         history.append({"role": "user", "content": question})
         try:
-            result = ask_research(question, project_id=str(st.session_state["backend_project_id"]), run_id=str(st.session_state["backend_run_id"]), thread_id=threads.get(key), section_key=key)
-            if result.get("thread_id"): threads[key] = result["thread_id"]
-            history.append({"role": "assistant", "content": result.get("answer") or "UNKNOWN — this section does not contain enough accepted evidence.", "citations": _items(result.get("citations"))})
+            with st.spinner("Blueprint is reading this section and its evidence…"):
+                result = ask_research(
+                    question,
+                    project_id=str(st.session_state["backend_project_id"]),
+                    run_id=str(st.session_state["backend_run_id"]),
+                    thread_id=threads.get(key),
+                    section_key=key,
+                    conversation_history=conversation,
+                )
+            if result.get("thread_id"):
+                threads[key] = result["thread_id"]
+            history.append({
+                "role": "assistant",
+                "content": result.get("answer") or "I could not produce a safe answer from the available section context. Try asking what is missing or which evidence would resolve it.",
+                "citations": _items(result.get("citations")),
+                "suggested_actions": _items(result.get("suggested_actions")),
+                "grounding_status": result.get("grounding_status"),
+            })
         except BackendError as exc:
             history.append({"role": "assistant", "content": str(exc), "citations": []})
         st.rerun()

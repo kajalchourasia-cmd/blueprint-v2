@@ -316,6 +316,7 @@ def ask_research(
     run_id: str,
     thread_id: str | None = None,
     section_key: str | None = None,
+    conversation_history: list[dict[str, str]] | None = None,
     config: AppConfig | None = None,
 ) -> dict[str, Any]:
     """Ask only against the current owner's retrieved research context."""
@@ -327,6 +328,7 @@ def ask_research(
         "correlation_id": f"streamlit-chat-{uuid.uuid4()}",
         "confirmed_command": False,
         "section_key": section_key,
+        "conversation_history": (conversation_history or [])[-8:],
     }
     if thread_id:
         payload["thread_id"] = thread_id

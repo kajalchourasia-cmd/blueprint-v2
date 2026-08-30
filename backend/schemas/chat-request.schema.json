@@ -17,6 +17,20 @@
       "items": { "type": "integer", "minimum": 1 }
     },
     "thread_id": { "type": ["string", "null"], "format": "uuid" },
+    "section_key": { "type": ["string", "null"], "maxLength": 100 },
+    "conversation_history": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "content"],
+        "properties": {
+          "role": { "enum": ["user", "assistant"] },
+          "content": { "type": "string", "minLength": 1, "maxLength": 4000 }
+        }
+      }
+    },
     "correlation_id": { "type": "string", "minLength": 3, "maxLength": 200 },
     "confirmed_command": { "type": "boolean", "default": false }
   }

@@ -7,6 +7,7 @@ from build_phase6_workflows import (
     code, connect, execute_workflow, http_nebius, http_supabase_rpc, if_true,
     manual, node, respond, sub_trigger, webhook, workflow,
 )
+from repair_chat_experience import NODE_CODE as CHAT_NODE_CODE
 
 ROOT = Path(__file__).resolve().parents[1]
 N8N = ROOT / "n8n"
@@ -111,11 +112,9 @@ def patch_existing() -> None:
     controller_path.write_text(json.dumps(w,indent=2)+"\n",encoding="utf-8")
 
     chat_path=N8N/"BP-CHAT-01-research-copilot.json"; w=json.loads(chat_path.read_text(encoding="utf-8"))
-    validate=next(n for n in w["nodes"] if n["name"]=="Validate Chat Request and Scope")
-    validate["parameters"]["jsCode"]=validate["parameters"]["jsCode"].replace("context:raw.context??null}}];","section_key:String(b.section_key??'').toLowerCase()||null,context:raw.context??null}}];")
-    answer=next(n for n in w["nodes"] if n["name"]=="Prepare Grounded Copilot Answer")
-    answer["parameters"]["jsCode"]=answer["parameters"]["jsCode"].replace("{message:x.message,intent:x.intent,context}","{message:x.message,intent:x.intent,requested_section:x.section_key,context}")
-    answer["parameters"]["jsCode"]=answer["parameters"]["jsCode"].replace("Answer only from the supplied run", "Focus first on requested_section when supplied. Answer only from the supplied run")
+    chat_nodes={node["name"]:node for node in w["nodes"]}
+    for node_name,js_code in CHAT_NODE_CODE.items():
+        chat_nodes[node_name]["parameters"]["jsCode"]=js_code
     chat_path.write_text(json.dumps(w,indent=2)+"\n",encoding="utf-8")
 
     audit_path=N8N/"BP-AUDIT-01-independent-evidence-auditor.json"; w=json.loads(audit_path.read_text(encoding="utf-8"))

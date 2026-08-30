@@ -155,10 +155,19 @@ class BackendContractTests(unittest.TestCase):
     def test_ask_research_uses_sibling_authenticated_webhook(self):
         response = FakeResponse(200, {"status": "ANSWERED", "answer": "Grounded answer", "citations": []})
         with patch("blueprint.backend._authenticated_request", return_value=response) as request:
-            result = ask_research("What did we learn?", project_id="project-1", run_id="run-1", config=CONFIG)
+            result = ask_research(
+                "What did we learn?",
+                project_id="project-1",
+                run_id="run-1",
+                section_key="customer_demand",
+                conversation_history=[{"role": "assistant", "content": "We found one open demand assumption."}],
+                config=CONFIG,
+            )
         self.assertEqual(result["status"], "ANSWERED")
         self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/chat")
         self.assertFalse(request.call_args.kwargs["json"]["confirmed_command"])
+        self.assertEqual(request.call_args.kwargs["json"]["section_key"], "customer_demand")
+        self.assertEqual(request.call_args.kwargs["json"]["conversation_history"][0]["role"], "assistant")
 
     def test_checkpoint_resolution_uses_resume_webhook_with_current_run_context(self):
         response = FakeResponse(202, {"ok": True, "status": "PLANNING", "planning_mode": "PROVE_AND_DESIGN"})
