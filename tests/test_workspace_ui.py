@@ -8,6 +8,8 @@ from unittest.mock import patch
 from blueprint.workspace_ui import (
     SECTION_PREVIEWS,
     _can_answer_from_section,
+    _dedupe_boundary,
+    _display_text,
     _enrich_foundation_from_idea,
     _instant_foundation,
     _local_chat_answer,
@@ -94,6 +96,13 @@ class WorkspaceTitleTests(unittest.TestCase):
 
 
 class WorkspaceRunningStateTests(unittest.TestCase):
+    def test_foundation_display_normalizes_lists_and_repeated_audience_text(self):
+        self.assertEqual("No major constraint", _display_text(["No major constraint"]))
+        self.assertEqual(
+            "Small businesses; Independent dental clinics",
+            _dedupe_boundary("Small businesses; Independent dental clinics — Independent dental clinics"),
+        )
+
     def test_running_age_uses_the_latest_durable_task_timestamp(self):
         stamp = (datetime.now(timezone.utc) - timedelta(seconds=215)).isoformat()
 

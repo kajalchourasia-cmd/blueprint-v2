@@ -23,6 +23,8 @@ Use three answer lanes deliberately:
 2. PLAIN-LANGUAGE EXPLANATION: You may explain stable product, business, research, finance, or validation concepts without citations. Clearly frame this as a general explanation, never as evidence about this founder's market.
 3. ACTION COACHING: You may turn an existing Blueprint actionable into practical founder-run steps using the supplied goal and constraints. Label additions as guidance, not completed work or proven fact.
 
+Write the answer field as clean Markdown for a readable analyst conversation: begin with the direct answer in one or two sentences; use short descriptive headings only when the answer has distinct sections; use bullets for genuine lists and numbered steps only for sequences; use a compact Markdown table only for a real comparison; keep paragraphs as paragraphs instead of turning every sentence into a bullet. Never return HTML or card markup.
+
 Do not reply with only UNKNOWN. When project evidence is missing, say what is known, what specific fact is missing, and the smallest safe way to obtain it. Ask at most one precise follow-up question when necessary. Do not force a rerun when founder input or an explanation is enough. For a genuinely unrelated query, briefly say Ask Blueprint is limited to this project's research, validation, finances, and actionables. Never invent a metric, source, customer quote, competitor feature, willingness to pay, or completed action. A rerun is only a proposal until the user confirms it. Never expose hidden reasoning or contact, send, publish, buy, book, pay, or delete. Return JSON with status (ANSWERED, PARTIALLY_ANSWERED, or INSUFFICIENT_EVIDENCE), answer, citations (accepted evidence IDs only), suggested_actions, limitations, and grounding_status (GROUNDED, PARTIALLY_GROUNDED, NO_ACCEPTED_EVIDENCE, or NOT_REQUIRED).`;return [{json:{...x,request:{model:'Qwen/Qwen3-30B-A3B-Instruct-2507',temperature:0.15,max_tokens:1800,response_format:{type:'json_object'},messages:[{role:'system',content:system},{role:'user',content:JSON.stringify({message:x.message,intent:x.intent,requested_section:x.section_key,conversation_history:x.conversation_history??[],context})}]}}}];"""
 
 
@@ -38,14 +40,18 @@ NODE_CODE = {
 
 
 def apply_contract(path: Path = WORKFLOW_PATH) -> None:
-    workflow = json.loads(path.read_text(encoding="utf-8"))
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    workflow = payload[0] if isinstance(payload, list) and len(payload) == 1 else payload
+    if not isinstance(workflow, dict):
+        raise RuntimeError("Chat workflow export must contain exactly one workflow object")
     nodes = {node["name"]: node for node in workflow["nodes"]}
     missing = sorted(set(NODE_CODE) - set(nodes))
     if missing:
         raise RuntimeError(f"Chat workflow is missing required nodes: {', '.join(missing)}")
     for name, code in NODE_CODE.items():
         nodes[name]["parameters"]["jsCode"] = code
-    path.write_text(json.dumps(workflow, indent=2) + "\n", encoding="utf-8")
+    updated = [workflow] if isinstance(payload, list) else workflow
+    path.write_text(json.dumps(updated, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -232,7 +232,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_stage_scroll{{padding-bottom:12px!important}}.st-key-bp_left_shortcuts{{display:grid!important;flex:0 0 auto!important;align-self:stretch!important;width:calc(100% - 10px)!important;box-sizing:border-box!important;gap:7px!important;margin:14px 5px 13px!important;padding-top:12px!important;border-top:1px solid #daddda!important;background:#f5f6f4!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"],.st-key-bp_left_shortcuts [data-testid="stLayoutWrapper"],.st-key-bp_left_shortcuts [data-testid="stButton"]{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"]{{gap:7px!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button{{display:flex!important;width:100%!important;min-height:39px!important;padding:0 11px!important;border:1px solid #dce1dd!important;border-radius:10px!important;background:#fff!important;color:#303a33!important;justify-content:flex-start!important;text-align:left!important;font:600 10px/1.2 var(--ui)!important;box-shadow:none!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'→';margin-left:auto;color:#778079;font-size:14px;font-weight:400}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:hover{{border-color:#bfc9c1!important;background:#fafcfb!important;color:#245d3c!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"],.st-key-bp_left_rail [data-testid="stExpanderDetails"]>[data-testid="stVerticalBlock"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stLayoutWrapper"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"]{{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;align-self:stretch!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{width:100%!important;margin:0!important;padding:6px 28px 6px 32px!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button>div,.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{display:block!important;width:100%!important;margin:0!important;padding:0!important;text-align:left!important}}.st-key-bp_right_rail{{top:72px!important;margin:72px 12px 12px 10px!important}}.st-key-bp_right_rail>[data-testid="stVerticalBlock"]{{gap:0!important}}
 .st-key-bp_center_pane{{padding-bottom:34px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:clamp(92px,15vh,180px)!important}}[class*="st-key-bp_chat_composer_"]{{bottom:8px!important;border-color:#e2d7d0!important;box-shadow:0 12px 32px rgba(82,52,38,.08)!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#dac8bc!important;background:#f7f0eb!important;color:#704832!important}}.st-key-bp_center_pane [data-testid="stChatInput"] button,.st-key-bp_center_pane [data-testid="stChatInputSubmitButton"]{{background:#87583f!important;color:#fff!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{width:100%!important;max-width:none!important;padding:0 12px!important;text-align:left!important;justify-content:flex-start!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button{{border-color:#d5dfd6!important;background:#edf4ee!important;color:#315440!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{border-color:#e5d8cf!important;background:#f7efea!important;color:#704b38!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'↗'!important;margin-left:auto;color:currentColor;font-size:13px;font-weight:500}}.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"],.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"] p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_left_companion{{flex:0 0 auto!important;align-self:stretch!important;max-height:255px;margin:0 5px 10px!important;padding:0 2px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin;scrollbar-color:transparent transparent}}.st-key-bp_left_companion:hover{{scrollbar-color:#c8ceca transparent}}.st-key-bp_left_companion>[data-testid="stVerticalBlock"]{{gap:0!important}}.st-key-bp_left_companion [data-testid="stExpander"]{{margin:0!important;border:0!important;border-top:1px solid #dfe3df!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_companion [data-testid="stExpander"] details{{border:0!important;background:transparent!important;box-shadow:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] summary{{min-height:38px!important;padding:7px 4px!important;flex-direction:row-reverse!important;justify-content:space-between!important;border:0!important;border-radius:0!important;background:transparent!important;color:#515a53!important;font:600 10px/1.2 var(--ui)!important;text-transform:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] details[open] summary{{background:transparent!important;color:#333d35!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"]{{padding:0 4px 9px!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{padding-left:8px!important}}.st-key-bp_left_companion [data-testid="stCheckbox"] label{{font-size:10px!important}}
 .state-banner span{{display:block;margin-top:4px}}.state-banner small{{display:block;margin-top:5px;color:#8a928c;font:9px var(--ui)}}.section-preview{{margin:12px 0 22px;padding:17px 18px;border:1px solid #e0e5e1;border-radius:14px;background:#fff}}.section-preview b{{font:600 13px/1.25 var(--ui);color:#28332b}}.section-preview p{{max-width:720px;margin:7px 0 0;color:#657068;font:12px/1.55 var(--ui)}}.empty-state{{display:grid!important;align-items:start!important;place-items:initial!important;min-height:245px!important;padding-top:24px!important;text-align:left!important}}.empty-state>div{{max-width:720px;padding:20px;border:1px solid #e1e6e2;border-radius:15px;background:#fafbfa}}.empty-state small{{display:block;margin-bottom:8px;color:#7a837c;font:650 9px/1.2 var(--ui);letter-spacing:.05em;text-transform:uppercase}}.empty-state b{{font:600 19px/1.25 var(--ui)!important}}.empty-state p{{max-width:660px!important;margin:8px 0 14px!important}}.empty-state em{{display:block;padding-top:12px;border-top:1px solid #e5e8e5;color:#8a918c;font:normal 10px/1.45 var(--ui)}}.chat-disabled{{padding:14px 15px;border:1px solid #e2d7d0;border-radius:17px;background:#fbf9f7;color:#77706b}}.chat-disabled b{{display:block;color:#4a413b;font:600 12px/1.3 var(--ui)}}.chat-disabled span{{display:block;margin:4px 0 11px;font:10px/1.45 var(--ui)}}.chat-disabled div{{padding:12px 13px;border:1px solid #e5dfda;border-radius:12px;background:#f3f1ef;color:#aaa39e;font:11px/1.2 var(--ui)}}
-.research-lead{{max-width:850px;margin:18px 0 27px;color:#344039;font:17px/1.68 var(--ui)}}.research-subtitle{{margin:31px 0 12px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.competitor-depth-title{{margin-top:38px}}.narrative-block{{max-width:870px;margin:31px 0 0;padding:0;border:0;background:transparent}}.narrative-block h3,.decision-frame h3,.constraint-strip h3,.foundation-assumptions h3{{margin:0 0 13px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.narrative-block ul{{margin:0;padding:0 0 0 21px}}.narrative-block li{{margin:0 0 10px;padding-left:3px;color:#3f4a43;font:14px/1.62 var(--ui)}}.narrative-block li::marker{{color:#4b805e}}.narrative-limitations{{margin-top:30px;padding:15px 17px;border-left:3px solid #b6937e;background:#faf7f4}}.narrative-limitations h3{{font-size:13px;color:#5f4b40}}.narrative-limitations li{{font-size:12px;color:#6e625b}}.decision-frame{{max-width:900px;margin:0 0 31px;padding:0}}.decision-frame dl{{margin:0;border-top:1px solid #dfe4e0}}.decision-frame dl>div{{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:15px 0;border-bottom:1px solid #e4e8e5}}.decision-frame dt{{color:#6b756e;font:600 11px/1.45 var(--ui);text-transform:uppercase;letter-spacing:.035em}}.decision-frame dd{{margin:0;color:#2e3931;font:14px/1.58 var(--ui)}}.constraint-strip{{max-width:900px;margin:31px 0}}.constraint-strip>div{{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid #dfe4e0;border-bottom:1px solid #dfe4e0}}.constraint-strip>div>div{{min-width:180px;flex:1;padding:14px 17px 14px 0}}.constraint-strip span{{display:block;color:#7a837c;font:600 9px/1.2 var(--ui);text-transform:uppercase}}.constraint-strip b{{display:block;margin-top:7px;color:#263129;font:600 13px/1.35 var(--ui)}}.foundation-assumptions{{max-width:900px;margin:31px 0}}.foundation-assumptions ol{{margin:0;padding:0;list-style:none;counter-reset:foundation}}.foundation-assumptions li{{position:relative;padding:15px 0 15px 45px;border-top:1px solid #e0e4e1;counter-increment:foundation}}.foundation-assumptions li:last-child{{border-bottom:1px solid #e0e4e1}}.foundation-assumptions li:before{{content:counter(foundation,decimal-leading-zero);position:absolute;left:0;top:16px;color:#528065;font:650 10px var(--ui)}}.foundation-assumptions b{{display:block;color:#273229;font:600 14px/1.5 var(--ui)}}.foundation-assumptions span{{display:block;margin-top:5px;color:#727a74;font:12px/1.55 var(--ui)}}.competitor-profile{{max-width:900px;margin:0;padding:24px 0;border-top:1px solid #dfe4e0}}.competitor-profile:last-of-type{{border-bottom:1px solid #dfe4e0}}.competitor-profile header{{display:flex;align-items:center;gap:10px;margin-bottom:18px}}.competitor-profile h4{{margin:0;color:#1e2821;font:650 22px/1.2 var(--ui)}}.competitor-profile header span{{padding:5px 8px;border-radius:99px;background:#e9f1eb;color:#3f684d;font:600 9px/1 var(--ui)}}.competitor-profile dl{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0}}.competitor-profile dl>div{{padding:12px 0;border-top:1px solid #edf0ed}}.competitor-profile dt{{color:#69736c;font:600 10px/1.3 var(--ui);text-transform:uppercase;letter-spacing:.025em}}.competitor-profile dd{{margin:5px 0 0;color:#38433b;font:13px/1.55 var(--ui)}}[data-testid="stChatMessage"]{{padding:8px 0!important;border:0!important;border-radius:0!important;background:transparent!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]){{width:fit-content!important;max-width:76%!important;margin-left:auto!important;padding:10px 14px!important;border:1px solid #eadfd7!important;border-radius:15px!important;background:#f7f0eb!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]){{max-width:880px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] p{{font:14px/1.62 var(--ui)!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:48px!important}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;bottom:8px!important}}.gate-score{{padding-bottom:15px;border-bottom:1px solid #e1e5e1}}.gate-score small{{display:block;color:#79827b;font:600 9px var(--ui);text-transform:uppercase}}.gate-score b{{display:block;margin:7px 0 3px;color:#233027;font:650 20px/1.25 var(--ui)}}.gate-score strong{{color:#3c744e;font:650 15px var(--ui)}}.conditional-score{{display:flex;align-items:center;gap:15px;margin:15px 0;padding:13px 14px;border-left:3px solid #4f825f;background:#f0f5f1}}.conditional-score b{{white-space:nowrap;color:#2e6540;font:650 19px var(--ui)}}.conditional-score span{{color:#68726b;font:11px/1.45 var(--ui)}}
+.research-lead{{max-width:850px;margin:18px 0 27px;color:#344039;font:17px/1.68 var(--ui)}}.research-subtitle{{margin:31px 0 12px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.competitor-depth-title{{margin-top:38px}}.narrative-block{{max-width:870px;margin:31px 0 0;padding:0;border:0;background:transparent}}.narrative-block h3,.decision-frame h3,.constraint-strip h3,.foundation-assumptions h3,.research-table-wrap h3,.report-pairs h3{{margin:0 0 13px;color:#1f2922;font:650 19px/1.25 var(--ui)}}.narrative-block ul{{margin:0;padding:0 0 0 21px}}.narrative-block li{{margin:0 0 10px;padding-left:3px;color:#3f4a43;font:14px/1.62 var(--ui)}}.narrative-block li::marker,.report-pairs li::marker{{color:#4b805e}}.narrative-limitations{{margin-top:30px;padding:15px 17px;border-left:3px solid #b6937e;background:#faf7f4}}.narrative-limitations h3{{font-size:13px;color:#5f4b40}}.narrative-limitations li{{font-size:12px;color:#6e625b}}.decision-frame{{max-width:900px;margin:0 0 31px;padding:0}}.decision-frame dl{{margin:0;border-top:1px solid #dfe4e0}}.decision-frame dl>div{{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:15px 0;border-bottom:1px solid #e4e8e5}}.decision-frame dt{{color:#6b756e;font:600 11px/1.45 var(--ui);text-transform:uppercase;letter-spacing:.035em}}.decision-frame dd{{margin:0;color:#2e3931;font:14px/1.58 var(--ui)}}.constraint-strip{{max-width:900px;margin:31px 0}}.constraint-strip>div{{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid #dfe4e0;border-bottom:1px solid #dfe4e0}}.constraint-strip>div>div{{min-width:180px;flex:1;padding:14px 17px 14px 0}}.constraint-strip span{{display:block;color:#7a837c;font:600 9px/1.2 var(--ui);text-transform:uppercase}}.constraint-strip b{{display:block;margin-top:7px;color:#263129;font:600 13px/1.35 var(--ui)}}.foundation-assumptions{{max-width:900px;margin:31px 0}}.foundation-assumptions ol{{margin:0;padding:0;list-style:none;counter-reset:foundation}}.foundation-assumptions li{{position:relative;padding:15px 0 15px 45px;border-top:1px solid #e0e4e1;counter-increment:foundation}}.foundation-assumptions li:last-child{{border-bottom:1px solid #e0e4e1}}.foundation-assumptions li:before{{content:counter(foundation,decimal-leading-zero);position:absolute;left:0;top:16px;color:#528065;font:650 10px var(--ui)}}.foundation-assumptions b{{display:block;color:#273229;font:600 14px/1.5 var(--ui)}}.foundation-assumptions span{{display:block;margin-top:5px;color:#727a74;font:12px/1.55 var(--ui)}}.report-pairs{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:900px;margin:32px 0;border-top:1px solid #dfe4e0}}.report-pairs article{{min-width:0;padding:20px 25px 20px 0;border-bottom:1px solid #e4e8e5}}.report-pairs article:nth-child(odd){{border-right:1px solid #e4e8e5}}.report-pairs article:nth-child(even){{padding-left:25px}}.report-pairs h3{{font-size:16px}}.report-pairs p,.report-pairs li{{color:#414c44;font:13px/1.62 var(--ui)}}.report-pairs p{{margin:0}}.report-pairs ul{{margin:0;padding-left:19px}}.report-pairs li{{margin-bottom:7px}}.report-callout{{max-width:870px;margin:24px 0;padding:17px 20px;border-left:3px solid #4f825f;background:#f2f6f3}}.report-callout.warning{{border-left-color:#b57a4c;background:#faf5f0}}.report-callout small{{display:block;margin-bottom:7px;color:#3f694c;font:650 10px/1.2 var(--ui);letter-spacing:.04em;text-transform:uppercase}}.report-callout.warning small{{color:#8a5837}}.report-callout p{{margin:0;color:#48534b;font:13px/1.6 var(--ui)}}.research-table-wrap{{max-width:900px;margin:34px 0}}.research-table-scroll{{overflow-x:auto;border-top:1px solid #d9dfda;border-bottom:1px solid #d9dfda}}.research-table{{width:100%;border-collapse:collapse;table-layout:auto}}.research-table th{{padding:11px 13px;background:#f4f6f4;color:#59635c;text-align:left;font:650 10px/1.3 var(--ui);letter-spacing:.03em;text-transform:uppercase}}.research-table td{{min-width:105px;padding:13px;color:#354138;border-top:1px solid #e8ebe8;vertical-align:top;font:12px/1.55 var(--ui)}}.audit-summary{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:900px;margin:25px 0 34px;border-top:1px solid #dce2dd;border-bottom:1px solid #dce2dd}}.audit-summary>div{{padding:17px 19px 17px 0}}.audit-summary>div+div{{padding-left:19px;border-left:1px solid #e1e5e2}}.audit-summary small{{display:block;color:#7b837d;font:600 9px/1.2 var(--ui);letter-spacing:.04em;text-transform:uppercase}}.audit-summary b{{display:block;margin-top:7px;color:#243128;font:600 21px/1.2 var(--ui)}}.competitor-profile{{max-width:900px;margin:0;padding:24px 0;border-top:1px solid #dfe4e0}}.competitor-profile:last-of-type{{border-bottom:1px solid #dfe4e0}}.competitor-profile header{{display:flex;align-items:center;gap:10px;margin-bottom:18px}}.competitor-profile h4{{margin:0;color:#1e2821;font:650 22px/1.2 var(--ui)}}.competitor-profile header span{{padding:5px 8px;border-radius:99px;background:#e9f1eb;color:#3f684d;font:600 9px/1 var(--ui)}}.competitor-profile dl{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0}}.competitor-profile dl>div{{padding:12px 0;border-top:1px solid #edf0ed}}.competitor-profile dt{{color:#69736c;font:600 10px/1.3 var(--ui);text-transform:uppercase;letter-spacing:.025em}}.competitor-profile dd{{margin:5px 0 0;color:#38433b;font:13px/1.55 var(--ui)}}[data-testid="stChatMessage"]{{padding:8px 0!important;border:0!important;border-radius:0!important;background:transparent!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]){{width:fit-content!important;max-width:76%!important;margin-left:auto!important;padding:10px 14px!important;border:1px solid #eadfd7!important;border-radius:15px!important;background:#f7f0eb!important}}[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]){{max-width:880px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] p,[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] li{{font:14px/1.62 var(--ui)!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] h3{{margin:11px 0 7px!important;color:#233028!important;font:650 16px/1.3 var(--ui)!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] ul,[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] ol{{padding-left:21px!important}}[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] li{{margin-bottom:6px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:48px!important}}[class*="st-key-bp_chat_composer_"]{{position:sticky!important;bottom:8px!important}}.gate-score{{padding-bottom:15px;border-bottom:1px solid #e1e5e1}}.gate-score small{{display:block;color:#79827b;font:600 9px var(--ui);text-transform:uppercase}}.gate-score b{{display:block;margin:7px 0 3px;color:#233027;font:650 20px/1.25 var(--ui)}}.gate-score strong{{color:#3c744e;font:650 15px var(--ui)}}.conditional-score{{display:flex;align-items:center;gap:15px;margin:15px 0;padding:13px 14px;border-left:3px solid #4f825f;background:#f0f5f1}}.conditional-score b{{white-space:nowrap;color:#2e6540;font:650 19px var(--ui)}}.conditional-score span{{color:#68726b;font:11px/1.45 var(--ui)}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 [class*="st-key-bp_chat_composer_"]{{position:fixed!important;left:calc(14.3vw + 36px)!important;right:34px!important;bottom:10px!important;width:auto!important;z-index:120!important}}.st-key-bp_center_pane{{padding-bottom:185px!important}}@media(max-width:760px){{[class*="st-key-bp_chat_composer_"]{{position:sticky!important;left:auto!important;right:auto!important;bottom:8px!important}}}}
 </style>""", unsafe_allow_html=True)
@@ -301,14 +301,18 @@ def _render_left_rail(
             with st.expander(stage_name, expanded=stage_number == 1 or selected_in_stage):
                 for key, label in sections:
                     state = states[key]
-                    st.button(
+                    clicked = st.button(
                         label,
                         key=f"select_{key}",
                         help=f"Status: {state[1]}",
                         use_container_width=True,
-                        on_click=_select_workspace_section if interactive else _focus_empty_idea,
-                        args=(key,) if interactive else (),
                     )
+                    if clicked:
+                        if interactive:
+                            _select_workspace_section(key)
+                        else:
+                            _focus_empty_idea()
+                        st.rerun()
     _render_left_shortcuts()
     if companion is not None:
         with st.container(key="bp_left_companion"):
@@ -381,6 +385,72 @@ def _field_text(item: dict, *keys: str, fallback: str = "Not established by the 
     return fallback
 
 
+def _display_text(value: Any, fallback: str = "Not provided") -> str:
+    if isinstance(value, list):
+        values = _clean(value)
+        return "; ".join(values) if values else fallback
+    text = _item_text(value).strip() if value not in (None, "", {}) else ""
+    return fallback if not text or text.lower().strip(" .:-") in {"not sure", "unknown"} else text
+
+
+def _dedupe_boundary(value: Any) -> str:
+    """Remove repeated audience clauses without changing the founder's meaning."""
+    text = _display_text(value, "Not identified yet.")
+    parts = [part.strip() for part in re.split(r"\s+[—|]\s+", text) if part.strip()]
+    kept: list[str] = []
+    for part in parts:
+        canonical = re.sub(r"[^a-z0-9]+", " ", part.lower()).strip()
+        if any(canonical == prior or canonical in prior for prior in (
+            re.sub(r"[^a-z0-9]+", " ", existing.lower()).strip() for existing in kept
+        )):
+            continue
+        kept.append(part)
+    return " — ".join(kept) or "Not identified yet."
+
+
+def _render_research_table(title: str, rows: list[dict], columns: list[tuple[str, str]]) -> None:
+    """Render a compact analyst table with deliberate typography and mobile fallback."""
+    if not rows:
+        return
+    header = "".join(f"<th>{html.escape(label)}</th>" for _, label in columns)
+    body = []
+    for row in rows[:12]:
+        cells = "".join(
+            f'<td data-label="{html.escape(label)}">{html.escape(_item_text(row.get(key)) or "Not established")}</td>'
+            for key, label in columns
+        )
+        body.append(f"<tr>{cells}</tr>")
+    st.markdown(
+        f'<section class="research-table-wrap"><h3>{html.escape(title)}</h3>'
+        f'<div class="research-table-scroll"><table class="research-table"><thead><tr>{header}</tr></thead>'
+        f'<tbody>{"".join(body)}</tbody></table></div></section>',
+        unsafe_allow_html=True,
+    )
+
+
+def _render_report_pairs(pairs: list[tuple[str, Any]]) -> None:
+    entries = []
+    for title, value in pairs:
+        rows = _clean(value) if isinstance(value, list) else [_item_text(value)] if value not in (None, "", {}) else []
+        rows = [row for row in rows if row]
+        if not rows:
+            continue
+        content = f'<ul>{"".join(f"<li>{html.escape(row)}</li>" for row in rows[:7])}</ul>' if len(rows) > 1 else f'<p>{html.escape(rows[0])}</p>'
+        entries.append(f'<article><h3>{html.escape(title)}</h3>{content}</article>')
+    if entries:
+        st.markdown(f'<section class="report-pairs">{"".join(entries)}</section>', unsafe_allow_html=True)
+
+
+def _render_evidence_boundary(text: str, *, tone: str = "evidence", title: str = "Evidence boundary") -> None:
+    if not text:
+        return
+    st.markdown(
+        f'<aside class="report-callout {html.escape(tone)}"><small>{html.escape(title)}</small>'
+        f'<p>{html.escape(text)}</p></aside>',
+        unsafe_allow_html=True,
+    )
+
+
 def _render_foundation(output: dict) -> None:
     finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
     if finding:
@@ -390,7 +460,7 @@ def _render_foundation(output: dict) -> None:
         )
 
     problem = _item_text(output.get("problem_hypothesis") or output.get("starting_position") or "Not identified yet.")
-    audience = _item_text(output.get("target_user_boundary") or "Not identified yet.")
+    audience = _dedupe_boundary(output.get("target_user_boundary") or "Not identified yet.")
     success = _item_text(output.get("success_definition") or "Not identified yet.")
     st.markdown(
         '<section class="decision-frame"><h3>Your starting position</h3>'
@@ -403,7 +473,7 @@ def _render_foundation(output: dict) -> None:
     constraints = _dict(output.get("founder_constraints"))
     if constraints:
         entries = "".join(
-            f'<div><span>{html.escape(str(key).replace("_", " ").title())}</span><b>{html.escape(_item_text(value))}</b></div>'
+            f'<div><span>{html.escape(str(key).replace("_", " ").title())}</span><b>{html.escape(_display_text(value))}</b></div>'
             for key, value in constraints.items()
             if value not in (None, "", [])
         )
@@ -439,6 +509,155 @@ def _render_foundation(output: dict) -> None:
     _render_list("Evidence boundary", output.get("limitations"), limitations=True)
 
 
+def _render_customer_research(output: dict) -> None:
+    finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
+    if finding:
+        st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
+
+    _render_evidence_boundary(
+        "This report distinguishes observed desk-research signals from founder assumptions. Interest, complaints, or stated intent are not treated as willingness to pay unless the evidence includes a payment, deposit, preorder, or explicit price commitment.",
+        title="How to read this research",
+    )
+    _render_list("Who appears to feel the problem most", output.get("customer_segments"))
+    _render_report_pairs([
+        ("Jobs they are trying to complete", output.get("jobs_to_be_done") or output.get("customer_jobs")),
+        ("What they use today", output.get("current_alternatives")),
+        ("Events that trigger action", output.get("trigger_events")),
+        ("What prevents switching", output.get("switching_barriers")),
+    ])
+
+    willingness = output.get("willingness_to_pay_status")
+    if willingness not in (None, "", []):
+        willingness_text = _item_text(willingness)
+        tone = "warning" if "unknown" in willingness_text.lower() or "not " in willingness_text.lower() else "evidence"
+        _render_evidence_boundary(willingness_text, tone=tone, title="Willingness-to-pay status")
+
+    _render_list("What the evidence actually shows", output.get("observed_signals"))
+    _render_list("Questions for real customer conversations", output.get("discovery_questions"))
+    _render_list("Where the first users may be reachable", output.get("first_user_channels"))
+    _render_list("What this changes in your idea", output.get("contextual_actions") or output.get("recommendations"))
+    _render_report_pairs([
+        ("Inferences—not yet facts", output.get("inferences")),
+        ("Assumptions to test", output.get("assumptions")),
+        ("Contradictory signals", output.get("contradictions")),
+        ("Questions still unanswered", output.get("unknowns")),
+    ])
+    _render_list("Risks to the customer thesis", output.get("risks"))
+    _render_list("Research limitations", output.get("limitations"), limitations=True)
+
+
+def _render_market_research(output: dict) -> None:
+    finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
+    if finding:
+        st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
+
+    facts = []
+    for label, field in (
+        ("Market structure", "market_structure"),
+        ("Category maturity", "category_maturity"),
+        ("Initial beachhead", "beachhead"),
+    ):
+        value = output.get(field)
+        if value not in (None, "", []):
+            facts.append((label, _item_text(value)))
+    if facts:
+        body = "".join(f'<div><dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd></div>' for label, value in facts)
+        st.markdown(f'<section class="decision-frame market-frame"><h3>The market boundary</h3><dl>{body}</dl></section>', unsafe_allow_html=True)
+
+    _render_report_pairs([
+        ("Forces creating demand", output.get("demand_drivers")),
+        ("Barriers slowing adoption", output.get("adoption_barriers")),
+        ("Regulatory or operating constraints", output.get("regulatory_constraints")),
+        ("Evidence-supported market signals", output.get("observed_signals")),
+    ])
+
+    ranges = output.get("evidence_backed_ranges")
+    range_rows: list[dict] = []
+    if isinstance(ranges, dict):
+        range_rows = [{"measure": key.replace("_", " ").title(), "finding": value} for key, value in ranges.items()]
+    elif isinstance(ranges, list):
+        for index, item in enumerate(ranges, 1):
+            data = _dict(item)
+            range_rows.append({
+                "measure": data.get("metric") or data.get("measure") or data.get("name") or f"Range {index}",
+                "finding": data.get("range") or data.get("value") or data.get("finding") or _item_text(item),
+            })
+    _render_research_table("Evidence-backed ranges", range_rows, [("measure", "Measure"), ("finding", "Supported finding")])
+
+    excluded = _clean(output.get("excluded_metrics"))
+    if excluded:
+        _render_evidence_boundary(
+            "These figures were deliberately excluded because the supplied evidence could not support them: " + "; ".join(excluded[:6]) + ".",
+            tone="warning",
+            title="False precision withheld",
+        )
+    _render_list("What this changes in the founder plan", output.get("contextual_actions") or output.get("recommendations"))
+    _render_report_pairs([
+        ("Assumptions to validate", output.get("assumptions")),
+        ("Open market risks", output.get("risks")),
+        ("Conflicting evidence", output.get("contradictions")),
+        ("Unknowns that affect the verdict", output.get("unknowns")),
+    ])
+    _render_list("Research limitations", output.get("limitations"), limitations=True)
+
+
+def _render_evidence_audit(output: dict) -> None:
+    status = str(output.get("audit_status") or output.get("status") or "NOT PASSED").replace("_", " ").title()
+    coverage = output.get("evidence_coverage")
+    coverage_text = "Not established"
+    if isinstance(coverage, (int, float)):
+        coverage_text = f"{float(coverage) * 100 if float(coverage) <= 1 else float(coverage):.0f}%"
+    finding = output.get("executive_finding") or output.get("summary") or _dict(output.get("verdict_input")).get("explanation")
+    lead = str(finding or "The independent audit checked whether the research streams and their citations are decision-capable.")
+    st.markdown(f'<p class="research-lead">{html.escape(lead)}</p>', unsafe_allow_html=True)
+    st.markdown(
+        f'<section class="audit-summary"><div><small>Audit status</small><b>{html.escape(status)}</b></div>'
+        f'<div><small>Evidence coverage</small><b>{html.escape(coverage_text)}</b></div>'
+        f'<div><small>Citation errors</small><b>{html.escape(str(output.get("citation_error_count", 0)))}</b></div></section>',
+        unsafe_allow_html=True,
+    )
+
+    findings = []
+    for item in _items(output.get("stream_findings")):
+        data = _dict(item)
+        findings.append({
+            "stream": str(data.get("module_key") or "Unknown").replace("_", " ").title(),
+            "coverage": f"{float(data.get('coverage')) * 100:.0f}%" if isinstance(data.get("coverage"), (int, float)) else "Unknown",
+            "signals": data.get("signal_count", 0),
+            "contradictions": data.get("contradiction_count", 0),
+            "citation_errors": data.get("citation_error_count", 0),
+        })
+    _render_research_table(
+        "Audit by research stream",
+        findings,
+        [("stream", "Research stream"), ("coverage", "Coverage"), ("signals", "Accepted signals"), ("contradictions", "Contradictions"), ("citation_errors", "Citation errors")],
+    )
+    _render_list("Decision blockers", output.get("critical_blockers"))
+    _render_list("Research streams still missing", output.get("missing_streams"))
+    accepted = _items(output.get("accepted_evidence")) or _items(output.get("evidence_cards"))
+    accepted_rows = []
+    for item in accepted[:12]:
+        data = _dict(item)
+        accepted_rows.append({
+            "source": data.get("source_title") or data.get("title") or data.get("source_domain") or "Accepted source",
+            "provider": data.get("provider") or data.get("source_provider") or "Web research",
+            "excerpt": data.get("excerpt") or data.get("claim") or "Inspect the source link for the accepted excerpt.",
+        })
+    _render_research_table("Accepted evidence register", accepted_rows, [("source", "Source"), ("provider", "Evidence type"), ("excerpt", "Why it was retained")])
+    if status.upper() != "PASS":
+        _render_evidence_boundary(
+            "The verdict must remain cautious or withheld until the listed blockers, missing streams, or citation problems are resolved. A failed audit is not silently converted into confidence.",
+            tone="warning",
+            title="Verdict restriction",
+        )
+    else:
+        _render_evidence_boundary(
+            "The audit passed the configured coverage and citation checks. This supports a research verdict, but it still does not prove customer demand, commercial success, or willingness to pay.",
+            title="What a pass means—and does not mean",
+        )
+    _render_list("Audit limitations", output.get("limitations"), limitations=True)
+
+
 def _render_competitors(output: dict) -> None:
     competitors = _items(output.get("competitors")) or _items(output.get("competitor_matrix"))
     rows = []
@@ -457,8 +676,11 @@ def _render_competitors(output: dict) -> None:
             'The table is the comparison layer; the profiles below explain what each alternative means for your idea.</p>',
             unsafe_allow_html=True,
         )
-        st.markdown('<h3 class="research-subtitle">Competitor landscape at a glance</h3>', unsafe_allow_html=True)
-        st.dataframe(rows, use_container_width=True, hide_index=True)
+        _render_research_table(
+            "Competitor landscape at a glance",
+            rows,
+            [("Competitor", "Competitor"), ("Type", "Type"), ("Core offer", "Core offer"), ("What customers value", "What customers value"), ("Gap worth testing", "Gap worth testing")],
+        )
         st.markdown('<h3 class="research-subtitle competitor-depth-title">What each competitor means for your idea</h3>', unsafe_allow_html=True)
         for item in competitors[:8]:
             if not isinstance(item, dict):
@@ -528,11 +750,17 @@ def _render_output(key: str, output: dict, checkpoint: dict | None) -> None:
         _render_verdict(output, checkpoint); return
     if key == "foundation":
         _render_foundation(output); return
+    if key == "customer_demand":
+        _render_customer_research(output); return
+    if key == "market_economics":
+        _render_market_research(output); return
+    if key == "evidence_audit":
+        _render_evidence_audit(output); return
     finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
     if finding:
         st.markdown(f'<p class="research-lead">{html.escape(str(finding))}</p>', unsafe_allow_html=True)
     if key == "competitor_intelligence":
-        _render_competitors(output)
+        _render_competitors(output); return
     for title, values in [("Problem and founder context", output.get("problem_hypothesis") or output.get("starting_position")), ("Evidence-supported signals", output.get("observed_signals")), ("Customer jobs and pains", output.get("customer_jobs") or output.get("pains")), ("Recommendations", output.get("recommendations")), ("Scenarios", output.get("scenarios")), ("Milestones", output.get("milestones")), ("Assumptions to test", output.get("assumptions")), ("Risks", output.get("risks")), ("Contradictions", output.get("contradictions")), ("Unknowns", output.get("unknowns")), ("Limitations", output.get("limitations"))]:
         _render_list(title, [values] if isinstance(values, dict) else values, title == "Limitations")
     if key == "foundation" and not any(_items(output.get(name)) for name in ("assumptions", "risks", "unknowns")):
@@ -733,15 +961,15 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
         evidence = _items(output.get("evidence_cards"))
         parts = []
         if signals:
-            parts.append("The strongest accepted signals are: " + " ".join(f"{index}. {signal}" for index, signal in enumerate(signals[:4], 1)))
+            parts.append("### Strongest accepted signals\n\n" + "\n".join(f"- {signal}" for signal in signals[:4]))
         if evidence:
             names = [
                 _field_text(_dict(item), "source_title", "title", "source_domain", fallback="Accepted evidence source")
                 for item in evidence[:5]
             ]
-            parts.append("The attached evidence references are: " + "; ".join(names) + ".")
+            parts.append("### Sources attached to this section\n\n" + "\n".join(f"- {name}" for name in names))
         if parts:
-            return " ".join(parts) + " Open Sources to inspect the underlying links and evidence boundary."
+            return "\n\n".join(parts) + "\n\nOpen **Sources** to inspect the underlying links, excerpts, and evidence boundary."
         return f"The current {label} result does not contain an accepted supporting source for that claim. Blueprint will not manufacture one; inspect Sources or rerun this section with a narrower question."
     if key == "competitor_intelligence" and any(term in normalized for term in ("competitor", "alternative", "different", "india", "pricing", "gap", "weakness", "strength")):
         competitors = _items(output.get("competitors")) or _items(output.get("competitor_matrix"))
@@ -752,27 +980,28 @@ def _local_chat_answer(question: str, key: str, output: dict, state: tuple[str, 
                 name = item.get("name") or item.get("competitor") or "Unnamed alternative"
                 strength = _field_text(item, "strengths", "customer_praise", "differentiator")
                 gap = _field_text(item, "gap", "opportunity", "weaknesses")
-                summaries.append(f"{name}: strongest on {strength}; the testable opening is {gap}.")
-            return "Here is the evidence-bounded comparison: " + " ".join(summaries)
+                summaries.append(f"**{name}** — strongest on {strength}. The testable opening is {gap}.")
+            return "### Evidence-bounded comparison\n\n" + "\n\n".join(summaries) + "\n\nTreat each opening as a positioning hypothesis until customers validate it."
     if any(term in normalized for term in ("risk", "limitation", "unknown", "uncertain", "missing")):
         field = "limitations" if "limitation" in normalized else "unknowns" if any(term in normalized for term in ("unknown", "uncertain", "missing")) else "risks"
         items = _clean(output.get(field))
         if items:
-            return f"The current {field.replace('_', ' ')} are: " + " ".join(f"{index}. {item}" for index, item in enumerate(items[:5], 1))
+            heading = field.replace("_", " ").title()
+            return f"### {heading}\n\n" + "\n".join(f"- {item}" for item in items[:5])
         return f"No accepted {field.replace('_', ' ')} are recorded in this section yet. Blueprint will not infer one as fact."
     asks_for_explanation = any(term in normalized for term in ("what is", "explain", "mean", "purpose", "why"))
     asks_for_action = any(term in normalized for term in ("next step", "next move", "what should i do", "actionable", "recommend"))
     if asks_for_explanation and asks_for_action and key in definitions:
         actions = _section_actions(key, None, output)
-        return definitions[key] + " Your safest next moves are: " + " ".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
+        return definitions[key] + "\n\nThe safest next moves are:\n\n" + "\n".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
     if asks_for_action:
         actions = _section_actions(key, None, output)
-        return "The safest next moves are: " + " ".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
+        return "The safest next moves are:\n\n" + "\n".join(f"{index}. {action}" for index, action in enumerate(actions[:3], 1))
     if asks_for_explanation and key in definitions:
-        suffix = f" Current finding: {finding}" if finding else ""
+        suffix = f"\n\n### What this run found\n\n{finding}" if finding else ""
         return definitions[key] + suffix
     if finding:
-        return f"Here is the clearest evidence-bounded answer available from {label}: {finding}"
+        return f"### Clearest answer from {label}\n\n{finding}"
     if state[0] == "running":
         return f"{label} is still running, so Blueprint cannot safely answer that from completed evidence yet. You can ask what this section is meant to establish, or wait for the accepted findings and sources to appear."
     if state[0] in {"locked", "idle", "ready"}:
@@ -803,7 +1032,7 @@ def _render_chat_content(key: str, output: dict, state: tuple[str, str]) -> None
     history = chats.setdefault(key, [])
     for message in history[-8:]:
         with st.chat_message(message["role"]):
-            st.write(message["content"])
+            st.markdown(str(message["content"]))
             if message.get("citations"):
                 st.caption("Evidence references: " + ", ".join(message["citations"]))
             if message.get("suggested_actions"):
