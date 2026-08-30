@@ -10,6 +10,7 @@
     "owner_id": { "type": ["string", "null"], "format": "uuid" },
     "project_id": { "type": ["string", "null"], "format": "uuid" },
     "run_id": { "type": ["string", "null"], "format": "uuid" },
+    "profile_version": { "type": ["integer", "null"], "minimum": 1 },
     "correlation_id": { "type": "string", "minLength": 3, "maxLength": 200 },
     "idea_text": { "type": ["string", "null"], "maxLength": 10000 },
     "optional_industry": { "type": ["string", "null"], "maxLength": 200 },
@@ -19,6 +20,15 @@
       "uniqueItems": true,
       "items": { "enum": ["foundation", "customer_demand", "competitor_intelligence", "market_economics", "financial_readiness", "validation", "launch_distribution", "growth_optimization"] }
     },
+    "requested_research": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "enum": ["customer_demand", "competitor_intelligence", "market_economics"] }
+    },
+    "planning_mode": { "enum": ["DISCOVER", "PROVE_AND_DESIGN", "COMPLETE_ACTION_BLUEPRINT"] },
+    "profile": { "type": "object" },
     "founder_inputs": { "type": "object" },
     "human_decision": {
       "type": ["object", "null"],

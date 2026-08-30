@@ -1,6 +1,6 @@
 # Blueprint Evidence Dev — Authoritative Build Plan
 
-> Version: 1.0  
+> Version: 1.1 — Phase 7 canonical-path revision
 > Updated: 30 August 2026  
 > Authority: this document supersedes older phase/status statements in `README.md`, `blueprint.md`, and `implementation-plan.md`. Those files remain useful design history.  
 > Product: a dynamic, evidence-first founder validation system—not a generic market-research report generator.
@@ -36,7 +36,7 @@ The “60” is not a percentage chance of success. It is a versioned readiness 
 - Scenario-based financial planning; no fabricated precision or investment advice.
 - Section-level next actions, targeted reruns, full reruns, profile editing, and impact preview.
 - Supabase canonical state, Pinecone accepted-evidence retrieval, and Mem0 founder-journey memory.
-- “Ask Blueprint” remains designed but is held until the staged end-to-end system works; it is not on the immediate V1 critical path.
+- “Ask this Research” is a scoped V1 retrieval layer over the current run's dynamic task outputs, immutable Blueprint, verdict, actionables, and accepted evidence. Research reruns require impact preview and explicit founder approval.
 - Human approval for writes or consequential actions; autonomous reads.
 - Tool-failure handling, retry budgets, checkpoints, resumability, observability, and end-to-end evaluations.
 - Streamlit integration and submission/demo package.
@@ -75,7 +75,7 @@ Use an agent only where the next action depends on context and evidence. Use det
 | Evidence auditor | Independently checks stream completion, citation allowlists, coverage, contradictions and verdict sufficiency | `BP-AUDIT-01` is imported and live-safe verified; production evidence run pending |
 | Blueprint synthesizer | Creates immutable Research Blueprint V1 from audited Stage 1 sections and verdict | `BP-SYNTH-01` is imported and live-safe verified; production persistence path is bound |
 | Independent critic | Scores completeness, grounding, contradictions, actionability, and safety; cannot self-approve | Baseline quality gate exists |
-| Ask Blueprint | Optional later interaction layer over accepted project evidence | `BP-CHAT-01` baseline exists; product integration intentionally deferred until the staged core works |
+| Ask this Research | Project-grounded explanation/actionable coach over accepted run evidence; may propose but never silently execute a rerun | Streamlit integration and `BP-CHAT-01` retrieval context are complete; live authenticated answer acceptance remains |
 | Memory adapters | Project accepted evidence to Pinecone and confirmed founder journey to Mem0 | `BP-PINE-01` and `BP-MEM0-01` imported; both add/search/delete acceptance paths passed live with scoped cleanup |
 
 `BP-PLAN-01 Dynamic Task Planner` was added after the original workflow set and passed its original safe fixture. The later frozen user flow now requires a controlled revision: it must plan only Stage 1 research initially, allow a missing founder goal, insert the Research Verdict checkpoint, and plan later modules only after the gate decision. Its deterministic dependency and persistence mechanisms remain valid.
@@ -155,10 +155,16 @@ The dashboard shows only project-relevant signals, selected by deterministic rul
 - Supabase migrations 012–013: version-exact execution context, observable run snapshots, and adapter-aware atomic task claiming; both verification suites passed 2/2.
 - `BP-STAGE1-01`: bounded parameterized Foundation/User/Competitor/Market specialist with provider, grounding, citation, repair, refusal and safe-test branches; safe fixture passed live.
 - `BP-SCHED-01`: multi-item claim/context/dispatch/observe/unlock cycle for currently installed Stage 1 adapters; two-task fan-out passed live with two preserved observations.
+- Phase 7A canonical start migrations 019–020 are installed: authenticated start atomically creates profile v1 and Original Blueprint, idempotent replays accept in-flight statuses, and the owner-scoped RAG/rerun context is live.
+- `BP-API-01` now dispatches the same `bp00Supervisor` ID into the dynamic Planner → Scheduler → Specialist/Router → Auditor → Verdict → Synthesizer → re-evaluation loop. The controller is capped at 12 scheduling cycles and fails visibly.
+- Stage-gate precedence was corrected: the immutable Research Blueprint is synthesized before a pending Stage 1 checkpoint blocks later work; a generic READY task still cannot bypass HITL.
+- `BP-API-02` exposes authenticated research-rerun preview/approve/cancel. Approval creates a new run and dispatches it through the same dynamic Supervisor; chat never directly auto-approves the write.
+- Streamlit renders the live Research Blueprint sections, sources, risks, unknowns, contextual actions, grounded research chat, and rerun approval controls ahead of the existing dashboard redesign layer.
+- Repeatable workflow/component evaluation now passes **77/77**; Python auth/backend contracts pass **9/9**; all three production webhooks reject missing authentication with `401`.
 
 ### Designed but not yet complete
 
-- Authenticated end-to-end run from Streamlit through the dynamic task graph and durable resume.
+- One real signed-in golden run and a second-user isolation run through the Streamlit browser.
 - Financial scenario engine and remaining dynamic modules.
 - Evaluation runner and hardening evidence.
 - Streamlit authentication/integration and final submission assets.
@@ -181,7 +187,11 @@ The dashboard shows only project-relevant signals, selected by deterministic rul
 | 6E2 | Profile edit, impact preview, targeted/full rerun | **Backend complete and safe-plan live-tested; authenticated UI acceptance remains** | Core complete |
 | 6F | Failure handling, observability, budgets, safe/partial completion | **Complete and live-safe verified: migration 018 installed; shared resilience controller published; 15/15 injected failures passed** | Complete |
 | 6G | Evals: routing, grounding, isolation, failures, workflow completion | **Complete for backend/component scope: actual exported Code nodes plus structural/security contracts pass 68/68** | Complete |
-| 7 | Streamlit UI/auth/dashboard/versioned sections/contextual actions/rerun integration | **In progress: auth, owner recovery, selected-research start, live status and HITL controls implemented; dynamic sections/rerun UI and real-JWT acceptance remain** | 3–4 h |
+| 7A | Authenticated start/JWT, immutable initial state, canonical n8n entry | **Implemented and locally/live-contract verified; real founder sign-in acceptance remains** | Complete except golden run |
+| 7B | Dynamic main-path convergence and bounded re-evaluation | **Implemented and published in place under `bp00Supervisor`** | Complete |
+| 7C | Streamlit live progress, Blueprint sections, sources, verdict, actionables, checkpoints | **Implemented; visual redesign remains deliberately separable** | Complete for functional binding |
+| 7D | Routing/grounding/failure/HITL/isolation/completion/rerun evals | **77/77 workflow/component + 9/9 Python PASS; real two-user journey remains** | Component complete |
+| 7E | Ask this Research RAG plus approval-gated reruns | **Implemented and webhooks published; authenticated answer/rerun golden run remains** | Component complete |
 | 8 | Requirement audit, demo fixtures, case study, README, submission | Pending | 2–3 h |
 | Product V2 | File upload, LlamaIndex document RAG, optional voice | Deferred | Post-hackathon |
 
@@ -211,4 +221,4 @@ Execution order: **6A → 6B → 6E1 → 6C → 6D → 6E2 → 6F → 6G → 7 �
 
 ## 11. Immediate build step
 
-Migrations 011–018 and the Stage 1/HITL/memory/rerun/resilience components are installed. `BP-PINE-01` passed upsert/search/delete, `BP-MEM0-01` passed scoped add/search/delete, `BP-RERUN-01` passed its dependency-closed targeted-plan fixture, and `BP-RESILIENCE-01` passed 15/15 live injected failures. The repeatable evaluator now passes 68/68 routing, grounding, scope, security, HITL, memory, rerun, budget, completion, failure, state, and isolation-contract cases. Supabase remains canonical. Phase 7 now has real Supabase sign-in/refresh/logout, RLS-backed returning-project recovery, authenticated idempotent start, selected research routing, live status and durable checkpoint controls. The immediate next step is real-JWT/two-user acceptance, followed by dynamic section/rerun UI binding.
+Migrations 011–020 and the Stage 1/HITL/memory/rerun/resilience components are installed. The public start, chat, and rerun webhooks are published and authenticate with the founder's Supabase JWT. The repeatable evaluator passes 77/77 and the Streamlit auth/backend suite passes 9/9. The immediate next step is a signed-in golden journey: start one idea, watch all selected research tasks complete, inspect the Research Blueprint and sources, ask a grounded question, preview/approve one rerun, then repeat the isolation check with a second user. After that, Phase 8 packages deployment, final checklist evidence, demo fixtures, and submission assets.

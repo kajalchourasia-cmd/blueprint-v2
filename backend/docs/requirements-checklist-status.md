@@ -4,6 +4,8 @@ Audited against the complete pasted checklist and all 122 ordered textual paragr
 
 Legend: **DONE** = implemented and evidenced; **PARTIAL** = designed or implemented but an acceptance test/UI binding remains; **PENDING** = not built yet; **N/A BY SCOPE** = deliberately prohibited rather than omitted.
 
+> Phase 7 delta (30 August 2026): migrations 019–020 are installed; the authenticated Streamlit start now reaches the dynamic Supervisor main path; detailed research sections, sources, verdict/actionables, Ask this Research, and approval-gated targeted reruns are functionally bound. Automated workflow/component evaluation is now 77/77 and Python auth/backend tests are 9/9. Items below that still describe these bindings as “held” or “pending” are historical audit wording; the remaining acceptance gap is one real signed-in golden journey, a second-user isolation journey, and public deployment.
+
 ## 1. Define the project — DONE
 
 - **DONE:** Own comparable multi-step use case: an evidence-first founder idea validation Blueprint.

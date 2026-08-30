@@ -1,12 +1,12 @@
 {
   "schema_version": "bp-phase6-eval-report-v1",
   "suite_name": "Blueprint Phase 6 Agentic Acceptance",
-  "suite_version": "1.0.0",
-  "started_at": "2026-08-30T05:00:13.511Z",
-  "completed_at": "2026-08-30T05:00:14.092Z",
+  "suite_version": "1.1.0-phase7",
+  "started_at": "2026-08-30T06:11:01.703Z",
+  "completed_at": "2026-08-30T06:11:01.768Z",
   "status": "PASSED",
-  "total_cases": 68,
-  "passed_cases": 68,
+  "total_cases": 77,
+  "passed_cases": 77,
   "failed_cases": 0,
   "completion_rate": 1,
   "category_metrics": {
@@ -16,23 +16,28 @@
       "failed": 0
     },
     "ROUTING": {
-      "total": 7,
-      "passed": 7,
+      "total": 9,
+      "passed": 9,
       "failed": 0
     },
     "SECURITY": {
-      "total": 4,
-      "passed": 4,
+      "total": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "STATE": {
+      "total": 26,
+      "passed": 26,
       "failed": 0
     },
     "HITL": {
-      "total": 7,
-      "passed": 7,
+      "total": 8,
+      "passed": 8,
       "failed": 0
     },
     "GROUNDING": {
-      "total": 4,
-      "passed": 4,
+      "total": 5,
+      "passed": 5,
       "failed": 0
     },
     "BUDGET": {
@@ -45,24 +50,19 @@
       "passed": 2,
       "failed": 0
     },
+    "RERUN": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0
+    },
     "MEMORY": {
       "total": 6,
       "passed": 6,
       "failed": 0
     },
-    "RERUN": {
-      "total": 4,
-      "passed": 4,
-      "failed": 0
-    },
     "FAILURE": {
       "total": 3,
       "passed": 3,
-      "failed": 0
-    },
-    "STATE": {
-      "total": 23,
-      "passed": 23,
       "failed": 0
     }
   },
@@ -97,7 +97,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788066013547-eval-scope_valid_idea",
+        "correlation_id": "bp-1788070261706-eval-scope_valid_idea",
         "request": {
           "idempotency_key": "eval-scope-001",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -138,7 +138,7 @@
           ]
         }
       ],
-      "duration_ms": 1.1
+      "duration_ms": 0.829
     },
     {
       "id": "scope_selected_competitor_only",
@@ -170,7 +170,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788066013549-eval-scope_selected_competitor_only",
+        "correlation_id": "bp-1788070261708-eval-scope_selected_competitor_only",
         "request": {
           "idempotency_key": "eval-scope-005",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -209,7 +209,7 @@
           ]
         }
       ],
-      "duration_ms": 0.508
+      "duration_ms": 0.441
     },
     {
       "id": "scope_missing_research_safe_fails",
@@ -238,7 +238,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788066013550-eval-scope_missing_research_safe_fails",
+        "correlation_id": "bp-1788070261709-eval-scope_missing_research_safe_fails",
         "request": {
           "idempotency_key": "eval-scope-006",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -266,7 +266,7 @@
           ]
         }
       ],
-      "duration_ms": 0.071
+      "duration_ms": 0.054
     },
     {
       "id": "scope_direct_send_denied",
@@ -295,7 +295,7 @@
         "error_code": "OUT_OF_SCOPE",
         "safe_message": "Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788066013551-eval-scope_direct_send_denied",
+        "correlation_id": "bp-1788070261709-eval-scope_direct_send_denied",
         "request": {
           "idempotency_key": "eval-scope-002",
           "idea_text": "Please send a message to this customer for me.",
@@ -323,7 +323,7 @@
           "actual_value": "OUT_OF_SCOPE"
         }
       ],
-      "duration_ms": 0.039
+      "duration_ms": 0.038
     },
     {
       "id": "scope_external_payload_denied",
@@ -355,7 +355,7 @@
         "error_code": "OUT_OF_SCOPE",
         "safe_message": "Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788066013551-eval-scope_external_payload_denied",
+        "correlation_id": "bp-1788070261710-eval-scope_external_payload_denied",
         "request": {
           "idempotency_key": "eval-scope-003",
           "idea_text": "Research a customer discovery application for founders.",
@@ -385,7 +385,7 @@
           ]
         }
       ],
-      "duration_ms": 0.045
+      "duration_ms": 0.047
     },
     {
       "id": "scope_missing_auth",
@@ -414,7 +414,7 @@
         "error_code": "UNAUTHENTICATED",
         "safe_message": "Please sign in before starting a Blueprint.",
         "authorization": "",
-        "correlation_id": "bp-1788066013551-eval-scope_missing_auth",
+        "correlation_id": "bp-1788070261710-eval-scope_missing_auth",
         "request": {
           "idempotency_key": "eval-scope-004",
           "idea_text": "Research a founder validation application with market evidence.",
@@ -442,7 +442,188 @@
           "actual_value": "UNAUTHENTICATED"
         }
       ],
-      "duration_ms": 0.049
+      "duration_ms": 0.043
+    },
+    {
+      "id": "start_accepts_idempotent_inflight_run",
+      "category": "STATE",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "ok",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "response.duplicate",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "response.profile_version",
+          "op": "eq",
+          "value": 1
+        }
+      ],
+      "actual": {
+        "ok": true,
+        "status_code": 202,
+        "response": {
+          "ok": true,
+          "correlation_id": "bp-eval-idempotent",
+          "project_id": "00000000-0000-4000-8000-000000000101",
+          "run_id": "00000000-0000-4000-8000-000000000102",
+          "status": "PLANNING",
+          "state_version": 2,
+          "profile_version": 1,
+          "original_blueprint_version": 1,
+          "duplicate": true,
+          "created_at": "2026-08-30T00:00:00Z",
+          "poll_after_ms": 2000
+        }
+      },
+      "assertions": [
+        {
+          "path": "ok",
+          "op": "eq",
+          "value": true,
+          "passed": true,
+          "actual_value": true
+        },
+        {
+          "path": "response.duplicate",
+          "op": "eq",
+          "value": true,
+          "passed": true,
+          "actual_value": true
+        },
+        {
+          "path": "response.profile_version",
+          "op": "eq",
+          "value": 1,
+          "passed": true,
+          "actual_value": 1
+        }
+      ],
+      "duration_ms": 0.222
+    },
+    {
+      "id": "canonical_supervisor_rejects_missing_profile",
+      "category": "STATE",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "error_code",
+          "op": "eq",
+          "value": "INVALID_CANONICAL_START"
+        }
+      ],
+      "actual": {
+        "command": "START",
+        "authorization": "Bearer test-jwt",
+        "project_id": "00000000-0000-4000-8000-000000000103",
+        "run_id": "00000000-0000-4000-8000-000000000104",
+        "requested_research": [
+          "market_economics"
+        ],
+        "planning_mode": "DISCOVER",
+        "profile_version": 0,
+        "controller_cycle": 0,
+        "claim_limit": 1,
+        "valid": false,
+        "error_code": "INVALID_CANONICAL_START",
+        "safe_message": "The start contract is incomplete, so no autonomous work was dispatched."
+      },
+      "assertions": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false,
+          "passed": true,
+          "actual_value": false
+        },
+        {
+          "path": "error_code",
+          "op": "eq",
+          "value": "INVALID_CANONICAL_START",
+          "passed": true,
+          "actual_value": "INVALID_CANONICAL_START"
+        }
+      ],
+      "duration_ms": 0.062
+    },
+    {
+      "id": "canonical_supervisor_accepts_typed_start",
+      "category": "ROUTING",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "planning_mode",
+          "op": "eq",
+          "value": "DISCOVER"
+        },
+        {
+          "path": "requested_research",
+          "op": "includes",
+          "value": "customer_demand"
+        }
+      ],
+      "actual": {
+        "command": "START",
+        "authorization": "Bearer test-jwt",
+        "project_id": "00000000-0000-4000-8000-000000000105",
+        "run_id": "00000000-0000-4000-8000-000000000106",
+        "profile_version": 1,
+        "requested_research": [
+          "customer_demand",
+          "competitor_intelligence",
+          "market_economics"
+        ],
+        "planning_mode": "DISCOVER",
+        "controller_cycle": 0,
+        "claim_limit": 1,
+        "valid": true,
+        "error_code": null,
+        "safe_message": "Authenticated dynamic orchestration accepted."
+      },
+      "assertions": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": true,
+          "passed": true,
+          "actual_value": true
+        },
+        {
+          "path": "planning_mode",
+          "op": "eq",
+          "value": "DISCOVER",
+          "passed": true,
+          "actual_value": "DISCOVER"
+        },
+        {
+          "path": "requested_research",
+          "op": "includes",
+          "value": "customer_demand",
+          "passed": true,
+          "actual_value": [
+            "customer_demand",
+            "competitor_intelligence",
+            "market_economics"
+          ]
+        }
+      ],
+      "duration_ms": 0.05
     },
     {
       "id": "planner_discover_defaults_all_research",
@@ -814,7 +995,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013600",
+        "correlation_id": "bp-plan-1788070261712",
         "test_mode": true
       },
       "assertions": [
@@ -1789,7 +1970,7 @@
           ]
         }
       ],
-      "duration_ms": 0.456
+      "duration_ms": 0.291
     },
     {
       "id": "planner_selected_competitor_only",
@@ -2060,7 +2241,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013603",
+        "correlation_id": "bp-plan-1788070261716",
         "test_mode": true
       },
       "assertions": [
@@ -2746,7 +2927,7 @@
           ]
         }
       ],
-      "duration_ms": 0.461
+      "duration_ms": 0.686
     },
     {
       "id": "planner_invalid_mode_safe_fails",
@@ -2801,7 +2982,7 @@
         "guard_status": "SAFE_FAILED",
         "guard_route": "SAFE_FAIL",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013603",
+        "correlation_id": "bp-plan-1788070261717",
         "test_mode": true
       },
       "assertions": [
@@ -2820,7 +3001,7 @@
           "actual_value": "SAFE_FAIL"
         }
       ],
-      "duration_ms": 0.078
+      "duration_ms": 0.111
     },
     {
       "id": "planner_stage2_requires_gate",
@@ -3411,7 +3592,7 @@
         "guard_status": "NEEDS_INPUT",
         "guard_route": "HUMAN_REVIEW",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013616",
+        "correlation_id": "bp-plan-1788070261718",
         "test_mode": true
       },
       "assertions": [
@@ -3430,7 +3611,7 @@
           "actual_value": "HUMAN_REVIEW"
         }
       ],
-      "duration_ms": 0.696
+      "duration_ms": 0.615
     },
     {
       "id": "planner_missing_research_replans",
@@ -4025,7 +4206,7 @@
         "guard_status": "REPLAN_DISCOVER",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013617",
+        "correlation_id": "bp-plan-1788070261719",
         "test_mode": true
       },
       "assertions": [
@@ -4044,7 +4225,7 @@
           "actual_value": "TASK_PLANNER"
         }
       ],
-      "duration_ms": 0.283
+      "duration_ms": 0.174
     },
     {
       "id": "planner_founder_pause_wins",
@@ -4639,7 +4820,7 @@
         "guard_status": "PAUSED",
         "guard_route": "HUMAN_REVIEW",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013619",
+        "correlation_id": "bp-plan-1788070261720",
         "test_mode": true
       },
       "assertions": [
@@ -4658,7 +4839,7 @@
           "actual_value": "HUMAN_REVIEW"
         }
       ],
-      "duration_ms": 0.218
+      "duration_ms": 0.183
     },
     {
       "id": "planner_growth_pretraction_not_applicable",
@@ -5333,7 +5514,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788066013620",
+        "correlation_id": "bp-plan-1788070261721",
         "test_mode": true
       },
       "assertions": [
@@ -5974,7 +6155,7 @@
           ]
         }
       ],
-      "duration_ms": 0.355
+      "duration_ms": 0.299
     },
     {
       "id": "supervisor_transition_cap",
@@ -6038,7 +6219,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.089
+      "duration_ms": 0.155
     },
     {
       "id": "supervisor_checkpoint_precedes_ready",
@@ -6103,7 +6284,63 @@
           ]
         }
       ],
-      "duration_ms": 0.04
+      "duration_ms": 0.098
+    },
+    {
+      "id": "supervisor_synthesizes_before_stage_gate",
+      "category": "ROUTING",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "route",
+          "op": "eq",
+          "value": "TASK_SCHEDULER"
+        },
+        {
+          "path": "requires_human",
+          "op": "eq",
+          "value": false
+        }
+      ],
+      "actual": {
+        "schema_version": "bp-supervisor-decision-v1",
+        "scenario": null,
+        "status": "DISPATCH",
+        "route": "TASK_SCHEDULER",
+        "requires_human": false,
+        "reason": "The Research Blueprint must be synthesized before the stage gate pauses later work.",
+        "allowed_decisions": [],
+        "transition_count": 1,
+        "terminal": false,
+        "panel_item": {
+          "item_type": "SUPERVISOR_STATUS",
+          "severity": "INFO",
+          "blocking": false,
+          "title": "Research can continue",
+          "message": "The Research Blueprint must be synthesized before the stage gate pauses later work.",
+          "allowed_decisions": [],
+          "next_route": "TASK_SCHEDULER"
+        },
+        "correlation_id": null,
+        "test_mode": true
+      },
+      "assertions": [
+        {
+          "path": "route",
+          "op": "eq",
+          "value": "TASK_SCHEDULER",
+          "passed": true,
+          "actual_value": "TASK_SCHEDULER"
+        },
+        {
+          "path": "requires_human",
+          "op": "eq",
+          "value": false,
+          "passed": true,
+          "actual_value": false
+        }
+      ],
+      "duration_ms": 0.046
     },
     {
       "id": "supervisor_founder_input",
@@ -6153,7 +6390,7 @@
           "actual_value": "FOUNDER_INPUT"
         }
       ],
-      "duration_ms": 0.07
+      "duration_ms": 0.097
     },
     {
       "id": "supervisor_contradiction_review",
@@ -6221,7 +6458,7 @@
           ]
         }
       ],
-      "duration_ms": 0.088
+      "duration_ms": 0.163
     },
     {
       "id": "supervisor_ready_dispatch",
@@ -6277,7 +6514,7 @@
           "actual_value": "DISPATCH"
         }
       ],
-      "duration_ms": 0.058
+      "duration_ms": 0.09
     },
     {
       "id": "supervisor_stage_complete",
@@ -6333,7 +6570,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.095
+      "duration_ms": 0.149
     },
     {
       "id": "supervisor_partial_visible",
@@ -6397,7 +6634,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.057
+      "duration_ms": 0.093
     },
     {
       "id": "hitl_valid_safe_decision",
@@ -6425,7 +6662,7 @@
         "authorization": "",
         "persist_required": false,
         "valid": true,
-        "correlation_id": "bp-hitl-1788066013661",
+        "correlation_id": "bp-hitl-1788070261728",
         "test_mode": true
       },
       "assertions": [
@@ -6444,7 +6681,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.263
+      "duration_ms": 0.114
     },
     {
       "id": "hitl_invalid_decision",
@@ -6467,7 +6704,7 @@
         "authorization": "",
         "persist_required": false,
         "valid": false,
-        "correlation_id": "bp-hitl-1788066013662",
+        "correlation_id": "bp-hitl-1788070261729",
         "test_mode": true
       },
       "assertions": [
@@ -6479,7 +6716,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.182
+      "duration_ms": 0.042
     },
     {
       "id": "chat_send_denied",
@@ -6506,7 +6743,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788066013682",
+        "correlation_id": "bp-chat-1788070261731",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6528,7 +6765,7 @@
           "actual_value": 422
         }
       ],
-      "duration_ms": 0.635
+      "duration_ms": 0.472
     },
     {
       "id": "chat_draft_allowed",
@@ -6555,7 +6792,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788066013683",
+        "correlation_id": "bp-chat-1788070261732",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6577,7 +6814,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.429
+      "duration_ms": 0.55
     },
     {
       "id": "chat_delete_denied",
@@ -6599,7 +6836,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788066013684",
+        "correlation_id": "bp-chat-1788070261733",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6614,7 +6851,243 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.03
+      "duration_ms": 0.05
+    },
+    {
+      "id": "chat_dynamic_context_enters_rag_prompt",
+      "category": "GROUNDING",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "request.messages.0.content",
+          "op": "includesText",
+          "value": "project-grounded assistant"
+        },
+        {
+          "path": "request.messages.1.content",
+          "op": "includesText",
+          "value": "Interview five founders"
+        }
+      ],
+      "actual": {
+        "message": "How do I complete the first actionable?",
+        "intent": "NEXT_STEP",
+        "context": {
+          "orchestration_tasks": [
+            {
+              "module_key": "customer_demand",
+              "status": "COMPLETED",
+              "output": {
+                "contextual_actions": [
+                  {
+                    "title": "Interview five founders"
+                  }
+                ]
+              }
+            }
+          ],
+          "current_blueprint": {
+            "version": 2,
+            "blueprint": {
+              "artifact_stage": "DISCOVER"
+            }
+          },
+          "next_actions": [],
+          "accepted_evidence": [
+            {
+              "id": "00000000-0000-4000-8000-000000000699",
+              "claim": "A cited finding"
+            }
+          ]
+        },
+        "request": {
+          "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+          "temperature": 0.1,
+          "max_tokens": 1400,
+          "response_format": {
+            "type": "json_object"
+          },
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are Ask This Research, Blueprint Evidence Dev's project-grounded assistant. Answer only from the supplied run, dynamic task outputs, current immutable Blueprint, verdict, actionables, and accepted evidence. Explain findings, sources, limitations, and how the founder can complete an existing actionable. Never invent a metric, source, customer quote, or next action. Every factual external claim must cite an accepted evidence ID. If evidence is insufficient, say UNKNOWN and suggest one of customer_demand, competitor_intelligence, or market_economics for a human-approved rerun. A rerun request is only a proposal: never claim it executed. Never expose hidden reasoning or contact, send, publish, buy, book, pay, or delete. Return JSON with answer, citations array of accepted evidence IDs, suggested_actions array, limitations array."
+            },
+            {
+              "role": "user",
+              "content": "{\"message\":\"How do I complete the first actionable?\",\"intent\":\"NEXT_STEP\",\"context\":{\"run\":{},\"project\":{},\"orchestration_tasks\":[{\"module_key\":\"customer_demand\",\"status\":\"COMPLETED\",\"output\":{\"contextual_actions\":[{\"title\":\"Interview five founders\"}]}}],\"current_blueprint\":{\"version\":2,\"blueprint\":{\"artifact_stage\":\"DISCOVER\"}},\"latest_verdict\":null,\"next_actions\":[],\"accepted_evidence\":[{\"id\":\"00000000-0000-4000-8000-000000000699\",\"claim\":\"A cited finding\"}],\"quality_checks\":[],\"errors\":[]}}"
+            }
+          ]
+        }
+      },
+      "assertions": [
+        {
+          "path": "request.messages.0.content",
+          "op": "includesText",
+          "value": "project-grounded assistant",
+          "passed": true,
+          "actual_value": "You are Ask This Research, Blueprint Evidence Dev's project-grounded assistant. Answer only from the supplied run, dynamic task outputs, current immutable Blueprint, verdict, actionables, and accepted evidence. Explain findings, sources, limitations, and how the founder can complete an existing actionable. Never invent a metric, source, customer quote, or next action. Every factual external claim must cite an accepted evidence ID. If evidence is insufficient, say UNKNOWN and suggest one of customer_demand, competitor_intelligence, or market_economics for a human-approved rerun. A rerun request is only a proposal: never claim it executed. Never expose hidden reasoning or contact, send, publish, buy, book, pay, or delete. Return JSON with answer, citations array of accepted evidence IDs, suggested_actions array, limitations array."
+        },
+        {
+          "path": "request.messages.1.content",
+          "op": "includesText",
+          "value": "Interview five founders",
+          "passed": true,
+          "actual_value": "{\"message\":\"How do I complete the first actionable?\",\"intent\":\"NEXT_STEP\",\"context\":{\"run\":{},\"project\":{},\"orchestration_tasks\":[{\"module_key\":\"customer_demand\",\"status\":\"COMPLETED\",\"output\":{\"contextual_actions\":[{\"title\":\"Interview five founders\"}]}}],\"current_blueprint\":{\"version\":2,\"blueprint\":{\"artifact_stage\":\"DISCOVER\"}},\"latest_verdict\":null,\"next_actions\":[],\"accepted_evidence\":[{\"id\":\"00000000-0000-4000-8000-000000000699\",\"claim\":\"A cited finding\"}],\"quality_checks\":[],\"errors\":[]}}"
+        }
+      ],
+      "duration_ms": 0.155
+    },
+    {
+      "id": "rerun_api_preview_requires_auth",
+      "category": "SECURITY",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "errors",
+          "op": "includes",
+          "value": "AUTHORIZATION_REQUIRED"
+        }
+      ],
+      "actual": {
+        "valid": false,
+        "errors": [
+          "AUTHORIZATION_REQUIRED"
+        ],
+        "status_code": 401,
+        "authorization": "",
+        "command": "PREVIEW",
+        "project_id": "00000000-0000-4000-8000-000000000611",
+        "source_run_id": "00000000-0000-4000-8000-000000000612",
+        "target_module": "market_economics",
+        "rerun_request_id": null,
+        "expected_source_state_version": 0,
+        "idempotency_key": "rerun-1788070261735",
+        "correlation_id": "bp-rerun-1788070261735"
+      },
+      "assertions": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false,
+          "passed": true,
+          "actual_value": false
+        },
+        {
+          "path": "errors",
+          "op": "includes",
+          "value": "AUTHORIZATION_REQUIRED",
+          "passed": true,
+          "actual_value": [
+            "AUTHORIZATION_REQUIRED"
+          ]
+        }
+      ],
+      "duration_ms": 0.089
+    },
+    {
+      "id": "rerun_api_typed_preview_allowed",
+      "category": "RERUN",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "target_module",
+          "op": "eq",
+          "value": "competitor_intelligence"
+        }
+      ],
+      "actual": {
+        "valid": true,
+        "errors": [],
+        "status_code": 400,
+        "authorization": "Bearer test-jwt",
+        "command": "PREVIEW",
+        "project_id": "00000000-0000-4000-8000-000000000613",
+        "source_run_id": "00000000-0000-4000-8000-000000000614",
+        "target_module": "competitor_intelligence",
+        "rerun_request_id": null,
+        "expected_source_state_version": 0,
+        "idempotency_key": "eval-rerun-api-1",
+        "correlation_id": "bp-rerun-1788070261736"
+      },
+      "assertions": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": true,
+          "passed": true,
+          "actual_value": true
+        },
+        {
+          "path": "target_module",
+          "op": "eq",
+          "value": "competitor_intelligence",
+          "passed": true,
+          "actual_value": "competitor_intelligence"
+        }
+      ],
+      "duration_ms": 0.121
+    },
+    {
+      "id": "rerun_api_rejects_auto_approval",
+      "category": "HITL",
+      "status": "PASS",
+      "expected": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "errors",
+          "op": "includes",
+          "value": "COMMAND_INVALID"
+        }
+      ],
+      "actual": {
+        "valid": false,
+        "errors": [
+          "COMMAND_INVALID"
+        ],
+        "status_code": 400,
+        "authorization": "Bearer test-jwt",
+        "command": "AUTO_APPROVE",
+        "project_id": null,
+        "source_run_id": null,
+        "target_module": "",
+        "rerun_request_id": "00000000-0000-4000-8000-000000000615",
+        "expected_source_state_version": 2,
+        "idempotency_key": "rerun-1788070261736",
+        "correlation_id": "bp-rerun-1788070261736"
+      },
+      "assertions": [
+        {
+          "path": "valid",
+          "op": "eq",
+          "value": false,
+          "passed": true,
+          "actual_value": false
+        },
+        {
+          "path": "errors",
+          "op": "includes",
+          "value": "COMMAND_INVALID",
+          "passed": true,
+          "actual_value": [
+            "COMMAND_INVALID"
+          ]
+        }
+      ],
+      "duration_ms": 0.058
     },
     {
       "id": "pinecone_unscoped_rejected",
@@ -6634,7 +7107,7 @@
         "valid_production": false,
         "top_k": 5,
         "external_ids": [],
-        "correlation_id": "bp-pine-1788066013701"
+        "correlation_id": "bp-pine-1788070261737"
       },
       "assertions": [
         {
@@ -6645,7 +7118,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.078
+      "duration_ms": 0.061
     },
     {
       "id": "pinecone_scoped_search_allowed",
@@ -6673,7 +7146,7 @@
         "valid_production": true,
         "top_k": 5,
         "external_ids": [],
-        "correlation_id": "bp-pine-1788066013702"
+        "correlation_id": "bp-pine-1788070261738"
       },
       "assertions": [
         {
@@ -6691,7 +7164,7 @@
           "actual_value": 5
         }
       ],
-      "duration_ms": 0.035
+      "duration_ms": 0.065
     },
     {
       "id": "mem0_unconfirmed_add_rejected",
@@ -6722,7 +7195,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788066013738"
+        "correlation_id": "bp-mem0-1788070261739"
       },
       "assertions": [
         {
@@ -6733,7 +7206,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.13
+      "duration_ms": 0.07
     },
     {
       "id": "mem0_confirmed_goal_allowed",
@@ -6769,7 +7242,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788066013739"
+        "correlation_id": "bp-mem0-1788070261739"
       },
       "assertions": [
         {
@@ -6787,7 +7260,7 @@
           "actual_value": "bp-00000000-0000-4000-8000-000000000712"
         }
       ],
-      "duration_ms": 0.075
+      "duration_ms": 0.048
     },
     {
       "id": "mem0_raw_log_rejected",
@@ -6818,7 +7291,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788066013739"
+        "correlation_id": "bp-mem0-1788070261740"
       },
       "assertions": [
         {
@@ -6829,7 +7302,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.057
+      "duration_ms": 0.047
     },
     {
       "id": "rerun_save_requires_scope",
@@ -6857,7 +7330,7 @@
         "valid_save": false,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788066013775"
+        "correlation_id": "bp-rerun-1788070261741"
       },
       "assertions": [
         {
@@ -6868,7 +7341,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.072
+      "duration_ms": 0.041
     },
     {
       "id": "rerun_scoped_save_allowed",
@@ -6898,7 +7371,7 @@
         "valid_save": true,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788066013776"
+        "correlation_id": "bp-rerun-1788070261741"
       },
       "assertions": [
         {
@@ -6909,7 +7382,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.051
+      "duration_ms": 0.042
     },
     {
       "id": "rerun_auto_approval_rejected",
@@ -6934,7 +7407,7 @@
         "valid_save": false,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788066013776"
+        "correlation_id": "bp-rerun-1788070261741"
       },
       "assertions": [
         {
@@ -6945,7 +7418,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.039
+      "duration_ms": 0.038
     },
     {
       "id": "rerun_dependency_closed_plan",
@@ -7581,7 +8054,7 @@
           ]
         }
       ],
-      "duration_ms": 0.511
+      "duration_ms": 0.368
     },
     {
       "id": "grounding_audit_pass",
@@ -7686,7 +8159,7 @@
               "critical_blockers": [],
               "evidence_audit_status": "PASS",
               "explanation": "Independent checks passed for stream completion, evidence coverage and citation integrity.",
-              "correlation_id": "bp-audit-1788066013804",
+              "correlation_id": "bp-audit-1788070261743",
               "test_mode": true
             }
           },
@@ -7704,7 +8177,7 @@
             "status": "PASS"
           }
         ],
-        "correlation_id": "bp-audit-1788066013804",
+        "correlation_id": "bp-audit-1788070261743",
         "test_mode": true
       },
       "assertions": [
@@ -7723,7 +8196,7 @@
           "actual_value": "PASS"
         }
       ],
-      "duration_ms": 0.544
+      "duration_ms": 0.395
     },
     {
       "id": "grounding_bad_reference_repairs",
@@ -7798,7 +8271,7 @@
               ],
               "evidence_audit_status": "NOT_PASSED",
               "explanation": "The research cannot support an unrestricted verdict yet: 1 material claim(s) failed citation allowlist checks.",
-              "correlation_id": "bp-audit-1788066013805",
+              "correlation_id": "bp-audit-1788070261744",
               "test_mode": true
             }
           },
@@ -7816,7 +8289,7 @@
             "status": "NOT_PASSED"
           }
         ],
-        "correlation_id": "bp-audit-1788066013805",
+        "correlation_id": "bp-audit-1788070261744",
         "test_mode": true
       },
       "assertions": [
@@ -7835,7 +8308,7 @@
           "actual_value": 1
         }
       ],
-      "duration_ms": 0.347
+      "duration_ms": 0.276
     },
     {
       "id": "resilience_rate_retry",
@@ -7871,7 +8344,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A provider is temporarily busy.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013825"
+        "correlation_id": "bp-resilience-1788070261746"
       },
       "assertions": [
         {
@@ -7889,7 +8362,7 @@
           "actual_value": "RETRY"
         }
       ],
-      "duration_ms": 1.058
+      "duration_ms": 0.776
     },
     {
       "id": "resilience_retry_exhausted_partial",
@@ -7920,7 +8393,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A provider failed; successful work is preserved.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013827"
+        "correlation_id": "bp-resilience-1788070261747"
       },
       "assertions": [
         {
@@ -7931,7 +8404,7 @@
           "actual_value": "PARTIAL_COMPLETE"
         }
       ],
-      "duration_ms": 0.675
+      "duration_ms": 0.531
     },
     {
       "id": "resilience_memory_degrades",
@@ -7967,7 +8440,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A bounded tool call timed out.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013827"
+        "correlation_id": "bp-resilience-1788070261747"
       },
       "assertions": [
         {
@@ -7985,7 +8458,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.132
+      "duration_ms": 0.1
     },
     {
       "id": "resilience_schema_repairs_once",
@@ -8020,7 +8493,7 @@
         "canonical_state_preserved": true,
         "safe_message": "An agent returned invalid structured output.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013828"
+        "correlation_id": "bp-resilience-1788070261748"
       },
       "assertions": [
         {
@@ -8038,7 +8511,7 @@
           "actual_value": "REPAIR"
         }
       ],
-      "duration_ms": 0.16
+      "duration_ms": 0.126
     },
     {
       "id": "resilience_grounding_never_guesses",
@@ -8073,7 +8546,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A material claim failed evidence validation.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013828"
+        "correlation_id": "bp-resilience-1788070261748"
       },
       "assertions": [
         {
@@ -8091,7 +8564,7 @@
           "actual_value": "Never substitute model training knowledge for missing source evidence."
         }
       ],
-      "duration_ms": 0.126
+      "duration_ms": 0.096
     },
     {
       "id": "resilience_budget_stops",
@@ -8126,7 +8599,7 @@
         "canonical_state_preserved": true,
         "safe_message": "The run reached a configured safety budget.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013829"
+        "correlation_id": "bp-resilience-1788070261748"
       },
       "assertions": [
         {
@@ -8144,7 +8617,7 @@
           "actual_value": "SAFE_FAIL"
         }
       ],
-      "duration_ms": 0.219
+      "duration_ms": 0.199
     },
     {
       "id": "resilience_policy_denies",
@@ -8179,7 +8652,7 @@
         "canonical_state_preserved": true,
         "safe_message": "The requested action is outside Blueprint scope.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013829"
+        "correlation_id": "bp-resilience-1788070261749"
       },
       "assertions": [
         {
@@ -8197,7 +8670,7 @@
           "actual_value": "POLICY_DENIED"
         }
       ],
-      "duration_ms": 0.099
+      "duration_ms": 0.062
     },
     {
       "id": "resilience_redacts_secrets",
@@ -8237,7 +8710,7 @@
         "canonical_state_preserved": true,
         "safe_message": "Authentication failed safely.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788066013830"
+        "correlation_id": "bp-resilience-1788070261749"
       },
       "assertions": [
         {
@@ -8262,7 +8735,7 @@
           "actual_value": "provider failed [CREDENTIAL_REDACTED] [EMAIL_REDACTED] Bearer [REDACTED]"
         }
       ],
-      "duration_ms": 0.059
+      "duration_ms": 0.031
     },
     {
       "id": "structure_bp00Supervisor",
@@ -8274,8 +8747,8 @@
         "bounded_error_route": true
       },
       "actual": {
-        "workflow": "BP-00 Adaptive Supervisor",
-        "nodes": 17,
+        "workflow": "BP-00 Dynamic Evidence Supervisor",
+        "nodes": 22,
         "failures": []
       },
       "assertions": [],
@@ -8310,6 +8783,23 @@
       "actual": {
         "workflow": "BP-API-01 Start Run",
         "nodes": 15,
+        "failures": []
+      },
+      "assertions": [],
+      "duration_ms": 0
+    },
+    {
+      "id": "structure_bpApi02ResearchRerun",
+      "category": "STATE",
+      "status": "PASS",
+      "expected": {
+        "valid_connections": true,
+        "valid_code": true,
+        "bounded_error_route": true
+      },
+      "actual": {
+        "workflow": "BP-API-02 Research Rerun",
+        "nodes": 19,
         "failures": []
       },
       "assertions": [],

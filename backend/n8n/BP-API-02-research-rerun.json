@@ -1,0 +1,682 @@
+{
+  "id": "bpApi02ResearchRerun",
+  "name": "BP-API-02 Research Rerun",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "blueprint/rerun",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a41a85f2-55ac-5814-aa6d-e3e49eb9c004",
+      "name": "POST Blueprint Research Rerun",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1280,
+        0
+      ],
+      "webhookId": "efef3dbb-7750-5ea8-b1e4-3be177b98832"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw=$input.first()?.json??{};let b=raw.body??raw;if(typeof b==='string'){try{b=JSON.parse(b)}catch{b={}}}const headers=Object.fromEntries(Object.entries(raw.headers??{}).map(([k,v])=>[String(k).toLowerCase(),v]));const authorization=String(headers.authorization??'').trim();const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const command=String(b.command??'').toUpperCase();const target=String(b.target_module??'').toLowerCase();const modules=['customer_demand','competitor_intelligence','market_economics'];const errors=[];if(!/^Bearer\\s+\\S+$/i.test(authorization))errors.push('AUTHORIZATION_REQUIRED');if(!['PREVIEW','APPROVE','CANCEL'].includes(command))errors.push('COMMAND_INVALID');if(command==='PREVIEW'&&(!uuid.test(String(b.project_id??''))||!uuid.test(String(b.source_run_id??''))||!modules.includes(target)))errors.push('PREVIEW_SCOPE_INVALID');if(command!=='PREVIEW'&&(!uuid.test(String(b.rerun_request_id??''))||!Number.isInteger(Number(b.expected_source_state_version))))errors.push('RESOLUTION_SCOPE_INVALID');const statusCode=errors.includes('AUTHORIZATION_REQUIRED')?401:400;return [{json:{valid:errors.length===0,errors,status_code:statusCode,authorization,command,project_id:b.project_id??null,source_run_id:b.source_run_id??null,target_module:target,rerun_request_id:b.rerun_request_id??null,expected_source_state_version:Number(b.expected_source_state_version??0),idempotency_key:String(b.idempotency_key??`rerun-${Date.now()}`).slice(0,200),correlation_id:String(b.correlation_id??`bp-rerun-${Date.now()}`).slice(0,200)}}];"
+      },
+      "id": "8975a777-9114-549a-adbf-a22a57babc3f",
+      "name": "Validate Rerun Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1060,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2dbdebb8-f46f-568f-a802-d462b25873b1",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3c68baad-eee7-5909-9331-23ac73a0a5a5",
+      "name": "Rerun Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/auth/v1/user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "e0d977bc-0b0e-55ca-9ff0-c61a22855577",
+      "name": "Verify Rerun Supabase User",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -620,
+        -100
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8c5f3cef-1a2c-5d08-b338-bb6b7ffb8fea",
+              "leftValue": "={{ /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test($json.id ?? '') }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2b9fb596-49eb-5f91-9c73-44d3728688ff",
+      "name": "Rerun User Authenticated?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dcda49bd-20eb-552d-a3e4-5a54ea106f16",
+              "leftValue": "={{ $('Validate Rerun Request').item.json.command === 'PREVIEW' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3a3576b3-eedf-5e87-bde5-ad967de0cd9c",
+      "name": "Preview Requested?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -180,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Validate Rerun Request').first().json;return [{json:{...x,rpc_body:{p_project_id:x.project_id,p_source_run_id:x.source_run_id,p_target_module:x.target_module,p_idempotency_key:x.idempotency_key}}}];"
+      },
+      "id": "0b28b4b4-1eac-595a-bc8f-32fe6fc812f7",
+      "name": "Prepare Research Rerun Preview",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/preview_research_rerun",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "10737787-fe00-5e2d-96af-7b761cb2815c",
+      "name": "Create Durable Rerun Preview",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        260,
+        -280
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const p=$json??{};const req=$('Prepare Research Rerun Preview').first().json;const rr=p.rerun_request??{};const cp=p.checkpoint??{};const ok=Boolean(rr.id&&cp.id);return [{json:{status_code:ok?200:500,response:ok?{ok:true,status:'NEEDS_CONFIRMATION',command:'PREVIEW',rerun_request_id:rr.id,checkpoint_id:cp.id,target_module:req.target_module,expected_source_state_version:Number(rr.impact?.source_state_version??cp.state_version??0),impact:rr.impact,available_decisions:cp.available_decisions??['APPROVE','CANCEL'],correlation_id:req.correlation_id}:{ok:false,error_code:'RERUN_PREVIEW_FAILED',message:'Blueprint could not create a durable rerun preview. Nothing was rerun.',correlation_id:req.correlation_id}}}];"
+      },
+      "id": "a72e817b-ad1c-5b64-91ca-e73f10649798",
+      "name": "Build Rerun Preview Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "67bd1091-1d2d-5dba-8a4d-ba17775afb7d",
+      "name": "Respond Rerun Preview",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        -280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$('Validate Rerun Request').first().json;return [{json:{...x,rpc_body:{p_rerun_request_id:x.rerun_request_id,p_decision:x.command,p_expected_source_state_version:x.expected_source_state_version}}}];"
+      },
+      "id": "c77ca829-d67e-585e-8247-28ba7eef4236",
+      "name": "Prepare Rerun Resolution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/resolve_profile_rerun",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "08180dc1-20f6-5866-aebb-b85a7b1230d6",
+      "name": "Resolve Approved Research Rerun",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        260,
+        -80
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Prepare Rerun Resolution').first().json;const p=$json??{};const approved=p.decision==='APPROVE'&&p.target_run?.id&&p.rerun_request?.target_profile_version;const cancelled=p.decision==='CANCEL';const requested=Array.isArray(p.profile?.requested_research)?p.profile.requested_research:[];return [{json:{...req,resolution:p,approved:Boolean(approved),cancelled,dispatch_required:Boolean(approved),project_id:p.target_run?.project_id??p.rerun_request?.project_id??null,run_id:p.target_run?.id??null,profile_version:Number(p.rerun_request?.target_profile_version??0),profile:p.profile??{},requested_research:requested,response:approved?{ok:true,status:'QUEUED',command:'APPROVE',project_id:p.target_run.project_id,run_id:p.target_run.id,profile_version:Number(p.rerun_request.target_profile_version),message:'The approved research rerun was queued through the dynamic Supervisor.',poll_after_ms:2000,correlation_id:req.correlation_id}:cancelled?{ok:true,status:'CANCELLED',command:'CANCEL',message:'The rerun was cancelled; no new research run was created.',correlation_id:req.correlation_id}:{ok:false,status:'SAFE_FAILED',error_code:'RERUN_RESOLUTION_FAILED',message:'The rerun decision could not be resolved safely.',correlation_id:req.correlation_id}}}];"
+      },
+      "id": "f4a00226-1b3d-56a4-bd46-514c9447ba1d",
+      "name": "Classify Rerun Resolution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "20b4c1a7-a850-507d-b934-7980e1ef638b",
+              "leftValue": "={{ $json.dispatch_required }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6a4f92c7-aa44-5d1e-9be1-b7c1bb3529c0",
+      "name": "Approved Rerun Needs Dispatch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        700,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{command:'START',authorization:x.authorization,project_id:x.project_id,run_id:x.run_id,profile_version:x.profile_version,idea_text:String(x.profile.idea_text??''),optional_industry:x.profile.optional_industry??null,geography:x.profile.geography??null,requested_research:x.requested_research,planning_mode:'DISCOVER',founder_inputs:x.profile.constraints??{},profile:x.profile,controller_cycle:0,correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "da87b3ab-7ab1-54e2-b5a3-f2eab4ec5583",
+      "name": "Prepare Approved Rerun Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bp00Supervisor",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "f69ae095-09d8-51a3-bb6a-2ff94fd9a058",
+      "name": "Dispatch Approved Rerun to BP-00",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1140,
+        -160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "99224160-a44e-534e-96e4-2f89acac88e2",
+      "name": "Respond Rerun Resolution",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ok:false,error_code:$json.status_code===401?'UNAUTHENTICATED':'INVALID_RERUN_REQUEST',message:$json.status_code===401?'Please sign in before requesting a rerun.':'Check the rerun scope and try again.',correlation_id:$json.correlation_id}) }}",
+        "options": {
+          "responseCode": "={{ $json.status_code ?? 200 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "f01cfc31-f85a-564e-a684-f50b9ceb0595",
+      "name": "Respond Invalid Rerun Request",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -620,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ok:false,error_code:'UNAUTHENTICATED',message:'Your session is invalid or expired. Please sign in again.',correlation_id:$('Validate Rerun Request').item.json.correlation_id}) }}",
+        "options": {
+          "responseCode": "={{ 401 }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b83650ea-a5fa-51ef-b016-5e65744960a4",
+      "name": "Respond Invalid Rerun Session",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -180,
+        60
+      ]
+    }
+  ],
+  "connections": {
+    "POST Blueprint Research Rerun": {
+      "main": [
+        [
+          {
+            "node": "Validate Rerun Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Rerun Request": {
+      "main": [
+        [
+          {
+            "node": "Rerun Request Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rerun Request Valid?": {
+      "main": [
+        [
+          {
+            "node": "Verify Rerun Supabase User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Rerun Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Rerun Supabase User": {
+      "main": [
+        [
+          {
+            "node": "Rerun User Authenticated?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rerun User Authenticated?": {
+      "main": [
+        [
+          {
+            "node": "Preview Requested?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Rerun Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preview Requested?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Research Rerun Preview",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Rerun Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Research Rerun Preview": {
+      "main": [
+        [
+          {
+            "node": "Create Durable Rerun Preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Durable Rerun Preview": {
+      "main": [
+        [
+          {
+            "node": "Build Rerun Preview Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Rerun Preview Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Rerun Preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Rerun Resolution": {
+      "main": [
+        [
+          {
+            "node": "Resolve Approved Research Rerun",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Approved Research Rerun": {
+      "main": [
+        [
+          {
+            "node": "Classify Rerun Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Rerun Resolution": {
+      "main": [
+        [
+          {
+            "node": "Approved Rerun Needs Dispatch?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Rerun Needs Dispatch?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Approved Rerun Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Rerun Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Approved Rerun Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Dispatch Approved Rerun to BP-00",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond Rerun Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "errorWorkflow": "bp90ErrorAudit01",
+    "executionTimeout": 120
+  },
+  "versionId": "c5e5090f-f246-59ee-a8be-a5f5761b8312",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

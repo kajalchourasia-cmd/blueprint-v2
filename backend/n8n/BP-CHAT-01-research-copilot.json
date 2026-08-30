@@ -398,7 +398,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const x=$input.first().json;const allowedEvidence=(x.context.accepted_evidence??[]).slice(0,30);const context={run:x.context.run??{},project:x.context.project??{},sections:x.context.sections??[],accepted_evidence:allowedEvidence,quality_checks:(x.context.quality_checks??[]).slice(0,5),approvals:(x.context.approvals??[]).slice(0,5),errors:(x.context.errors??[]).slice(0,5)};return [{json:{...x,request:{model:'Qwen/Qwen3-30B-A3B-Instruct-2507',temperature:0.1,max_tokens:1200,response_format:{type:'json_object'},messages:[{role:'system',content:'You are Blueprint Research Copilot. Answer only from the supplied project/run context and accepted evidence. Explain what was done, current status, evidence-supported findings, limitations, and next permitted steps. Every factual research statement must cite an evidence ID from the context. If the context does not answer the question, say UNKNOWN and suggest a bounded research module or founder input. Never claim to have run an action, never expose hidden reasoning, and never contact, send, publish, buy, book, pay, or delete. Return JSON with answer, citations array of accepted evidence IDs, suggested_actions array, limitations array.'},{role:'user',content:JSON.stringify({message:x.message,intent:x.intent,context})}]}}}];"
+        "jsCode": "const x=$input.first().json;const allowedEvidence=(x.context.accepted_evidence??[]).slice(0,40);const context={run:x.context.run??{},project:x.context.project??{},orchestration_tasks:(x.context.orchestration_tasks??[]).slice(0,20),current_blueprint:x.context.current_blueprint??null,latest_verdict:x.context.latest_verdict??null,next_actions:(x.context.next_actions??[]).slice(0,12),accepted_evidence:allowedEvidence,quality_checks:(x.context.quality_checks??[]).slice(0,5),errors:(x.context.errors??[]).slice(0,5)};return [{json:{...x,request:{model:'Qwen/Qwen3-30B-A3B-Instruct-2507',temperature:0.1,max_tokens:1400,response_format:{type:'json_object'},messages:[{role:'system',content:'You are Ask This Research, Blueprint Evidence Dev\\'s project-grounded assistant. Answer only from the supplied run, dynamic task outputs, current immutable Blueprint, verdict, actionables, and accepted evidence. Explain findings, sources, limitations, and how the founder can complete an existing actionable. Never invent a metric, source, customer quote, or next action. Every factual external claim must cite an accepted evidence ID. If evidence is insufficient, say UNKNOWN and suggest one of customer_demand, competitor_intelligence, or market_economics for a human-approved rerun. A rerun request is only a proposal: never claim it executed. Never expose hidden reasoning or contact, send, publish, buy, book, pay, or delete. Return JSON with answer, citations array of accepted evidence IDs, suggested_actions array, limitations array.'},{role:'user',content:JSON.stringify({message:x.message,intent:x.intent,context})}]}}}];"
       },
       "id": "c8f48a22-0147-5ed2-b5a4-d7c58179dcf9",
       "name": "Prepare Grounded Copilot Answer",
@@ -424,7 +424,7 @@
         }
       },
       "id": "78ea5cb3-b247-5402-91ce-2be4a4500df2",
-      "name": "Nebius — Grounded Research Copilot",
+      "name": "Nebius \u2014 Grounded Research Copilot",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
@@ -839,14 +839,14 @@
       "main": [
         [
           {
-            "node": "Nebius — Grounded Research Copilot",
+            "node": "Nebius \u2014 Grounded Research Copilot",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Nebius — Grounded Research Copilot": {
+    "Nebius \u2014 Grounded Research Copilot": {
       "main": [
         [
           {

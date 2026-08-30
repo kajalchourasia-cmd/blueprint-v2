@@ -33,6 +33,11 @@ SENSITIVE_SESSION_KEYS = {
     "generation_error",
     "owned_blueprints",
     "owned_blueprints_error",
+    "bp_research_chat",
+    "bp_research_thread_id",
+    "bp_rerun_proposal",
+    "bp_rerun_preview",
+    "bp_rerun_idempotency_key",
 }
 
 

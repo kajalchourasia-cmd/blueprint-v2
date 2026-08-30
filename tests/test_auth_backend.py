@@ -6,7 +6,14 @@ from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from blueprint.auth import AUTH_STATE_KEY, clear_local_session, get_auth_session, sign_in
-from blueprint.backend import load_recent_blueprints, normalize_research_selection, start_blueprint
+from blueprint.backend import (
+    ask_research,
+    load_recent_blueprints,
+    normalize_research_selection,
+    preview_research_rerun,
+    resolve_research_rerun,
+    start_blueprint,
+)
 from blueprint.config import AppConfig
 
 
@@ -129,6 +136,31 @@ class BackendContractTests(unittest.TestCase):
             result = load_recent_blueprints(CONFIG)
         self.assertEqual(result[0]["latest_run"]["id"], "run-new")
         self.assertIsNone(result[1]["latest_run"])
+
+    def test_ask_research_uses_sibling_authenticated_webhook(self):
+        response = FakeResponse(200, {"status": "ANSWERED", "answer": "Grounded answer", "citations": []})
+        with patch("blueprint.backend._authenticated_request", return_value=response) as request:
+            result = ask_research("What did we learn?", project_id="project-1", run_id="run-1", config=CONFIG)
+        self.assertEqual(result["status"], "ANSWERED")
+        self.assertEqual(request.call_args.args[1], "https://n8n.example.test/webhook/blueprint/chat")
+        self.assertFalse(request.call_args.kwargs["json"]["confirmed_command"])
+
+    def test_rerun_is_preview_then_explicit_resolution(self):
+        preview_response = FakeResponse(200, {"ok": True, "status": "NEEDS_CONFIRMATION", "rerun_request_id": "rr-1"})
+        resolve_response = FakeResponse(202, {"ok": True, "status": "QUEUED", "run_id": "run-2"})
+        with patch("blueprint.backend._authenticated_request", side_effect=[preview_response, resolve_response]) as request:
+            preview = preview_research_rerun(
+                "market_economics",
+                project_id="project-1",
+                source_run_id="run-1",
+                idempotency_key="rerun-key-001",
+                config=CONFIG,
+            )
+            resolved = resolve_research_rerun("rr-1", 3, "APPROVE", config=CONFIG)
+        self.assertEqual(preview["status"], "NEEDS_CONFIRMATION")
+        self.assertEqual(resolved["run_id"], "run-2")
+        self.assertEqual(request.call_args_list[0].args[1], "https://n8n.example.test/webhook/blueprint/rerun")
+        self.assertEqual(request.call_args_list[1].kwargs["json"]["command"], "APPROVE")
 
 
 if __name__ == "__main__":

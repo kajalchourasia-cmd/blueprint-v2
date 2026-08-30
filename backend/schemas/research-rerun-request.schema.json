@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blueprint-evidence.dev/schemas/research-rerun-request.schema.json",
+  "title": "Blueprint Human-Approved Research Rerun Request",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "project_id", "source_run_id", "target_module", "idempotency_key"],
+      "properties": {
+        "command": { "const": "PREVIEW" },
+        "project_id": { "type": "string", "format": "uuid" },
+        "source_run_id": { "type": "string", "format": "uuid" },
+        "target_module": { "enum": ["customer_demand", "competitor_intelligence", "market_economics"] },
+        "idempotency_key": { "type": "string", "minLength": 8, "maxLength": 200 },
+        "correlation_id": { "type": "string", "maxLength": 200 }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "rerun_request_id", "expected_source_state_version"],
+      "properties": {
+        "command": { "enum": ["APPROVE", "CANCEL"] },
+        "rerun_request_id": { "type": "string", "format": "uuid" },
+        "expected_source_state_version": { "type": "integer", "minimum": 0 },
+        "correlation_id": { "type": "string", "maxLength": 200 }
+      }
+    }
+  ]
+}

@@ -4,13 +4,16 @@
   "title": "Blueprint Start Accepted Response",
   "type": "object",
   "additionalProperties": false,
-  "required": ["ok", "correlation_id", "project_id", "run_id", "status", "duplicate", "poll_after_ms"],
+  "required": ["ok", "correlation_id", "project_id", "run_id", "status", "profile_version", "duplicate", "poll_after_ms"],
   "properties": {
     "ok": { "const": true },
     "correlation_id": { "type": "string" },
     "project_id": { "type": "string", "format": "uuid" },
     "run_id": { "type": "string", "format": "uuid" },
-    "status": { "const": "NEW" },
+    "status": { "enum": ["NEW", "FRAMING", "NEEDS_INPUT", "PLANNING", "RESEARCHING", "AUDITING", "WAITING_APPROVAL", "SYNTHESIZING", "COMPLETED", "PARTIAL", "HUMAN_REVIEW", "SAFE_FAILED", "CANCELLED"] },
+    "state_version": { "type": "integer", "minimum": 0 },
+    "profile_version": { "type": "integer", "minimum": 1 },
+    "original_blueprint_version": { "type": "integer", "minimum": 1 },
     "duplicate": { "type": "boolean" },
     "created_at": { "type": "string", "format": "date-time" },
     "poll_after_ms": { "type": "integer", "minimum": 250 }

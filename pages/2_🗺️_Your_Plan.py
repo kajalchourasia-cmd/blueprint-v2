@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from blueprint.auth import handle_logout_query, require_auth
-from blueprint.backend_ui import render_backend_status_panel
+from blueprint.backend_ui import render_backend_status_panel, render_research_workspace
 from blueprint.product_dashboard_v2 import render_product_dashboard_v2
 from blueprint.blueprint_map import render_blueprint_map
 from blueprint.coach import chat
@@ -43,6 +43,7 @@ if st.query_params.get("view") == "blueprint":
     st.stop()
 else:
     render_backend_status_panel()
+    render_research_workspace()
     render_product_dashboard_v2()
     st.stop()
 

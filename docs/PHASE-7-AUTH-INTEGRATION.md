@@ -31,9 +31,12 @@ Blueprint never sends, contacts, publishes, pays, purchases, books, or deletes e
 6. Repeat with a second user and prove that neither user can see the other's project/run.
 7. For Streamlit Cloud, replace the local webhook with a public HTTPS n8n endpoint.
 
-## Next UI binding work
+## Phase 7 integration status — updated after canonical-path convergence
 
-- Replace remaining CSV/demo dashboard values with dynamic Supabase Blueprint sections and measured signals.
-- Add detailed source/evidence views and version comparison.
-- Add profile edit + impact preview + targeted/full rerun controls.
-- Keep Ask Blueprint/chat held until the staged core journey passes authenticated acceptance.
+- **7A:** authenticated start now creates the owner-scoped project/run, immutable profile v1, and Original Blueprint before dispatch.
+- **7B:** the public start webhook now invokes the dynamic Planner → Scheduler → typed Stage 1 workers → independent audit → deterministic verdict → immutable synthesis loop under the existing `bp00Supervisor` ID.
+- **7C:** Streamlit now reads and renders live status, detailed research sections, sources, risks, unknowns, actionables, verdicts, and founder checkpoints. The older dashboard remains below it so visual redesign can happen without changing backend contracts.
+- **7D:** workflow/component evaluation passes 77/77 and Python auth/backend tests pass 9/9.
+- **7E:** Ask this Research retrieves only the current owner's dynamic outputs, Blueprint, verdict, actionables, and accepted evidence. A rerun is proposal → impact preview → explicit approve/cancel; natural-language chat cannot silently execute it.
+
+Still required for final acceptance: one real signed-in golden journey, a second-user isolation journey, and a cloud-reachable HTTPS n8n URL before Streamlit Community Cloud deployment.

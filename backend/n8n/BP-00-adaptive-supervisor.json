@@ -1,54 +1,30 @@
 {
   "id": "bp00Supervisor",
-  "name": "BP-00 Adaptive Supervisor",
+  "name": "BP-00 Dynamic Evidence Supervisor",
   "nodes": [
-    {
-      "parameters": {},
-      "id": "49fd9117-22af-54a2-9c51-5c0917f3f809",
-      "name": "Run Supervisor Test",
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -1080,
-        -180
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "return [{json:{command:'START',idea_text:'A private evidence workspace that helps an early-stage founder validate an existing product idea before committing a large build budget.',optional_industry:'Founder tools',geography:'Global',requested_modules:['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'],founder_inputs:{available_budget:5000,monthly_build_budget:1000,hours_per_week:12,target_monthly_price:49,currency:'USD',current_stage:'idea',work_completed:[],constraints:['solo founder']},correlation_id:'bp-supervisor-safe-test',state:{transition_count:0,search_cycle_count:0,tool_call_count:0,revision_count:0},test_mode:true}}];"
-      },
-      "id": "9ad935bd-4c54-5f25-aee3-ff0d5489c25e",
-      "name": "Create Safe Supervisor Fixture",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -860,
-        -180
-      ]
-    },
     {
       "parameters": {
         "inputSource": "passthrough"
       },
-      "id": "b5d31dc8-49c4-55c2-8868-9acfbe45cb7f",
-      "name": "When Called by Start Chat or Resume",
+      "id": "c5458735-b1e4-5ba5-a6cc-f9e309fe8701",
+      "name": "When Called by Authenticated Start",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.2,
       "position": [
-        -1080,
-        80
+        -1500,
+        0
       ]
     },
     {
       "parameters": {
-        "jsCode": "const src=$input.first()?.json??{};const command=String(src.command??'START').toUpperCase();const allowedCommands=['START','RESUME','RUN_MODULE','ANSWER_CHAT','CANCEL'];if(!allowedCommands.includes(command))throw new Error('SUPERVISOR_COMMAND_INVALID');const idea=String(src.idea_text??src.state?.project?.idea_text??'').trim();const forbidden=['recipient','email_to','message_to','phone_number','payment','publish_target','delete_target'];const forbiddenFields=forbidden.filter(k=>src[k]!=null);const actionText=String(src.message??'').trim();const operational=/\\b(send|email|message|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(actionText);const draftOnly=/\\b(draft|write|prepare)\\b/i.test(actionText)&&!/\\b(send|ping|call|contact|post|publish|buy|pay|book|schedule|delete|remove)\\b/i.test(actionText);const external=operational&&!draftOnly;const allowedModules=['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation','launch_distribution','growth_optimization'];const requested=Array.isArray(src.requested_modules)?[...new Set(src.requested_modules.filter(x=>allowedModules.includes(x)))]:[];const s=src.state&&typeof src.state==='object'?src.state:{};const counters={transition_count:Number(s.transition_count??0),search_cycle_count:Number(s.search_cycle_count??0),tool_call_count:Number(s.tool_call_count??0),revision_count:Number(s.revision_count??0)};const budgetExceeded=counters.transition_count>=20||counters.search_cycle_count>=3||counters.tool_call_count>=80||counters.revision_count>=3;const scopeDenied=forbiddenFields.length>0||external;const missing=[];if(command!=='CANCEL'&&idea.length<10)missing.push('Describe the product or business idea in at least one clear sentence.');const route=scopeDenied?{route:'SAFE_FAIL',reason_code:'OUT_OF_SCOPE',confidence:1,next_status:'SAFE_FAILED',requires_human:false,terminal:true}:budgetExceeded?{route:'SAFE_FAIL',reason_code:'RUN_BUDGET_EXHAUSTED',confidence:1,next_status:'SAFE_FAILED',requires_human:false,terminal:true}:command==='CANCEL'?{route:'CANCEL',reason_code:'FOUNDER_CANCELLED',confidence:1,next_status:'CANCELLED',requires_human:false,terminal:true}:missing.length?{route:'FOUNDER_INPUT',reason_code:'MISSING_IDEA',confidence:1,next_status:'NEEDS_INPUT',requires_human:true,terminal:false}:{route:'RESEARCH_SUITE',reason_code:command==='RUN_MODULE'?'FOUNDER_REQUESTED_MODULE':'VALID_START',confidence:1,next_status:'RESEARCHING',requires_human:false,terminal:false};return [{json:{schema_version:'bp-supervisor-state-v1',command,authorization:String(src.authorization??''),owner_id:src.owner_id??null,project_id:src.project_id??null,run_id:src.run_id??null,correlation_id:String(src.correlation_id??`bp-supervisor-${Date.now()}`).slice(0,200),idea_text:idea,optional_industry:String(src.optional_industry??'').trim()||null,geography:String(src.geography??'').trim()||null,requested_modules:requested.length?requested:['foundation','customer_demand','competitor_intelligence','market_economics','financial_readiness','validation'],founder_inputs:src.founder_inputs&&typeof src.founder_inputs==='object'?src.founder_inputs:{},human_decision:src.human_decision??null,state:s,test_mode:src.test_mode===true,route_decision:{...route,missing_information:missing,allowed_next_routes:route.route==='RESEARCH_SUITE'?['BLUEPRINT_QUALITY','FOUNDER_INPUT','HUMAN_REVIEW','PARTIAL_COMPLETE']:[],route_evidence:[route.reason_code],budget_snapshot:counters},should_execute_core:route.route==='RESEARCH_SUITE'}}];"
+        "jsCode": "const src=$input.first()?.json??{};const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String(src.authorization??'').trim();const aliases={user_research:'customer_demand',customer_research:'customer_demand',customer_demand:'customer_demand',competitor_research:'competitor_intelligence',competitor_intelligence:'competitor_intelligence',market_research:'market_economics',market_economics:'market_economics'};const selected=[...new Set((Array.isArray(src.requested_research)?src.requested_research:[]).map(x=>aliases[String(x).toLowerCase()]).filter(Boolean))];const valid=src.command==='START'&&uuid.test(String(src.project_id??''))&&uuid.test(String(src.run_id??''))&&Number(src.profile_version)>0&&/^Bearer\\s+\\S+$/i.test(authorization)&&selected.length>0;return [{json:{...src,authorization,requested_research:selected,planning_mode:'DISCOVER',profile_version:Number(src.profile_version??0),controller_cycle:Math.max(0,Math.trunc(Number(src.controller_cycle??0))),claim_limit:1,valid,error_code:valid?null:'INVALID_CANONICAL_START',safe_message:valid?'Authenticated dynamic orchestration accepted.':'The start contract is incomplete, so no autonomous work was dispatched.'}}];"
       },
-      "id": "0784216c-a592-507b-bdd8-a4add161d935",
-      "name": "Validate Supervisor Contract and Guard Scope",
+      "id": "715a54a9-872f-5605-bd5e-0c62d7b42fd2",
+      "name": "Normalize Canonical Supervisor Command",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -620,
+        -1280,
         0
       ]
     },
@@ -63,8 +39,8 @@
           },
           "conditions": [
             {
-              "id": "467ef998-4dd8-5e65-be23-91cb3aa58a1e",
-              "leftValue": "={{ $json.should_execute_core }}",
+              "id": "dd7524a2-ef5c-592c-ab4f-8d52a49ce192",
+              "leftValue": "={{ $json.valid }}",
               "rightValue": true,
               "operator": {
                 "type": "boolean",
@@ -77,198 +53,32 @@
         },
         "options": {}
       },
-      "id": "fb32d903-7275-5a2a-9583-63a61a573b27",
-      "name": "Run Research Engine?",
+      "id": "ba7f95b2-2948-586b-9ea4-80d4299de41a",
+      "name": "Canonical Command Valid?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -380,
+        -1060,
         0
       ]
     },
     {
       "parameters": {
-        "jsCode": "const x=$input.first().json;const denied=x.route_decision.reason_code==='OUT_OF_SCOPE';return [{json:{schema_version:'bp-supervisor-result-v1',status:x.route_decision.next_status,route:x.route_decision.route,terminal:x.route_decision.terminal,requires_human:x.route_decision.requires_human,message:denied?'Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.':(x.route_decision.route==='FOUNDER_INPUT'?x.route_decision.missing_information[0]:(x.route_decision.route==='CANCEL'?'The Blueprint run was cancelled safely.':'The run reached a configured safety limit and stopped safely.')),missing_information:x.route_decision.missing_information,route_decision:x.route_decision,correlation_id:x.correlation_id,persistence_envelope:{owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id}}}];"
+        "jsCode": "const x=$json;return [{json:{...x,rpc_body:{p_run_id:x.run_id}}}];"
       },
-      "id": "9e11a7b5-f49e-5c3e-b70c-efd6d6074800",
-      "name": "Build Visible Supervisor Outcome",
+      "id": "d3b36c52-435c-5c6e-939f-877afc751e52",
+      "name": "Prepare Dynamic Run State",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -140,
-        160
-      ]
-    },
-    {
-      "parameters": {
-        "source": "database",
-        "workflowId": {
-          "__rl": true,
-          "value": "bpCore45Evidence01",
-          "mode": "id"
-        },
-        "mode": "once",
-        "options": {
-          "waitForSubWorkflow": true
-        }
-      },
-      "id": "7c082a76-f000-5539-b43f-ef42ba4fb83c",
-      "name": "Execute BP-CORE-45 Research Engine",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        -140,
+        -840,
         -120
-      ],
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "jsCode": "const b=$input.first()?.json??{};const hasBlueprint=b.schema_version==='bp-blueprint-v1'&&Array.isArray(b.sections);if(!hasBlueprint)throw new Error('RESEARCH_ENGINE_INVALID_OUTPUT');const needsHuman=['HUMAN_REVIEW','NEEDS_INPUT','SAFE_FAILED'].includes(b.status)||['HUMAN_REVIEW','FOUNDER_INPUT','SAFE_FAIL'].includes(b.next_route);return [{json:{blueprint:b,revision_count:Number(b.audit?.revision_count??0),correlation_id:b.persistence_envelope?.correlation_id??'bp-supervisor',research_requires_human:needsHuman,supervisor_route:needsHuman?'HUMAN_REVIEW':'BLUEPRINT_QUALITY'}}];"
-      },
-      "id": "2a621855-4a43-59d8-9db6-e8dd0b4c4016",
-      "name": "Inspect Research Result and Route",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        100,
-        -120
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "8027eefb-6b6e-51e5-a9c8-4e3df95d5d05",
-              "leftValue": "={{ $json.research_requires_human }}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "146dbef4-8c9a-5b78-a7a2-6a483a07df08",
-      "name": "Research Needs Human?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        340,
-        -120
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const x=$input.first().json;return [{json:{schema_version:'bp-supervisor-result-v1',status:'HUMAN_REVIEW',route:'HUMAN_REVIEW',terminal:false,requires_human:true,message:'Research completed partially and needs a founder decision or clarification before it can continue.',blueprint:x.blueprint,questions:x.blueprint.sections.flatMap(s=>s.open_questions??[]).slice(0,8),limitations:x.blueprint.limitations??[],correlation_id:x.correlation_id}}];"
-      },
-      "id": "796cd5e1-dfa3-5b42-8ce2-5dc1d2126baf",
-      "name": "Build Research Human Checkpoint",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        580,
-        20
-      ]
-    },
-    {
-      "parameters": {
-        "source": "database",
-        "workflowId": {
-          "__rl": true,
-          "value": "bpQa01BlueprintQuality",
-          "mode": "id"
-        },
-        "mode": "once",
-        "options": {
-          "waitForSubWorkflow": true
-        }
-      },
-      "id": "1f1670d6-5387-5715-a0c3-1668c06131dd",
-      "name": "Execute BP-QA-01 Quality Gate",
-      "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.3,
-      "position": [
-        580,
-        -220
-      ],
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "jsCode": "const q=$input.first()?.json??{};if(!q.quality||!q.blueprint)throw new Error('QUALITY_GATE_INVALID_OUTPUT');const pass=q.status==='QUALITY_PASSED'&&q.quality.verdict==='PASS';const human=q.status==='HUMAN_REVIEW'||q.quality.requires_human===true;const citations=(q.blueprint.citations??[]).filter(c=>['ACCEPT','ACCEPT_WITH_LIMITATION'].includes(c.auditor_verdict));return [{json:{schema_version:'bp-supervisor-result-v1',status:pass?'COMPLETED':(human?'HUMAN_REVIEW':'PARTIAL'),route:pass?'MEMORY_INDEX':(human?'HUMAN_REVIEW':'PARTIAL_COMPLETE'),terminal:pass||!human,requires_human:human,message:pass?'Blueprint passed the independent final quality gate. Accepted evidence is ready for project-isolated memory indexing.':(human?'The Blueprint needs a founder or reviewer decision.':'The best safe partial Blueprint has been preserved with its quality warning.'),blueprint:q.blueprint,quality:q.quality,revision_count:q.revision_count,quality_improved:q.quality_improved,accepted_evidence_for_memory:pass?citations:[],memory_write_authorized:pass,correlation_id:q.correlation_id,agent_trace:[...(q.agent_trace??[]),{agent:'SUPERVISOR',status:pass?'SUCCEEDED':(human?'PARTIAL':'SUCCEEDED'),route:pass?'MEMORY_INDEX':(human?'HUMAN_REVIEW':'PARTIAL_COMPLETE')}],persistence_envelope:q.blueprint.persistence_envelope??{}}}];"
-      },
-      "id": "4ee003f7-f0fa-52cd-9e7e-24ff3bbe09db",
-      "name": "Finalize Supervisor Decision",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        820,
-        -220
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const result=$input.first()?.json??{};const v=$('Validate Supervisor Contract and Guard Scope').first().json;const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const enriched={...result,command:v.command,owner_id:v.owner_id,project_id:v.project_id,run_id:v.run_id,persistence_envelope:{...(result.persistence_envelope??{}),owner_id:v.owner_id,project_id:v.project_id,run_id:v.run_id,correlation_id:v.correlation_id}};const persist_required=!v.test_mode&&uuid.test(String(v.owner_id??''))&&uuid.test(String(v.project_id??''))&&uuid.test(String(v.run_id??''))&&/^Bearer\\s+\\S+$/i.test(v.authorization);return [{json:{result:enriched,persist_required,authorization:v.authorization,rpc_body:{p_result:enriched}}}];"
-      },
-      "id": "c860b84b-d557-5c95-8c10-e529407c56d2",
-      "name": "Prepare Supervisor Persistence",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1060,
-        -20
-      ]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "b8195091-55e2-580d-beb8-fdab9fdf30a3",
-              "leftValue": "={{ $json.persist_required }}",
-              "rightValue": true,
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "5dd364bb-1226-5c87-9045-c77254768460",
-      "name": "Persist Production Supervisor Result?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1300,
-        -20
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/persist_supervisor_result",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/prepare_dynamic_run",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
@@ -292,12 +102,12 @@
           "timeout": 20000
         }
       },
-      "id": "0c1e2b56-2c00-5e95-bbe2-940de0f962eb",
-      "name": "Persist Supervisor Result Atomically",
+      "id": "1b7200bc-d5fb-52e2-aca2-f5a0b92eb8c4",
+      "name": "Prepare or Resume Dynamic Run",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        1540,
+        -620,
         -120
       ],
       "credentials": {
@@ -310,212 +120,620 @@
     },
     {
       "parameters": {
-        "jsCode": "const prep=$('Prepare Supervisor Persistence').first().json;const p=$input.first()?.json??{};if(p.error||p.persisted!==true)return [{json:{...prep.result,status:'HUMAN_REVIEW',route:'HUMAN_REVIEW',terminal:false,requires_human:true,message:'The research result was preserved in this execution, but durable persistence failed. Review the audit before retrying.',persistence:{persisted:false,reason:'SUPABASE_PERSISTENCE_FAILED'}}}];return [{json:{...prep.result,persistence:p}}];"
+        "jsCode": "const base=$('Prepare Dynamic Run State').first().json;const raw=$input.first()?.json??{};const ok=raw.prepared===true&&raw.run&&raw.run.id===base.run_id;return [{json:{...base,prepare_ok:ok,prepared:raw,should_plan:ok&&raw.should_plan===true,can_work:ok&&!raw.terminal&&!raw.waiting_for_human,controller_status:ok?(raw.waiting_for_human?'WAITING_APPROVAL':raw.terminal?raw.run.status:'PLANNING'):'HUMAN_REVIEW',controller_route:ok?(raw.waiting_for_human?'HITL_RESUME':raw.terminal?'COMPLETE':'TASK_PLANNER'):'HUMAN_REVIEW',requires_human:!ok||raw.waiting_for_human===true,terminal:raw.terminal===true,message:ok?'Dynamic run state prepared.':'The supervisor could not prepare durable run state; the run was stopped safely.',provider_response:ok?undefined:raw}}];"
       },
-      "id": "dbad192a-486e-52c5-a02d-6f132cde1b8a",
-      "name": "Return Persisted Supervisor Result",
+      "id": "9825b1c0-e998-5d9b-a8ba-0b0088225ebd",
+      "name": "Bind Prepared Run State",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1780,
+        -400,
         -120
       ]
     },
     {
       "parameters": {
-        "jsCode": "const x=$input.first().json;return [{json:{...x.result,persistence:{persisted:false,reason:$('Validate Supervisor Contract and Guard Scope').first().json.test_mode?'TEST_MODE':'AUTHENTICATED_CONTEXT_REQUIRED'}}}];"
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2dc84b1c-78cd-502a-9e2b-aef4b1dff511",
+              "leftValue": "={{ $json.can_work }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
-      "id": "ef808ad0-0565-5f6d-a4bc-a96d21e86b95",
-      "name": "Return Nonproduction Supervisor Result",
+      "id": "6a3104bd-d71e-500a-9ac3-d177f496bbb8",
+      "name": "Run Can Continue?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -180,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "31d22252-8752-5672-a88e-c5e0010896df",
+              "leftValue": "={{ $json.should_plan }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "beb95ffb-6c38-5bd7-9db3-74d6664b4025",
+      "name": "Dynamic Plan Needed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        40,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpPlan01DynamicTaskPlanner",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "63d2f2a4-050c-566e-b9cd-f277ac0eb5cd",
+      "name": "Execute Dynamic Task Planner",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        260,
+        -300
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{...x,status:'PLANNED',route:'TASK_SCHEDULER',requires_human:false,terminal:false,message:'Existing durable task graph will be resumed.'}}];"
+      },
+      "id": "8960a14d-dd93-5e11-89ba-695e1cf9f371",
+      "name": "Use Existing Durable Plan",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1540,
-        100
+        260,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Bind Prepared Run State').first().json;const decision=$input.first()?.json??{};const schedulable=decision.route==='TASK_SCHEDULER'&&decision.requires_human!==true;return [{json:{...base,plan_decision:decision,schedulable,controller_status:schedulable?'PLANNED':'HUMAN_REVIEW',controller_route:schedulable?'TASK_SCHEDULER':(decision.route??'HUMAN_REVIEW'),requires_human:!schedulable,message:decision.message??(schedulable?'Task graph ready.':'Task planning stopped safely.')}}];"
+      },
+      "id": "47688aae-47e4-56e9-b31f-2594a8e4635d",
+      "name": "Bind Planner Decision",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "71462fa6-59c2-59ac-a311-97a17e343cd1",
+              "leftValue": "={{ $json.schedulable }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "89342ec8-47c0-59a6-b321-e65af386d12b",
+      "name": "Plan Schedulable?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        700,
+        -220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{authorization:x.authorization,owner_id:x.owner_id,project_id:x.project_id,run_id:x.run_id,profile_version:x.profile_version,idea_text:x.idea_text,profile:x.profile??x.founder_inputs??{},requested_research:x.requested_research,claim_limit:1,controller_cycle:Number(x.controller_cycle??0),correlation_id:x.correlation_id,test_mode:false}}];"
+      },
+      "id": "6ad205fb-9c04-5909-a859-3db31f75e538",
+      "name": "Build Scheduler Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpSched01EligibleTaskScheduler",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "b21bf396-7faf-54b3-bf0a-e8183fe34df2",
+      "name": "Execute One Eligible Task",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1140,
+        -300
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cycle=$json.controller_cycle??$('Build Scheduler Request').first().json.controller_cycle??0;return [{json:{scheduler_result:$json,authorization:$json.authorization??$('Build Scheduler Request').first().json.authorization,run_id:$json.run_id??$('Build Scheduler Request').first().json.run_id,project_id:$json.project_id??$('Build Scheduler Request').first().json.project_id,profile_version:$json.profile_version??$('Build Scheduler Request').first().json.profile_version,idea_text:$('Build Scheduler Request').first().json.idea_text,profile:$('Build Scheduler Request').first().json.profile,requested_research:$('Build Scheduler Request').first().json.requested_research,correlation_id:$json.correlation_id??$('Build Scheduler Request').first().json.correlation_id,controller_cycle:Number(cycle),rpc_body:{p_run_id:$json.run_id??$('Build Scheduler Request').first().json.run_id}}}];"
+      },
+      "id": "c5792154-d819-57f7-b98e-cd12de09c177",
+      "name": "Prepare Durable Snapshot Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gudsbrmphrokpnzmrlqd.supabase.co/rest/v1/rpc/get_orchestration_run_snapshot",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $json.authorization }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.rpc_body) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "4ff3fa8e-0ca8-5592-89c5-32e7804229bc",
+      "name": "Load Durable Orchestration Snapshot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1580,
+        -300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fguxqwSfKfj2xfo9",
+          "name": "BP Supabase Public"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Prepare Durable Snapshot Request').first().json;const snapshot=$input.first()?.json??{};const snapshotOk=snapshot.schema_version==='bp-orchestration-run-snapshot-v1'&&snapshot.run?.id===base.run_id;return [{json:{...base,snapshot:snapshotOk?snapshot:{run:{id:base.run_id},tasks:[],pending_checkpoints:[]},snapshot_ok:snapshotOk,transition_count:Number(base.controller_cycle??0),test_mode:false}}];"
+      },
+      "id": "66b50adf-9c1f-5289-a768-9b7c4c23954c",
+      "name": "Bind Snapshot for Re-evaluation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "bpSupervisorReeval01",
+          "mode": "id"
+        },
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "c3ad37d4-6133-5d12-8789-2683c4f66e1d",
+      "name": "Re-evaluate Durable State",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2020,
+        -300
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const base=$('Bind Snapshot for Re-evaluation').first().json;const decision=$input.first()?.json??{};const cycle=Number(base.controller_cycle??0)+1;const snapshotOk=base.snapshot_ok===true;let route=snapshotOk?(decision.route??'HUMAN_REVIEW'):'HUMAN_REVIEW';let status=snapshotOk?(decision.status??'HUMAN_REVIEW'):'HUMAN_REVIEW';let requiresHuman=!snapshotOk||decision.requires_human===true;let message=snapshotOk?(decision.reason??decision.message??'Supervisor re-evaluated durable state.'):'The durable snapshot could not be loaded; orchestration stopped safely.';if(route==='TASK_SCHEDULER'&&cycle>=12){route='HUMAN_REVIEW';status='HUMAN_REVIEW';requiresHuman=true;message='The bounded controller reached 12 scheduling cycles and stopped for review.';}return [{json:{...base,decision:{...decision,route,status,requires_human:requiresHuman,reason:message},controller_cycle:cycle,continue_loop:route==='TASK_SCHEDULER'&&cycle<12,controller_status:status,controller_route:route,requires_human:requiresHuman,terminal:decision.terminal===true,message}}];"
+      },
+      "id": "d4ff5a6e-6dc1-515b-9316-ec37f3d2eef6",
+      "name": "Attach Bounded Controller Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ae84ed83-071b-5116-8720-5797d415027d",
+              "leftValue": "={{ $json.continue_loop }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "30a17d19-0ef1-5935-b17f-3068f4d209c1",
+      "name": "Another Eligible Task?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2460,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{schema_version:'bp-canonical-supervisor-result-v1',status:x.controller_status??'HUMAN_REVIEW',route:x.controller_route??'HUMAN_REVIEW',requires_human:x.requires_human===true,terminal:x.terminal===true,message:x.message??x.safe_message??'The supervisor stopped safely.',project_id:x.project_id??null,run_id:x.run_id??null,profile_version:Number(x.profile_version??0)||null,controller_cycles:Number(x.controller_cycle??0),correlation_id:x.correlation_id??null,panel_item:x.decision?.panel_item??{item_type:'HUMAN_REVIEW',severity:'HIGH',blocking:true,title:'Review required',message:x.message??x.safe_message??'The supervisor stopped safely.',allowed_decisions:[],next_route:x.controller_route??'HUMAN_REVIEW'},test_mode:false}}];"
+      },
+      "id": "948ff193-ad97-587c-9d3e-e2cd8c037d02",
+      "name": "Return Visible Dynamic Supervisor Outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2680,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const x=$json;return [{json:{schema_version:'bp-canonical-supervisor-result-v1',status:'SAFE_FAILED',route:'SAFE_FAIL',requires_human:true,terminal:true,message:x.safe_message,project_id:x.project_id??null,run_id:x.run_id??null,profile_version:Number(x.profile_version??0)||null,controller_cycles:0,correlation_id:x.correlation_id??null,panel_item:{item_type:'HUMAN_REVIEW',severity:'HIGH',blocking:true,title:'Start stopped safely',message:x.safe_message,allowed_decisions:['RETRY','CANCEL'],next_route:'HUMAN_REVIEW'},test_mode:false}}];"
+      },
+      "id": "36582f8b-1d89-5b92-af3c-ceccc7b246a0",
+      "name": "Return Invalid Canonical Start",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -840,
+        140
       ]
     }
   ],
   "connections": {
-    "Run Supervisor Test": {
+    "When Called by Authenticated Start": {
       "main": [
         [
           {
-            "node": "Create Safe Supervisor Fixture",
+            "node": "Normalize Canonical Supervisor Command",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Create Safe Supervisor Fixture": {
+    "Normalize Canonical Supervisor Command": {
       "main": [
         [
           {
-            "node": "Validate Supervisor Contract and Guard Scope",
+            "node": "Canonical Command Valid?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "When Called by Start Chat or Resume": {
+    "Canonical Command Valid?": {
       "main": [
         [
           {
-            "node": "Validate Supervisor Contract and Guard Scope",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Validate Supervisor Contract and Guard Scope": {
-      "main": [
-        [
-          {
-            "node": "Run Research Engine?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Run Research Engine?": {
-      "main": [
-        [
-          {
-            "node": "Execute BP-CORE-45 Research Engine",
+            "node": "Prepare Dynamic Run State",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Build Visible Supervisor Outcome",
+            "node": "Return Invalid Canonical Start",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Execute BP-CORE-45 Research Engine": {
+    "Prepare Dynamic Run State": {
       "main": [
         [
           {
-            "node": "Inspect Research Result and Route",
+            "node": "Prepare or Resume Dynamic Run",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Inspect Research Result and Route": {
+    "Prepare or Resume Dynamic Run": {
       "main": [
         [
           {
-            "node": "Research Needs Human?",
+            "node": "Bind Prepared Run State",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Research Needs Human?": {
+    "Bind Prepared Run State": {
       "main": [
         [
           {
-            "node": "Build Research Human Checkpoint",
+            "node": "Run Can Continue?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Can Continue?": {
+      "main": [
+        [
+          {
+            "node": "Dynamic Plan Needed?",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Execute BP-QA-01 Quality Gate",
+            "node": "Return Visible Dynamic Supervisor Outcome",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Execute BP-QA-01 Quality Gate": {
+    "Dynamic Plan Needed?": {
       "main": [
         [
           {
-            "node": "Finalize Supervisor Decision",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Build Visible Supervisor Outcome": {
-      "main": [
-        [
-          {
-            "node": "Prepare Supervisor Persistence",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Build Research Human Checkpoint": {
-      "main": [
-        [
-          {
-            "node": "Prepare Supervisor Persistence",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Finalize Supervisor Decision": {
-      "main": [
-        [
-          {
-            "node": "Prepare Supervisor Persistence",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare Supervisor Persistence": {
-      "main": [
-        [
-          {
-            "node": "Persist Production Supervisor Result?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Persist Production Supervisor Result?": {
-      "main": [
-        [
-          {
-            "node": "Persist Supervisor Result Atomically",
+            "node": "Execute Dynamic Task Planner",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Return Nonproduction Supervisor Result",
+            "node": "Use Existing Durable Plan",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Persist Supervisor Result Atomically": {
+    "Execute Dynamic Task Planner": {
       "main": [
         [
           {
-            "node": "Return Persisted Supervisor Result",
+            "node": "Bind Planner Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Existing Durable Plan": {
+      "main": [
+        [
+          {
+            "node": "Bind Planner Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bind Planner Decision": {
+      "main": [
+        [
+          {
+            "node": "Plan Schedulable?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Schedulable?": {
+      "main": [
+        [
+          {
+            "node": "Build Scheduler Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Visible Dynamic Supervisor Outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Scheduler Request": {
+      "main": [
+        [
+          {
+            "node": "Execute One Eligible Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute One Eligible Task": {
+      "main": [
+        [
+          {
+            "node": "Prepare Durable Snapshot Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Durable Snapshot Request": {
+      "main": [
+        [
+          {
+            "node": "Load Durable Orchestration Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Durable Orchestration Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Bind Snapshot for Re-evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bind Snapshot for Re-evaluation": {
+      "main": [
+        [
+          {
+            "node": "Re-evaluate Durable State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-evaluate Durable State": {
+      "main": [
+        [
+          {
+            "node": "Attach Bounded Controller Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Bounded Controller Context": {
+      "main": [
+        [
+          {
+            "node": "Another Eligible Task?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Another Eligible Task?": {
+      "main": [
+        [
+          {
+            "node": "Build Scheduler Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Visible Dynamic Supervisor Outcome",
             "type": "main",
             "index": 0
           }
@@ -529,7 +747,7 @@
     "executionOrder": "v1",
     "timezone": "Asia/Calcutta",
     "errorWorkflow": "bp90ErrorAudit01",
-    "executionTimeout": 240
+    "executionTimeout": 900
   },
   "versionId": "981618a1-2154-599f-9874-d59d85a01fca",
   "meta": {

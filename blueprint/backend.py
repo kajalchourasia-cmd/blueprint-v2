@@ -99,6 +99,12 @@ def make_idempotency_key() -> str:
     return f"streamlit-{uuid.uuid4()}"
 
 
+def _n8n_webhook(config: AppConfig, leaf: str) -> str:
+    """Keep all Blueprint webhooks on the same configured n8n public base."""
+    base = config.n8n_start_webhook_url.rsplit("/", 1)[0]
+    return f"{base}/{leaf.lstrip('/')}"
+
+
 def normalize_research_selection(selection: list[str] | None) -> list[str]:
     selected = selection or list(RESEARCH_MODULES)
     modules = [RESEARCH_MODULES.get(item, item) for item in selected]
@@ -216,6 +222,7 @@ def load_run_bundle(project_id: str, run_id: str, config: AppConfig | None = Non
         "control_panel": ("get_founder_control_panel", {"p_run_id": run_id}),
         "snapshot": ("get_orchestration_run_snapshot", {"p_run_id": run_id}),
         "blueprint": ("get_progressive_blueprint_dashboard", {"p_project_id": project_id}),
+        "research_context": ("get_supervisor_context", {"p_run_id": run_id}),
         "observability": ("get_run_observability", {"p_run_id": run_id}),
     }
     bundle: dict[str, Any] = {"project_id": project_id, "run_id": run_id, "loaded_at": time.time(), "errors": {}}
@@ -261,3 +268,84 @@ def resolve_founder_checkpoint(
     if not isinstance(result, dict):
         raise BackendError("The checkpoint response was not valid.", code="SCHEMA")
     return result
+
+
+def ask_research(
+    message: str,
+    *,
+    project_id: str,
+    run_id: str,
+    thread_id: str | None = None,
+    config: AppConfig | None = None,
+) -> dict[str, Any]:
+    """Ask only against the current owner's retrieved research context."""
+    config = config or load_config()
+    payload = {
+        "message": message.strip(),
+        "project_id": project_id,
+        "run_id": run_id,
+        "correlation_id": f"streamlit-chat-{uuid.uuid4()}",
+        "confirmed_command": False,
+    }
+    if thread_id:
+        payload["thread_id"] = thread_id
+    response = _authenticated_request(
+        "POST", _n8n_webhook(config, "chat"), config=config, json=payload
+    )
+    body = _json_or_empty(response)
+    if response.status_code not in {200, 202} or not isinstance(body, dict):
+        raise _safe_error(response, "Ask this Research could not answer safely.")
+    return body
+
+
+def preview_research_rerun(
+    target_module: str,
+    *,
+    project_id: str,
+    source_run_id: str,
+    idempotency_key: str,
+    config: AppConfig | None = None,
+) -> dict[str, Any]:
+    config = config or load_config()
+    response = _authenticated_request(
+        "POST",
+        _n8n_webhook(config, "rerun"),
+        config=config,
+        json={
+            "command": "PREVIEW",
+            "project_id": project_id,
+            "source_run_id": source_run_id,
+            "target_module": target_module,
+            "idempotency_key": idempotency_key,
+            "correlation_id": f"streamlit-rerun-preview-{uuid.uuid4()}",
+        },
+    )
+    body = _json_or_empty(response)
+    if response.status_code != 200 or not isinstance(body, dict) or not body.get("ok"):
+        raise _safe_error(response, "Blueprint could not create the rerun impact preview safely.")
+    return body
+
+
+def resolve_research_rerun(
+    rerun_request_id: str,
+    expected_source_state_version: int,
+    decision: str,
+    *,
+    config: AppConfig | None = None,
+) -> dict[str, Any]:
+    config = config or load_config()
+    response = _authenticated_request(
+        "POST",
+        _n8n_webhook(config, "rerun"),
+        config=config,
+        json={
+            "command": decision.upper(),
+            "rerun_request_id": rerun_request_id,
+            "expected_source_state_version": int(expected_source_state_version),
+            "correlation_id": f"streamlit-rerun-resolve-{uuid.uuid4()}",
+        },
+    )
+    body = _json_or_empty(response)
+    if response.status_code not in {200, 202} or not isinstance(body, dict) or not body.get("ok"):
+        raise _safe_error(response, "Blueprint could not apply the rerun decision safely.")
+    return body
