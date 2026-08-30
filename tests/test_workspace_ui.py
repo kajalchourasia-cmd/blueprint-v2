@@ -1,9 +1,13 @@
+import json
 import unittest
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from blueprint.workspace_ui import (
+    SECTION_PREVIEWS,
+    _instant_foundation,
     _local_chat_answer,
     _open_workspace_view,
     _project_title,
@@ -79,6 +83,33 @@ class WorkspaceRunningStateTests(unittest.TestCase):
         self.assertIsNone(_running_age_seconds(None))
         self.assertIsNone(_running_age_seconds({"updated_at": "not-a-timestamp"}))
 
+    def test_every_workspace_section_has_an_informative_waiting_preview(self):
+        self.assertIn("jobs", SECTION_PREVIEWS["customer_demand"][1])
+        self.assertIn("Direct, indirect", SECTION_PREVIEWS["competitor_intelligence"][1])
+        self.assertIn("beachhead", SECTION_PREVIEWS["market_economics"][1])
+
+    def test_foundation_can_be_structured_without_web_or_model_latency(self):
+        context = {
+            "project": {
+                "constraints": {
+                    "onboarding_answers": {
+                        "target_customer": ["Busy professionals"],
+                        "goal": "Validate demand",
+                        "hours_per_week": 6,
+                        "money_available": 0,
+                    }
+                }
+            }
+        }
+        fake_streamlit = SimpleNamespace(session_state={})
+        with patch("blueprint.workspace_ui.st", fake_streamlit):
+            result = _instant_foundation(context, "A fitness tracker for busy professionals")
+
+        self.assertEqual("foundation", result["module_key"])
+        self.assertIn("Busy professionals", result["target_user_boundary"])
+        self.assertTrue(result["assumptions"])
+        self.assertTrue(result["risks"])
+
 
 class WorkspaceNavigationTests(unittest.TestCase):
     def test_blueprint_round_trip_restores_the_active_run_and_section(self):
@@ -111,6 +142,48 @@ class WorkspaceNavigationTests(unittest.TestCase):
         self.assertNotIn("view", query_params)
         self.assertEqual("run-1", session_state["backend_run_id"])
         self.assertEqual("competitor_intelligence", session_state["bp_selected_section"])
+
+
+class ParallelResearchWorkflowTests(unittest.TestCase):
+    def test_parallel_runner_filters_non_uuid_source_labels_before_rpc(self):
+        root = Path(__file__).resolve().parents[1]
+        workflow = json.loads(
+            (root / "backend" / "n8n" / "BP-STAGE1-ASYNC-01-research-runner.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        prepare = next(node for node in workflow["nodes"] if node["name"] == "Prepare Durable Observation")
+
+        self.assertIn("durableEvidenceIds", prepare["parameters"]["jsCode"])
+        self.assertIn("uuid.test(id)", prepare["parameters"]["jsCode"])
+
+    def test_scheduler_dispatches_selected_research_without_waiting(self):
+        root = Path(__file__).resolve().parents[1]
+        workflow = json.loads(
+            (root / "backend" / "n8n" / "BP-SCHED-01-eligible-task-scheduler.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        dispatch = next(node for node in workflow["nodes"] if node["name"] == "Dispatch Parallel Specialist Runner")
+
+        self.assertFalse(dispatch["parameters"]["options"]["waitForSubWorkflow"])
+
+    def test_stage1_uses_the_validated_fast_model_for_bounded_extraction(self):
+        root = Path(__file__).resolve().parents[1]
+        workflow = json.loads(
+            (root / "backend" / "n8n" / "BP-STAGE1-01-research-specialist.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        prepare = next(node for node in workflow["nodes"] if node["name"] == "Prepare Grounded Specialist Analysis")
+        analyst = next(node for node in workflow["nodes"] if node["name"] == "Nebius — Bounded Stage 1 Analyst")
+        code = prepare["parameters"]["jsCode"]
+
+        self.assertIn("Qwen/Qwen3-30B-A3B-Instruct-2507", code)
+        self.assertIn("exactly 5 concise objects", code)
+        self.assertIn("evidence.slice(0,6)", code)
+        self.assertIn("slice(0,900)", code)
+        self.assertEqual(90000, analyst["parameters"]["options"]["timeout"])
 
 
 if __name__ == "__main__":

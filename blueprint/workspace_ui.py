@@ -36,6 +36,24 @@ WORKSPACE_RETURN_KEYS = (
     "bp_completed_actionables",
 )
 
+SECTION_PREVIEWS = {
+    "foundation": ("What Foundation establishes", "Your problem hypothesis, first-user boundary, founder constraints, success definition, riskiest assumptions, open risks, and the exact questions that downstream research must answer."),
+    "customer_demand": ("What Customer Research will establish", "The customer's jobs, pains, current workarounds, triggering events, reachable early segments, switching barriers, and the strength of any willingness-to-pay or commitment evidence."),
+    "competitor_intelligence": ("What Competitor Research will establish", "Direct, indirect, manual, service, and non-consumption alternatives—plus pricing, positioning, customer praise and complaints, strengths, weaknesses, and evidence-backed gaps worth testing."),
+    "market_economics": ("What Market Research will establish", "The reachable beachhead, category structure, demand and adoption signals, channel access, important constraints, and which market-size or willingness-to-pay claims remain assumptions."),
+    "evidence_audit": ("What Evidence Audit will establish", "Whether the important claims have relevant sources, sufficient coverage, current citations, contradictory evidence, or unsupported leaps that must be withheld from the verdict."),
+    "research_verdict": ("What the Research Verdict will establish", "A transparent proceed, narrow, validate again, or stop recommendation—with the score components, decisive evidence, unresolved uncertainty, and the safest next route."),
+    "assumptions_risks": ("What this step will establish", "The remaining assumptions and risks ranked by decision impact, evidence gap, and the cheapest safe way to reduce uncertainty."),
+    "offer_pricing": ("What this step will establish", "A testable offer and pricing hypothesis grounded in founder constraints and Stage 1 evidence—not invented revenue or conversion numbers."),
+    "validation_proof": ("What this step will establish", "The smallest validation experiments, proof thresholds, failure criteria, and human decisions needed before further commitment."),
+    "operating_model": ("What this step will establish", "A practical delivery and support model that fits the founder's capacity, scope, and the evidence collected so far."),
+    "financial_readiness": ("What this step will establish", "Scenario-based cost, runway, and funding-readiness boundaries using founder-provided inputs; unsupported financial claims remain visibly unknown."),
+    "execution_readiness": ("What this gate will establish", "Whether the evidence, offer, validation plan, operating model, and financial constraints are coherent enough to prepare an advisory action blueprint."),
+    "launch_distribution": ("What this advisory step will establish", "An evidence-informed MVP boundary, first-customer path, distribution options, and milestones—not autonomous execution or weekly task management."),
+    "growth_optimization": ("What this advisory step will establish", "The prerequisites and signals to watch before attempting growth, with advice explicitly separated from observed proof."),
+    "action_blueprint": ("What the Action Blueprint will establish", "A connected milestone map from the founder's current evidence to the next provable moves, preserving gates, dependencies, and unknowns."),
+}
+
 
 def _items(value: Any) -> list:
     return value if isinstance(value, list) else []
@@ -208,6 +226,7 @@ div[data-testid="stLayoutWrapper"]:has(> div[data-testid="stVerticalBlock"].st-k
 .st-key-bp_left_rail{{padding-top:12px!important}}.st-key-bp_left_rail .st-key-bp_home{{margin:0 0 36px!important}}.rail-top-progress{{margin:22px 6px 32px!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{display:flex!important;padding-left:0!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{width:100%!important;margin:0!important;text-align:left!important}}.kpi-label{{font-weight:600!important}}.st-key-bp_shortcut_blueprint,.st-key-bp_shortcut_financial{{position:relative;overflow:hidden;padding:15px!important;border-radius:20px!important;box-shadow:none!important;transform:none!important}}.st-key-bp_shortcut_blueprint{{min-height:158px;background:#132b1e!important;border-color:#244535!important}}.st-key-bp_shortcut_financial{{min-height:176px;background:radial-gradient(circle at 76% 28%,rgba(120,186,205,.52),transparent 35%),linear-gradient(145deg,#8f929a 0%,#aa8176 56%,#b8795d 100%)!important;border-color:#9b8179!important}}.st-key-bp_shortcut_blueprint:hover{{transform:translateY(-2px)!important;border-color:#537a62!important}}.st-key-bp_shortcut_financial:hover{{transform:translateY(-2px)!important;border-color:#a86f55!important}}.st-key-bp_shortcut_blueprint:after,.st-key-bp_shortcut_financial:after{{content:none!important}}.plan-native-head{{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-start;gap:9px;margin-bottom:11px}}.plan-native-head small{{color:#a8b8ad;font:650 7px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase}}.st-key-bp_shortcut_financial .plan-native-head small{{color:#fff;opacity:.82}}.plan-native-icon{{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:transparent;color:#caff36;font:700 14px var(--ui)}}.st-key-bp_shortcut_financial .plan-native-icon{{background:rgba(255,255,255,.13);color:#fff}}.plan-map-lines{{position:absolute;z-index:1;right:-12px;top:19px;width:102px;height:55px;transform:rotate(-16deg);opacity:.55}}.plan-map-lines i{{display:block;margin:9px 0;border-top:1px solid #53a671}}.st-key-bp_shortcut_blueprint button,.st-key-bp_shortcut_financial button{{position:relative;z-index:3;min-height:26px!important;padding:0!important;color:#fff!important;justify-content:flex-start!important;text-align:left!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.015em!important}}.st-key-bp_shortcut_blueprint button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_financial button [data-testid="stMarkdownContainer"],.st-key-bp_shortcut_blueprint button p,.st-key-bp_shortcut_financial button p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_shortcut_blueprint button:hover,.st-key-bp_shortcut_financial button:hover{{color:#fff!important;background:transparent!important}}.st-key-bp_shortcut_blueprint [data-testid="stCaptionContainer"],.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{position:relative;z-index:2;display:block!important;margin-top:3px!important;padding-right:4px!important;color:#a9b8ae!important;font-size:8px!important;line-height:1.45!important}}.st-key-bp_shortcut_financial [data-testid="stCaptionContainer"]{{color:rgba(255,255,255,.74)!important}}.plan-native-cta{{position:relative;z-index:2;display:inline-flex;margin-top:11px;padding:6px 9px;border:1px solid #bbed3f;border-radius:14px;color:#d5ff5c;font:650 7px/1 var(--ui);letter-spacing:.04em}}.plan-money{{position:relative;z-index:2;margin:14px 0 13px;color:#fff;font:500 30px/1 var(--ui);letter-spacing:-.04em}}.plan-edit-mark{{display:grid;place-items:center;width:25px;height:25px;margin-left:auto;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font:650 10px var(--ui)}}.st-key-bp_right_rail [data-testid="stExpander"] .st-key-bp_action_card_workspace{{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}}.action-count{{display:block;margin:3px 1px 0 auto;color:#858d87;font:600 9px var(--ui);text-align:right}}
 .st-key-bp_stage_scroll{{padding-bottom:12px!important}}.st-key-bp_left_shortcuts{{display:grid!important;flex:0 0 auto!important;align-self:stretch!important;width:calc(100% - 10px)!important;box-sizing:border-box!important;gap:7px!important;margin:14px 5px 13px!important;padding-top:12px!important;border-top:1px solid #daddda!important;background:#f5f6f4!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"],.st-key-bp_left_shortcuts [data-testid="stLayoutWrapper"],.st-key-bp_left_shortcuts [data-testid="stButton"]{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts>[data-testid="stVerticalBlock"]{{gap:7px!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button{{display:flex!important;width:100%!important;min-height:39px!important;padding:0 11px!important;border:1px solid #dce1dd!important;border-radius:10px!important;background:#fff!important;color:#303a33!important;justify-content:flex-start!important;text-align:left!important;font:600 10px/1.2 var(--ui)!important;box-shadow:none!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'→';margin-left:auto;color:#778079;font-size:14px;font-weight:400}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:hover{{border-color:#bfc9c1!important;background:#fafcfb!important;color:#245d3c!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"],.st-key-bp_left_rail [data-testid="stExpanderDetails"]>[data-testid="stVerticalBlock"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stLayoutWrapper"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"]{{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;align-self:stretch!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{width:100%!important;margin:0!important;padding:6px 28px 6px 32px!important;justify-content:flex-start!important;text-align:left!important}}.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button>div,.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button [data-testid="stMarkdownContainer"],.st-key-bp_left_rail [data-testid="stExpanderDetails"] [data-testid="stButton"] button p{{display:block!important;width:100%!important;margin:0!important;padding:0!important;text-align:left!important}}.st-key-bp_right_rail{{top:72px!important;margin:72px 12px 12px 10px!important}}.st-key-bp_right_rail>[data-testid="stVerticalBlock"]{{gap:0!important}}
 .st-key-bp_center_pane{{padding-bottom:34px!important}}[class*="st-key-bp_chat_shell_"]{{padding-top:clamp(92px,15vh,180px)!important}}[class*="st-key-bp_chat_composer_"]{{bottom:8px!important;border-color:#e2d7d0!important;box-shadow:0 12px 32px rgba(82,52,38,.08)!important}}[class*="st-key-chat_starter_"] button:hover{{border-color:#dac8bc!important;background:#f7f0eb!important;color:#704832!important}}.st-key-bp_center_pane [data-testid="stChatInput"] button,.st-key-bp_center_pane [data-testid="stChatInputSubmitButton"]{{background:#87583f!important;color:#fff!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial{{width:100%!important;max-width:none!important;align-self:stretch!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button,.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{width:100%!important;max-width:none!important;padding:0 12px!important;text-align:left!important;justify-content:flex-start!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_blueprint button{{border-color:#d5dfd6!important;background:#edf4ee!important;color:#315440!important}}.st-key-bp_left_shortcuts .st-key-bp_left_open_financial button{{border-color:#e5d8cf!important;background:#f7efea!important;color:#704b38!important}}.st-key-bp_left_shortcuts [data-testid="stButton"] button:after{{content:'↗'!important;margin-left:auto;color:currentColor;font-size:13px;font-weight:500}}.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"],.st-key-bp_left_shortcuts [data-testid="stMarkdownContainer"] p{{width:100%!important;margin:0!important;text-align:left!important}}.st-key-bp_left_companion{{flex:0 0 auto!important;align-self:stretch!important;max-height:255px;margin:0 5px 10px!important;padding:0 2px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin;scrollbar-color:transparent transparent}}.st-key-bp_left_companion:hover{{scrollbar-color:#c8ceca transparent}}.st-key-bp_left_companion>[data-testid="stVerticalBlock"]{{gap:0!important}}.st-key-bp_left_companion [data-testid="stExpander"]{{margin:0!important;border:0!important;border-top:1px solid #dfe3df!important;border-radius:0!important;background:transparent!important}}.st-key-bp_left_companion [data-testid="stExpander"] details{{border:0!important;background:transparent!important;box-shadow:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] summary{{min-height:38px!important;padding:7px 4px!important;flex-direction:row-reverse!important;justify-content:space-between!important;border:0!important;border-radius:0!important;background:transparent!important;color:#515a53!important;font:600 10px/1.2 var(--ui)!important;text-transform:none!important}}.st-key-bp_left_companion [data-testid="stExpander"] details[open] summary{{background:transparent!important;color:#333d35!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"]{{padding:0 4px 9px!important}}.st-key-bp_left_companion [data-testid="stExpanderDetails"] [data-testid="stButton"] button{{padding-left:8px!important}}.st-key-bp_left_companion [data-testid="stCheckbox"] label{{font-size:10px!important}}
+.state-banner span{{display:block;margin-top:4px}}.state-banner small{{display:block;margin-top:5px;color:#8a928c;font:9px var(--ui)}}.section-preview{{margin:12px 0 22px;padding:17px 18px;border:1px solid #e0e5e1;border-radius:14px;background:#fff}}.section-preview b{{font:600 13px/1.25 var(--ui);color:#28332b}}.section-preview p{{max-width:720px;margin:7px 0 0;color:#657068;font:12px/1.55 var(--ui)}}.empty-state{{display:grid!important;align-items:start!important;place-items:initial!important;min-height:245px!important;padding-top:24px!important;text-align:left!important}}.empty-state>div{{max-width:720px;padding:20px;border:1px solid #e1e6e2;border-radius:15px;background:#fafbfa}}.empty-state small{{display:block;margin-bottom:8px;color:#7a837c;font:650 9px/1.2 var(--ui);letter-spacing:.05em;text-transform:uppercase}}.empty-state b{{font:600 19px/1.25 var(--ui)!important}}.empty-state p{{max-width:660px!important;margin:8px 0 14px!important}}.empty-state em{{display:block;padding-top:12px;border-top:1px solid #e5e8e5;color:#8a918c;font:normal 10px/1.45 var(--ui)}}.chat-disabled{{padding:14px 15px;border:1px solid #e2d7d0;border-radius:17px;background:#fbf9f7;color:#77706b}}.chat-disabled b{{display:block;color:#4a413b;font:600 12px/1.3 var(--ui)}}.chat-disabled span{{display:block;margin:4px 0 11px;font:10px/1.45 var(--ui)}}.chat-disabled div{{padding:12px 13px;border:1px solid #e5dfda;border-radius:12px;background:#f3f1ef;color:#aaa39e;font:11px/1.2 var(--ui)}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@keyframes ideaFocus{{0%,100%{{box-shadow:0 10px 30px rgba(35,65,45,.055)}}35%{{border-color:#58a274;box-shadow:0 0 0 6px rgba(54,139,87,.13),0 14px 36px rgba(35,65,45,.1)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:760px){{html,body,[data-testid="stAppViewContainer"]{{height:auto!important;overflow:auto!important}}main [data-testid="stHorizontalBlock"]:has(.st-key-bp_left_rail){{height:auto!important}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{position:relative!important;top:auto!important;height:auto!important;min-height:0}}.st-key-bp_right_rail{{margin:14px;border-radius:16px}}.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:620px){{.kpi-grid{{grid-template-columns:1fr}}.st-key-bp_center_pane{{padding:22px 18px 100px!important}}}}
 </style>""", unsafe_allow_html=True)
 
@@ -390,6 +409,76 @@ def _running_age_seconds(task: dict | None) -> int | None:
         return None
 
 
+def _instant_foundation(context: dict, idea: str) -> dict:
+    """Build the input-only Foundation immediately while n8n persists the canonical copy."""
+    project = _dict(context.get("project"))
+    constraints = _dict(project.get("constraints"))
+    answers = _dict(constraints.get("onboarding_answers")) or _dict(st.session_state.get("dialog_answers"))
+
+    def clean(value: Any) -> str:
+        if isinstance(value, list):
+            return ", ".join(str(item).strip() for item in value if str(item).strip())
+        return str(value or "").strip()
+
+    audience = clean(constraints.get("target_customer") or answers.get("target_customer"))
+    audience_detail = clean(answers.get("customer_detail"))
+    if audience_detail and audience_detail.lower() not in audience.lower():
+        audience = " — ".join(item for item in (audience, audience_detail) if item)
+    geography = " — ".join(
+        item for item in (clean(answers.get("location")), clean(answers.get("location_detail")))
+        if item and item.lower() != "not sure"
+    )
+    success = clean(constraints.get("success_definition") or answers.get("success_definition") or answers.get("success_type") or constraints.get("goal") or answers.get("goal"))
+    hours = constraints.get("hours_per_week", answers.get("hours_per_week"))
+    budget = constraints.get("available_budget", answers.get("money_available"))
+    timeline = clean(constraints.get("launch_timeline") or answers.get("launch_timeline"))
+    prior = clean(answers.get("prior_work"))
+    unknowns = []
+    if not audience:
+        unknowns.append("The first target customer segment is not yet specific enough to test.")
+    if not success or success.lower() == "not sure":
+        unknowns.append("A measurable success threshold has not been defined yet.")
+    if not geography:
+        unknowns.append("The initial geography or delivery boundary is not yet defined.")
+    if not prior or prior.lower() == "nothing yet":
+        unknowns.append("No direct customer, prototype, sale, or experiment evidence has been recorded yet.")
+    assumptions = [
+        f"The stated first user is {audience}; this remains a founder hypothesis until customer evidence is collected." if audience else "A specific first-user hypothesis still needs to be chosen.",
+        "The problem described in the idea is important and frequent enough for the target user to change current behaviour.",
+        "The founder can reach a meaningful first validation milestone within the stated time, budget, and life constraints.",
+    ]
+    risks = []
+    try:
+        if float(hours or 0) and float(hours) < 5:
+            risks.append(f"Only {hours} hours per week are available, so the first validation scope must stay very small.")
+    except (TypeError, ValueError):
+        pass
+    try:
+        if float(budget or 0) == 0:
+            risks.append("No build budget is currently allocated; early validation must use no-cost or very low-cost tests.")
+    except (TypeError, ValueError):
+        pass
+    if not risks:
+        risks.append("Time, budget, and delivery constraints must be checked again as the evidence plan becomes specific.")
+    finding = "Blueprint has converted the onboarding answers into a testable starting position"
+    if audience:
+        finding += f" for {audience}"
+    finding += ". This is a founder hypothesis, not market proof; the research streams will now test its most important assumptions."
+    return {
+        "schema_version": "bp-foundation-preview-v1",
+        "module_key": "foundation",
+        "executive_finding": finding,
+        "problem_hypothesis": f"{idea} The decision question is whether the stated audience experiences this problem strongly and frequently enough to change current behaviour.",
+        "target_user_boundary": audience or "Not identified — founder input required.",
+        "founder_constraints": {"hours_per_week": hours or "Not provided", "available_budget": budget if budget not in (None, "") else "Not provided", "launch_timeline": timeline or "Not provided"},
+        "success_definition": success or "Not identified — define a measurable outcome.",
+        "assumptions": assumptions,
+        "risks": risks,
+        "unknowns": unknowns,
+        "limitations": ["This immediate Foundation is structured only from founder-provided inputs. External customer and market claims require accepted research evidence."],
+    }
+
+
 def _recover_expired_task(tasks: dict[str, dict], bundle: dict) -> None:
     now = datetime.now(timezone.utc).timestamp()
     attempts = st.session_state.setdefault("bp_stale_recovery_attempts", {})
@@ -397,7 +486,8 @@ def _recover_expired_task(tasks: dict[str, dict], bundle: dict) -> None:
         if str(task.get("status") or "").upper() != "RUNNING":
             continue
         age = _running_age_seconds(task)
-        if age is None or age < 180:
+        recovery_after = 20 if str(task.get("module_key")) == "foundation" else 180
+        if age is None or age < recovery_after:
             continue
         recovery_key = f"{task.get('id')}:{task.get('attempt_count', 0)}"
         if now - float(attempts.get(recovery_key) or 0) < 60:
@@ -416,6 +506,7 @@ def _recover_expired_task(tasks: dict[str, dict], bundle: dict) -> None:
 
 
 def _render_empty(key: str, state: tuple[str, str], task: dict | None = None) -> None:
+    preview_title, preview_copy = SECTION_PREVIEWS.get(key, (f"What {LABELS[key]} will establish", "Blueprint will keep this step bounded to the evidence and decisions it is responsible for."))
     if state[0] == "running":
         age = _running_age_seconds(task)
         if key == "foundation":
@@ -434,15 +525,22 @@ def _render_empty(key: str, state: tuple[str, str], task: dict | None = None) ->
             title = "This task stopped reporting progress"
             detail = "The task lease has expired. Blueprint will recover it for a bounded retry instead of leaving this screen running forever."
         elapsed = f'<small>Last task update: {age // 60}m {age % 60:02d}s ago</small>' if age is not None else ""
-        st.markdown(f'<div class="state-banner"><div class="state-spinner"></div><div><b>{html.escape(title)}</b><span>{html.escape(detail)}</span>{elapsed}</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="state-banner"><div class="state-spinner"></div><div><b>{html.escape(title)}</b><span>{html.escape(detail)}</span>{elapsed}</div></div><div class="section-preview"><b>{html.escape(preview_title)}</b><p>{html.escape(preview_copy)}</p></div>', unsafe_allow_html=True)
         return
     stage = _stage_number(key)
     message = "The Supervisor has queued this specialist and will start it when its dependencies are ready." if state[0] == "ready" else "The failed output was not promoted. Open Background process for the safe next route." if state[0] == "error" else "Stage 1 must finish first. Open Research Verdict, review why it was reached, then choose a founder decision to unlock Stage 2." if stage == 2 else "Stage 2 evidence and Gate 2 approval are required before this advisory action blueprint can be created." if stage == 3 else "This stream has not started. If selected during onboarding, the Supervisor will schedule it automatically."
-    st.markdown(f'<div class="empty-state"><div><b>{html.escape(state[1])}</b><p>{html.escape(message)}</p></div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="empty-state"><div><small>{html.escape(state[1])}</small><b>{html.escape(preview_title)}</b><p>{html.escape(preview_copy)}</p><em>{html.escape(message)}</em></div></div>', unsafe_allow_html=True)
 
 
 def _render_chat(key: str, output: dict, state: tuple[str, str]) -> None:
     with st.container(key=f"bp_chat_shell_{key}"):
+        if state[0] != "done" or not output:
+            label = LABELS[key]
+            st.markdown(
+                f'<div class="chat-disabled"><b>Ask Blueprint unlocks when {html.escape(label)} is ready</b><span>Once this section has an accepted result, you can ask about its findings, evidence, limitations, and next move.</span><div>Ask Blueprint about {html.escape(label.lower())}…</div></div>',
+                unsafe_allow_html=True,
+            )
+            return
         _render_chat_content(key, output, state)
 
 
@@ -690,6 +788,10 @@ def _workspace_body() -> None:
                 risk_items.append(risk)
     risks = len(risk_items); score = _score(dashboard_verdict or latest_verdict); progress = [item for item in _items(dashboard.get("stage_progress")) if isinstance(item, dict)]; completion = round(sum(float(item.get("completion_percent") or 0) for item in progress) / max(1, len(progress))) if progress else round(100 * sum(state[0] == "done" for state in states.values()) / len(states)); coverage_value = (dashboard_verdict or latest_verdict).get("evidence_coverage"); coverage = round((float(coverage_value) * 100 if float(coverage_value) <= 1 else float(coverage_value))) if isinstance(coverage_value, (int, float)) else 0; workspace_actions = _workspace_actions(tasks, artifact, dashboard)
     selected = st.session_state.get("bp_selected_section", selected); task = tasks.get(selected); state = states[selected]; output = _extract_output(task, artifact, selected)
+    foundation_preview = False
+    if selected == "foundation" and not output and state[0] in {"idle", "running", "ready"}:
+        output = _instant_foundation(context, str(idea))
+        foundation_preview = True
     if selected == "research_verdict": output = {**output, **dashboard_verdict, **latest_verdict}
     sources = _flatten_sources(output, context)
     left, center = st.columns([0.92, 5.53], gap=None)
@@ -710,6 +812,8 @@ def _workspace_body() -> None:
                 st.info(str(recovery_notice))
             if notice := st.session_state.pop("bp_transition_notice", None): st.success(str(notice))
             st.markdown(f'<div class="section-kicker">Stage {_stage_number(selected)} · {html.escape(state[1])}</div><div class="section-title">{html.escape(LABELS[selected])}</div>', unsafe_allow_html=True)
+            if foundation_preview:
+                st.markdown('<div class="state-banner"><div class="state-spinner"></div><div><b>Foundation is ready to review</b><span>This input-only view was prepared immediately. Blueprint is persisting the canonical copy and starting Customer, Competitor, and Market Research in parallel.</span></div></div>', unsafe_allow_html=True)
             _render_output(selected, output, checkpoint if selected == "research_verdict" else None) if output else _render_empty(selected, state, task); _render_chat(selected, output, state)
     if checkpoint:
         seen = f"bp_gate_seen_{checkpoint.get('checkpoint_id')}"

@@ -295,6 +295,45 @@
     },
     {
       "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2},
+          "conditions": [{"id": "b5c40101-0120-4020-8020-0de013000160", "leftValue": "={{ ['foundation','customer_demand','competitor_intelligence','market_economics'].includes(String($json.task?.module_key ?? '')) }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000161",
+      "name": "Parallel Specialist Task?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1200, -20]
+    },
+    {
+      "parameters": {
+        "source": "database",
+        "workflowId": {"__rl": true, "value": "bpStage1AsyncResearch01", "mode": "id"},
+        "mode": "each",
+        "options": {"waitForSubWorkflow": false}
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000162",
+      "name": "Dispatch Parallel Specialist Runner",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [1420, -210]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const req=$('Normalize Scheduler Request').first().json;const dispatched=$json??{};return {json:{schema_version:'bp-scheduler-cycle-result-v1',status:'DISPATCHED',route:'SUPERVISOR_REEVALUATE',requires_human:false,terminal:false,message:'Claimed specialist work was dispatched into independent executions.',authorization:req.authorization,owner_id:req.owner_id,project_id:req.project_id,run_id:req.run_id,profile_version:req.profile_version,requested_research:req.requested_research,controller_cycle:req.controller_cycle,correlation_id:req.correlation_id,dispatch_metadata:dispatched.metadata??{},test_mode:false}};"
+      },
+      "id": "b5c40101-0120-4020-8020-0de013000163",
+      "name": "Return Parallel Dispatch Cycle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1660, -210]
+    },
+    {
+      "parameters": {
         "source": "database",
         "workflowId": {
           "__rl": true,
@@ -332,7 +371,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const worker=$json??{};const obs=worker.observation&&typeof worker.observation==='object'?worker.observation:{verdict:'TOOL_FAILED',summary:'The specialist returned no valid observation envelope.',output:{},evidence_ids:[],limitations:['Malformed specialist result.'],retryable:true,proposed_route:'BOUNDED_RETRY_OR_FALLBACK'};const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String($('Normalize Scheduler Request').first().json.authorization??'');const persist_required=worker.test_mode!==true&&uuid.test(String(worker.task_id??''))&&/^Bearer\\s+\\S+$/i.test(authorization);return {json:{worker,observation:obs,authorization,persist_required,rpc_body:{p_task_id:worker.task_id,p_verdict:obs.verdict,p_summary:String(obs.summary??'Task observation').slice(0,4000),p_output:obs.output??{},p_evidence_ids:Array.isArray(obs.evidence_ids)?obs.evidence_ids:[],p_limitations:Array.isArray(obs.limitations)?obs.limitations:[],p_retryable:obs.retryable===true,p_proposed_route:String(obs.proposed_route??obs.verdict).slice(0,500)}}};"
+        "jsCode": "const worker=$json??{};const obs=worker.observation&&typeof worker.observation==='object'?worker.observation:{verdict:'TOOL_FAILED',summary:'The specialist returned no valid observation envelope.',output:{},evidence_ids:[],limitations:['Malformed specialist result.'],retryable:true,proposed_route:'BOUNDED_RETRY_OR_FALLBACK'};const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;const authorization=String($('Normalize Scheduler Request').first().json.authorization??'');const persist_required=worker.test_mode!==true&&uuid.test(String(worker.task_id??''))&&/^Bearer\\s+\\S+$/i.test(authorization);const durableEvidenceIds=Array.isArray(obs.evidence_ids)?obs.evidence_ids.map(String).filter(id=>uuid.test(id)):[];return {json:{worker,observation:obs,authorization,persist_required,rpc_body:{p_task_id:worker.task_id,p_verdict:obs.verdict,p_summary:String(obs.summary??'Task observation').slice(0,4000),p_output:obs.output??{},p_evidence_ids:durableEvidenceIds,p_limitations:Array.isArray(obs.limitations)?obs.limitations:[],p_retryable:obs.retryable===true,p_proposed_route:String(obs.proposed_route??obs.verdict).slice(0,500)}}};"
       },
       "id": "b5c40101-0120-4020-8020-0de013000116",
       "name": "Prepare Typed Task Observation",
@@ -600,7 +639,7 @@
       "main": [
         [
           {
-            "node": "Execute Typed Stage 1 Worker Router",
+            "node": "Parallel Specialist Task?",
             "type": "main",
             "index": 0
           }
@@ -613,6 +652,15 @@
           }
         ]
       ]
+    },
+    "Parallel Specialist Task?": {
+      "main": [
+        [{"node": "Dispatch Parallel Specialist Runner", "type": "main", "index": 0}],
+        [{"node": "Execute Typed Stage 1 Worker Router", "type": "main", "index": 0}]
+      ]
+    },
+    "Dispatch Parallel Specialist Runner": {
+      "main": [[{"node": "Return Parallel Dispatch Cycle", "type": "main", "index": 0}]]
     },
     "Execute Typed Stage 1 Worker Router": {
       "main": [
