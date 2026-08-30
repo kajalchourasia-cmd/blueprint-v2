@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from blueprint.auth import require_auth
-from blueprint.workspace_ui import render_blueprint_workspace
+from blueprint.workspace_ui import LABELS, render_blueprint_workspace, render_financial_plan, render_full_blueprint
 
 st.set_page_config(page_title="Blueprint", page_icon="⌁", layout="wide", initial_sidebar_state="collapsed")
 require_auth()
@@ -30,12 +30,22 @@ if action_key := st.query_params.get("complete_action"):
     st.rerun()
 
 if st.query_params.get("view") == "blueprint":
-    st.session_state["bp_selected_section"] = "action_blueprint"
-    render_blueprint_workspace()
+    render_full_blueprint()
     st.stop()
-else:
-    render_blueprint_workspace()
+
+if st.query_params.get("view") == "financial":
+    render_financial_plan()
     st.stop()
+
+if requested_section := st.query_params.get("section"):
+    requested_section = str(requested_section)
+    if requested_section in LABELS:
+        st.session_state["bp_selected_section"] = requested_section
+    st.query_params.clear()
+    st.rerun()
+
+render_blueprint_workspace()
+st.stop()
 
 
 st.set_page_config(page_title="Blueprint", page_icon="⌖", layout="wide", initial_sidebar_state="collapsed")

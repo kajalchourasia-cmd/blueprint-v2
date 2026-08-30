@@ -170,7 +170,9 @@ def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
 .bp-project-title{{font:500 clamp(30px,3.2vw,52px)/.96 'Space Grotesk';letter-spacing:-.068em;margin:2px 0 7px;color:var(--ink)}}.bp-goal{{font:10px/1.45 'DM Mono';color:var(--muted)}}.bp-live{{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #cbd8ce;border-radius:20px;background:#f7fbf7;color:#356447;font:9px 'DM Mono'}}.bp-live:before{{content:'';width:7px;height:7px;border-radius:50%;background:#43a467;animation:pulse 1.7s infinite}}
 .kpi-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0}}.kpi{{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;min-height:74px}}.kpi:after{{content:'';position:absolute;right:-18px;bottom:-27px;width:65px;height:65px;border-radius:50%;background:var(--tint,#e6efe8)}}.kpi b{{display:block;white-space:nowrap;font:500 24px 'Space Grotesk';letter-spacing:-.055em}}.kpi span{{font:8px 'DM Mono';color:var(--muted);text-transform:uppercase}}
 .st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:calc(100vh - 32px);min-height:720px;border:1px solid var(--line);background:rgba(251,252,249,.94);overflow-y:auto}}.st-key-bp_left_rail{{border-radius:25px 12px 12px 25px;padding:17px 12px!important}}.st-key-bp_center_pane{{border-radius:12px;padding:20px 26px 105px!important}}.st-key-bp_right_rail{{border-radius:12px 25px 25px 12px;padding:16px 13px!important;background:#f7f8f4}}
+.rail-heading{{margin:0 2px 15px;font:500 23px/.95 'Space Grotesk';letter-spacing:-.065em;color:#202722}}.rail-heading span{{color:#9aa09b}}.rail-heading small{{display:block;margin-bottom:7px;color:#7b837d;font:500 7px 'DM Mono';letter-spacing:.09em;text-transform:uppercase}}
 .rail-summary{{padding:12px 11px 11px;border:1px solid #e0e4e0;border-radius:15px;background:#fff}}.rail-summary-head{{display:flex;justify-content:space-between;align-items:center;font:500 9px 'DM Mono';color:#59625b}}.rail-progress{{height:5px;margin:10px 0 9px;border-radius:8px;background:#e5e8e5;overflow:hidden}}.rail-progress i{{display:block;height:100%;border-radius:8px;background:#2f8051;transition:width .35s ease}}.rail-legend{{display:flex;gap:8px;flex-wrap:wrap;font:7px 'DM Mono';color:#858c86}}.rail-legend span{{display:flex;align-items:center;gap:4px}}.rail-legend i{{width:6px;height:6px;border-radius:50%;background:#c8ccc9}}.rail-legend .live i{{background:#4a9b68;animation:pulse 1.6s infinite}}.rail-legend .done i{{background:#2f8051}}.stage-label{{margin:19px 7px 8px;font:500 8px 'DM Mono';text-transform:uppercase;color:#8a918b}}.st-key-bp_left_rail [data-testid="stButton"] button{{position:relative;min-height:48px!important;padding:8px 31px 8px 12px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#39423b!important;text-align:left!important;justify-content:flex-start!important;white-space:pre-line!important;font:500 10px/1.32 'Space Grotesk'!important;box-shadow:none!important;transition:background .18s ease,box-shadow .18s ease,transform .18s ease}}.st-key-bp_left_rail [data-testid="stButton"] button:hover{{transform:translateX(2px);background:#edf2ec!important}}
+.rail-tools-label{{margin:24px 7px 8px;font:500 8px 'DM Mono';letter-spacing:.08em;text-transform:uppercase;color:#8a918b}}.rail-tool-card{{position:relative;display:block;overflow:hidden;margin-top:9px;padding:15px 14px;border-radius:17px;text-decoration:none!important;transition:transform .22s ease,box-shadow .22s ease}}.rail-tool-card:hover{{transform:translateY(-2px);box-shadow:0 13px 28px rgba(20,39,27,.13)}}.rail-tool-card b{{display:block;margin-top:20px;font:500 14px 'Space Grotesk';letter-spacing:-.035em}}.rail-tool-card small{{display:block;margin-top:4px;font:8px/1.38 'DM Mono';opacity:.72}}.rail-tool-card i{{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:9px;font:normal 13px Arial}}.rail-tool-card.blueprint{{color:#f3f7f3;background:linear-gradient(135deg,#12251a,#1d3b29)}}.rail-tool-card.blueprint:after{{content:'';position:absolute;right:-34px;top:-45px;width:120px;height:120px;border-radius:50%;border:1px solid rgba(177,238,126,.2);box-shadow:inset 0 0 0 22px rgba(177,238,126,.025),inset 0 0 0 43px rgba(177,238,126,.02)}}.rail-tool-card.blueprint i{{color:#bdf14a;background:#284433}}.rail-tool-card.finance{{color:#3d302d;background:linear-gradient(145deg,#dbe3e3,#d6a083 75%,#bd8065)}}.rail-tool-card.finance i{{color:#fff;background:rgba(255,255,255,.23)}}
 .section-kicker{{font:8px 'DM Mono';color:#79827a;text-transform:uppercase}}.section-title{{font:500 31px 'Space Grotesk';letter-spacing:-.06em;margin:6px 0 2px}}.section-summary{{margin:13px 0 21px;padding:16px 18px;border-left:3px solid var(--green);border-radius:0 15px 15px 0;background:#f1f6f1;font:14px/1.55 'Space Grotesk'}}.state-banner{{display:flex;gap:13px;margin:22px 0;padding:18px;border:1px solid var(--line);border-radius:17px;background:#f6f8f5}}.state-spinner{{width:25px;height:25px;border:3px solid #cfdbd1;border-top-color:#267749;border-radius:50%;animation:spin .8s linear infinite}}.state-banner b{{display:block;font:500 14px 'Space Grotesk'}}.state-banner span{{font:10px/1.4 'DM Mono';color:var(--muted)}}
 .detail-heading{{margin:23px 0 9px;font:500 9px 'DM Mono';text-transform:uppercase;color:#6e776f}}.insight-list{{display:grid;gap:8px}}.insight{{padding:11px 13px;border:1px solid #e1e5e1;border-radius:12px;background:#fff;font:12px/1.48 'Space Grotesk'}}.empty-state{{display:grid;place-items:center;min-height:260px;text-align:center;color:#737d75}}.empty-state b{{display:block;font:500 22px 'Space Grotesk';color:#2a352d}}.empty-state p{{max-width:500px;font:12px/1.5 'Space Grotesk'}}
 .verdict-hero{{margin:17px 0;padding:22px;border-radius:20px;background:linear-gradient(135deg,#193f2a,#286345);color:#f2f8f3}}.verdict-hero strong{{font:500 25px 'Space Grotesk'}}.verdict-hero p{{color:#c8dbce;font:12px/1.5 'Space Grotesk'}}.score-row{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}.score-cell{{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}}.score-cell b{{display:block;font:500 18px 'Space Grotesk'}}.score-cell span{{font:8px 'DM Mono';text-transform:uppercase;color:#7c857e}}
@@ -178,6 +180,34 @@ def _render_css(states: dict[str, tuple[str, str]], selected: str) -> None:
 .chat-divider{{margin:30px 0 12px;border-top:1px solid var(--line)}}.st-key-bp_center_pane [data-testid="stChatInput"]{{position:sticky!important;bottom:0;z-index:20;background:#fbfcf9;padding-top:12px}}.stChatMessage{{background:#f3f6f2!important;border-radius:15px!important}}.right-title{{font:500 9px 'DM Mono';text-transform:uppercase;margin:10px 4px}}[class*="st-key-bp_action_card_"]{{padding:15px 13px 11px!important;border:1px solid #dfe4df;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(31,48,36,.06)}}.action-head{{display:flex;align-items:center;justify-content:space-between;gap:8px}}.action-head b{{font:600 13px 'Space Grotesk'}}.action-head span{{font:8px 'DM Mono';color:#8b918c}}.action-progress{{height:6px;margin:12px 0 10px;border-radius:8px;background:#e7e9e7;overflow:hidden}}.action-progress i{{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#173b28,#3e9160);transition:width .35s ease}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"]{{margin:0!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label{{padding:7px 1px!important;align-items:flex-start!important;font:11px/1.4 'Space Grotesk'!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label p{{font-size:11px!important}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked) p{{color:#9ba09c!important;text-decoration:line-through;text-decoration-thickness:1px}}[class*="st-key-bp_action_card_"] [data-testid="stCheckbox"] label:has(input:checked)>div:first-child{{animation:pop .25s ease-out}}.action-empty{{padding:10px 0;color:#8a908b;font:10px/1.45 'Space Grotesk'}}.st-key-bp_right_rail [data-testid="stExpander"]{{border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important;margin-top:9px}}.st-key-bp_right_rail [data-testid="stCheckbox"] input:checked+div{{background:#348557!important;animation:pop .25s ease-out}}[data-testid="stDialog"]>div{{max-width:720px!important;border-radius:25px!important;background:#f8faf7!important}}
 {state_css}@keyframes spin{{to{{transform:rotate(360deg)}}}}@keyframes pulse{{50%{{opacity:.3}}}}@keyframes pop{{50%{{transform:scale(1.25)}}}}@media(max-width:1100px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}.st-key-bp_left_rail,.st-key-bp_center_pane,.st-key-bp_right_rail{{height:auto;min-height:0;border-radius:18px}}}}
 </style>""", unsafe_allow_html=True)
+
+
+def _render_left_rail(states: dict[str, tuple[str, str]], selected: str, *, interactive: bool) -> None:
+    st.markdown('<div class="bp-wordmark">Blueprint</div><div class="rail-heading"><small>Your decision path</small>Roadmap <span>&amp; Progress</span></div>', unsafe_allow_html=True)
+    done_count = sum(state[0] == "done" for state in states.values())
+    running_count = sum(state[0] == "running" for state in states.values())
+    waiting_count = len(states) - done_count - running_count
+    rail_percent = round(100 * done_count / max(1, len(states)))
+    st.markdown(
+        f'<div class="rail-summary"><div class="rail-summary-head"><span>Overall progress</span><span>{done_count} of {len(states)}</span></div>'
+        f'<div class="rail-progress"><i style="width:{rail_percent}%"></i></div><div class="rail-legend">'
+        f'<span class="live"><i></i>{running_count} processing</span><span class="done"><i></i>{done_count} done</span><span><i></i>{waiting_count} waiting</span></div></div>',
+        unsafe_allow_html=True,
+    )
+    for stage_name, sections in STAGES:
+        stage_done = sum(states[key][0] == "done" for key, _ in sections)
+        st.markdown(f'<div class="stage-label">{html.escape(stage_name)} · {stage_done}/{len(sections)}</div>', unsafe_allow_html=True)
+        for key, label in sections:
+            state = states[key]
+            if st.button(label, key=f"select_{key}", use_container_width=True, disabled=not interactive, help=f"Status: {state[1]}"):
+                st.session_state["bp_selected_section"] = key
+                st.rerun()
+    st.markdown(
+        '<div class="rail-tools-label">Complete plan</div>'
+        '<a class="rail-tool-card blueprint" href="/Your_Plan?view=blueprint" target="_self"><i>⌘</i><b>Open full Blueprint</b><small>Every stage, dependency, discovered decision, and unresolved part.</small></a>'
+        '<a class="rail-tool-card finance" href="/Your_Plan?view=financial" target="_self"><i>$</i><b>Financial Plan</b><small>Capital, cost boundaries, pricing evidence, and readiness.</small></a>',
+        unsafe_allow_html=True,
+    )
 
 
 def _render_list(title: str, values: Any, limitations: bool = False) -> None:
@@ -344,15 +374,7 @@ def _workspace_body() -> None:
     left, center, right = st.columns([1.1, 3.7, 1.35], gap="small")
     with left:
         with st.container(key="bp_left_rail"):
-            st.markdown('<div class="bp-wordmark">Blueprint</div>', unsafe_allow_html=True)
-            done_count = sum(state[0] == "done" for state in states.values()); running_count = sum(state[0] == "running" for state in states.values()); blocked_count = sum(state[0] in {"locked", "idle"} for state in states.values()); rail_percent = round(100 * done_count / max(1, len(states)))
-            st.markdown(f'<div class="rail-summary"><div class="rail-summary-head"><span>Blueprint progress</span><span>{done_count} of {len(states)}</span></div><div class="rail-progress"><i style="width:{rail_percent}%"></i></div><div class="rail-legend"><span class="live"><i></i>{running_count} processing</span><span class="done"><i></i>{done_count} done</span><span><i></i>{blocked_count} blocked</span></div></div>', unsafe_allow_html=True)
-            for stage_name, sections in STAGES:
-                stage_done = sum(states[key][0] == "done" for key, _ in sections)
-                st.markdown(f'<div class="stage-label">{html.escape(stage_name)} · {stage_done}/{len(sections)}</div>', unsafe_allow_html=True)
-                for key, label in sections:
-                    state = states[key]
-                    if st.button(f"{label}\n{state[1]}", key=f"select_{key}", use_container_width=True): st.session_state["bp_selected_section"] = key; st.rerun()
+            _render_left_rail(states, selected, interactive=True)
     selected = st.session_state.get("bp_selected_section", selected); task = tasks.get(selected); state = states[selected]; output = _extract_output(task, artifact, selected)
     if selected == "research_verdict": output = {**output, **dashboard_verdict, **latest_verdict}
     sources = _flatten_sources(output, context)
@@ -382,12 +404,7 @@ def _empty_workspace() -> None:
     left, center, right = st.columns([1.1, 3.7, 1.35], gap="small")
     with left:
         with st.container(key="bp_left_rail"):
-            st.markdown('<div class="bp-wordmark">Blueprint</div>', unsafe_allow_html=True)
-            st.markdown('<div class="rail-summary"><div class="rail-summary-head"><span>Blueprint progress</span><span>0 of 15</span></div><div class="rail-progress"><i style="width:0%"></i></div><div class="rail-legend"><span class="live"><i></i>0 processing</span><span class="done"><i></i>0 done</span><span><i></i>15 not started</span></div></div>', unsafe_allow_html=True)
-            for stage_name, sections in STAGES:
-                st.markdown(f'<div class="stage-label">{html.escape(stage_name)} · 0/{len(sections)}</div>', unsafe_allow_html=True)
-                for key, label in sections:
-                    st.button(f"{label}\n{states[key][1]}", key=f"select_{key}", use_container_width=True, disabled=True)
+            _render_left_rail(states, "no_active_section", interactive=False)
     with center:
         with st.container(key="bp_center_pane"):
             st.markdown('<div class="bp-project-title">Build your first Blueprint</div><div class="bp-goal">Start with the unfinished idea. Blueprint will ask for the context it needs.</div>', unsafe_allow_html=True)
@@ -418,6 +435,158 @@ def _empty_workspace() -> None:
                 st.caption("Sources appear after evidence has been accepted.")
             with st.expander("Background process", expanded=False):
                 st.caption("No research run has started yet.")
+
+
+def _map_node_content(output: dict, state: tuple[str, str], label: str) -> tuple[str, list[str]]:
+    finding = output.get("executive_finding") or output.get("summary") or output.get("explanation")
+    if finding:
+        summary = re.sub(r"\s+", " ", str(finding)).strip()[:260]
+    elif state[0] == "running":
+        summary = "Evidence is being gathered and audited. Accepted findings will appear here automatically."
+    elif state[0] == "error":
+        summary = "The latest output was not promoted. This node needs input, retry, or human review."
+    else:
+        summary = f"{label} has not been identified yet. Its dependencies or evidence are not ready."
+    details: list[str] = []
+    for field in ("observed_signals", "recommendations", "milestones", "assumptions", "risks", "unknowns", "contextual_actions"):
+        for item in _clean(output.get(field)):
+            if item not in details:
+                details.append(item[:150])
+            if len(details) == 3:
+                return summary, details
+    return summary, details
+
+
+def _render_full_blueprint_css() -> None:
+    st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap');
+[data-testid="stAppViewContainer"],[data-testid="stHeader"]{background:#080b09;color:#eef4ef}[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stSidebar"],[data-testid="stSidebarNav"],#MainMenu,footer{display:none!important}[data-testid="stAppViewContainer"]>.main{margin-left:0!important}main .block-container{width:100%!important;max-width:1840px!important;padding:25px 44px 70px!important}
+.map-shell{position:relative;min-height:100vh;color:#edf3ee;font-family:'Space Grotesk',sans-serif}.map-shell:before{content:'';position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(154,191,164,.18) 1px,transparent 1.2px);background-size:24px 24px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+.map-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid #273029}.map-brand{font:500 9px 'DM Mono';letter-spacing:.12em;color:#b5c2b8}.map-brand b{color:#c8ff58}.map-actions{display:flex;gap:8px}.map-actions a{padding:10px 14px;border:1px solid #38433b;border-radius:18px;color:#c8d1ca;text-decoration:none;font:500 8px 'DM Mono';letter-spacing:.05em;transition:.2s}.map-actions a:hover{border-color:#b8ee52;color:#d8ff8a;transform:translateY(-1px)}.map-actions a.primary{border-color:#edf3ee;background:#edf3ee;color:#111713}
+.map-hero{position:relative;z-index:1;display:grid;grid-template-columns:1.35fr .65fr;gap:50px;align-items:end;padding:43px 0 28px}.map-eyebrow{font:500 8px 'DM Mono';letter-spacing:.14em;color:#84a18b}.map-hero h1{margin:12px 0 0;font:500 clamp(48px,6vw,92px)/.88 'Space Grotesk';letter-spacing:-.082em}.map-hero h1 span{color:#758079}.map-intro{max-width:570px;margin:0;color:#a5afa7;font:13px/1.55 'Space Grotesk'}.map-intro b{color:#d4f579;font-weight:500}.map-metrics{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-bottom:26px;border:1px solid #29332c;border-radius:18px;overflow:hidden;background:#29332c}.map-metric{padding:15px 17px;background:#111612}.map-metric b{display:block;font:500 22px 'Space Grotesk';letter-spacing:-.045em}.map-metric span{font:7px 'DM Mono';text-transform:uppercase;color:#78847a}
+.map-lane{position:relative;z-index:1;margin-top:18px;padding:20px;border:1px solid #29332c;border-radius:25px;background:rgba(15,20,16,.86);overflow:hidden}.map-lane:before{content:'';position:absolute;left:44px;right:44px;top:116px;border-top:1px dashed #354138}.lane-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:18px}.lane-index{color:#9dc065;font:500 8px 'DM Mono';letter-spacing:.12em}.lane-head h2{margin:6px 0 0;font:500 27px 'Space Grotesk';letter-spacing:-.055em}.lane-head p{max-width:520px;margin:0;color:#7f8b81;font:10px/1.45 'DM Mono'}.map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.map-node{position:relative;min-height:236px;padding:17px;border:1px solid #303b33;border-radius:19px;background:#141a15;color:#e9f0ea;text-decoration:none!important;animation:nodeIn .42s both;transition:transform .22s ease,border-color .22s ease,background .22s ease}.map-node:not(:nth-child(3n)):after{content:'→';position:absolute;z-index:4;right:-14px;top:50%;width:14px;color:#9eb2a2;font:13px 'DM Mono';text-align:center}.map-node:hover{z-index:3;transform:translateY(-4px);border-color:#738979;background:#182019}.map-node:before{content:'';position:absolute;left:17px;top:-1px;width:38px;height:3px;border-radius:0 0 5px 5px;background:#59645c}.map-node.identified:before{background:#b9ed57}.map-node.processing:before{background:#75c3ff;animation:linePulse 1.25s infinite}.map-node.review:before{background:#ff927e}.map-node.unidentified{border-style:dashed;color:#a4ada6;background:#111512}.node-top{display:flex;align-items:center;justify-content:space-between}.node-number{font:8px 'DM Mono';color:#707b72}.node-status{display:inline-flex;align-items:center;gap:6px;font:7px 'DM Mono';letter-spacing:.06em;text-transform:uppercase;color:#869188}.node-status:before{content:'';width:7px;height:7px;border-radius:50%;background:#59635b}.identified .node-status{color:#b8d982}.identified .node-status:before{background:#a6dd47;box-shadow:0 0 0 4px rgba(166,221,71,.08)}.processing .node-status{color:#9dd4fa}.processing .node-status:before{background:#70c2fb;animation:mapPulse 1.3s infinite}.review .node-status{color:#f7aa9b}.review .node-status:before{background:#ee7e68}.map-node h3{margin:26px 0 8px;font:500 20px 'Space Grotesk';letter-spacing:-.045em;color:#f2f6f2}.map-node p{min-height:58px;margin:0;color:#929d94;font:10px/1.48 'Space Grotesk'}.node-points{display:grid;gap:5px;margin-top:15px}.node-point{display:flex;gap:7px;padding-top:6px;border-top:1px solid #252d27;color:#b9c2bb;font:8px/1.38 'DM Mono'}.node-point:before{content:'↳';color:#8fb859}.node-awaiting{margin-top:16px;padding:9px 10px;border:1px dashed #303832;border-radius:10px;color:#6e7870;font:8px/1.4 'DM Mono'}
+.finance-strip{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr repeat(3,.55fr);gap:1px;margin-top:18px;border:1px solid #3a3630;border-radius:23px;overflow:hidden;background:#3a3630}.finance-lead,.finance-cell{padding:22px;background:linear-gradient(145deg,#191b18,#221f1a)}.finance-lead{background:linear-gradient(125deg,#39251f,#6f4635)}.finance-lead small,.finance-cell small{font:7px 'DM Mono';letter-spacing:.08em;text-transform:uppercase;color:#beab9c}.finance-lead h2{margin:22px 0 6px;font:500 25px 'Space Grotesk';letter-spacing:-.055em}.finance-lead p{margin:0;color:#cfbcae;font:10px/1.5 'DM Mono'}.finance-cell b{display:block;margin-top:25px;font:500 22px 'Space Grotesk';letter-spacing:-.045em}.finance-cell span{display:block;margin-top:5px;color:#8f9890;font:8px/1.4 'DM Mono'}.finance-link{display:inline-block;margin-top:14px;color:#e4f2dd;font:8px 'DM Mono'}
+.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin:24px 0 0;color:#7c877e;font:8px 'DM Mono'}.map-legend span{display:flex;align-items:center;gap:7px}.map-legend i{width:8px;height:8px;border-radius:50%;background:#59635b}.map-legend .l1 i{background:#a6dd47}.map-legend .l2 i{background:#70c2fb}.map-legend .l3 i{background:#ee7e68}
+@keyframes nodeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes mapPulse{50%{opacity:.25;box-shadow:0 0 0 6px rgba(112,194,251,.08)}}@keyframes linePulse{50%{opacity:.3}}
+@media(max-width:1000px){main .block-container{padding:18px!important}.map-hero{grid-template-columns:1fr}.map-grid{grid-template-columns:repeat(2,1fr)}.map-node:not(:nth-child(3n)):after{display:none}.finance-strip{grid-template-columns:1fr 1fr}.map-metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.map-grid,.finance-strip{grid-template-columns:1fr}.map-hero h1{font-size:48px}.map-actions a:not(.primary){display:none}}
+</style>""", unsafe_allow_html=True)
+
+
+def render_full_blueprint() -> None:
+    """Render a separate, dynamic system map of the founder's entire Blueprint."""
+    _render_full_blueprint_css()
+    bundle: dict = {}
+    load_error = ""
+    if st.session_state.get("backend_run_id"):
+        try:
+            bundle = hydrate_current_run(force=True) or {}
+        except BackendError as exc:
+            load_error = str(exc)
+    context = _dict(bundle.get("research_context"))
+    dashboard = _dict(bundle.get("blueprint"))
+    artifact = _dict(_dict(dashboard.get("current_version")).get("blueprint"))
+    tasks = _task_map(bundle)
+    gate_1 = any(key in tasks for key in ("assumptions_risks", "offer_pricing", "validation_proof", "operating_model", "financial_readiness", "execution_readiness"))
+    gate_2 = any(key in tasks for key in ("launch_distribution", "growth_optimization", "action_blueprint"))
+    states = {key: _section_state(tasks.get(key), _stage_number(key), gate_1, gate_2) for _, sections in STAGES for key, _ in sections}
+    project = _dict(context.get("project"))
+    idea = project.get("idea_text") or artifact.get("idea_text") or artifact.get("product_idea") or st.session_state.get("idea", "Your Product Idea")
+    title = _project_title(str(idea))
+    outputs = {key: _extract_output(tasks.get(key), artifact, key) for _, sections in STAGES for key, _ in sections}
+    discovered = sum(bool(output) or states[key][0] == "done" for key, output in outputs.items())
+    processing = sum(state[0] == "running" for state in states.values())
+    unresolved = len(states) - discovered
+    constraints = _dict(project.get("constraints"))
+    answers = _dict(constraints.get("onboarding_answers")) or _dict(st.session_state.get("dialog_answers"))
+    capital = answers.get("budget") or answers.get("capital_available") or "Not identified"
+    revenue = answers.get("revenue_model") or "Not identified"
+    pricing = outputs.get("offer_pricing", {}).get("pricing_model") or outputs.get("offer_pricing", {}).get("recommendation") or "Not identified"
+    status_map = {
+        "done": ("identified", "Identified"),
+        "running": ("processing", "Processing"),
+        "error": ("review", "Needs review"),
+        "ready": ("unidentified", "Not identified"),
+        "locked": ("unidentified", "Not identified"),
+        "idle": ("unidentified", "Not identified"),
+    }
+    stage_descriptions = {
+        1: "Establish the customer, market, competitive reality, and the first evidence-backed verdict.",
+        2: "Turn accepted research into assumptions, an offer, validation design, operating logic, and financial boundaries.",
+        3: "Translate proven decisions into an advisory MVP, distribution path, growth prerequisites, and final action map.",
+    }
+    sequence = 0
+    lanes: list[str] = []
+    for stage_number, (stage_name, sections) in enumerate(STAGES, 1):
+        cards: list[str] = []
+        for key, label in sections:
+            sequence += 1
+            kind, status_label = status_map.get(states[key][0], ("unidentified", "Not identified"))
+            summary, details = _map_node_content(outputs[key], states[key], label)
+            detail_html = "".join(f'<div class="node-point">{html.escape(item)}</div>' for item in details)
+            if not detail_html:
+                detail_html = '<div class="node-awaiting">Awaiting accepted evidence and the required prior decision.</div>'
+            cards.append(
+                f'<a class="map-node {kind}" style="animation-delay:{sequence * 0.035:.3f}s" href="/Your_Plan?section={html.escape(key)}" target="_self">'
+                f'<div class="node-top"><span class="node-number">{sequence:02d}</span><span class="node-status">{status_label}</span></div>'
+                f'<h3>{html.escape(label)}</h3><p>{html.escape(summary)}</p><div class="node-points">{detail_html}</div></a>'
+            )
+        clean_name = stage_name.split("·", 1)[-1].strip()
+        lanes.append(
+            f'<section class="map-lane"><div class="lane-head"><div><div class="lane-index">STAGE {stage_number:02d} / {html.escape(clean_name.upper())}</div>'
+            f'<h2>{html.escape(clean_name)}</h2></div><p>{html.escape(stage_descriptions[stage_number])}</p></div><div class="map-grid">{"".join(cards)}</div></section>'
+        )
+    load_notice = f'<div class="node-awaiting">Live data could not refresh: {html.escape(load_error)}</div>' if load_error else ""
+    st.markdown(
+        f'''<main class="map-shell"><header class="map-top"><div class="map-brand"><b>⌘</b> BLUEPRINT / CONNECTED DECISION PATH</div><div class="map-actions"><a href="/" target="_self">HOME</a><a class="primary" href="/Your_Plan" target="_self">DASHBOARD</a></div></header>
+        <section class="map-hero"><div><div class="map-eyebrow">IDEA → EVIDENCE → DECISION → ADVISORY PLAN</div><h1>{html.escape(title)} <span>Blueprint</span></h1></div><p class="map-intro"><b>Follow the connected path.</b> Identified cards contain accepted work from this run. Gray cards are deliberately marked as not identified until their evidence or decision gate exists.</p></section>
+        <div class="map-metrics"><div class="map-metric"><b>{discovered}/{len(states)}</b><span>Parts identified</span></div><div class="map-metric"><b>{processing}</b><span>Processing now</span></div><div class="map-metric"><b>{unresolved}</b><span>Still unidentified</span></div><div class="map-metric"><b style="font:500 12px/1.3 'DM Mono'">{html.escape(_goal_line(context).replace("Goal: ", ""))}</b><span>Founder goal</span></div></div>{load_notice}{"".join(lanes)}
+        <section class="finance-strip"><div class="finance-lead"><small>Financial plan / evidence boundary</small><h2>Know the cost of the next commitment.</h2><p>Blueprint separates founder inputs from researched evidence and never invents revenue, pricing, conversion, or willingness to pay.</p><a class="finance-link" href="/Your_Plan?view=financial" target="_self">OPEN FINANCIAL PLAN →</a></div><div class="finance-cell"><small>Capital available</small><b>{html.escape(str(capital))}</b><span>Founder-provided constraint</span></div><div class="finance-cell"><small>Revenue model</small><b>{html.escape(str(revenue))}</b><span>Unidentified until provided or supported</span></div><div class="finance-cell"><small>Pricing direction</small><b>{html.escape(_item_text(pricing)[:80])}</b><span>Requires customer or market evidence</span></div></section>
+        <div class="map-legend"><span class="l1"><i></i>Identified from the current Blueprint</span><span class="l2"><i></i>Processing now</span><span class="l3"><i></i>Needs input or review</span><span><i></i>Not identified yet</span></div></main>''',
+        unsafe_allow_html=True,
+    )
+
+
+def render_financial_plan() -> None:
+    """Render the founder's financial boundaries without fabricating commercial proof."""
+    bundle: dict = {}
+    if st.session_state.get("backend_run_id"):
+        try:
+            bundle = hydrate_current_run(force=True) or {}
+        except BackendError:
+            bundle = {}
+    context = _dict(bundle.get("research_context"))
+    tasks = _task_map(bundle)
+    output = _dict(_dict(tasks.get("financial_readiness")).get("output"))
+    project = _dict(context.get("project"))
+    answers = _dict(_dict(project.get("constraints")).get("onboarding_answers")) or _dict(st.session_state.get("dialog_answers"))
+    idea = project.get("idea_text") or st.session_state.get("idea", "Your Product Idea")
+    fields = [
+        ("Capital available", answers.get("budget") or answers.get("capital_available"), "Founder-provided constraint"),
+        ("Time available", answers.get("time_available") or answers.get("weekly_time"), "Founder-provided constraint"),
+        ("Revenue model", answers.get("revenue_model") or output.get("revenue_model"), "Requires an explicit business-model decision"),
+        ("Pricing evidence", output.get("pricing_model") or output.get("pricing_direction"), "Requires customer or market evidence"),
+        ("Runway", output.get("runway") or output.get("runway_months"), "Calculated only from provided costs and capital"),
+        ("Readiness", output.get("readiness") or output.get("status"), "Current financial decision state"),
+    ]
+    cards = "".join(
+        f'<article class="fp-card"><small>{html.escape(label)}</small><b>{html.escape(_item_text(value)[:110]) if value not in (None, "", []) else "Not identified"}</b><span>{html.escape(note)}</span></article>'
+        for label, value, note in fields
+    )
+    sections = []
+    for title, field in (("Cost assumptions", "assumptions"), ("Scenarios", "scenarios"), ("Financial risks", "risks"), ("Next decisions", "recommendations")):
+        values = _clean(output.get(field))[:6]
+        rows = "".join(f'<li>{html.escape(value)}</li>' for value in values) or '<li class="unknown">Not identified yet — this will fill after Stage 2 has accepted inputs and evidence.</li>'
+        sections.append(f'<article class="fp-section"><small>{html.escape(title)}</small><ul>{rows}</ul></article>')
+    st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap');
+[data-testid="stAppViewContainer"],[data-testid="stHeader"]{background:linear-gradient(145deg,#e8eeea,#f1dfd4 62%,#cf9f87);color:#262b27}[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stSidebar"],[data-testid="stSidebarNav"],#MainMenu,footer{display:none!important}[data-testid="stAppViewContainer"]>.main{margin-left:0!important}main .block-container{width:100%!important;max-width:1500px!important;padding:28px 48px 80px!important}.fp-shell{font-family:'Space Grotesk',sans-serif}.fp-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:17px;border-bottom:1px solid rgba(45,53,47,.2)}.fp-brand{font:500 9px 'DM Mono';letter-spacing:.1em}.fp-top a{padding:10px 14px;border:1px solid rgba(37,46,39,.25);border-radius:18px;color:#29322b;text-decoration:none;font:8px 'DM Mono'}.fp-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:45px;padding:58px 0 35px}.fp-hero small,.fp-card small,.fp-section small{font:500 8px 'DM Mono';letter-spacing:.1em;text-transform:uppercase;color:#6a766e}.fp-hero h1{margin:13px 0 8px;font:500 clamp(55px,7vw,100px)/.86 'Space Grotesk';letter-spacing:-.085em}.fp-hero h1 span{color:#8f7770}.fp-hero p{align-self:end;margin:0;color:#626d65;font:14px/1.55 'Space Grotesk'}.fp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.fp-card{position:relative;overflow:hidden;min-height:165px;padding:20px;border:1px solid rgba(49,59,51,.2);border-radius:22px;background:rgba(255,255,255,.45);backdrop-filter:blur(16px);transition:.22s}.fp-card:hover{transform:translateY(-3px);background:rgba(255,255,255,.62);box-shadow:0 18px 35px rgba(74,52,43,.08)}.fp-card:after{content:'';position:absolute;right:-32px;bottom:-45px;width:110px;height:110px;border-radius:50%;background:rgba(173,116,88,.1)}.fp-card b{position:relative;z-index:1;display:block;margin-top:31px;font:500 23px/1.08 'Space Grotesk';letter-spacing:-.055em}.fp-card span{position:relative;z-index:1;display:block;margin-top:8px;color:#727c74;font:9px/1.45 'DM Mono'}.fp-sections{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}.fp-section{min-height:190px;padding:22px;border:1px solid rgba(49,59,51,.18);border-radius:22px;background:rgba(247,247,241,.62)}.fp-section ul{display:grid;gap:8px;margin:19px 0 0;padding:0;list-style:none}.fp-section li{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.55);font:11px/1.45 'Space Grotesk'}.fp-section li:before{content:'↳';margin-right:8px;color:#8c5f4b}.fp-section li.unknown{color:#7f8880;font-family:'DM Mono';font-size:9px}.fp-rule{margin-top:18px;padding:17px 20px;border-radius:17px;background:#28342c;color:#eaf0eb;font:10px/1.5 'DM Mono'}.fp-rule b{color:#d7f483}.fp-actions{display:flex;gap:8px;margin-top:18px}.fp-actions a{padding:12px 15px;border-radius:16px;background:#26342b;color:#f0f4f1;text-decoration:none;font:8px 'DM Mono'}.fp-actions a.secondary{border:1px solid rgba(39,50,42,.24);background:rgba(255,255,255,.4);color:#29342c}@media(max-width:850px){main .block-container{padding:20px!important}.fp-hero{grid-template-columns:1fr}.fp-grid,.fp-sections{grid-template-columns:1fr}.fp-hero h1{font-size:58px}}
+</style>""", unsafe_allow_html=True)
+    st.markdown(
+        f'''<main class="fp-shell"><header class="fp-top"><div class="fp-brand">BLUEPRINT / FINANCIAL PLAN</div><a href="/Your_Plan" target="_self">BACK TO DASHBOARD</a></header><section class="fp-hero"><div><small>Founder constraints → evidence → financial decision</small><h1>Financial <span>Plan</span></h1></div><p>Financial readiness for <b>{html.escape(_project_title(str(idea)))}</b>. Blank evidence stays visibly unidentified; Blueprint does not turn estimates into facts.</p></section><div class="fp-grid">{cards}</div><div class="fp-sections">{"".join(sections)}</div><div class="fp-rule"><b>Evidence boundary:</b> projected revenue, conversion, willingness to pay, and runway are withheld until the required founder inputs or accepted research exist.</div><div class="fp-actions"><a href="/Your_Plan?section=financial_readiness" target="_self">OPEN FINANCIAL READINESS →</a><a class="secondary" href="/Your_Plan?view=blueprint" target="_self">VIEW FULL BLUEPRINT</a></div></main>''',
+        unsafe_allow_html=True,
+    )
 
 
 @st.fragment(run_every=4)
