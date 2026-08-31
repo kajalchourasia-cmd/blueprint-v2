@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2400" viewBox="0 0 3840 2400">
+<rect width="3840" height="2400" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6A746E"/></marker></defs>
+<rect x="44" y="40" width="3752" height="172" rx="36" fill="#F6F8F6" stroke="#D6DCD8" stroke-width="2"/>
+<rect x="84" y="74" width="104" height="104" rx="26" fill="#EAF3EE" stroke="#176447" stroke-width="2"/>
+<line x1="114" y1="106" x2="158" y2="102" stroke="#176447" stroke-width="4"/>
+<line x1="114" y1="106" x2="136" y2="148" stroke="#176447" stroke-width="4"/>
+<line x1="158" y1="102" x2="162" y2="146" stroke="#176447" stroke-width="4"/>
+<line x1="136" y1="148" x2="162" y2="146" stroke="#176447" stroke-width="4"/>
+<circle cx="114" cy="106" r="8" fill="#176447" stroke="#176447" stroke-width="2"/>
+<circle cx="158" cy="102" r="8" fill="#176447" stroke="#176447" stroke-width="2"/>
+<circle cx="136" cy="148" r="8" fill="#176447" stroke="#176447" stroke-width="2"/>
+<circle cx="162" cy="146" r="8" fill="#176447" stroke="#176447" stroke-width="2"/>
+<text x="224" y="120" text-anchor="start" font-family="Segoe UI, Arial" font-size="58" font-weight="600" fill="#16201B">Blueprint — Runtime Trust, Memory &amp; Latency Flow</text>
+<text x="224" y="164" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#5D6963">How the system answers quickly, deepens research safely, remembers deliberately, and returns control to the founder.</text>
+<text x="3748" y="100" text-anchor="end" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#2E5F8A">REVIEW ASSET · V1</text>
+<text x="3748" y="160" text-anchor="end" font-family="Segoe UI, Arial" font-size="26" font-weight="400" fill="#5D6963">Human approval is a control plane—not one final button</text>
+<rect x="44" y="248" width="832" height="1920" rx="36" fill="#FFFFFF" stroke="#D6DCD8" stroke-width="2"/>
+<rect x="912" y="248" width="1980" height="1920" rx="36" fill="#FFFFFF" stroke="#2E5F8A" stroke-width="2"/>
+<rect x="2928" y="248" width="868" height="1920" rx="36" fill="#FFFFFF" stroke="#D6DCD8" stroke-width="2"/>
+<text x="88" y="318" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#6D5AA6">FOUR MEMORY LAYERS</text>
+<text x="88" y="396" text-anchor="start" font-family="Segoe UI, Arial" font-size="50" font-weight="600" fill="#16201B">Remember the right thing</text>
+<text x="88" y="442" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#5D6963">Each store has one authority. This prevents stale</text>
+<text x="88" y="478" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#5D6963">personalization from becoming project truth.</text>
+<rect x="88" y="540" width="740" height="256" rx="20" fill="#F6F8F6" stroke="#D6DCD8" stroke-width="2"/>
+<text x="116" y="580" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#5D6963">SESSION MEMORY</text>
+<text x="116" y="630" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Streamlit UI state</text>
+<text x="116" y="668" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Current page, selected section, transient controls and display</text>
+<text x="116" y="698" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">cache. Lost safely when the session ends.</text>
+<rect x="88" y="832" width="740" height="308" rx="20" fill="#EBF2F8" stroke="#2E5F8A" stroke-width="2"/>
+<text x="116" y="872" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#2E5F8A">CANONICAL EPISODIC STATE</text>
+<text x="116" y="922" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Supabase</text>
+<text x="116" y="960" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Profiles, runs, tasks, evidence, approvals, checkpoints and</text>
+<text x="116" y="990" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Blueprint versions. Read before routing; write after every state</text>
+<text x="116" y="1020" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">transition.</text>
+<rect x="88" y="1176" width="740" height="280" rx="20" fill="#EAF3EE" stroke="#176447" stroke-width="2"/>
+<text x="116" y="1216" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#176447">LONG-TERM FOUNDER MEMORY</text>
+<text x="116" y="1266" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Mem0</text>
+<text x="116" y="1304" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Only confirmed goals, preferences, constraints, corrections and</text>
+<text x="116" y="1334" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">decisions—with provenance. Never the canonical Blueprint.</text>
+<rect x="88" y="1492" width="740" height="308" rx="20" fill="#F2EEF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="116" y="1532" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#6D5AA6">SEMANTIC EVIDENCE MEMORY</text>
+<text x="116" y="1582" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Pinecone</text>
+<text x="116" y="1620" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Accepted evidence and completed sections for retrieval. Every</text>
+<text x="116" y="1650" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">hit is mapped back to owner-scoped Supabase truth before use.</text>
+<rect x="88" y="1836" width="740" height="260" rx="24" fill="#FCF4E2" stroke="#936515" stroke-width="2"/>
+<text x="124" y="1898" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#936515">LEARNING BOUNDARY</text>
+<text x="124" y="1950" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="400" fill="#16201B">Blueprint learns by recording observations, accepted</text>
+<text x="124" y="1984" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="400" fill="#16201B">evidence and founder feedback, then replanning from</text>
+<text x="124" y="2018" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="400" fill="#16201B">durable state. It does not self-train the model or store raw</text>
+<text x="124" y="2052" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="400" fill="#16201B">chain-of-thought.</text>
+<text x="960" y="318" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#2E5F8A">RUNTIME CONTROL FLOW</text>
+<text x="960" y="396" text-anchor="start" font-family="Segoe UI, Arial" font-size="50" font-weight="600" fill="#16201B">Fast first value. Deep evidence next.</text>
+<text x="2840" y="378" text-anchor="end" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#2E5F8A">SUPERVISOR-OWNED</text>
+<rect x="960" y="440" width="1884" height="144" rx="24" fill="#FFFFFF" stroke="#D6DCD8" stroke-width="2"/>
+<circle cx="1008" cy="492" r="26" fill="#5D6963" stroke="#5D6963" stroke-width="2"/>
+<text x="1008" y="488" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#FFFFFF">1</text>
+<text x="1056" y="492" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Founder request + onboarding</text>
+<text x="1056" y="536" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Idea, goal, constraints and selected research lanes enter an owner-isolated run.</text>
+<line x1="1902" y1="584" x2="1902" y2="620" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="624" width="1884" height="156" rx="24" fill="#F6F8F6" stroke="#D6DCD8" stroke-width="2"/>
+<circle cx="1008" cy="676" r="26" fill="#5D6963" stroke="#5D6963" stroke-width="2"/>
+<text x="1008" y="672" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#FFFFFF">2</text>
+<text x="1056" y="676" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Safety, scope, identity + idempotency boundary</text>
+<text x="1056" y="720" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Reject unsafe/out-of-scope requests; restore or create exactly one durable project/run.</text>
+<line x1="1902" y1="780" x2="1902" y2="816" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="820" width="1884" height="184" rx="24" fill="#EAF3EE" stroke="#176447" stroke-width="2"/>
+<circle cx="1008" cy="872" r="26" fill="#176447" stroke="#176447" stroke-width="2"/>
+<text x="1008" y="868" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#FFFFFF">3</text>
+<text x="1056" y="872" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Immediate Foundation — deterministic fast path</text>
+<text x="1056" y="916" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Structure founder-provided inputs locally. No web search or model round-trip blocks the first useful view.</text>
+<rect x="1770.2" y="1008" width="263.6" height="48" rx="24" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="1902" y="1034" text-anchor="middle" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">FOUNDATION VISIBLE</text>
+<line x1="1902" y1="1056" x2="1902" y2="1092" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="1096" width="1884" height="164" rx="24" fill="#EBF2F8" stroke="#2E5F8A" stroke-width="2"/>
+<circle cx="1008" cy="1148" r="26" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="1008" y="1144" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#FFFFFF">4</text>
+<text x="1056" y="1148" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Dynamic Supervisor + dependency-aware scheduler</text>
+<text x="1056" y="1192" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Load canonical state, eligible memories and budgets; dispatch only justified specialist work.</text>
+<line x1="1902" y1="1260" x2="1902" y2="1294" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="1300" width="1884" height="296" rx="28" fill="#F6F8F6" stroke="#D6DCD8" stroke-width="2"/>
+<text x="1000" y="1354" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#2E5F8A">5  PARALLEL SPECIALIST FAN-OUT</text>
+<rect x="1000" y="1392" width="582.6666666666666" height="164" rx="20" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="1028" y="1432" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#176447">RESEARCH AGENT</text>
+<text x="1028" y="1482" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Customer</text>
+<text x="1028" y="1520" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Pains, jobs, personas, interview path and demand</text>
+<text x="1028" y="1550" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">signals.</text>
+<rect x="1610.6666666666665" y="1392" width="582.6666666666666" height="164" rx="20" fill="#FFFFFF" stroke="#6D5AA6" stroke-width="2"/>
+<text x="1638.6666666666665" y="1432" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#6D5AA6">RESEARCH AGENT</text>
+<text x="1638.6666666666665" y="1482" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Competitor</text>
+<text x="1638.6666666666665" y="1520" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Direct, indirect and workaround alternatives;</text>
+<text x="1638.6666666666665" y="1550" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">gaps and complaints.</text>
+<rect x="2221.333333333333" y="1392" width="582.6666666666666" height="164" rx="20" fill="#FFFFFF" stroke="#936515" stroke-width="2"/>
+<text x="2249.333333333333" y="1432" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#936515">RESEARCH AGENT</text>
+<text x="2249.333333333333" y="1482" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Market</text>
+<text x="2249.333333333333" y="1520" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Secondary evidence, dynamics, reachability and</text>
+<text x="2249.333333333333" y="1550" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">market constraints.</text>
+<text x="2804" y="1356" text-anchor="end" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#176447">Each completed section renders immediately</text>
+<line x1="1902" y1="1596" x2="1902" y2="1632" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="1636" width="1884" height="256" rx="28" fill="#FFFFFF" stroke="#D6DCD8" stroke-width="2"/>
+<rect x="1000" y="1680" width="582.6666666666666" height="168" rx="20" fill="#EBF2F8" stroke="#2E5F8A" stroke-width="2"/>
+<text x="1028" y="1720" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#2E5F8A">INDEPENDENT AGENT</text>
+<text x="1028" y="1770" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Evidence audit</text>
+<text x="1028" y="1808" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Coverage, relevance, freshness, contradictions</text>
+<text x="1028" y="1838" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">and citation integrity.</text>
+<rect x="1610.6666666666665" y="1680" width="582.6666666666666" height="168" rx="20" fill="#FCF4E2" stroke="#936515" stroke-width="2"/>
+<text x="1638.6666666666665" y="1720" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#936515">DETERMINISTIC POLICY</text>
+<text x="1638.6666666666665" y="1770" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Research verdict</text>
+<text x="1638.6666666666665" y="1808" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Transparent score, threshold, limitations and</text>
+<text x="1638.6666666666665" y="1838" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">allowed next routes.</text>
+<rect x="2221.333333333333" y="1680" width="582.6666666666666" height="168" rx="20" fill="#F2EEF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="2249.333333333333" y="1720" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="600" fill="#6D5AA6">CRITIQUE AGENT</text>
+<text x="2249.333333333333" y="1770" text-anchor="start" font-family="Segoe UI, Arial" font-size="32" font-weight="600" fill="#16201B">Quality gate</text>
+<text x="2249.333333333333" y="1808" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Grounding, completeness, actionability and</text>
+<text x="2249.333333333333" y="1838" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">safety; cannot self-approve.</text>
+<line x1="1902" y1="1892" x2="1902" y2="1928" stroke="#5D6963" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="960" y="1932" width="1884" height="176" rx="28" fill="#FCF4E2" stroke="#936515" stroke-width="4"/>
+<text x="1000" y="1984" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#936515">6  HUMAN-IN-THE-LOOP DECISION GATE</text>
+<text x="1000" y="2044" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#16201B">Founder can approve, revise, add information, request a rerun, override with reason, pause or stop.</text>
+<text x="1000" y="2092" text-anchor="start" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#5D6963">Only an accepted decision unlocks Stage 2 and updates the versioned Blueprint.</text>
+<polyline points="876,976 924,976 924,702 960,702" fill="none" stroke="#2E5F8A" stroke-width="4" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<rect x="844.0" y="920" width="168" height="48" rx="24" fill="#FFFFFF" stroke="#2E5F8A" stroke-width="2"/>
+<text x="928" y="946" text-anchor="middle" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#2E5F8A">STATE</text>
+<polyline points="876,1316 900,1316 900,1180 960,1180" fill="none" stroke="#176447" stroke-width="4" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<rect x="832.0" y="1264" width="168" height="48" rx="24" fill="#FFFFFF" stroke="#176447" stroke-width="2"/>
+<text x="916" y="1290" text-anchor="middle" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">CONFIRMED</text>
+<polyline points="960,1764 912,1764 912,1646 876,1646" fill="none" stroke="#6D5AA6" stroke-width="4" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<rect x="826.0" y="1708" width="168" height="48" rx="24" fill="#FFFFFF" stroke="#6D5AA6" stroke-width="2"/>
+<text x="910" y="1734" text-anchor="middle" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">ACCEPTED</text>
+<text x="2972" y="318" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#176447">LATENCY DESIGN</text>
+<text x="2972" y="394" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#16201B">Where waiting is removed</text>
+<circle cx="2994" cy="454" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="454" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">1</text>
+<text x="3036" y="460" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Deterministic Foundation: no external research wait.</text>
+<circle cx="2994" cy="504" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="504" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">2</text>
+<text x="3036" y="510" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Customer, competitor and market work run in parallel.</text>
+<circle cx="2994" cy="554" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="554" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">3</text>
+<text x="3036" y="560" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Scheduler skips agents whose dependencies or evidence</text>
+<text x="3036" y="594" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">do not justify them.</text>
+<circle cx="2994" cy="638" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="638" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">4</text>
+<text x="3036" y="644" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Progressive persistence keeps completed sections</text>
+<text x="3036" y="678" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">readable while others run.</text>
+<circle cx="2994" cy="722" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="722" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">5</text>
+<text x="3036" y="728" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Bounded timeouts, retries, tool and cost budgets prevent</text>
+<text x="3036" y="762" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">endless loops.</text>
+<circle cx="2994" cy="806" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="806" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">6</text>
+<text x="3036" y="812" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Durable resume continues from the last checkpoint</text>
+<text x="3036" y="846" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">instead of restarting.</text>
+<circle cx="2994" cy="890" r="22" fill="#2E5F8A" stroke="#2E5F8A" stroke-width="2"/>
+<text x="2994" y="890" text-anchor="middle" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#FFFFFF">7</text>
+<text x="3036" y="896" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">Section-scoped RAG retrieves only the evidence needed</text>
+<text x="3036" y="930" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#16201B">for that question.</text>
+<line x1="2972" y1="1072" x2="3752" y2="1072" stroke="#D6DCD8" stroke-width="2"/>
+<text x="2972" y="1138" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#A64B43">BOUNDED RECOVERY LOOP</text>
+<text x="2972" y="1202" text-anchor="start" font-family="Segoe UI, Arial" font-size="38" font-weight="600" fill="#16201B">Failure never becomes an infinite spinner</text>
+<rect x="2972" y="1240" width="776" height="76" rx="18" fill="#FBEDEC" stroke="#A64B43" stroke-width="2"/>
+<text x="3360" y="1280" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#16201B">Tool/model failure</text>
+<line x1="3360" y1="1316" x2="3360" y2="1336" stroke="#5D6963" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="2972" y="1338" width="776" height="76" rx="18" fill="#F6F8F6" stroke="#D6DCD8" stroke-width="2"/>
+<text x="3360" y="1378" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#16201B">Classify + record</text>
+<line x1="3360" y1="1414" x2="3360" y2="1434" stroke="#5D6963" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="2972" y="1436" width="776" height="76" rx="18" fill="#FCF4E2" stroke="#936515" stroke-width="2"/>
+<text x="3360" y="1476" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#16201B">Retry / repair once</text>
+<line x1="3360" y1="1512" x2="3360" y2="1532" stroke="#5D6963" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="2972" y="1534" width="776" height="76" rx="18" fill="#EBF2F8" stroke="#2E5F8A" stroke-width="2"/>
+<text x="3360" y="1574" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="400" fill="#16201B">Reload state + replan</text>
+<line x1="3360" y1="1610" x2="3360" y2="1630" stroke="#5D6963" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="2972" y="1632" width="776" height="76" rx="18" fill="#EAF3EE" stroke="#176447" stroke-width="2"/>
+<text x="3360" y="1672" text-anchor="middle" font-family="Segoe UI, Arial" font-size="24" font-weight="600" fill="#16201B">Partial result / HITL / safe fail</text>
+<line x1="2972" y1="1736" x2="3752" y2="1736" stroke="#D6DCD8" stroke-width="2"/>
+<text x="2972" y="1802" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#936515">EVERY HITL TRIGGER</text>
+<circle cx="2982" cy="1852" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="1854" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">Required founder context is missing or ambiguous.</text>
+<circle cx="2982" cy="1888" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="1890" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">Decision-critical evidence is contradictory or insufficient.</text>
+<circle cx="2982" cy="1924" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="1926" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">A profile correction makes downstream work stale.</text>
+<circle cx="2982" cy="1960" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="1962" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">A rerun, route override or idea change is proposed.</text>
+<circle cx="2982" cy="1996" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="1998" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">A stage gate or final Blueprint decision is reached.</text>
+<circle cx="2982" cy="2032" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="2034" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">Retries, provider budget or time budget are exhausted.</text>
+<circle cx="2982" cy="2068" r="8" fill="#936515" stroke="#936515" stroke-width="2"/>
+<text x="3008" y="2070" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#16201B">Any external create, modify, send, publish, pay or delete action is requested.</text>
+<rect x="44" y="2184" width="3752" height="164" rx="32" fill="#16201B" stroke="#16201B" stroke-width="2"/>
+<text x="96" y="2238" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#A8D7C4">OBSERVE</text>
+<text x="96" y="2294" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#FFFFFF">Latency per step · attempts · route reason · tool/model · budget · terminal status</text>
+<text x="2000" y="2238" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="600" fill="#F4D899">TASK COMPLETION</text>
+<text x="2000" y="2294" text-anchor="start" font-family="Segoe UI, Arial" font-size="28" font-weight="400" fill="#FFFFFF">Every run ends visibly: completed, partial, needs input, human review, cancelled or safe failed.</text>
+</svg>

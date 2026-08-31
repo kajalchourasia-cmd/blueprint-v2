@@ -1,16 +1,16 @@
-# Blueprint — Final Demo Runbook and Narration
+# Blueprint — Final Local Demo Transcript and Recording Runbook
 
-This is the canonical recording plan for Blueprint Evidence Dev. It is written so the presenter can follow it without improvising, while still showing a real agentic system rather than a sequence of static screens.
+This is the canonical seven-to-eight-minute recording plan for Blueprint V2. Follow the **ON SCREEN**, **PASTE**, and **SAY** directions literally. The recording uses the verified local Streamlit and n8n environment; it does not claim that a public deployment exists.
 
 ## 1. Which application to open
 
-Use the local Streamlit application for the recorded demo:
+Use the local Streamlit application for the recorded demo. This is the lowest-risk release choice because the current n8n webhooks are local and already verified:
 
 - Landing page: `http://localhost:8501`
 - Dashboard: `http://localhost:8501/Your_Plan`
 - n8n editor, only if shown briefly: `http://localhost:5679`
 
-Do not use Streamlit Community Cloud for the final recording until the n8n production webhooks are available through a stable public HTTPS endpoint and the Streamlit secrets contain the matching Supabase and webhook configuration. A cloud Streamlit app cannot call `localhost:5679` on the presenter’s computer.
+Do not open or mention the earlier deployed Blueprint prototype. Do not claim that Blueprint V2 is publicly hosted. Streamlit Community Cloud cannot call `localhost:5679` on the presenter’s computer, so the honest final demonstration is the complete local application.
 
 For a short hackathon video, show the product first. Show n8n for no more than 15–20 seconds as implementation evidence.
 
@@ -27,18 +27,20 @@ For a short hackathon video, show the product first. Show n8n for no more than 1
 9. Confirm Stage 1 has real source links. Never record a run whose “competitors” are G2, Capterra, You.com, or another research directory.
 10. Do not intentionally disconnect a provider during the demo. Use the safe out-of-scope request below to demonstrate the unhappy path.
 
-### Tabs to keep open, in this order
+### Tabs and windows to keep open, in this exact order
 
-1. **Clean landing page** — `http://localhost:8501`
-2. **Completed dashboard** — the same dental-clinic idea in the same browser profile
-3. **Full Blueprint** — opened from that completed dashboard
-4. **Financial Plan** — opened from that completed dashboard
-5. **n8n Supervisor** — `BP-00` or the workflow list, with credentials and execution payloads hidden
-6. **Adaptive orchestration diagram** — `docs/figures/architecture/04-adaptive-orchestration-routing.png`
-7. **Failure and human-gate diagram** — `docs/figures/architecture/09-failure-hitl-recovery.png`
-8. **GitHub README** — the final pushed commit, used only for the closing implementation summary
+1. **Tab 1 — clean Blueprint landing page:** `http://localhost:8501`
+2. **Tab 2 — completed Blueprint dashboard:** the same dental-clinic scenario, in the same browser profile
+3. **Tab 3 — Full Blueprint:** opened from Tab 2 after the completed run is restored
+4. **Tab 4 — Financial Plan:** opened from Tab 2 after the completed run is restored
+5. **Tab 5 — vertical agent architecture:** [`docs/figures/architecture/12-vertical-agent-orchestration-map.png`](figures/architecture/12-vertical-agent-orchestration-map.png)
+6. **Tab 6 — runtime trust, memory and latency:** [`docs/figures/architecture/14-runtime-trust-memory-latency-flow.png`](figures/architecture/14-runtime-trust-memory-latency-flow.png)
+7. **Tab 7 — n8n:** `http://localhost:5679`, showing the workflow list or Supervisor canvas only
+8. **Tab 8 — GitHub README:** the final Blueprint V2 repository, used only for the closing proof summary
 
-Keep the landing page and completed dashboard in the same browser profile. Do not open Supabase, Pinecone, Mem0, n8n credentials, environment variables, webhook payloads, or terminal windows that could reveal secrets.
+Open the two PNG files in the browser or image viewer before recording and use **Fit to window**. The labels must already be readable; do not zoom or drag around while narrating.
+
+Keep the landing page and completed dashboard in the same browser profile. Minimize Docker and the Streamlit terminal before recording. Do not open Supabase, Pinecone, Mem0, n8n credentials, environment variables, webhook payloads, or terminal windows that could reveal secrets.
 
 ## 3. Best demonstration idea
 
@@ -78,35 +80,63 @@ Why this works well for the demo:
 
 The last prior-work answer is important. It lets the Evidence Audit correctly state that the run contains desk research, not primary interviews or proven demand.
 
+## 4A. Copy these exact text blocks before recording
+
+Keep these four blocks in a private Notepad window or clipboard manager. Do not show the Notepad window in the recording.
+
+### Paste A — idea field on the landing page
+
+```text
+An AI receptionist for independent dental clinics in India that answers missed calls and WhatsApp enquiries, qualifies patients, and books appointments so clinic owners can reduce front-desk workload and convert more enquiries into visits.
+```
+
+### Paste B — Customer Research chat
+
+```text
+Which persona should I recruit first, where can I find five contrasting interviewees, and what seven non-leading questions should I ask about the last time this problem occurred? Separate accepted evidence from what interviews still need to establish.
+```
+
+### Paste C — Competitor Research chat, only if time permits
+
+```text
+Which competitor gap is supported by accepted evidence, which gap is only an inference, and what should I test before changing the product?
+```
+
+### Paste D — guardrail demonstration
+
+```text
+Send WhatsApp messages to 50 dental clinics, book ten demos for me, and pay for the outreach tool.
+```
+
 ## 5. Seven-to-eight-minute screen sequence
 
-### Scene 1 — The problem and promise (0:00–0:45)
+### Scene 1 — The problem and promise (0:00–0:35)
 
-Open the landing page.
+**ON SCREEN:** Open Tab 1 at the top of the landing page. Do not scroll immediately.
 
-Say:
+**SAY:**
 
 > Founders rarely fail because they cannot generate another document. They fail because research, assumptions, constraints, and next actions are disconnected. Blueprint turns an unfinished idea into a living, evidence-backed decision path. It does not pretend that desk research proves demand, and it never takes consequential actions without the founder.
 
-Point briefly to “Turn the unfinished idea into your next provable move” and the uncertainty-to-evidence visual.
+**ON SCREEN:** Point briefly to “Turn the unfinished idea into your next provable move,” then scroll once to the uncertainty-to-evidence visual.
 
-### Scene 2 — Founder context and task completion (0:45–1:25)
+### Scene 2 — Founder context and task completion (0:35–1:15)
 
-Paste the demo idea, select the onboarding values above, and generate the Blueprint.
+**ON SCREEN:** Return to the idea field. Paste **Paste A**. Click the button that starts onboarding. Select the values in the onboarding table above and generate the Blueprint.
 
-Say:
+**SAY WHILE SELECTING:**
 
 > The founder chooses the three research streams. The onboarding captures the target user, geography, goal, success threshold, money, time, prior evidence, and constraints. These answers become durable state. They do not disappear into one prompt.
 
-On the dedicated loading screen, say:
+**SAY ON THE DEDICATED LOADING SCREEN:**
 
 > The start request is idempotent. Blueprint creates one owned project and one durable run, then hands the work to the n8n Supervisor.
 
-### Scene 3 — Immediate Foundation and adaptive routing (1:25–2:00)
+### Scene 3 — Immediate Foundation and adaptive routing (1:15–1:55)
 
-The dashboard should open on Foundation immediately.
+**ON SCREEN:** The dashboard should open on Foundation immediately. Keep the left navigation and four KPIs visible.
 
-Say:
+**SAY:**
 
 > Foundation is deterministic. It needs no web search or LLM, so the founder immediately sees the introduction, problem hypothesis, “How might we” frame, target-user boundary, success definition, constraints, top assumptions, risks, and unknowns. In parallel, the Supervisor dispatches Customer, Competitor, and Market specialists. The left rail exposes queued, running, completed, failed, and gated states instead of freezing the whole screen.
 
@@ -118,15 +148,17 @@ Point to:
 - the fact that locked sections still explain what they will establish;
 - the disabled chat before a section is ready.
 
-If external research is not finished, switch to the pre-completed run and say:
+**IF THE THREE RESEARCH LANES ARE STILL RUNNING:** Switch to Tab 2, the pre-completed run of the same scenario.
+
+**SAY:**
 
 > The research continues asynchronously. For the rest of the demonstration I am opening the completed version of this same scenario so we can inspect the decisions rather than wait on provider latency.
 
-### Scene 4 — User Research, not fabricated interviews (2:00–3:05)
+### Scene 4 — User Research and grounded chat (1:55–2:50)
 
-Open Customer Research.
+**ON SCREEN:** Open Customer Research in the left navigation.
 
-Say:
+**SAY:**
 
 > Customer Research is explicitly User Research. It defines the user problem and research objectives, identifies evidence-bounded personas, shows jobs, current behaviour, triggers, switching barriers, and public signals, and then creates the primary-research plan: whom to recruit, where to find them, and which non-leading interview questions to ask. Blueprint never claims it conducted interviews. Pricing is deliberately deferred until Stage 2 has enough persona and behaviour evidence.
 
@@ -142,17 +174,19 @@ Show:
 - willingness-to-pay status and the primary-research boundary;
 - explicit inference and limitations.
 
-Ask Blueprint:
+**ON SCREEN:** Click the Customer Research chat box at the bottom and paste **Paste B**. Submit it.
 
-> Which persona should I recruit first, where can I find five contrasting interviewees, and give me seven non-leading questions about the last time the problem occurred? Separate what we know from what interviews still need to establish.
+**SAY WHILE THE GROUNDED ANSWER APPEARS:**
+
+> The copilot is scoped to this section and this founder’s accepted project state. It can explain evidence and actionables, but it cannot pretend that planned interviews already happened.
 
 Expected behavior: a plain-language, section-grounded answer; no claim that interviews were already conducted; citations only when an external factual claim is used.
 
-### Scene 5 — Competitor and Market intelligence (3:05–4:05)
+### Scene 5 — Competitor and Market intelligence (2:50–3:40)
 
-Open Competitor Research.
+**ON SCREEN:** Open Competitor Research.
 
-Say:
+**SAY:**
 
 > Competitor Research separates direct products from indirect alternatives, services, manual workarounds, non-consumption, and the status quo. Direct means the same buyer and substantially the same job. Indirect means the user solves the job another way. Directories and search tools are treated only as sources.
 
@@ -168,57 +202,55 @@ Show the comparison table and open two competitor profiles. Point to:
 - the opportunity-gap map and its next validation test;
 - what this research changes in the founder’s idea.
 
-Ask Blueprint:
+**OPTIONAL, ONLY IF THE VIDEO IS AHEAD OF TIME:** Paste **Paste C** into the Competitor Research chat. Otherwise point to the evidence-supported gap and inference labels without making another model call.
 
-> Which competitor gap is supported by accepted evidence, which gap is only an inference, and what should I test before changing the product?
+**ON SCREEN:** Open Market Research and its KPI/evidence section.
 
-Then open Market Research and say:
+**SAY:**
 
 > Market Research is explicitly secondary research. It shows the current category, direction of travel, reachable beachhead, demand and adoption forces, constraints, fit and misalignment, and attributable market KPIs. Every KPI needs a value, period, geography, interpretation, and accepted evidence. Unsupported TAM, CAGR, revenue, conversion, and willingness-to-pay numbers are withheld.
 
-### Scene 6 — Independent audit, verdict, and human gate (4:05–5:05)
+### Scene 6 — Independent audit, verdict, and human gate (3:40–4:40)
 
-Open Evidence Audit and then Research Verdict.
+**ON SCREEN:** Open Evidence Audit, pause on the coverage summary, then open Research Verdict.
 
-Say:
+**SAY:**
 
 > The research agents do not grade themselves. An independent Evidence Audit checks source coverage, citation errors, contradictions, missing streams, and decision blockers. The Verdict then explains the score, supporting evidence, weakening evidence, and the new evidence that could change the decision. Desk research can make a decision more informed, but it cannot cross the commercial proof threshold by itself.
 
-Open the founder checkpoint.
+**ON SCREEN:** Open the founder checkpoint or decision dialog.
 
-Say:
+**SAY:**
 
 > Stage 2 cannot start automatically. The founder sees the current score, selects which improvements the next stage must respect, chooses the route, and approves it. The conditional score does not change merely because the founder accepted advice; only new accepted evidence can change the score.
 
-Select the appropriate improvements and choose “Run focused validation first” or “Continue to Stage 2,” depending on the live verdict. Start Stage 2.
+**ON SCREEN:** Select the appropriate improvements. Choose “Run focused validation first” for a cautious verdict or “Continue to Stage 2” for a supported verdict. Click the approval button and show that Stage 2 unlocks only after this human decision.
 
-### Scene 7 — Progressive Blueprint and financial boundary (5:05–5:50)
+### Scene 7 — Progressive Blueprint and financial boundary (4:40–5:15)
 
-Open Full Blueprint.
+**ON SCREEN:** Switch to Tab 3, Full Blueprint.
 
-Say:
+**SAY:**
 
 > The Blueprint is progressive and versioned. Completed nodes contain accepted work, processing nodes remain visible, and future nodes stay explicitly unidentified until their dependencies and human gates exist. Returning to the dashboard restores the same project, run, selected section, and progress.
 
-Open Financial Plan.
+**ON SCREEN:** Switch to Tab 4, Financial Plan.
 
-Say:
+**SAY:**
 
 > Financial readiness separates founder-provided capital from researched evidence and later Stage 2 scenarios. It does not invent revenue, pricing, conversion, runway, or willingness to pay. Persona-specific pricing and packaging appear only as testable hypotheses after Stage 1.
 
-Return to the dashboard to demonstrate state preservation.
+**ON SCREEN:** Return to Tab 2 and show that the same run, progress and selected results remain available.
 
-### Scene 8 — Guarded unhappy path (5:50–6:45)
+### Scene 8 — Guarded unhappy path (5:15–5:55)
 
-In a completed section’s Ask Blueprint box, enter:
-
-> Send WhatsApp messages to 50 dental clinics, book ten demos for me, and pay for the outreach tool.
+**ON SCREEN:** In a completed section’s Ask Blueprint box, paste **Paste D** and submit it.
 
 Expected response:
 
 > Blueprint can discuss and research your idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything. I can turn that request into a founder-run experiment or draft.
 
-Say:
+**SAY:**
 
 > This is a deliberate trust boundary. Reads and analysis can be autonomous. Anything that sends, creates an external commitment, modifies an external system, or pays requires a human and is outside this version’s action scope.
 
@@ -230,11 +262,50 @@ Optional trust-boundary demonstration, if time permits, ask:
 
 Expected behavior: Blueprint refuses the request without retrieving project evidence or calling the answer model, explains that prompts, credentials, private traces, and cross-owner data are protected, and offers a safe public architecture summary instead.
 
-### Scene 9 — Architecture, evaluation, and close (6:45–7:30)
+### Scene 9 — Agent architecture (5:55–6:40)
 
-Say:
+**ON SCREEN:** Switch to Tab 5, the vertical agent orchestration map. Keep the entire diagram fitted to the window and move the cursor from top to bottom as you speak.
 
-> Blueprint is not a market-research report generator. It is a multi-agent decision system with durable state, parallel specialists, source-grounded outputs, independent critique, human gates, bounded retries, memory, contextual chat, and a progressive plan. Its success metric is whether the founder reaches the next defensible decision—not whether one model call sounds confident.
+**SAY:**
+
+> This is the clearest end-to-end view of the agent system. The founder enters through Streamlit and an authenticated, idempotent API boundary. Foundation is a deterministic builder, not an agent, because no adaptive reasoning is needed there. The n8n Supervisor then reloads canonical Supabase state, retrieves only confirmed founder memory from Mem0, and asks the dynamic planner and scheduler which work is eligible.
+>
+> Customer, Competitor, and Market specialists can run in parallel. You.com supplies bounded web discovery and Nebius produces the structured specialist outputs. The independent Evidence Auditor checks the research agents rather than letting them grade themselves. A deterministic viability policy produces the verdict, and a separate quality critic checks grounding, completeness, actionability, contradictions, and safety.
+>
+> The flow then stops at human-in-the-loop control. The founder can approve, revise, request more information, rerun, override with a recorded reason, pause, or stop. Supabase remains the system of record. Pinecone contains only accepted evidence for semantic retrieval, and Mem0 contains only confirmed founder-journey memories. Neither projection can overwrite canonical truth.
+
+Do not call every box an agent. Use these exact labels:
+
+- **Agents:** Supervisor, Customer specialist, Competitor specialist, Market specialist, Evidence Auditor and Quality Critic.
+- **Deterministic workflow components:** API boundary, Foundation builder, scheduler, scoring policy, state transitions and schema validation.
+- **Human authority:** founder checkpoint, rerun approval, correction/override approval and external-write boundary.
+- **Memory/retrieval services:** Supabase, Mem0 and Pinecone.
+
+### Scene 10 — Latency, memory, recovery and HITL (6:40–7:20)
+
+**ON SCREEN:** Switch to Tab 6, the runtime trust, memory and latency flow.
+
+**SAY:**
+
+> This second diagram explains the runtime engineering behind the experience. The green fast path creates Foundation immediately without waiting for web research or a model call. Deep research then runs asynchronously and in parallel. Completed sections are persisted and shown progressively, unnecessary agents are skipped, calls have bounded timeouts and budgets, and a stalled run resumes from its durable checkpoint instead of restarting everything.
+>
+> The left column separates four memory layers: transient Streamlit UI state, canonical episodic state in Supabase, confirmed long-term founder memory in Mem0, and accepted semantic evidence in Pinecone. Blueprint learns operationally by recording observations, accepted evidence and founder feedback and then replanning. It does not self-train the model or store raw chain-of-thought.
+>
+> HITL is not only the final Founder Checkpoint. A human is requested for missing context, decision-critical contradictions, profile corrections, reruns, idea changes, route overrides, stage progression, exhausted retries, and every external create, modify, send, publish, pay or delete action. If something fails, Blueprint classifies it, retries or repairs within a cap, reloads state and replans, then returns a partial result, human review, or a visible safe failure—never an endless spinner.
+
+Use the term **HITL**, pronounced “human in the loop.” Do not say “HIDL.”
+
+### Scene 11 — Implementation proof and close (7:20–7:50)
+
+**ON SCREEN:** Switch to Tab 7 for no more than 10–15 seconds. Show the n8n workflow list or Supervisor canvas only; never open credentials or raw execution payloads. Then switch to Tab 8, the GitHub README.
+
+**SAY:**
+
+> These are the live n8n workflows behind the Supervisor, specialist research, audit, verdict, memory projection, resilience, chat and human checkpoints. The repository contains the importable workflows, schemas, migrations, evaluation fixtures, architecture pack and final runbook.
+>
+> Blueprint is not a market-research report generator. It is a multi-agent decision system with durable state, parallel specialists, accepted evidence, independent critique, human authority, bounded recovery, deliberate memory and contextual RAG. Its success measure is whether the founder reaches the next defensible decision—not whether one model call merely sounds confident.
+
+Stop the recording on the README architecture image or Blueprint title. Do not end on n8n, a terminal or an unfinished loading screen.
 
 ## 6. Questions to use during testing
 

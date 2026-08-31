@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="3460" viewBox="0 0 2000 3460">
+<rect width="2000" height="3460" fill="#FFFFFF"/>
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>
+<text x="70" y="102" text-anchor="start" font-family="Segoe UI, Arial" font-size="48" font-weight="600" fill="#17201C">Blueprint — Vertical Agent Orchestration &amp; Memory Map</text>
+<text x="70" y="141" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="400" fill="#5F6B65">Who decides, who researches, who critiques, when memory is read or written, and where a human takes control</text>
+<line x1="70" y1="165" x2="1930" y2="165" stroke="#C9D0CC" stroke-width="2"/>
+<rect x="70" y="202" width="156" height="42" rx="21" fill="#EAF1F8" stroke="#EAF1F8" stroke-width="1"/>
+<text x="87" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#2D5F8B">SUPERVISOR</text>
+<rect x="250" y="202" width="214" height="42" rx="21" fill="#F1EDF8" stroke="#F1EDF8" stroke-width="1"/>
+<text x="267" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#6D5AA6">SPECIALIST AGENT</text>
+<rect x="488" y="202" width="209" height="42" rx="21" fill="#FBF3DD" stroke="#FBF3DD" stroke-width="1"/>
+<text x="505" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#9A6A14">AUDITOR / CRITIC</text>
+<rect x="721" y="202" width="185" height="42" rx="21" fill="#E8F2ED" stroke="#E8F2ED" stroke-width="1"/>
+<text x="738" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#176447">DETERMINISTIC</text>
+<rect x="930" y="202" width="171" height="42" rx="21" fill="#FBF3DD" stroke="#FBF3DD" stroke-width="1"/>
+<text x="947" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#7C563C">HUMAN GATE</text>
+<rect x="1125" y="202" width="205" height="42" rx="21" fill="#F5F7F5" stroke="#F5F7F5" stroke-width="1"/>
+<text x="1142" y="230" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#5F6B65">MEMORY / STATE</text>
+<text x="70" y="303" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#176447">MEMORY AND CANONICAL STATE</text>
+<line x1="70" y1="320" x2="410" y2="320" stroke="#176447" stroke-width="3"/>
+<text x="485" y="303" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#2D5F8B">AUTHORITATIVE CONTROL PATH</text>
+<line x1="485" y1="320" x2="1515" y2="320" stroke="#2D5F8B" stroke-width="3"/>
+<text x="1590" y="303" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="600" fill="#6D5AA6">TOOLS, RECOVERY AND TELEMETRY</text>
+<line x1="1590" y1="320" x2="1930" y2="320" stroke="#6D5AA6" stroke-width="3"/>
+<line x1="1000" y1="528" x2="1000" y2="548" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="694" x2="1000" y2="714" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="864" x2="1000" y2="884" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="1034" x2="1000" y2="1054" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="1230" x2="1000" y2="1250" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="1426" x2="1000" y2="1446" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="1866" x2="1000" y2="1886" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="2036" x2="1000" y2="2056" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="2188" x2="1000" y2="2208" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="2368" x2="1000" y2="2388" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="2538" x2="1000" y2="2558" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="2748" x2="1000" y2="2768" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="1000" y1="3018" x2="1000" y2="3038" stroke="#6B746F" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="485" y="372" width="1030" height="156" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">FOUNDER INPUT</text>
+<text x="513" y="452" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">Idea + requested outcome</text>
+<text x="513" y="486" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">The founder supplies the unfinished idea, constraints, geography, goal and the research lanes</text>
+<text x="513" y="516" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">to run.</text>
+<rect x="485" y="548" width="1030" height="146" rx="22" fill="#FFFFFF" stroke="#C9D0CC" stroke-width="2"/>
+<text x="513" y="584" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#5F6B65">EXPERIENCE LAYER</text>
+<text x="513" y="628" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">Streamlit onboarding</text>
+<text x="513" y="662" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Creates an anonymous owner session, validates required fields and shows progress without</text>
+<text x="513" y="692" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">exposing internal tools.</text>
+<rect x="485" y="714" width="1030" height="150" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="750" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">DETERMINISTIC API BOUNDARY</text>
+<text x="513" y="794" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-API-01 · Start or resume a run</text>
+<text x="513" y="828" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Applies scope and safety checks, restores owner context and persists a durable project/run</text>
+<text x="513" y="858" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">before work begins.</text>
+<rect x="485" y="884" width="1030" height="150" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="920" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">DETERMINISTIC BUILDER</text>
+<text x="513" y="964" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">Foundation Builder · immediate</text>
+<text x="513" y="998" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Turns confirmed onboarding answers into problem framing, goals, personas-to-test, constraints</text>
+<text x="513" y="1028" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">and initial assumptions. No web research is needed.</text>
+<rect x="485" y="1054" width="1030" height="176" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="513" y="1090" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#2D5F8B">SUPERVISOR / ORCHESTRATOR</text>
+<text x="513" y="1134" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-00 · Adaptive Supervisor</text>
+<text x="513" y="1168" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Reloads canonical state, applies budgets and policy, chooses the next eligible route and</text>
+<text x="513" y="1198" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">re-evaluates after every observation or founder decision.</text>
+<rect x="485" y="1250" width="1030" height="176" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="1286" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">DETERMINISTIC PLANNING + SCHEDULING</text>
+<text x="513" y="1330" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-PLAN-01 + BP-SCHED-01</text>
+<text x="513" y="1364" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Builds the dependency graph, releases only eligible tasks and dispatches independent research</text>
+<text x="513" y="1394" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">lanes in parallel—not a fixed A → B → C chain.</text>
+<rect x="485" y="1446" width="1030" height="420" rx="26" fill="#FFFFFF" stroke="#6D5AA6" stroke-width="2"/>
+<text x="513" y="1483" text-anchor="start" font-family="Segoe UI, Arial" font-size="19" font-weight="600" fill="#6D5AA6">PARALLEL SPECIALIST AGENTS · READ-ONLY RESEARCH</text>
+<text x="513" y="1516" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Each receives the same foundation contract and returns structured findings, evidence IDs,</text>
+<text x="513" y="1543" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">assumptions and limitations.</text>
+<rect x="513" y="1547" width="306" height="262" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="541" y="1583" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">SPECIALIST AGENT</text>
+<text x="541" y="1622" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Customer / User</text>
+<text x="541" y="1659" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Pain signals, personas,</text>
+<text x="541" y="1687" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">discovery channels,</text>
+<text x="541" y="1715" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">interview objectives and</text>
+<text x="541" y="1743" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">questions.</text>
+<polyline points="1000,1426 1000,1518 666.0,1518 666.0,1547" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="666.0,1809 666.0,1836 1000,1836 1000,1886" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="847" y="1547" width="306" height="262" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="875" y="1583" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">SPECIALIST AGENT</text>
+<text x="875" y="1622" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Competitor</text>
+<text x="875" y="1659" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Direct + indirect</text>
+<text x="875" y="1687" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">alternatives, positioning,</text>
+<text x="875" y="1715" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">pricing boundary,</text>
+<text x="875" y="1743" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">complaints and gaps.</text>
+<polyline points="1000,1426 1000,1518 1000.0,1518 1000.0,1547" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1000.0,1809 1000.0,1836 1000,1836 1000,1886" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1181" y="1547" width="306" height="262" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="1209" y="1583" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">SPECIALIST AGENT</text>
+<text x="1209" y="1622" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Market</text>
+<text x="1209" y="1659" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Secondary evidence,</text>
+<text x="1209" y="1687" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">market direction, adoption</text>
+<text x="1209" y="1715" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">constraints and bounded</text>
+<text x="1209" y="1743" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">opportunity.</text>
+<polyline points="1000,1426 1000,1518 1334.0,1518 1334.0,1547" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1334.0,1809 1334.0,1836 1000,1836 1000,1886" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="485" y="1886" width="1030" height="150" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="513" y="1922" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#9A6A14">INDEPENDENT AUDITOR AGENT</text>
+<text x="513" y="1966" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-AUDIT-01 · Evidence Auditor</text>
+<text x="513" y="2000" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Checks source relevance, recency, claim support, contradictions and missing evidence. Rejected</text>
+<text x="513" y="2030" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">claims cannot influence the verdict.</text>
+<rect x="485" y="2056" width="1030" height="132" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="2092" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">DETERMINISTIC DECISION ENGINE</text>
+<text x="513" y="2136" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-VERDICT-01 · Viability Engine</text>
+<text x="513" y="2169" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Computes the transparent 40 / 30 / 30 score, coverage and confidence. It never invents demand,</text>
+<text x="513" y="2198" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">revenue or willingness-to-pay.</text>
+<rect x="485" y="2208" width="1030" height="160" rx="22" fill="#FBF3DD" stroke="#9A6A14" stroke-width="2"/>
+<text x="513" y="2244" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#9A6A14">CRITIQUE AGENT</text>
+<text x="513" y="2288" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-QA-01 · Quality Critic</text>
+<text x="513" y="2322" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Challenges completeness, consistency, unsupported certainty and usefulness. It may request</text>
+<text x="513" y="2352" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">one bounded revision through the Supervisor.</text>
+<rect x="485" y="2388" width="1030" height="150" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="513" y="2424" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">SYNTHESIS AGENT</text>
+<text x="513" y="2468" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-SYNTH-01 · Blueprint Synthesizer</text>
+<text x="513" y="2502" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Combines only audited findings into a versioned Research Blueprint, explicit actionables, open</text>
+<text x="513" y="2532" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">risks and traceable sources.</text>
+<rect x="485" y="2558" width="1030" height="190" rx="22" fill="#FBF3DD" stroke="#7C563C" stroke-width="2"/>
+<text x="513" y="2594" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#7C563C">HUMAN DECISION LAYER · HITL</text>
+<text x="513" y="2638" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">BP-HITL-01 · Founder Checkpoint</text>
+<text x="513" y="2672" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">The founder reviews the verdict and selected idea improvements, then chooses proceed, revise,</text>
+<text x="513" y="2702" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">rerun, override with reason, or pause. Stage 2 cannot unlock without this decision.</text>
+<rect x="485" y="2768" width="1030" height="250" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="513" y="2804" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#6D5AA6">ADVISORY SPECIALIST AGENTS</text>
+<text x="513" y="2848" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">Stage 2 Prove &amp; Design → Stage 3 Action Blueprint</text>
+<text x="513" y="2882" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Approved context routes into assumptions and risk, operating model, validation plan and</text>
+<text x="513" y="2912" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">deterministic financial scenarios. Stage 3 supplies milestone-level MVP, first-customer and</text>
+<text x="513" y="2942" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">distribution guidance—never executes actions for the founder.</text>
+<rect x="485" y="3038" width="1030" height="166" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="513" y="3074" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">FOUNDER-VISIBLE OUTCOME</text>
+<text x="513" y="3118" text-anchor="start" font-family="Segoe UI, Arial" font-size="30" font-weight="600" fill="#17201C">Versioned Blueprint + financial scenarios + next moves</text>
+<text x="513" y="3152" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">Every section stays inspectable while later work runs. The founder can compare versions,</text>
+<text x="513" y="3182" text-anchor="start" font-family="Segoe UI, Arial" font-size="23" font-weight="400" fill="#5F6B65">inspect evidence and request a targeted rerun through HITL.</text>
+<rect x="70" y="372" width="340" height="174" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="98" y="408" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#5F6B65">SHORT-TERM UI MEMORY</text>
+<text x="98" y="447" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">Streamlit session</text>
+<text x="98" y="483" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Active page, selected section</text>
+<text x="98" y="510" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">and transient display state only.</text>
+<text x="98" y="537" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Never treated as business truth.</text>
+<rect x="70" y="588" width="340" height="386" rx="22" fill="#E8F2ED" stroke="#176447" stroke-width="2"/>
+<text x="98" y="624" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#176447">CANONICAL EPISODIC STATE</text>
+<text x="98" y="664" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">Supabase + RLS</text>
+<text x="98" y="700" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">System of record for</text>
+<text x="98" y="728" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">owner-scoped projects, runs,</text>
+<text x="98" y="756" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">task graph, observations,</text>
+<text x="98" y="784" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">evidence, errors, checkpoints,</text>
+<text x="98" y="812" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">decisions and Blueprint</text>
+<text x="98" y="840" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">versions. Read before every</text>
+<text x="98" y="868" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">routing decision; written after</text>
+<text x="98" y="896" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">every state transition.</text>
+<rect x="70" y="1048" width="340" height="278" rx="22" fill="#F1EDF8" stroke="#6D5AA6" stroke-width="2"/>
+<text x="98" y="1079" text-anchor="start" font-family="Segoe UI, Arial" font-size="13" font-weight="600" fill="#6D5AA6">LONG-TERM SEMANTIC PREFERENCE MEMORY</text>
+<text x="98" y="1124" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">Mem0</text>
+<text x="98" y="1160" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Reads confirmed founder</text>
+<text x="98" y="1188" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">goals, preferences and prior</text>
+<text x="98" y="1216" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">corrections during planning.</text>
+<text x="98" y="1244" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Writes only after a founder</text>
+<text x="98" y="1272" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">checkpoint—never stores</text>
+<text x="98" y="1300" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">research claims as truth.</text>
+<rect x="70" y="1610" width="340" height="300" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="98" y="1645" text-anchor="start" font-family="Segoe UI, Arial" font-size="17" font-weight="600" fill="#2D5F8B">ACCEPTED-EVIDENCE PROJECTION</text>
+<text x="98" y="1686" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">Pinecone</text>
+<text x="98" y="1722" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">Receives only evidence</text>
+<text x="98" y="1750" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">accepted by BP-AUDIT-01</text>
+<text x="98" y="1778" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">through BP-PINE-01. Used for</text>
+<text x="98" y="1806" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">semantic retrieval; every hit is</text>
+<text x="98" y="1834" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">revalidated against Supabase</text>
+<text x="98" y="1862" text-anchor="start" font-family="Segoe UI, Arial" font-size="21" font-weight="400" fill="#5F6B65">before generation.</text>
+<rect x="1590" y="1370" width="340" height="185" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1618" y="1406" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#5F6B65">READ-ONLY SEARCH TOOL</text>
+<text x="1618" y="1446" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">You.com</text>
+<text x="1618" y="1481" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Discovers current sources for the</text>
+<text x="1618" y="1508" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">three research specialists. Search</text>
+<text x="1618" y="1535" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">excerpts are not accepted</text>
+<text x="1618" y="1562" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">evidence by themselves.</text>
+<rect x="1590" y="1575" width="340" height="220" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1618" y="1611" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#5F6B65">MODEL SERVICE</text>
+<text x="1618" y="1651" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">Nebius</text>
+<text x="1618" y="1686" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Structured extraction and</text>
+<text x="1618" y="1713" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">synthesis for specialists, critic</text>
+<text x="1618" y="1740" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">and Research Copilot. Prompts</text>
+<text x="1618" y="1767" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">demand schemas, evidence IDs</text>
+<text x="1618" y="1794" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">and bounded uncertainty.</text>
+<rect x="1590" y="2022" width="340" height="292" rx="22" fill="#FBECEB" stroke="#A94840" stroke-width="2"/>
+<text x="1618" y="2055" text-anchor="start" font-family="Segoe UI, Arial" font-size="15" font-weight="600" fill="#A94840">DETERMINISTIC RECOVERY CONTROLLER</text>
+<text x="1618" y="2098" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">BP-RESILIENCE-01</text>
+<text x="1618" y="2133" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">On tool or model failure: retry</text>
+<text x="1618" y="2160" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">within budget, repair schema,</text>
+<text x="1618" y="2187" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">reload durable state, choose an</text>
+<text x="1618" y="2214" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">alternate route, return partial</text>
+<text x="1618" y="2241" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">results for review, or fail safely. It</text>
+<text x="1618" y="2268" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">never silently fabricates a result.</text>
+<rect x="1590" y="2350" width="340" height="280" rx="22" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="1618" y="2386" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#5F6B65">OBSERVABILITY COMPONENT</text>
+<text x="1618" y="2426" text-anchor="start" font-family="Segoe UI, Arial" font-size="26" font-weight="600" fill="#17201C">BP-90 · Audit + Error Writer</text>
+<text x="1618" y="2461" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Records route reason, tool</text>
+<text x="1618" y="2488" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">choice, attempt, latency, budget,</text>
+<text x="1618" y="2515" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">confidence, terminal state and</text>
+<text x="1618" y="2542" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">correlation IDs for replay and</text>
+<text x="1618" y="2569" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">evaluation.</text>
+<rect x="1590" y="2768" width="340" height="350" rx="22" fill="#EAF1F8" stroke="#2D5F8B" stroke-width="2"/>
+<text x="1618" y="2804" text-anchor="start" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#2D5F8B">GROUNDED RAG AGENT</text>
+<text x="1618" y="2843" text-anchor="start" font-family="Segoe UI, Arial" font-size="25" font-weight="600" fill="#17201C">BP-CHAT-01 · Research Copilot</text>
+<text x="1618" y="2879" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Answers only about the active</text>
+<text x="1618" y="2906" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">Blueprint section and accepted</text>
+<text x="1618" y="2933" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">evidence. It cites sources, states</text>
+<text x="1618" y="2960" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">limitations and coaches next</text>
+<text x="1618" y="2987" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">actions. Rerun or write requests</text>
+<text x="1618" y="3014" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">are proposals sent to HITL—not</text>
+<text x="1618" y="3041" text-anchor="start" font-family="Segoe UI, Arial" font-size="20" font-weight="400" fill="#5F6B65">executed directly.</text>
+<polyline points="410,459 454,459 454,621 485,621" fill="none" stroke="#5F6B65" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="410,745 458,745 458,789 485,789" fill="none" stroke="#176447" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="410,826 464,826 464,1141 485,1141" fill="none" stroke="#176447" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="485,1198 446,1198 446,915 410,915" fill="none" stroke="#176447" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="410,1168 452,1168 452,1134 485,1134" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="485,2676 440,2676 440,1275 410,1275" fill="none" stroke="#6D5AA6" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1515,1652 1548,1652 1548,1460 1590,1460" fill="none" stroke="#5F6B65" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1515,1705 1560,1705 1560,1685 1590,1685" fill="none" stroke="#5F6B65" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="485,1961 424,1961 424,1765 410,1765" fill="none" stroke="#2D5F8B" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1515,2288 1552,2288 1552,2158 1590,2158" fill="none" stroke="#A94840" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1590,2248 1570,2248 1570,1141 1515,1141" fill="none" stroke="#A94840" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<polyline points="485,2648 432,2648 432,1141 485,1141" fill="none" stroke="#7C563C" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<polyline points="1515,2480 1552,2480 1552,2480 1590,2480" fill="none" stroke="#5F6B65" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1515,3120 1550,3120 1550,2943 1590,2943" fill="none" stroke="#2D5F8B" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="410,1800 418,1800 418,3230 1560,3230 1560,2985 1590,2985" fill="none" stroke="#2D5F8B" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<polyline points="410,948 426,948 426,3242 1572,3242 1572,3048 1590,3048" fill="none" stroke="#176447" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<polyline points="1760,2768 1950,2768 1950,1685 1930,1685" fill="none" stroke="#5F6B65" stroke-width="3" stroke-linejoin="round" stroke-dasharray="12 10" marker-end="url(#arrow)"/>
+<rect x="70" y="3260" width="1860" height="120" rx="20" fill="#F5F7F5" stroke="#C9D0CC" stroke-width="2"/>
+<text x="96" y="3299" text-anchor="start" font-family="Segoe UI, Arial" font-size="19" font-weight="600" fill="#176447">LEARNING BOUNDARY</text>
+<text x="96" y="3338" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#17201C">The system improves by storing accepted observations, founder corrections and route outcomes, then reloading them on the next decision.</text>
+<text x="96" y="3370" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">It does not self-train model weights, store raw chain-of-thought, or let Mem0/Pinecone override Supabase as the source of truth.</text>
+<line x1="70" y1="3382" x2="1930" y2="3382" stroke="#C9D0CC" stroke-width="2"/>
+<text x="70" y="3426" text-anchor="start" font-family="Segoe UI, Arial" font-size="22" font-weight="400" fill="#5F6B65">Solid arrows = normal control/data path · Dashed arrows = recovery, revision or retrieval path · External writes remain human-approved</text>
+</svg>

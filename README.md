@@ -1,17 +1,16 @@
-# Blueprint
-
-Blueprint is an evidence-first multi-agent decision system that turns an unfinished founder idea into a sourced research verdict and the next provable move.
-
-> Blueprint helps an early-stage founder turn an unfinished product idea into an evidence-backed proceed, revise or pause decision in a web app. It autonomously plans and runs scoped customer, competitor and market research, but consequential writes, reruns and stage progression remain under human approval.
-
 ## Blueprint V2 final release
 
 | Deliverable | Blueprint V2 source |
 |---|---|
 | Final submission document | [Open the Blueprint V2 submission document](https://docs.google.com/document/d/1dJEE5hrkcfB9I40906ZY7RcTTi5_4WPWo9kg1dpKVlg/edit) |
-| Live Streamlit application | **Deployment in progress.** The verified Blueprint V2 URL will be added here after its hosted n8n smoke test passes. No earlier Blueprint prototype URL is used. |
 | Final video walkthrough | **Recording placeholder.** Add only the reviewed Blueprint V2 recording; do not reuse the earlier prototype walkthrough. |
 | Source repository | [kajalchourasia-cmd/blueprint-v2](https://github.com/kajalchourasia-cmd/blueprint-v2) |
+
+# Blueprint
+
+Blueprint is an evidence-first multi-agent decision system that turns an unfinished founder idea into a sourced research verdict and the next provable move.
+
+> Blueprint helps an early-stage founder turn an unfinished product idea into an evidence-backed proceed, revise or pause decision in a web app. It autonomously plans and runs scoped customer, competitor and market research, but consequential writes, reruns and stage progression remain under human approval.
 
 <p align="center">
   <img src="docs/figures/architecture/00-readme-architecture.png" alt="Blueprint orchestrator flow: Streamlit, n8n supervisor, research specialists, evidence audit, viability verdict, human checkpoint, Supabase, Pinecone and Mem0" width="100%" />
