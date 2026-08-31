@@ -1,13 +1,10 @@
-## Blueprint V2 final release
-
-| Deliverable | Blueprint V2 source |
-|---|---|
-| Final submission document | [Open the Blueprint V2 submission document](https://docs.google.com/document/d/1dJEE5hrkcfB9I40906ZY7RcTTi5_4WPWo9kg1dpKVlg/edit) |
-| Complete demo transcript and recording runbook | [Open the complete step-by-step Markdown transcript](docs/FINAL-DEMO-RUNBOOK.md) |
-| Final video walkthrough | **Recording placeholder.** Add only the reviewed Blueprint V2 recording; do not reuse the earlier prototype walkthrough. |
-| Source repository | [kajalchourasia-cmd/blueprint-v2](https://github.com/kajalchourasia-cmd/blueprint-v2) |
-
 # Blueprint
+
+**Final Submission Document:** [Open the Blueprint V2 submission document](https://docs.google.com/document/d/1dJEE5hrkcfB9I40906ZY7RcTTi5_4WPWo9kg1dpKVlg/edit)
+
+**Final Video Walkthrough:** [Watch the Blueprint V2 walkthrough](https://www.loom.com/share/1a50cb349e024368a1bc10d7d0a48d63)
+
+**Source Repository:** [kajalchourasia-cmd/blueprint-v2](https://github.com/kajalchourasia-cmd/blueprint-v2)
 
 Blueprint is an evidence-first multi-agent decision system that turns an unfinished founder idea into a sourced research verdict and the next provable move.
 
