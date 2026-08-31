@@ -56,6 +56,14 @@ Blueprint instead connects four things:
 
 The complete project canvas plus the high-resolution PNG and editable SVG pack live in [`docs/figures/architecture`](docs/figures/architecture). Use [`docs/ARCHITECTURE-FIGURES.md`](docs/ARCHITECTURE-FIGURES.md) as the visual index.
 
+### Complete end-to-end agentic architecture
+
+This is the canonical system view. It shows where the founder enters, how Streamlit crosses the authenticated n8n boundary, where the Supervisor plans and replans, how the three specialists converge through audit and critique, when HITL is required, how RAG answers are grounded, and which memory store is authoritative.
+
+<p align="center">
+  <img src="docs/figures/architecture/02-end-to-end-system-architecture.png" alt="Blueprint V2 complete end-to-end agentic architecture showing founder and Streamlit experience, Supabase authentication, n8n API boundary, adaptive supervisor and scheduler, parallel specialist agents, evidence audit, verdict and quality critic, HITL, Supabase canonical state, Pinecone accepted-evidence retrieval, Mem0 founder journey memory, section-scoped RAG, tools, observability and safe degradation" width="100%" />
+</p>
+
 ### Overall product and orchestration flow
 
 The Supervisor reloads durable state after every observation, recalculates eligibility and chooses the next bounded route. This is why Blueprint is not a fixed A-to-B workflow.

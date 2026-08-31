@@ -45,17 +45,19 @@ def rgb(value: str) -> tuple[int, int, int]:
 
 
 class Figure:
-    def __init__(self, title: str, subtitle: str) -> None:
-        self.image = Image.new("RGB", (W, H), rgb(WHITE))
+    def __init__(self, title: str, subtitle: str, width: int = W, height: int = H) -> None:
+        self.width = width
+        self.height = height
+        self.image = Image.new("RGB", (width, height), rgb(WHITE))
         self.draw = ImageDraw.Draw(self.image)
         self.svg = [
-            f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
-            f'<rect width="{W}" height="{H}" fill="{WHITE}"/>',
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+            f'<rect width="{width}" height="{height}" fill="{WHITE}"/>',
             '<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#6B746F"/></marker></defs>',
         ]
         self.text(70, 54, title, 48, INK, bold=True)
         self.text(70, 116, subtitle, 25, MUTED)
-        self.line(70, 165, W - 70, 165, LINE, 2)
+        self.line(70, 165, width - 70, 165, LINE, 2)
 
     def font(self, size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
         return ImageFont.truetype(str(FONT_BOLD if bold else FONT_REG), size)
@@ -166,8 +168,8 @@ class Figure:
         self.line(x1, y1, x2, y2, "#6B746F", 4, arrow=True)
 
     def footer(self, label: str) -> None:
-        self.line(70, H - 78, W - 70, H - 78, LINE, 2)
-        self.text(70, H - 56, label, 22, MUTED)
+        self.line(70, self.height - 78, self.width - 70, self.height - 78, LINE, 2)
+        self.text(70, self.height - 56, label, 22, MUTED)
 
     def save(self, stem: str) -> None:
         OUT.mkdir(parents=True, exist_ok=True)
@@ -231,27 +233,87 @@ def project_canvas() -> None:
 
 
 def end_to_end_architecture() -> None:
-    f = Figure("End-to-End System Architecture", "Control plane, evidence plane and durable state are intentionally separated")
-    columns = [90, 405, 720, 1035, 1350, 1665]
-    top = [
-        ("Founder UI", "Streamlit landing, onboarding, dashboard and approvals", GREEN_SOFT, GREEN),
-        ("API boundary", "JWT owner scope, contract validation and idempotency", WHITE, LINE),
-        ("Supervisor", "Loads snapshot and chooses the next eligible route", BLUE_SOFT, BLUE),
-        ("Planner / Scheduler", "Creates dependencies and atomically claims ready tasks", VIOLET_SOFT, VIOLET),
-        ("Specialists", "Foundation plus customer, competitor and market research", WHITE, LINE),
-        ("Decision layer", "Evidence Audit → Verdict → Quality Critic → HITL", AMBER_SOFT, AMBER),
+    f = Figure(
+        "Blueprint — Complete End-to-End Agentic Architecture",
+        "One durable observation loop connects the founder experience, specialist agents, grounded decisions, memory and human control",
+        width=2400,
+        height=1650,
+    )
+
+    # Lane labels keep the architecture readable without wrapping every layer in a heavy container.
+    lanes = [
+        (205, "EXPERIENCE + SECURE ENTRY", GREEN),
+        (455, "ADAPTIVE CONTROL PLANE", BLUE),
+        (705, "SPECIALISTS + EVIDENCE CONVERGENCE", VIOLET),
+        (1030, "STATE, MEMORY + SECTION RAG", GREEN),
+        (1300, "TOOLS, OBSERVABILITY + RECOVERY", AMBER),
     ]
-    for i, item in enumerate(top):
-        f.card(columns[i], 230, 255, 235, *item)
-        if i < 5:
-            f.arrow_between(columns[i] + 255, 348, columns[i + 1] - 15, 348)
-    f.card(140, 620, 470, 190, "Supabase — system of record", "Owner-isolated projects, runs, tasks, checkpoints, evidence, decisions, errors and immutable Blueprint versions.", WHITE, GREEN)
-    f.card(725, 620, 470, 190, "Research and model services", "You.com supplies bounded discovery. Nebius performs structured extraction, synthesis, critique and grounded chat.", WHITE, BLUE)
-    f.card(1310, 620, 470, 190, "Rebuildable sidecars", "Pinecone stores accepted-evidence vectors. Mem0 stores confirmed founder preferences, goals and decisions.", WHITE, VIOLET)
-    f.arrow_between(375, 620, 375, 500)
-    f.arrow_between(960, 620, 960, 500)
-    f.arrow_between(1545, 620, 1545, 500)
-    f.footer("The Supervisor never treats Pinecone or Mem0 as project truth; both are revalidated against Supabase.")
+    for y, label, color in lanes:
+        f.text(70, y, label, 22, color, bold=True)
+        f.line(70, y + 38, 2330, y + 38, LINE, 2)
+
+    # Experience and secure entry.
+    f.card(95, 255, 300, 175, "Founder", "Idea, goals, constraints, research choices and approvals.", GREEN_SOFT, GREEN)
+    f.card(455, 255, 390, 175, "Streamlit product", "Landing → onboarding → live dashboard → section chat → Blueprint.", WHITE, GREEN)
+    f.card(905, 255, 410, 175, "Supabase Auth + RLS", "Anonymous owner session isolates every project, run, evidence row and chat.", WHITE, LINE)
+    f.card(1375, 255, 430, 175, "n8n API boundary", "Start / resume / chat / rerun contracts, scope guard and idempotency.", WHITE, LINE)
+    f.card(1865, 255, 440, 175, "Founder-visible outcomes", "Versioned Blueprint, financial scenarios, sources, risks and next move.", GREEN_SOFT, GREEN)
+    for x1, x2 in ((395, 455), (845, 905), (1315, 1375)):
+        f.arrow_between(x1, 342, x2 - 14, 342)
+
+    # Adaptive control plane.
+    f.card(210, 520, 450, 145, "BP-00 Adaptive Supervisor", "Reload canonical snapshot, enforce budgets and select one allowlisted route.", BLUE_SOFT, BLUE)
+    f.card(760, 520, 450, 145, "Planner + Scheduler", "Build dependencies, claim eligible work atomically and run safe parallel branches.", VIOLET_SOFT, VIOLET)
+    f.card(1310, 520, 420, 145, "Observation Router", "Completed / needs input / retry / repair / partial / review / safe fail.", WHITE, BLUE)
+    f.card(1830, 505, 470, 175, "HITL — Human Decision Layer", "Clarify missing context; approve Stage 1→2; revise; rerun; override with reason; pause or resume.", AMBER_SOFT, AMBER)
+    f.arrow_between(660, 592, 746, 592)
+    f.arrow_between(1210, 592, 1296, 592)
+    f.arrow_between(1730, 592, 1816, 592)
+    f.line(1905, 505, 1905, 455, AMBER, 3)
+    f.line(1905, 455, 435, 455, AMBER, 3)
+    f.line(435, 455, 435, 520, AMBER, 3, arrow=True)
+    f.text(940, 422, "founder decision or tool observation → reload state and replan", 22, AMBER, bold=True)
+    f.line(2210, 505, 2210, 444, GREEN, 3, arrow=True)
+
+    # Specialists and evidence convergence.
+    f.card(85, 775, 335, 175, "Foundation", "Deterministic founder-input framing. Immediate; no web or model wait.", GREEN_SOFT, GREEN)
+    f.card(465, 755, 350, 215, "Customer / User Agent", "Pain signals, personas, jobs, alternatives, first-user channels and interview plan.", WHITE, BLUE)
+    f.card(855, 755, 350, 215, "Competitor Agent", "Direct + indirect alternatives, positioning, pricing, strengths, complaints and gaps.", WHITE, VIOLET)
+    f.card(1245, 755, 350, 215, "Market Agent", "Secondary evidence, category direction, market access, constraints and unknowns.", WHITE, BROWN)
+    f.card(1640, 755, 315, 215, "Evidence Auditor", "Allowlist, relevance, freshness, conflicts, coverage and accepted evidence IDs.", AMBER_SOFT, AMBER)
+    f.card(1995, 755, 315, 215, "Verdict + Quality Critic", "40/30/30 decision score, limitations, improvement impact and gate payload.", GREEN_SOFT, GREEN)
+    # The scheduler fans eligible research tasks out in parallel; Foundation is a
+    # deterministic sibling, not a serial prerequisite that performs web research.
+    f.line(985, 665, 985, 715, "#78817C", 3)
+    f.line(252, 715, 1420, 715, "#78817C", 3)
+    for xx in (252, 640, 1030, 1420):
+        f.line(xx, 715, xx, 741 if xx != 252 else 761, "#78817C", 3, arrow=True)
+    # Completed specialist outputs converge below the cards so the connector
+    # never cuts through labels or evidence descriptions.
+    for xx in (640, 1030, 1420):
+        f.line(xx, 970, xx, 995, "#78817C", 3)
+    f.line(640, 995, 1797, 995, "#78817C", 3)
+    f.line(1797, 995, 1797, 974, "#78817C", 3, arrow=True)
+    f.arrow_between(1955, 862, 1981, 862)
+    f.line(2152, 755, 2152, 680, AMBER, 3, arrow=True)
+
+    # Canonical state, memory projections and grounded section chat.
+    f.card(85, 1070, 560, 175, "Supabase — canonical episodic state", "Projects, profiles, runs, task observations, evidence, checkpoints, errors and immutable Blueprint versions.", GREEN_SOFT, GREEN)
+    f.card(705, 1070, 410, 175, "Pinecone — semantic evidence", "Accepted-evidence vectors only; every retrieval is revalidated against Supabase.", VIOLET_SOFT, VIOLET)
+    f.card(1175, 1070, 410, 175, "Mem0 — founder journey", "Confirmed goals, preferences, corrections and decisions; personalization, never project truth.", BLUE_SOFT, BLUE)
+    f.card(1645, 1070, 665, 175, "BP-CHAT-01 — grounded section RAG", "Scope question → retrieve section + accepted evidence → semantic assist → canonical revalidation → bounded answer.", WHITE, BLUE)
+    f.arrow_between(645, 1157, 691, 1157)
+    f.arrow_between(1115, 1157, 1161, 1157)
+    f.arrow_between(1585, 1157, 1631, 1157)
+    f.text(1645, 1254, "returns a scoped answer to the active Streamlit section", 20, BLUE, bold=True)
+
+    # Tool adapters and fail-closed operations.
+    f.card(120, 1360, 430, 140, "You.com discovery", "Called by research specialists for bounded web search; excerpts remain untrusted until audited.", WHITE, LINE)
+    f.card(610, 1360, 430, 140, "Nebius model roles", "Called for structured extraction, synthesis, critique and grounded chat.", WHITE, LINE)
+    f.card(1100, 1360, 500, 140, "BP-90 + observability", "Retries, dead letters, route reasons, attempts, latency, budgets and traces.", RED_SOFT, RED)
+    f.card(1660, 1360, 610, 140, "Safe degradation", "Preserve successful siblings; ask for input, return partial, or fail closed—never fabricate.", AMBER_SOFT, AMBER)
+
+    f.footer("Learning = accepted observations + founder feedback stored in durable state, then reloaded for the next route. No raw chain of thought or model-weight self-training.")
     f.save("02-end-to-end-system-architecture")
 
 
