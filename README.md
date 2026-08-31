@@ -4,6 +4,15 @@ Blueprint is an evidence-first multi-agent decision system that turns an unfinis
 
 > Blueprint helps an early-stage founder turn an unfinished product idea into an evidence-backed proceed, revise or pause decision in a web app. It autonomously plans and runs scoped customer, competitor and market research, but consequential writes, reruns and stage progression remain under human approval.
 
+## Blueprint V2 final release
+
+| Deliverable | Blueprint V2 source |
+|---|---|
+| Final submission document | [Open the Blueprint V2 submission document](https://docs.google.com/document/d/1dJEE5hrkcfB9I40906ZY7RcTTi5_4WPWo9kg1dpKVlg/edit) |
+| Live Streamlit application | **Deployment in progress.** The verified Blueprint V2 URL will be added here after its hosted n8n smoke test passes. No earlier Blueprint prototype URL is used. |
+| Final video walkthrough | **Recording placeholder.** Add only the reviewed Blueprint V2 recording; do not reuse the earlier prototype walkthrough. |
+| Source repository | [kajalchourasia-cmd/blueprint-v2](https://github.com/kajalchourasia-cmd/blueprint-v2) |
+
 <p align="center">
   <img src="docs/figures/architecture/00-readme-architecture.png" alt="Blueprint orchestrator flow: Streamlit, n8n supervisor, research specialists, evidence audit, viability verdict, human checkpoint, Supabase, Pinecone and Mem0" width="100%" />
 </p>
@@ -46,6 +55,22 @@ Blueprint instead connects four things:
 ## Architecture at a glance
 
 The complete project canvas plus the high-resolution PNG and editable SVG pack live in [`docs/figures/architecture`](docs/figures/architecture). Use [`docs/ARCHITECTURE-FIGURES.md`](docs/ARCHITECTURE-FIGURES.md) as the visual index.
+
+### Overall product and orchestration flow
+
+The Supervisor reloads durable state after every observation, recalculates eligibility and chooses the next bounded route. This is why Blueprint is not a fixed A-to-B workflow.
+
+<p align="center">
+  <img src="docs/figures/architecture/04-adaptive-orchestration-routing.png" alt="Blueprint V2 adaptive orchestration: supervisor, dynamic planner, ready work, missing input, tool observations, stage completion and closed-loop re-evaluation" width="100%" />
+</p>
+
+### Canonical data model
+
+Supabase is authoritative for ownership, project state, research evidence, decisions and immutable Blueprint versions. Pinecone and Mem0 are rebuildable projections and cannot overwrite canonical truth.
+
+<p align="center">
+  <img src="docs/figures/architecture/12-canonical-data-model.png" alt="Blueprint V2 canonical data model covering identity, projects, execution, evidence, decisions, observability, founder control, grounded conversation and rebuildable memory projections" width="100%" />
+</p>
 
 ## Founder journey
 
@@ -141,7 +166,7 @@ Ask Blueprint is section-scoped and owner-scoped:
 5. Generate a bounded answer with evidence labels, limitations and a suggested next move.
 6. If the user requests a rerun, show an impact preview and require explicit approval.
 
-Uploaded-document RAG and LlamaIndex ingestion are planned for V2; they are not represented as completed V1 functionality.
+Uploaded-document RAG and LlamaIndex ingestion are planned for a later document-ingestion release; they are not represented as completed functionality in this submission.
 
 ## Research output contract
 
@@ -160,7 +185,7 @@ Reads are autonomous. These actions require explicit human approval:
 - creating a new finalized Blueprint version;
 - any external create, modify, send, publish, purchase, pay or delete action.
 
-V1 does not send messages, contact leads, book meetings, pay for tools, publish content or delete records. Out-of-scope requests receive a clear refusal and a safe in-scope alternative.
+This release does not send messages, contact leads, book meetings, pay for tools, publish content or delete records. Out-of-scope requests receive a clear refusal and a safe in-scope alternative.
 
 Ask Blueprint may explain the public architecture and trust boundaries, but it never exposes system/developer prompts, hidden instructions, chain of thought, credentials, tokens, private configuration, raw internal traces, or another founder's data.
 
@@ -231,7 +256,7 @@ Current acceptance evidence is **39/39 Python tests**, **11/11 Phase 6B workflow
 - Market research is desk/secondary research. Blueprint must not describe it as completed primary research or proven demand.
 - Listed competitor prices are not proof of willingness to pay. Purchase, deposit, signup or comparable behavioral evidence is required.
 - Pinecone and Mem0 are bounded sidecars; Supabase remains the only canonical state authority.
-- Uploaded-document ingestion and LlamaIndex-based document RAG remain V2 scope.
+- Uploaded-document ingestion and LlamaIndex-based document RAG remain future scope.
 - Blueprint advises launch, distribution and growth decisions; it does not execute a founder's business operations.
 
 ## Repository structure

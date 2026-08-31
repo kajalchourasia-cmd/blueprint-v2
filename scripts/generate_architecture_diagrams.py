@@ -428,6 +428,29 @@ def deployment_boundary() -> None:
     f.save("11-deployment-boundary")
 
 
+def canonical_data_model() -> None:
+    f = Figure("Blueprint — Canonical Data Model", "Supabase owns project truth; execution, evidence, decisions and experience remain traceable")
+    f.card(70, 220, 350, 180, "Identity + project", "auth.users → projects → project_profiles", GREEN_SOFT, GREEN)
+    f.card(500, 220, 350, 180, "Execution", "runs → orchestration_tasks → task_observations", BLUE_SOFT, BLUE)
+    f.card(930, 220, 350, 180, "Evidence", "evidence → hypotheses / competitors → blueprint_sections", VIOLET_SOFT, VIOLET)
+    f.card(1360, 220, 490, 180, "Decisions + versions", "stage_verdicts → human_checkpoints → blueprint_versions", AMBER_SOFT, AMBER)
+    f.arrow_between(420, 310, 480, 310)
+    f.arrow_between(850, 310, 910, 310)
+    f.arrow_between(1280, 310, 1340, 310)
+
+    f.text(70, 500, "SUPPORTING RELATIONSHIPS", 23, MUTED, bold=True)
+    f.card(70, 550, 400, 190, "Observability", "agent_runs • tool_calls • state_transitions • errors • quality_checks", WHITE, LINE)
+    f.card(520, 550, 400, 190, "Founder control", "approvals • rerun_requests • next_actions • dashboard_signals", WHITE, GREEN)
+    f.card(970, 550, 400, 190, "Grounded conversation", "chat_threads • chat_messages • accepted evidence IDs", WHITE, BLUE)
+    f.card(1420, 550, 430, 190, "Rebuildable projections", "memory_projections → Pinecone / Mem0 synchronization", WHITE, VIOLET)
+    for xx in (270, 720, 1170, 1635):
+        f.arrow_between(xx, 550, xx, 430)
+
+    f.card(245, 810, 1430, 120, "Ownership invariant", "Every durable row is scoped through owner_id, project_id and run_id. Pinecone and Mem0 can be rebuilt; neither can overwrite canonical Supabase truth.", SOFT, LINE)
+    f.footer("The model stores inputs, evidence, route reasons, approvals and outcomes — never raw chain of thought or provider credentials.")
+    f.save("12-canonical-data-model")
+
+
 def contact_sheet() -> None:
     files = sorted(p for p in OUT.glob("*.png") if p.name != "00-architecture-review-sheet.png")
     thumb_w, thumb_h = 600, 338
@@ -459,6 +482,7 @@ def write_index() -> None:
         ("09-failure-hitl-recovery", "Failure handling and HITL"),
         ("10-evaluation-observability", "Evaluation and observability"),
         ("11-deployment-boundary", "Deployment boundary"),
+        ("12-canonical-data-model", "Canonical Supabase data model and authority boundaries"),
     ]
     lines = [
         "# Blueprint Architecture Figures", "",
@@ -475,6 +499,7 @@ def main() -> None:
         readme_architecture, project_canvas, end_to_end_architecture, founder_journey,
         orchestration_flow, stage1_flow, handoff_contracts, rag_flow, memory_model,
         failure_flow, evaluation_flow, deployment_boundary,
+        canonical_data_model,
     ):
         function()
     contact_sheet()

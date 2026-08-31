@@ -16,5 +16,6 @@ All figures use a white background, large Segoe UI type, thin borders and restra
 | [09-failure-hitl-recovery](figures/architecture/09-failure-hitl-recovery.png) | Failure handling and HITL |
 | [10-evaluation-observability](figures/architecture/10-evaluation-observability.png) | Evaluation and observability |
 | [11-deployment-boundary](figures/architecture/11-deployment-boundary.png) | Deployment boundary |
+| [12-canonical-data-model](figures/architecture/12-canonical-data-model.png) | Canonical Supabase data model and authority boundaries |
 
 A review contact sheet is available at `docs/figures/architecture/00-architecture-review-sheet.png`.

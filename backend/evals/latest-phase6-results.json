@@ -2,8 +2,8 @@
   "schema_version": "bp-phase6-eval-report-v1",
   "suite_name": "Blueprint Phase 6 Agentic Acceptance",
   "suite_version": "1.1.0-phase7",
-  "started_at": "2026-08-30T22:42:27.500Z",
-  "completed_at": "2026-08-30T22:42:27.591Z",
+  "started_at": "2026-08-31T02:06:19.423Z",
+  "completed_at": "2026-08-31T02:06:19.479Z",
   "status": "PASSED",
   "total_cases": 85,
   "passed_cases": 85,
@@ -97,7 +97,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788129747503-eval-scope_valid_idea",
+        "correlation_id": "bp-1788141979426-eval-scope_valid_idea",
         "request": {
           "idempotency_key": "eval-scope-001",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -138,7 +138,7 @@
           ]
         }
       ],
-      "duration_ms": 0.582
+      "duration_ms": 0.605
     },
     {
       "id": "scope_selected_competitor_only",
@@ -170,7 +170,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788129747504-eval-scope_selected_competitor_only",
+        "correlation_id": "bp-1788141979427-eval-scope_selected_competitor_only",
         "request": {
           "idempotency_key": "eval-scope-005",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -209,7 +209,7 @@
           ]
         }
       ],
-      "duration_ms": 0.314
+      "duration_ms": 0.338
     },
     {
       "id": "scope_missing_research_safe_fails",
@@ -238,7 +238,7 @@
         "error_code": "INVALID_REQUEST",
         "safe_message": "Check the idea, idempotency key, and optional fields, then try again.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788129747505-eval-scope_missing_research_safe_fails",
+        "correlation_id": "bp-1788141979428-eval-scope_missing_research_safe_fails",
         "request": {
           "idempotency_key": "eval-scope-006",
           "idea_text": "A founder workspace that validates a product idea with cited research.",
@@ -295,7 +295,7 @@
         "error_code": "OUT_OF_SCOPE",
         "safe_message": "Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788129747505-eval-scope_direct_send_denied",
+        "correlation_id": "bp-1788141979428-eval-scope_direct_send_denied",
         "request": {
           "idempotency_key": "eval-scope-002",
           "idea_text": "Please send a message to this customer for me.",
@@ -355,7 +355,7 @@
         "error_code": "OUT_OF_SCOPE",
         "safe_message": "Blueprint can research and evaluate a founder idea, but it cannot contact people, send messages, publish, purchase, book, pay, or delete anything.",
         "authorization": "Bearer test-jwt",
-        "correlation_id": "bp-1788129747505-eval-scope_external_payload_denied",
+        "correlation_id": "bp-1788141979428-eval-scope_external_payload_denied",
         "request": {
           "idempotency_key": "eval-scope-003",
           "idea_text": "Research a customer discovery application for founders.",
@@ -385,7 +385,7 @@
           ]
         }
       ],
-      "duration_ms": 0.042
+      "duration_ms": 0.049
     },
     {
       "id": "scope_missing_auth",
@@ -414,7 +414,7 @@
         "error_code": "UNAUTHENTICATED",
         "safe_message": "Please sign in before starting a Blueprint.",
         "authorization": "",
-        "correlation_id": "bp-1788129747505-eval-scope_missing_auth",
+        "correlation_id": "bp-1788141979429-eval-scope_missing_auth",
         "request": {
           "idempotency_key": "eval-scope-004",
           "idea_text": "Research a founder validation application with market evidence.",
@@ -442,7 +442,7 @@
           "actual_value": "UNAUTHENTICATED"
         }
       ],
-      "duration_ms": 0.04
+      "duration_ms": 0.06
     },
     {
       "id": "start_accepts_idempotent_inflight_run",
@@ -505,7 +505,7 @@
           "actual_value": 1
         }
       ],
-      "duration_ms": 0.207
+      "duration_ms": 0.236
     },
     {
       "id": "canonical_supervisor_rejects_missing_profile",
@@ -556,7 +556,7 @@
           "actual_value": "INVALID_CANONICAL_START"
         }
       ],
-      "duration_ms": 0.241
+      "duration_ms": 0.056
     },
     {
       "id": "canonical_supervisor_accepts_typed_start",
@@ -625,7 +625,7 @@
           ]
         }
       ],
-      "duration_ms": 0.152
+      "duration_ms": 0.064
     },
     {
       "id": "planner_discover_defaults_all_research",
@@ -997,7 +997,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747510",
+        "correlation_id": "bp-plan-1788141979432",
         "test_mode": true
       },
       "assertions": [
@@ -1972,7 +1972,7 @@
           ]
         }
       ],
-      "duration_ms": 0.719
+      "duration_ms": 0.303
     },
     {
       "id": "planner_selected_competitor_only",
@@ -2243,7 +2243,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747514",
+        "correlation_id": "bp-plan-1788141979433",
         "test_mode": true
       },
       "assertions": [
@@ -2929,7 +2929,7 @@
           ]
         }
       ],
-      "duration_ms": 0.667
+      "duration_ms": 0.245
     },
     {
       "id": "planner_invalid_mode_safe_fails",
@@ -2984,7 +2984,7 @@
         "guard_status": "SAFE_FAILED",
         "guard_route": "SAFE_FAIL",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747515",
+        "correlation_id": "bp-plan-1788141979434",
         "test_mode": true
       },
       "assertions": [
@@ -3003,7 +3003,7 @@
           "actual_value": "SAFE_FAIL"
         }
       ],
-      "duration_ms": 0.122
+      "duration_ms": 0.05
     },
     {
       "id": "planner_stage2_requires_gate",
@@ -3594,7 +3594,7 @@
         "guard_status": "NEEDS_INPUT",
         "guard_route": "HUMAN_REVIEW",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747516",
+        "correlation_id": "bp-plan-1788141979434",
         "test_mode": true
       },
       "assertions": [
@@ -3613,7 +3613,7 @@
           "actual_value": "HUMAN_REVIEW"
         }
       ],
-      "duration_ms": 0.582
+      "duration_ms": 0.216
     },
     {
       "id": "planner_missing_research_replans",
@@ -4208,7 +4208,7 @@
         "guard_status": "REPLAN_DISCOVER",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747517",
+        "correlation_id": "bp-plan-1788141979434",
         "test_mode": true
       },
       "assertions": [
@@ -4227,7 +4227,7 @@
           "actual_value": "TASK_PLANNER"
         }
       ],
-      "duration_ms": 0.194
+      "duration_ms": 0.077
     },
     {
       "id": "planner_founder_pause_wins",
@@ -4822,7 +4822,7 @@
         "guard_status": "PAUSED",
         "guard_route": "HUMAN_REVIEW",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747518",
+        "correlation_id": "bp-plan-1788141979435",
         "test_mode": true
       },
       "assertions": [
@@ -4841,7 +4841,7 @@
           "actual_value": "HUMAN_REVIEW"
         }
       ],
-      "duration_ms": 0.177
+      "duration_ms": 0.066
     },
     {
       "id": "planner_growth_pretraction_not_applicable",
@@ -5516,7 +5516,7 @@
         "guard_status": "READY",
         "guard_route": "TASK_PLANNER",
         "advisory_only": true,
-        "correlation_id": "bp-plan-1788129747519",
+        "correlation_id": "bp-plan-1788141979435",
         "test_mode": true
       },
       "assertions": [
@@ -6157,7 +6157,7 @@
           ]
         }
       ],
-      "duration_ms": 0.375
+      "duration_ms": 0.119
     },
     {
       "id": "supervisor_transition_cap",
@@ -6221,7 +6221,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.056
+      "duration_ms": 0.058
     },
     {
       "id": "supervisor_checkpoint_precedes_ready",
@@ -6286,7 +6286,7 @@
           ]
         }
       ],
-      "duration_ms": 0.034
+      "duration_ms": 0.042
     },
     {
       "id": "supervisor_synthesizes_before_stage_gate",
@@ -6342,7 +6342,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.017
+      "duration_ms": 0.024
     },
     {
       "id": "supervisor_founder_input",
@@ -6392,7 +6392,7 @@
           "actual_value": "FOUNDER_INPUT"
         }
       ],
-      "duration_ms": 0.038
+      "duration_ms": 0.046
     },
     {
       "id": "supervisor_contradiction_review",
@@ -6460,7 +6460,7 @@
           ]
         }
       ],
-      "duration_ms": 0.049
+      "duration_ms": 0.057
     },
     {
       "id": "supervisor_ready_dispatch",
@@ -6516,7 +6516,7 @@
           "actual_value": "DISPATCH"
         }
       ],
-      "duration_ms": 0.031
+      "duration_ms": 0.033
     },
     {
       "id": "supervisor_stage_complete",
@@ -6572,7 +6572,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.051
+      "duration_ms": 0.054
     },
     {
       "id": "supervisor_partial_visible",
@@ -6636,7 +6636,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.034
+      "duration_ms": 0.059
     },
     {
       "id": "hitl_valid_safe_decision",
@@ -6664,7 +6664,7 @@
         "authorization": "",
         "persist_required": false,
         "valid": true,
-        "correlation_id": "bp-hitl-1788129747522",
+        "correlation_id": "bp-hitl-1788141979438",
         "test_mode": true
       },
       "assertions": [
@@ -6683,7 +6683,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.045
+      "duration_ms": 0.061
     },
     {
       "id": "hitl_invalid_decision",
@@ -6706,7 +6706,7 @@
         "authorization": "",
         "persist_required": false,
         "valid": false,
-        "correlation_id": "bp-hitl-1788129747522",
+        "correlation_id": "bp-hitl-1788141979439",
         "test_mode": true
       },
       "assertions": [
@@ -6718,7 +6718,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.02
+      "duration_ms": 0.068
     },
     {
       "id": "chat_send_denied",
@@ -6746,7 +6746,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747530",
+        "correlation_id": "bp-chat-1788141979442",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6770,7 +6770,7 @@
           "actual_value": 422
         }
       ],
-      "duration_ms": 6.607
+      "duration_ms": 2.169
     },
     {
       "id": "chat_draft_allowed",
@@ -6798,7 +6798,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747534",
+        "correlation_id": "bp-chat-1788141979443",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6822,7 +6822,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 2.286
+      "duration_ms": 0.735
     },
     {
       "id": "chat_delete_denied",
@@ -6845,7 +6845,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747535",
+        "correlation_id": "bp-chat-1788141979444",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6862,7 +6862,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.093
+      "duration_ms": 0.037
     },
     {
       "id": "chat_internal_prompt_denied",
@@ -6900,7 +6900,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747536",
+        "correlation_id": "bp-chat-1788141979444",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6938,7 +6938,7 @@
           "actual_value": 403
         }
       ],
-      "duration_ms": 0.086
+      "duration_ms": 0.031
     },
     {
       "id": "chat_secret_denied",
@@ -6966,7 +6966,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747537",
+        "correlation_id": "bp-chat-1788141979444",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -6990,7 +6990,7 @@
           "actual_value": "SENSITIVE_INTERNAL"
         }
       ],
-      "duration_ms": 0.083
+      "duration_ms": 0.03
     },
     {
       "id": "chat_cross_owner_denied",
@@ -7018,7 +7018,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747538",
+        "correlation_id": "bp-chat-1788141979445",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -7042,7 +7042,7 @@
           "actual_value": "SENSITIVE_INTERNAL"
         }
       ],
-      "duration_ms": 0.084
+      "duration_ms": 0.031
     },
     {
       "id": "chat_architecture_overview_allowed",
@@ -7075,7 +7075,7 @@
         "project_id": "00000000-0000-4000-8000-000000000601",
         "run_id": null,
         "thread_id": null,
-        "correlation_id": "bp-chat-1788129747539",
+        "correlation_id": "bp-chat-1788141979445",
         "confirmed_command": false,
         "authorization": "",
         "test_mode": true,
@@ -7106,7 +7106,7 @@
           "actual_value": null
         }
       ],
-      "duration_ms": 0.083
+      "duration_ms": 0.048
     },
     {
       "id": "chat_dynamic_context_enters_rag_prompt",
@@ -7190,7 +7190,7 @@
           "actual_value": "{\"message\":\"How do I complete the first actionable?\",\"intent\":\"NEXT_STEP\",\"conversation_history\":[],\"context\":{\"run\":{},\"project\":{},\"selected_section_context\":{\"task\":null,\"blueprint_section\":null},\"sections\":[],\"orchestration_tasks\":[{\"module_key\":\"customer_demand\",\"status\":\"COMPLETED\",\"output\":{\"contextual_actions\":[{\"title\":\"Interview five founders\"}]}}],\"current_blueprint\":{\"version\":2,\"blueprint\":{\"artifact_stage\":\"DISCOVER\"}},\"latest_verdict\":null,\"next_actions\":[],\"accepted_evidence\":[{\"id\":\"00000000-0000-4000-8000-000000000699\",\"claim\":\"A cited finding\"}],\"quality_checks\":[],\"errors\":[],\"conversation_history\":[]}}"
         }
       ],
-      "duration_ms": 0.104
+      "duration_ms": 0.108
     },
     {
       "id": "rerun_api_preview_requires_auth",
@@ -7221,8 +7221,8 @@
         "target_module": "market_economics",
         "rerun_request_id": null,
         "expected_source_state_version": 0,
-        "idempotency_key": "rerun-1788129747540",
-        "correlation_id": "bp-rerun-1788129747540"
+        "idempotency_key": "rerun-1788141979447",
+        "correlation_id": "bp-rerun-1788141979447"
       },
       "assertions": [
         {
@@ -7272,7 +7272,7 @@
         "rerun_request_id": null,
         "expected_source_state_version": 0,
         "idempotency_key": "eval-rerun-api-1",
-        "correlation_id": "bp-rerun-1788129747541"
+        "correlation_id": "bp-rerun-1788141979447"
       },
       "assertions": [
         {
@@ -7321,8 +7321,8 @@
         "target_module": "",
         "rerun_request_id": "00000000-0000-4000-8000-000000000615",
         "expected_source_state_version": 2,
-        "idempotency_key": "rerun-1788129747541",
-        "correlation_id": "bp-rerun-1788129747541"
+        "idempotency_key": "rerun-1788141979447",
+        "correlation_id": "bp-rerun-1788141979447"
       },
       "assertions": [
         {
@@ -7362,7 +7362,7 @@
         "valid_production": false,
         "top_k": 5,
         "external_ids": [],
-        "correlation_id": "bp-pine-1788129747542"
+        "correlation_id": "bp-pine-1788141979448"
       },
       "assertions": [
         {
@@ -7373,7 +7373,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.031
+      "duration_ms": 0.027
     },
     {
       "id": "pinecone_scoped_search_allowed",
@@ -7401,7 +7401,7 @@
         "valid_production": true,
         "top_k": 5,
         "external_ids": [],
-        "correlation_id": "bp-pine-1788129747542"
+        "correlation_id": "bp-pine-1788141979448"
       },
       "assertions": [
         {
@@ -7450,7 +7450,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788129747542"
+        "correlation_id": "bp-mem0-1788141979448"
       },
       "assertions": [
         {
@@ -7461,7 +7461,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.047
+      "duration_ms": 0.048
     },
     {
       "id": "mem0_confirmed_goal_allowed",
@@ -7497,7 +7497,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788129747543"
+        "correlation_id": "bp-mem0-1788141979449"
       },
       "assertions": [
         {
@@ -7515,7 +7515,7 @@
           "actual_value": "bp-00000000-0000-4000-8000-000000000712"
         }
       ],
-      "duration_ms": 0.034
+      "duration_ms": 0.037
     },
     {
       "id": "mem0_raw_log_rejected",
@@ -7546,7 +7546,7 @@
         "mem0_user_id": "00000000-0000-4000-8000-000000000711",
         "mem0_agent_id": "bp-00000000-0000-4000-8000-000000000712",
         "mem0_run_id": "00000000-0000-4000-8000-000000000713",
-        "correlation_id": "bp-mem0-1788129747543"
+        "correlation_id": "bp-mem0-1788141979449"
       },
       "assertions": [
         {
@@ -7557,7 +7557,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.028
+      "duration_ms": 0.029
     },
     {
       "id": "rerun_save_requires_scope",
@@ -7585,7 +7585,7 @@
         "valid_save": false,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788129747543"
+        "correlation_id": "bp-rerun-1788141979450"
       },
       "assertions": [
         {
@@ -7596,7 +7596,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.028
+      "duration_ms": 0.029
     },
     {
       "id": "rerun_scoped_save_allowed",
@@ -7626,7 +7626,7 @@
         "valid_save": true,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788129747544"
+        "correlation_id": "bp-rerun-1788141979450"
       },
       "assertions": [
         {
@@ -7662,7 +7662,7 @@
         "valid_save": false,
         "valid_preview": false,
         "valid_resolve": false,
-        "correlation_id": "bp-rerun-1788129747544"
+        "correlation_id": "bp-rerun-1788141979450"
       },
       "assertions": [
         {
@@ -7673,7 +7673,7 @@
           "actual_value": false
         }
       ],
-      "duration_ms": 0.023
+      "duration_ms": 0.024
     },
     {
       "id": "rerun_dependency_closed_plan",
@@ -8309,7 +8309,7 @@
           ]
         }
       ],
-      "duration_ms": 0.228
+      "duration_ms": 0.245
     },
     {
       "id": "grounding_audit_pass",
@@ -8420,7 +8420,7 @@
               "critical_blockers": [],
               "evidence_audit_status": "PASS",
               "explanation": "Independent checks passed for stream completion, evidence coverage and citation integrity.",
-              "correlation_id": "bp-audit-1788129747545",
+              "correlation_id": "bp-audit-1788141979452",
               "test_mode": true
             }
           },
@@ -8438,7 +8438,7 @@
             "status": "PASS"
           }
         ],
-        "correlation_id": "bp-audit-1788129747545",
+        "correlation_id": "bp-audit-1788141979452",
         "test_mode": true
       },
       "assertions": [
@@ -8457,7 +8457,7 @@
           "actual_value": "PASS"
         }
       ],
-      "duration_ms": 0.282
+      "duration_ms": 0.31
     },
     {
       "id": "grounding_bad_reference_repairs",
@@ -8534,7 +8534,7 @@
               ],
               "evidence_audit_status": "NOT_PASSED",
               "explanation": "The research cannot support an unrestricted verdict yet: 1 material claim(s) failed citation allowlist checks.",
-              "correlation_id": "bp-audit-1788129747546",
+              "correlation_id": "bp-audit-1788141979452",
               "test_mode": true
             }
           },
@@ -8552,7 +8552,7 @@
             "status": "NOT_PASSED"
           }
         ],
-        "correlation_id": "bp-audit-1788129747546",
+        "correlation_id": "bp-audit-1788141979452",
         "test_mode": true
       },
       "assertions": [
@@ -8571,7 +8571,7 @@
           "actual_value": 1
         }
       ],
-      "duration_ms": 0.2
+      "duration_ms": 0.487
     },
     {
       "id": "resilience_rate_retry",
@@ -8607,7 +8607,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A provider is temporarily busy.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747547"
+        "correlation_id": "bp-resilience-1788141979454"
       },
       "assertions": [
         {
@@ -8625,7 +8625,7 @@
           "actual_value": "RETRY"
         }
       ],
-      "duration_ms": 0.383
+      "duration_ms": 0.403
     },
     {
       "id": "resilience_retry_exhausted_partial",
@@ -8656,7 +8656,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A provider failed; successful work is preserved.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747548"
+        "correlation_id": "bp-resilience-1788141979454"
       },
       "assertions": [
         {
@@ -8667,7 +8667,7 @@
           "actual_value": "PARTIAL_COMPLETE"
         }
       ],
-      "duration_ms": 0.342
+      "duration_ms": 0.361
     },
     {
       "id": "resilience_memory_degrades",
@@ -8703,7 +8703,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A bounded tool call timed out.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747548"
+        "correlation_id": "bp-resilience-1788141979455"
       },
       "assertions": [
         {
@@ -8721,7 +8721,7 @@
           "actual_value": true
         }
       ],
-      "duration_ms": 0.069
+      "duration_ms": 0.106
     },
     {
       "id": "resilience_schema_repairs_once",
@@ -8756,7 +8756,7 @@
         "canonical_state_preserved": true,
         "safe_message": "An agent returned invalid structured output.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747548"
+        "correlation_id": "bp-resilience-1788141979455"
       },
       "assertions": [
         {
@@ -8774,7 +8774,7 @@
           "actual_value": "REPAIR"
         }
       ],
-      "duration_ms": 0.09
+      "duration_ms": 0.082
     },
     {
       "id": "resilience_grounding_never_guesses",
@@ -8809,7 +8809,7 @@
         "canonical_state_preserved": true,
         "safe_message": "A material claim failed evidence validation.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747548"
+        "correlation_id": "bp-resilience-1788141979455"
       },
       "assertions": [
         {
@@ -8827,7 +8827,7 @@
           "actual_value": "Never substitute model training knowledge for missing source evidence."
         }
       ],
-      "duration_ms": 0.066
+      "duration_ms": 0.077
     },
     {
       "id": "resilience_budget_stops",
@@ -8862,7 +8862,7 @@
         "canonical_state_preserved": true,
         "safe_message": "The run reached a configured safety budget.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747549"
+        "correlation_id": "bp-resilience-1788141979455"
       },
       "assertions": [
         {
@@ -8880,7 +8880,7 @@
           "actual_value": "SAFE_FAIL"
         }
       ],
-      "duration_ms": 0.115
+      "duration_ms": 0.117
     },
     {
       "id": "resilience_policy_denies",
@@ -8915,7 +8915,7 @@
         "canonical_state_preserved": true,
         "safe_message": "The requested action is outside Blueprint scope.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747549"
+        "correlation_id": "bp-resilience-1788141979456"
       },
       "assertions": [
         {
@@ -8933,7 +8933,7 @@
           "actual_value": "POLICY_DENIED"
         }
       ],
-      "duration_ms": 0.056
+      "duration_ms": 0.064
     },
     {
       "id": "resilience_redacts_secrets",
@@ -8973,7 +8973,7 @@
         "canonical_state_preserved": true,
         "safe_message": "Authentication failed safely.",
         "forbidden_fallback": "Never substitute model training knowledge for missing source evidence.",
-        "correlation_id": "bp-resilience-1788129747549"
+        "correlation_id": "bp-resilience-1788141979456"
       },
       "assertions": [
         {
@@ -8998,7 +8998,7 @@
           "actual_value": "provider failed [CREDENTIAL_REDACTED] [EMAIL_REDACTED] Bearer [REDACTED]"
         }
       ],
-      "duration_ms": 0.03
+      "duration_ms": 0.032
     },
     {
       "id": "structure_bp00Supervisor",
