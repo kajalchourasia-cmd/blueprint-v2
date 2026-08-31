@@ -3,6 +3,7 @@
 | Deliverable | Blueprint V2 source |
 |---|---|
 | Final submission document | [Open the Blueprint V2 submission document](https://docs.google.com/document/d/1dJEE5hrkcfB9I40906ZY7RcTTi5_4WPWo9kg1dpKVlg/edit) |
+| Complete demo transcript and recording runbook | [Open the complete step-by-step Markdown transcript](docs/FINAL-DEMO-RUNBOOK.md) |
 | Final video walkthrough | **Recording placeholder.** Add only the reviewed Blueprint V2 recording; do not reuse the earlier prototype walkthrough. |
 | Source repository | [kajalchourasia-cmd/blueprint-v2](https://github.com/kajalchourasia-cmd/blueprint-v2) |
 
