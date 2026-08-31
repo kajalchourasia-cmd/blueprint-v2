@@ -4,6 +4,34 @@ Blueprint is an evidence-first multi-agent decision system that turns an unfinis
 
 > Blueprint helps an early-stage founder turn an unfinished product idea into an evidence-backed proceed, revise or pause decision in a web app. It autonomously plans and runs scoped customer, competitor and market research, but consequential writes, reruns and stage progression remain under human approval.
 
+<p align="center">
+  <img src="docs/figures/architecture/00-readme-architecture.png" alt="Blueprint orchestrator flow: Streamlit, n8n supervisor, research specialists, evidence audit, viability verdict, human checkpoint, Supabase, Pinecone and Mem0" width="100%" />
+</p>
+
+## Open the prototype
+
+### Fastest path on the prepared machine
+
+1. Start Docker Desktop and confirm the existing `blueprint-evidence-dev-n8n` container is running.
+2. Open `http://localhost:5679` once and sign in to the local n8n instance.
+3. From this repository, run:
+
+   ```powershell
+   .\.venv\Scripts\Activate.ps1
+   streamlit run app.py
+   ```
+
+4. Open `http://localhost:8501`.
+5. Enter an idea, complete onboarding, and let Blueprint open the Dashboard on Foundation. Customer/User, Competitor and Market Research then run through the n8n Supervisor.
+
+If `.venv` does not exist yet, follow the complete local setup under [Run locally](#run-locally). The exact evaluator route and demo prompt are in the [final demo runbook](docs/FINAL-DEMO-RUNBOOK.md).
+
+### Public Streamlit deployment
+
+The Streamlit UI is deployment-ready, but the complete product must not be published with a localhost backend. Streamlit Community Cloud cannot reach `http://localhost:5679`. First expose the persistent n8n instance through authenticated HTTPS, then configure `N8N_START_WEBHOOK_URL` in Streamlit secrets and deploy `app.py` from `main`.
+
+Use the [Streamlit deployment checklist](docs/STREAMLIT-DEPLOYMENT.md) for the exact secrets, release gates and smoke tests.
+
 ## What problem it solves
 
 Early-stage founders usually research ideas across search tabs, notes, spreadsheets and disconnected AI chats. The result is often a polished report with unclear evidence, invented precision and no reliable decision path.
@@ -16,8 +44,6 @@ Blueprint instead connects four things:
 4. Founder control: a human checkpoint before the system changes the Blueprint or advances a stage.
 
 ## Architecture at a glance
-
-![Blueprint architecture at a glance](docs/figures/architecture/00-readme-architecture.png)
 
 The complete project canvas plus the high-resolution PNG and editable SVG pack live in [`docs/figures/architecture`](docs/figures/architecture). Use [`docs/ARCHITECTURE-FIGURES.md`](docs/ARCHITECTURE-FIGURES.md) as the visual index.
 
